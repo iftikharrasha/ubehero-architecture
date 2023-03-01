@@ -18,7 +18,7 @@ import Checkout from '../components/Tournaments/Checkout/Checkout';
 import CheckoutForm from '../components/Tournaments/Checkout/CheckoutForm';
 import CheckoutLayout from '../components/Common/Checkout/CheckoutLayout';
 
-const TournamentDetails = () => { 
+const TournamentDetails = ({socket}) => { 
     const isLoggedIn = useSelector(state => state.profile.signed_in);
     const [routeKey, setRouteKey] = useState('leaderboards');
     const { id } = useParams();
@@ -142,18 +142,23 @@ const TournamentDetails = () => {
                             <Tab eventKey="prizes" title="Prizes">
                                 <Prizes prizes={tournamentDetails.prizes}/>
                             </Tab>
-                            <Tab eventKey="chatroom" title="Chatroom">
-
-                                {
-                                    chatroomDetails ? <ChatRoom 
-                                                            tournamentDetails={tournamentDetails} 
-                                                            leaderboardDetails={leaderboardDetails} 
-                                                            chatroomDetails={chatroomDetails}
-                                                        />
-                                    : <Preloader/>
-                                }
-                                
-                            </Tab>
+                            {
+                                isLoggedIn && (
+                                    <Tab eventKey="chatroom" title="Chatroom">
+        
+                                        {
+                                            chatroomDetails ? <ChatRoom 
+                                                                    socket={socket}
+                                                                    tournamentDetails={tournamentDetails} 
+                                                                    leaderboardDetails={leaderboardDetails} 
+                                                                    chatroomDetails={chatroomDetails}
+                                                                />
+                                            : <Preloader/>
+                                        }
+                                        
+                                    </Tab>
+                                )
+                            }
                         </Tabs>
                     </>
                     }
