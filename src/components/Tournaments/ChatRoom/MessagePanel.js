@@ -1,10 +1,10 @@
+import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useRef } from 'react';
 import useAuth from '../../../hooks/useAuth';
 
-const MessagePanel = ({socket, tournamentDetails, chatroomDetails, loggedInUser}) => {
+const MessagePanel = ({socket, tournamentDetails, loggedInUser, routeKey}) => {
     const [messagesRecieved, setMessagesReceived] = useState([]);
-    // console.log(messagesRecieved)
 
     const { _id, tournamentName, tournamentThumbnail } = tournamentDetails;
 
@@ -18,6 +18,7 @@ const MessagePanel = ({socket, tournamentDetails, chatroomDetails, loggedInUser}
                     message: data.message,
                     senderName: data.senderName,
                     timeStamp: data.timeStamp,
+                    senderPhoto: data.senderPhoto,
                 },
             ]);
         });
@@ -35,17 +36,14 @@ const MessagePanel = ({socket, tournamentDetails, chatroomDetails, loggedInUser}
         return () => socket.off("last_100_messages");
     }, [socket]);
 
-     // dd/mm/yyyy, hh:mm:ss
-    function formatDateFromTimestamp(timestamp) {
-        const date = new Date(timestamp);
-        return date.toLocaleString();
-    }
-
     const messagesColumnRef = useRef(null);
+    
     useEffect(() => {
-        messagesColumnRef.current.scrollTop =
-          messagesColumnRef.current.scrollHeight;
-      }, [messagesRecieved]);
+        if (messagesColumnRef && messagesColumnRef.current && messagesRecieved.length > 0) {
+            const { scrollHeight, clientHeight } = messagesColumnRef.current;
+            messagesColumnRef.current.scrollTo({ left: 0, top: scrollHeight - clientHeight, behavior: 'smooth' });
+        }
+    }, [messagesRecieved, routeKey]);
 
     return (
         <div className="chat">
@@ -55,7 +53,6 @@ const MessagePanel = ({socket, tournamentDetails, chatroomDetails, loggedInUser}
                         <img src={tournamentThumbnail} alt="avatar"/>
                         <div className="chat-about">
                             <h6 className="m-b-0">{tournamentName}</h6>
-                            {/* <small>version: {version}</small> */}
                         </div>
                     </div>
                 </div>
@@ -64,13 +61,27 @@ const MessagePanel = ({socket, tournamentDetails, chatroomDetails, loggedInUser}
                 <ul className="m-b-0">
                     {
                         messagesRecieved.map((item, index) => (
-                            <li className="clearfix" key={index}>
-                                <div className="message-data text-right">
-                                    <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="avatar"/> {item.senderName}
+                            <li className={item.senderName.toLowerCase() === loggedInUser.name ? "text-right" : "text-left"} key={index}>
+                                <div className="message-data">
+                                    <img src={item.senderPhoto} alt="avatar"/> {item.senderName} 
+                                    {
+                                        item.senderName.toLowerCase() === loggedInUser.name ? null : 
+                                            item.senderPermissions ? 
+                                                item.senderPermissions.includes("master") ? " (MASTER)" :
+                                                            null
+                                            : null
+                                    }
                                 </div>
-                                <div className="message my-message">
+                                <div className={
+                                        item.senderName.toLowerCase() === loggedInUser.name ? "message my-message" : 
+                                                    item.senderPermissions ? 
+                                                        item.senderPermissions.includes("master") ? "message other-message master" :
+                                                                    "message other-message"
+                                        : "message other-message bot"
+                                }
+                                >
                                     <p>{item.message}</p>
-                                    <span className="message-data-time">{formatDateFromTimestamp(item.timeStamp)}</span>
+                                    <span>{moment(item.timeStamp).fromNow()}</span>
                                 </div>                                    
                             </li>
                         ))

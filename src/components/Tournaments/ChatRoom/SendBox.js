@@ -1,17 +1,30 @@
 import React, { useState } from "react";
+import moment from "moment/moment";
 
-const SendBox = ({socket, room, loggedInUser}) => {
+const SendBox = ({socket, roomId, room, loggedInUser}) => {
     const [message, setMessage] = useState("");
 
     const sendMessage = () => {
         if (message !== "") {
           const senderName = loggedInUser.name;
+          const senderId = loggedInUser.id;
+          const senderPhoto = loggedInUser.photo;
+          const senderPermissions = loggedInUser.permissions;
+        //   const senderType = loggedInUser.permissions.includes('master') ? 'master' : 'user';
+
           const timeStamp = Date.now();
+          const date = moment(timeStamp);
+          const output = date.format('YYYY-MM-DDTHH:mm:ss.SSS');
+
           const data = {
-            senderName: senderName,
+            roomId: roomId,
             room: room,
+            senderId: senderId,
+            senderName: senderName,
+            senderPermissions: senderPermissions,
+            senderPhoto: senderPhoto,
             message: message,
-            timeStamp: timeStamp
+            timeStamp: output,
           }
           // Send message to server. We can't specify who we send the message to from the frontend. We can only send to server. Server can then send message to rest of users in room
           socket.emit("send_message", data);

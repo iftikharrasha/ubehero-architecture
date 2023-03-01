@@ -4,7 +4,7 @@ import UserList from './UserList';
 import SendBox from './SendBox';
 import MessagePanel from './MessagePanel';
 
-const ChatRoom = ({socket, tournamentDetails, leaderboardDetails, chatroomDetails}) => {
+const ChatRoom = ({socket, tournamentDetails, leaderboardDetails, routeKey}) => {
     const { _id, tournamentName } = tournamentDetails;
     const { leaderboard } = leaderboardDetails;
     const { loggedInUser } = useAuth();
@@ -27,15 +27,19 @@ const ChatRoom = ({socket, tournamentDetails, leaderboardDetails, chatroomDetail
        <div className='chatroom'>
         <div className="container">
             <div className="row clearfix">
-                <div className="col-lg-12">
-                    <div className="card chat-app">
+                <div className="col-lg-8">
+                    <div className="card">
                         <MessagePanel 
                             socket={socket} 
                             tournamentDetails={tournamentDetails} 
-                            chatroomDetails={chatroomDetails} 
-                            loggedInUser={loggedInUser}/>
-                        <SendBox socket={socket} room={_id} loggedInUser={loggedInUser}/>
-                        {/* <UserList leaderboard={leaderboard}/> */}
+                            loggedInUser={loggedInUser}
+                            routeKey={routeKey}/>
+                        <SendBox socket={socket} roomId={_id} room={tournamentName} loggedInUser={loggedInUser}/>
+                    </div>
+                </div>
+                <div className="col-lg-4">
+                    <div className="card">
+                        <UserList leaderboard={leaderboard}/>
                     </div>
                 </div>
             </div>

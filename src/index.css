@@ -95,19 +95,6 @@ body {
   width: 100%;
   box-shadow: 0 1px 2px 0 rgb(0 0 0 / 10%);
 }
-.chat-app .people-list {
-  width: 280px;
-  position: absolute;
-  right: 0;
-  top: 0;
-  padding: 20px;
-  z-index: 7
-}
-
-.chat-app .chat {
-  margin-right: 280px;
-  border-left: 1px solid #eaeaea
-}
 
 .people-list {
   -moz-transition: .5s;
@@ -173,7 +160,9 @@ body {
 
 .chat .chat-history {
   padding: 20px;
-  border-bottom: 2px solid #fff
+  border-bottom: 2px solid #fff;
+  height: 400px;
+  overflow-y: auto;
 }
 
 .chat .chat-history ul {
@@ -213,6 +202,13 @@ body {
   position: relative
 }
 
+.chat .chat-history .message p{
+  margin-bottom: 0;
+}
+.chat .chat-history .message span{
+  font-size: 12px;
+}
+
 .chat .chat-history .message:after {
   bottom: 100%;
   left: 7%;
@@ -227,11 +223,11 @@ body {
   margin-left: -10px
 }
 
-.chat .chat-history .my-message {
+.chat .chat-history .other-message {
   background: #efefef
 }
 
-.chat .chat-history .my-message:after {
+.chat .chat-history .other-message:after {
   bottom: 100%;
   left: 30px;
   border: solid transparent;
@@ -245,12 +241,12 @@ body {
   margin-left: -10px
 }
 
-.chat .chat-history .other-message {
+.chat .chat-history .my-message {
   background: #e8f1f3;
   text-align: right
 }
 
-.chat .chat-history .other-message:after {
+.chat .chat-history .my-message:after {
   border-bottom-color: #e8f1f3;
   left: 93%
 }
@@ -258,6 +254,14 @@ body {
 .chat .chat-message {
   padding: 20px
 }
+
+/* .chat .chat-history .master {
+  background: red;
+}
+
+.chat .chat-history .bot {
+  background: green;
+} */
 
 .online,
 .offline,
@@ -296,48 +300,10 @@ body {
   padding: 0.75rem 0.75rem;
 }
 
-@media only screen and (max-width: 767px) {
-  .chat-app .people-list {
-      height: 465px;
-      width: 100%;
-      overflow-x: auto;
-      background: #fff;
-      left: -400px;
-      display: none
-  }
-  .chat-app .people-list.open {
-      left: 0
-  }
-  .chat-app .chat {
-      margin: 0
-  }
-  .chat-app .chat .chat-header {
-      border-radius: 0.55rem 0.55rem 0 0
-  }
-  .chat-app .chat-history {
-      height: 300px;
-      overflow-x: auto
-  }
+.text-left{
+  text-align: left;
 }
 
-@media only screen and (min-width: 768px) and (max-width: 992px) {
-  .chat-app .chat-list {
-      height: 650px;
-      overflow-x: auto
-  }
-  .chat-app .chat-history {
-      height: 600px;
-      overflow-x: auto
-  }
-}
-
-@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 1) {
-  .chat-app .chat-list {
-      height: 480px;
-      overflow-x: auto
-  }
-  .chat-app .chat-history {
-      height: calc(100vh - 350px);
-      overflow-x: auto
-  }
+.text-right{
+  text-align: right;
 }

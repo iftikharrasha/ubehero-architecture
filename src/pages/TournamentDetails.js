@@ -12,13 +12,13 @@ import { fetchLeaderboards } from '../redux/slices/leaderboardSlice';
 import Preloader from '../components/PageLayout/Preloader';
 import Prizes from '../components/Tournaments/Prizes/Prizes';
 import ChatRoom from '../components/Tournaments/ChatRoom/ChatRoom';
-import { fetchChatRoom } from '../redux/slices/chatRoomSlice';
 import { useLocation, useHistory  } from 'react-router-dom';
 import Checkout from '../components/Tournaments/Checkout/Checkout';
 import CheckoutForm from '../components/Tournaments/Checkout/CheckoutForm';
 import CheckoutLayout from '../components/Common/Checkout/CheckoutLayout';
+import io from 'socket.io-client';
 
-const TournamentDetails = ({socket}) => { 
+const TournamentDetails = () => { 
     const isLoggedIn = useSelector(state => state.profile.signed_in);
     const [routeKey, setRouteKey] = useState('leaderboards');
     const { id } = useParams();
@@ -45,12 +45,6 @@ const TournamentDetails = ({socket}) => {
         dispatch(fetchLeaderboards({ id, versionLeaderboard }));
     }, [])
 
-    useEffect(() => {
-        if(routeKey === 'chatroom'){
-            dispatch(fetchChatRoom({ id, versionChatroom }));
-        }
-    }, [routeKey])
-
     const tournaments = useSelector((state) => state.tournaments.data)
     const tournamentDetails = tournaments.find(t => t._id === id);
     const versionTournament = tournamentDetails ? tournamentDetails.version : 0;
@@ -59,10 +53,9 @@ const TournamentDetails = ({socket}) => {
     const leaderboardDetails = leaderboards[id];
     const versionLeaderboard = leaderboardDetails ? leaderboardDetails.version : 0;
     
-    const chatroom = useSelector((state) => state.chatroom.data)
-    const chatroomDetails = chatroom[id];
-    const versionChatroom = chatroomDetails ? chatroomDetails.version : 0;
-    
+    // const chatroom = useSelector((state) => state.chatroom.data)
+    // const chatroomDetails = chatroom[id];
+    // const versionChatroom = chatroomDetails ? chatroomDetails.version : 0;
     // console.log('1. versionChatroomC:', versionChatroom);
 
     const [method, setMethod]  = useState('');
@@ -84,6 +77,40 @@ const TournamentDetails = ({socket}) => {
     const handleCancel = () => {
         history.goBack()
     };
+
+
+    const [socket, setSocket] = useState(null);
+  
+    useEffect(() => {
+      const newSocket = io.connect(`${process.env.REACT_APP_API_LINK}`, {
+        transports: ['websocket'],
+      });
+  
+      setSocket(newSocket);
+  
+      // Listen for pong event
+      newSocket.on("pong", (receivedDate, pingReceivedAt) => {
+        const timeStamp = new Date().getTime();
+        const latency = timeStamp - receivedDate;
+        console.log(`Received pong of ${newSocket.id} at ${pingReceivedAt} with latency ${latency}ms`);
+      });
+  
+      // Disconnect socket on unmount
+      return () => {
+        newSocket.disconnect();
+      };
+    }, []);
+  
+    useEffect(() => {
+      let interval;
+      if (socket) {
+        interval = setInterval(() => {
+          socket.emit("ping");
+        }, 15000);
+      }
+    
+      return () => clearInterval(interval);
+    }, [socket]);
 
     return (
         <PageLayout>
@@ -147,12 +174,12 @@ const TournamentDetails = ({socket}) => {
                                     <Tab eventKey="chatroom" title="Chatroom">
         
                                         {
-                                            chatroomDetails ? <ChatRoom 
-                                                                    socket={socket}
-                                                                    tournamentDetails={tournamentDetails} 
-                                                                    leaderboardDetails={leaderboardDetails} 
-                                                                    chatroomDetails={chatroomDetails}
-                                                                />
+                                            socket ? <ChatRoom 
+                                                        socket={socket}
+                                                        tournamentDetails={tournamentDetails} 
+                                                        leaderboardDetails={leaderboardDetails} 
+                                                        routeKey={routeKey}
+                                                    />
                                             : <Preloader/>
                                         }
                                         
