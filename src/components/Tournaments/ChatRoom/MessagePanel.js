@@ -1,17 +1,19 @@
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useRef } from 'react';
-import useAuth from '../../../hooks/useAuth';
+import msg from '../../../sounds/msg.mp3';
+import bot from '../../../sounds/bot.mp3';
+import typing from '../../../sounds/typing.mp3';
 
 const MessagePanel = ({socket, tournamentDetails, loggedInUser, routeKey}) => {
     const [messagesRecieved, setMessagesReceived] = useState([]);
+    const [sound, setSound] = useState(null);
 
     const { _id, tournamentName, tournamentThumbnail } = tournamentDetails;
 
      // Runs whenever a socket event is recieved from the server
     useEffect(() => {
         socket.on('receive_message', (data) => {
-            // console.log(data)
             setMessagesReceived((state) => [
                 ...state,
                 {
@@ -21,6 +23,20 @@ const MessagePanel = ({socket, tournamentDetails, loggedInUser, routeKey}) => {
                     senderPhoto: data.senderPhoto,
                 },
             ]);
+
+            if(data.senderName.toLowerCase() !== loggedInUser.name){
+                if(data.sound === "bot"){
+                    setSound(bot)
+                    const newMessageSound = document.getElementById("newMessageSound");
+                    newMessageSound.play();
+                }else if(data.sound === "msg"){
+                    setSound(msg)
+                    const newMessageSound = document.getElementById("newMessageSound");
+                    newMessageSound.play();
+                }else{
+                    setSound(null)
+                }
+            }
         });
 
         // Remove event listener on component unmount
@@ -86,21 +102,9 @@ const MessagePanel = ({socket, tournamentDetails, loggedInUser, routeKey}) => {
                             </li>
                         ))
                     }
-                    {/* {
-                        messages.map((item, index) => (
-                            <li className="clearfix" key={index}>
-                                <div className="message-data text-right">
-                                    <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="avatar"/>
-                                </div>
-                                <div className={item.senderName.toLowerCase() === loggedInUser.name ? "message other-message float-right" : item.routeId === 1 ? "message other-message float-right masterAnnouncement" : "message my-message"}>
-                                    <p>{item.message}</p>
-                                    <span className="message-data-time">{item.timeStamp}</span>
-                                </div>                                    
-                            </li>
-                        ))
-                    } */}
                 </ul>
             </div>
+            <audio id="newMessageSound" src={sound} type="audio/mpeg"></audio>
         </div>
     );
 };

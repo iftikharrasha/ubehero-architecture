@@ -5,7 +5,6 @@ import { Link, useParams } from 'react-router-dom';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import PageLayout from '../components/PageLayout/PageLayout';
-import Tournaments from '../components/Tournaments/Tournaments';
 import Leaderboard from '../components/Tournaments/Leaderboards/Leaderboards';
 import { fetchTournamentDetails } from '../redux/slices/tournamentSlice'
 import { fetchLeaderboards } from '../redux/slices/leaderboardSlice';
@@ -13,10 +12,11 @@ import Preloader from '../components/PageLayout/Preloader';
 import Prizes from '../components/Tournaments/Prizes/Prizes';
 import ChatRoom from '../components/Tournaments/ChatRoom/ChatRoom';
 import { useLocation, useHistory  } from 'react-router-dom';
-import Checkout from '../components/Tournaments/Checkout/Checkout';
 import CheckoutForm from '../components/Tournaments/Checkout/CheckoutForm';
 import CheckoutLayout from '../components/Common/Checkout/CheckoutLayout';
 import io from 'socket.io-client';
+
+let initialSocketId = null;
 
 const TournamentDetails = () => { 
     const isLoggedIn = useSelector(state => state.profile.signed_in);
@@ -52,11 +52,6 @@ const TournamentDetails = () => {
     const leaderboards = useSelector((state) => state.leaderboards.data)
     const leaderboardDetails = leaderboards[id];
     const versionLeaderboard = leaderboardDetails ? leaderboardDetails.version : 0;
-    
-    // const chatroom = useSelector((state) => state.chatroom.data)
-    // const chatroomDetails = chatroom[id];
-    // const versionChatroom = chatroomDetails ? chatroomDetails.version : 0;
-    // console.log('1. versionChatroomC:', versionChatroom);
 
     const [method, setMethod]  = useState('');
     const handlePaymentMethod = (e, m) => {
@@ -78,8 +73,11 @@ const TournamentDetails = () => {
         history.goBack()
     };
 
-
+    //socket implementation
     const [socket, setSocket] = useState(null);
+    const [isConnected, setIsConnected] = useState(false);
+    // const [initialSocketId, setInitialSocketId] = useState(null);
+    console.log('isConnected', isConnected)
   
     useEffect(() => {
       const newSocket = io.connect(`${process.env.REACT_APP_API_LINK}`, {
@@ -89,10 +87,33 @@ const TournamentDetails = () => {
       setSocket(newSocket);
   
       // Listen for pong event
-      newSocket.on("pong", (receivedDate, pingReceivedAt) => {
+      newSocket.on("pong", (receivedDate, pingReceivedAt, pongSocketId) => {
+
         const timeStamp = new Date().getTime();
         const latency = timeStamp - receivedDate;
         console.log(`Received pong of ${newSocket.id} at ${pingReceivedAt} with latency ${latency}ms`);
+
+        if(!initialSocketId){
+            console.log("pongSocketId, initialSocketId", pongSocketId, initialSocketId)
+            initialSocketId = pongSocketId;
+            // setInitialSocketId(pongSocketId);
+        }
+
+        // Compare the socketId with the initial socketId to see if the socket is still connected
+        if(initialSocketId){
+            if (pongSocketId !== initialSocketId) {
+                console.log('Socket disconnected for inactivity!');
+                setIsConnected(false);
+
+                newSocket.emit("leave_room", { timeStamp });
+            }
+        }
+      });
+
+      // Listen for disconnect event
+      newSocket.on('disconnect', () => {
+        console.log('Socket disconnected with disconnect event');
+        setIsConnected(false);
       });
   
       // Disconnect socket on unmount
@@ -107,6 +128,7 @@ const TournamentDetails = () => {
         interval = setInterval(() => {
           socket.emit("ping");
         }, 15000);
+        setIsConnected(true);
       }
     
       return () => clearInterval(interval);
@@ -176,8 +198,9 @@ const TournamentDetails = () => {
                                         {
                                             socket ? <ChatRoom 
                                                         socket={socket}
+                                                        isConnected={isConnected}
                                                         tournamentDetails={tournamentDetails} 
-                                                        leaderboardDetails={leaderboardDetails} 
+                                                        leaderboardDetails={leaderboardDetails}
                                                         routeKey={routeKey}
                                                     />
                                             : <Preloader/>

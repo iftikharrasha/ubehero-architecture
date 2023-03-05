@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import moment from "moment/moment";
 
-const SendBox = ({socket, roomId, room, loggedInUser}) => {
+const SendBox = ({socket, isConnected, roomId, room, loggedInUser}) => {
     const [message, setMessage] = useState("");
+    const [isTyping, setIsTyping] = useState(false);
 
     const sendMessage = () => {
         if (message !== "") {
@@ -10,7 +11,6 @@ const SendBox = ({socket, roomId, room, loggedInUser}) => {
           const senderId = loggedInUser.id;
           const senderPhoto = loggedInUser.photo;
           const senderPermissions = loggedInUser.permissions;
-        //   const senderType = loggedInUser.permissions.includes('master') ? 'master' : 'user';
 
           const timeStamp = Date.now();
           const date = moment(timeStamp);
@@ -26,26 +26,66 @@ const SendBox = ({socket, roomId, room, loggedInUser}) => {
             message: message,
             timeStamp: output,
           }
-          // Send message to server. We can't specify who we send the message to from the frontend. We can only send to server. Server can then send message to rest of users in room
+          // Send message to server
           socket.emit("send_message", data);
           setMessage("");
         }
     };
 
+    useEffect(() => {
+        socket.on("userTyping", (userName) => {
+          setIsTyping(true);
+          setTimeout(() => {
+            setIsTyping(false);
+          }, 1500);
+        });
+    }, [socket]);
+
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            sendMessage();
+        } else {
+          if (!isTyping) {
+            socket.emit('typing', { roomId: roomId, userName: loggedInUser.name });
+          }
+        }
+    };
+
+    const handleReconnect = () => {
+      window.location.reload();
+    }
+
     return (
-        <div className="chat-message clearfix">
-            <div className="input-group mb-0">
-                <input type="text" 
-                    className="form-control" 
-                    placeholder="Enter text here..."
-                    onChange={(e) => setMessage(e.target.value)}
-                    value={message}
-                />   
-                <div className="input-group-prepend">
-                    <span className="input-group-text" onClick={sendMessage}><i className="fa fa-send"></i></span>
-                </div>                                 
-            </div>
-        </div>
+      isConnected ? 
+      <div className="chat-message clearfix">
+          {
+              isTyping ? <div className='typing'>
+                              <div className="tiblock">
+                                  <div className="tidot"></div>
+                                  <div className="tidot"></div>
+                                  <div className="tidot"></div>
+                              </div>
+                          </div> : null
+          }
+          
+
+          <div className="input-group mb-0">
+              <input type="text" 
+                  className="form-control" 
+                  placeholder="Enter text here..."
+                  onChange={(e) => setMessage(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  value={message}
+              />   
+              <div className="input-group-prepend">
+                  <span className="input-group-text" onClick={sendMessage}><i className="fa fa-send"></i></span>
+              </div>                                 
+          </div>
+      </div> :
+      <div className="d-flex justicy-content-center align-items-center flex-column pb-4">
+        <p>Server Stalled!</p>
+        <button onClick={handleReconnect}>Reconnect</button>
+      </div>
     );
 };
 

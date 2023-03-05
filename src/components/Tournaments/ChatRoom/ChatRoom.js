@@ -1,22 +1,24 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import useAuth from '../../../hooks/useAuth';
 import UserList from './UserList';
 import SendBox from './SendBox';
 import MessagePanel from './MessagePanel';
 
-const ChatRoom = ({socket, tournamentDetails, leaderboardDetails, routeKey}) => {
+const ChatRoom = ({socket, isConnected, tournamentDetails, leaderboardDetails, routeKey, isTyping, setIsTyping}) => {
     const { _id, tournamentName } = tournamentDetails;
     const { leaderboard } = leaderboardDetails;
     const { loggedInUser } = useAuth();
 
     useEffect(() => {
         if (socket) {
-            const room = _id;
+            const roomId = _id;
             const senderName = loggedInUser.name;
+            const senderPhoto = loggedInUser.photo;
 
             const data = {
-              room: room,
+              roomId: roomId,
               senderName: senderName,
+              senderPhoto: senderPhoto
             }
 
             socket.emit("join_room", data);
@@ -34,12 +36,18 @@ const ChatRoom = ({socket, tournamentDetails, leaderboardDetails, routeKey}) => 
                             tournamentDetails={tournamentDetails} 
                             loggedInUser={loggedInUser}
                             routeKey={routeKey}/>
-                        <SendBox socket={socket} roomId={_id} room={tournamentName} loggedInUser={loggedInUser}/>
+                        <SendBox 
+                            socket={socket} 
+                            isConnected={isConnected}
+                            roomId={_id} 
+                            room={tournamentName} 
+                            loggedInUser={loggedInUser}
+                        />
                     </div>
                 </div>
                 <div className="col-lg-4">
                     <div className="card">
-                        <UserList leaderboard={leaderboard}/>
+                        <UserList socket={socket} leaderboard={leaderboard}/>
                     </div>
                 </div>
             </div>
