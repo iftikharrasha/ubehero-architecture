@@ -83,7 +83,7 @@ const SendBox = ({socket, isConnected, roomId, room, loggedInUser}) => {
           </div>
       </div> :
       <div className="d-flex justicy-content-center align-items-center flex-column pb-4">
-        <p>Server Stalled!</p>
+        <p>You are disconnected!</p>
         <button onClick={handleReconnect}>Reconnect</button>
       </div>
     );

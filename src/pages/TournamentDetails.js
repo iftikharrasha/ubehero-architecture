@@ -77,7 +77,7 @@ const TournamentDetails = () => {
     const [socket, setSocket] = useState(null);
     const [isConnected, setIsConnected] = useState(false);
     // const [initialSocketId, setInitialSocketId] = useState(null);
-    console.log('isConnected', isConnected)
+    // console.log('isConnected', isConnected)
   
     useEffect(() => {
       const newSocket = io.connect(`${process.env.REACT_APP_API_LINK}`, {
@@ -102,6 +102,7 @@ const TournamentDetails = () => {
         // Compare the socketId with the initial socketId to see if the socket is still connected
         if(initialSocketId){
             if (pongSocketId !== initialSocketId) {
+                initialSocketId = null;
                 console.log('Socket disconnected for inactivity!');
                 setIsConnected(false);
 
@@ -112,6 +113,7 @@ const TournamentDetails = () => {
 
       // Listen for disconnect event
       newSocket.on('disconnect', () => {
+        initialSocketId = null;
         console.log('Socket disconnected with disconnect event');
         setIsConnected(false);
       });

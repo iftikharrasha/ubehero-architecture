@@ -5,6 +5,7 @@ import Tabs from 'react-bootstrap/Tabs';
 
 const UserList = ({socket, leaderboard}) => {
     const [roomUsers, setRoomUsers] = useState([]);
+    // console.log('roomUsers', roomUsers);
 
     useEffect(() => {
         socket.on("chatroom_users", (data) => {
