@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from 'react';
 import { Link } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import Dropdown from 'react-bootstrap/Dropdown';
@@ -6,13 +6,65 @@ import { useDispatch } from "react-redux";
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import { changeRegion } from "../../redux/slices/staticSlice";
 import { useHistory } from "react-router-dom";
-import ubehero from "../../images/ubehero-dark.svg"
+import ubehero from "../../images/ubehero-dark.svg";
+import Notification from "../Common/Notification/Notification";
+import io from 'socket.io-client';
+
+let initialSocketId = null;
 
 const Header = () => {
   const dispatch = useDispatch();
   const { loggedInUser, handlelogOut } = useAuth();
   const history = useHistory();
 
+  //socket implementation
+  const [socket, setSocket] = useState(null);
+  const [isConnected, setIsConnected] = useState(false);
+
+  useEffect(() => {
+    const notyfSocket = io.connect(`${process.env.REACT_APP_API_LINK}/notifications`, {
+      transports: ['websocket'],
+    });
+
+    setSocket(notyfSocket);
+
+    // Listen for pong event
+  //   notyfSocket.on("pong", (receivedDate, pingReceivedAt, pongSocketId) => {
+
+  //     const timeStamp = new Date().getTime();
+  //     const latency = timeStamp - receivedDate;
+  //     console.log(`Received pong of ${notyfSocket.id} at ${pingReceivedAt} with latency ${latency}ms`);
+
+  //     if(!initialSocketId){
+  //         console.log("pongSocketId, initialSocketId", pongSocketId, initialSocketId)
+  //         initialSocketId = pongSocketId;
+  //     }
+
+  //     // Compare the socketId with the initial socketId to see if the socket is still connected
+  //     if(initialSocketId){
+  //         if (pongSocketId !== initialSocketId) {
+  //             initialSocketId = null;
+  //             console.log('Socket disconnected for inactivity!');
+  //             setIsConnected(false);
+
+  //             // notyfSocket.emit("leave_room", { timeStamp });
+  //         }
+  //     }
+  //   });
+
+    // Listen for disconnect event
+    notyfSocket.on('disconnect', () => {
+      initialSocketId = null;
+      console.log('Socket disconnected with disconnect event');
+      setIsConnected(false);
+    });
+
+    // Disconnect socket on unmount
+    return () => {
+      notyfSocket.disconnect();
+    };
+  }, []);
+    
   return (
     <div className='py-1 border-bottom header'>
       <div className='container d-flex justify-content-between align-items-center'>
@@ -32,9 +84,22 @@ const Header = () => {
               >
                 Logout
               </button>
-              <Link className='h5 text-white text-decoration-none mb-0 ms-2' to={`/wallet/${loggedInUser.id}`}>
-                <strong className='text-white'>94.85$</strong>
-              </Link>
+
+              {
+                socket ? <Notification 
+                            socket={socket} 
+                            isConnected={isConnected}
+                            loggedInUser={loggedInUser}
+                          />  : null
+              }
+              
+
+              <div className="dropdown">
+                <Link className="me-3 dropdown-toggle hidden-arrow text-white mx-4 font-xl" to={`/wallet/${loggedInUser.id}`}>
+                    <i className="fas fa-wallet"></i>
+                    <span className="badge rounded-pill badge-notification bg-secondary">94.85$</span>
+                </Link>
+              </div>
               {
                 loggedInUser.permissions.includes("master") ? 
                 <Link className='h6 text-white text-decoration-none mb-0 ms-5' to={`/master/${loggedInUser.id}`}>
@@ -58,17 +123,6 @@ const Header = () => {
               <Dropdown.Item onClick={() => dispatch(changeRegion('ksa'))}>KSA</Dropdown.Item>
             </DropdownButton>
           </div>
-
-          {/* <ul className="results">
-              <li className="matches-list">
-                  <div className="participate-team">
-                      <h3><span>UK</span></h3>
-                  </div>
-                  <div className="participate-team oponent">
-                      <h3><span>BD</span></h3>
-                  </div>
-              </li>
-          </ul> */}
       </div>
     </div>
   );

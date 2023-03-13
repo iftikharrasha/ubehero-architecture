@@ -363,3 +363,39 @@ body {
             transform: translateY(0rem);
   }
 }
+
+.notyf-item {
+  min-width: 400px;
+  border-bottom: 1px solid gray;
+  padding: 4px 0;
+}
+
+.notyf-item a span{
+  width: 40px;
+  height: 40px;
+  background-color: white;
+  border-radius: 50%;
+  border: 2px solid gray;
+}
+
+.notyf-item a span img{
+  width: 20px;
+  height: 20px;
+}
+
+.notyf-item .subject{
+  align-self: flex-start;
+}
+
+.notyf-item .subject p, h6{
+  margin: 0;
+  margin-left: 10px;
+}
+
+.notyf-item .subject h6{
+  font-size: 16px;
+}
+
+.notyf-item .subject p{
+  font-size: 14px;
+}

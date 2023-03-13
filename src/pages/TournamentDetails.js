@@ -65,7 +65,6 @@ const TournamentDetails = () => {
     };
 
     const handleOrder = () => {
-        // history.push(`/tournament/details/${id}/order`);
         setRouteKey('order');
     };
 
@@ -76,27 +75,24 @@ const TournamentDetails = () => {
     //socket implementation
     const [socket, setSocket] = useState(null);
     const [isConnected, setIsConnected] = useState(false);
-    // const [initialSocketId, setInitialSocketId] = useState(null);
-    // console.log('isConnected', isConnected)
   
     useEffect(() => {
-      const newSocket = io.connect(`${process.env.REACT_APP_API_LINK}`, {
+      const chatRoomSocket = io.connect(`${process.env.REACT_APP_API_LINK}/chatRoom`, {
         transports: ['websocket'],
       });
   
-      setSocket(newSocket);
+      setSocket(chatRoomSocket);
   
       // Listen for pong event
-      newSocket.on("pong", (receivedDate, pingReceivedAt, pongSocketId) => {
+      chatRoomSocket.on("pong", (receivedDate, pingReceivedAt, pongSocketId) => {
 
         const timeStamp = new Date().getTime();
         const latency = timeStamp - receivedDate;
-        console.log(`Received pong of ${newSocket.id} at ${pingReceivedAt} with latency ${latency}ms`);
+        console.log(`Received pong of ${chatRoomSocket.id} at ${pingReceivedAt} with latency ${latency}ms`);
 
         if(!initialSocketId){
             console.log("pongSocketId, initialSocketId", pongSocketId, initialSocketId)
             initialSocketId = pongSocketId;
-            // setInitialSocketId(pongSocketId);
         }
 
         // Compare the socketId with the initial socketId to see if the socket is still connected
@@ -106,13 +102,13 @@ const TournamentDetails = () => {
                 console.log('Socket disconnected for inactivity!');
                 setIsConnected(false);
 
-                newSocket.emit("leave_room", { timeStamp });
+                chatRoomSocket.emit("leave_room", { timeStamp });
             }
         }
       });
 
       // Listen for disconnect event
-      newSocket.on('disconnect', () => {
+      chatRoomSocket.on('disconnect', () => {
         initialSocketId = null;
         console.log('Socket disconnected with disconnect event');
         setIsConnected(false);
@@ -120,7 +116,7 @@ const TournamentDetails = () => {
   
       // Disconnect socket on unmount
       return () => {
-        newSocket.disconnect();
+        chatRoomSocket.disconnect();
       };
     }, []);
   

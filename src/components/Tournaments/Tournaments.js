@@ -28,7 +28,7 @@ const Tournaments = ({remark, route, handleCancel, tournament, detailsPage, hand
         <div className='col-md-9'>
           <div className='card-body'>
             <h5 className='card-title'>{tournamentName}</h5>
-            <h6>{gameType}</h6>
+            {/* <h6>{gameType}</h6> */}
             <p className='card-text'>version: {version}</p>
             {
               remark ? null :
