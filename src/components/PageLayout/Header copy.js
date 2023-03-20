@@ -10,7 +10,7 @@ import ubehero from "../../images/ubehero-dark.svg";
 import Notification from "../Common/Notification/Notification";
 import io from 'socket.io-client';
 
-// let initialSocketId = null;
+let initialSocketId = null;
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -77,7 +77,7 @@ const Header = () => {
 
     // Listen for disconnect event
     notyfSocket.on('disconnect', () => {
-      // initialSocketId = null;
+      initialSocketId = null;
       localStorage.removeItem("notyfSocketId");
       console.log('Socket disconnected with disconnect event');
       setIsConnected(false);
