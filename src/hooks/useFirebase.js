@@ -16,7 +16,7 @@ const useFirebase = () => {
             if(response.data.status === 200){
                 localStorage.setItem('jwt', response.data.data.jwt);
                 localStorage.setItem('refresh', response.data.data.refreshToken);
-                dispatch(setLogIn());
+                dispatch(setLogIn(response.data.data.user));
 
                 setErrorMessage(null);
                 const destination = location?.state?.from || '/';

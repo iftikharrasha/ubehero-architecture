@@ -399,3 +399,8 @@ body {
 .notyf-item .subject p{
   font-size: 14px;
 }
+
+.dropdown-menu.show{
+  max-height: 90vh;
+  overflow-y: scroll;
+}

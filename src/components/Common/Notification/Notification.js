@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-const Notification = ({socket, isConnected, loggedInUser}) => {
+const Notification = ({socket, isConnected, userId}) => {
   const [notyfReceived, setNotyfReceived] = useState([]);
 
     useEffect(() => {
         if (socket) {
-            const userId = loggedInUser.id;
-
             const data = {
               userId: userId,
             }
@@ -34,10 +32,16 @@ const Notification = ({socket, isConnected, loggedInUser}) => {
             setNotyfReceived((state) => [
                 ...state,
                 {
-                    message: data.message,
-                    senderName: data.senderName,
+                    type: data.type,
+                    subject: data.subject,
+                    subjectPhoto: data.subjectPhoto,
+                    invokedByName: data.invokedByName,
+                    invokedById: data.invokedById,
+                    receivedByName: data.receivedByName,
+                    receivedById: data.receivedById,
+                    route: data.route,
                     timeStamp: data.timeStamp,
-                    senderPhoto: data.senderPhoto,
+                    read: data.read
                 },
             ]);
         });
@@ -95,4 +99,5 @@ const Notification = ({socket, isConnected, loggedInUser}) => {
     );
 };
 
+// export default withNotyfSocket(Notification);
 export default Notification;

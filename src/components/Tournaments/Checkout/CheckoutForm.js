@@ -1,7 +1,39 @@
+import moment from 'moment';
 import React from 'react';
+import { useSelector } from 'react-redux';
+import useAuth from '../../../hooks/useAuth';
+import useNotyf from '../../../hooks/useNotyf';
 
 const CheckoutForm = ({method, tournament}) => {
     const { _id, tournamentName, gameType, tournamentThumbnail, version, purchased, settings } = tournament;
+    const { loggedInUser } = useAuth();
+
+    //just for testing purposes for notifications
+    const user = useSelector((state) => state.profile.data)
+    const jwt = localStorage.getItem("jwt");
+    const { socket } = useNotyf(user, jwt);
+
+    const sendMessage = () => {
+        const timeStamp = Date.now();
+        const date = moment(timeStamp);
+        const output = date.format('YYYY-MM-DDTHH:mm:ss.SSS');
+
+        const data = {
+          type: "tournament_registration",
+          subject: "You’ve joined the tournament",
+          subjectPhoto: tournamentThumbnail,
+          invokedByName: tournamentName,
+          invokedById: _id,
+          receivedByName: loggedInUser.name,
+          receivedById: loggedInUser.id,
+          route: `tournament/details/${_id}`,
+          timeStamp: output,
+          read: false
+        }
+
+        // Send message to server
+        socket.emit("send_notification", data);
+    };
 
     return (
         <section className="order-form">
@@ -107,7 +139,7 @@ const CheckoutForm = ({method, tournament}) => {
 
                             <div className="row my-4">
                                 <div className="col-12">
-                                    <button type="button" id="btnSubmit" className="btn btn-primary d-block mx-auto btn-submit">Submit</button>
+                                    <button type="button" id="btnSubmit" className="btn btn-primary d-block mx-auto btn-submit" onClick={sendMessage}>Submit</button>
                                 </div>
                             </div>
                         </div>

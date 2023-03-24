@@ -18,7 +18,6 @@ export const fetchProfileDetails = createAsyncThunk(
     }
 );
 
-
 const profileSlice = createSlice({
     name: 'profile',
     initialState: {
@@ -29,6 +28,7 @@ const profileSlice = createSlice({
     },
     reducers: {
         setLogIn: (state, action) => {
+            state.data = action.payload || state.data;
             state.signed_in = true;
         },
         setLogOut: (state, action) => {

@@ -5,7 +5,6 @@ import Tabs from 'react-bootstrap/Tabs';
 
 const UserList = ({socket, leaderboard}) => {
     const [roomUsers, setRoomUsers] = useState([]);
-    console.log('roomUsers', roomUsers);
 
     useEffect(() => {
         socket.on("chatroom_users", (data) => {
@@ -25,7 +24,7 @@ const UserList = ({socket, leaderboard}) => {
             id="uncontrolled-tab-example"
             className="mb-3"
         >
-            <Tab eventKey="online" title={`Online (${roomUsers.length})`}>
+            <Tab eventKey="online" title={`Online (${roomUsers.length + 1})`}>
                 <div id="plist" className="people-list px-1">
                     <ul className="list-unstyled chat-list mb-0">
                         <li className="clearfix active mb-1">

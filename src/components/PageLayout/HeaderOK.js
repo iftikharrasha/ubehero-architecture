@@ -22,8 +22,8 @@ const Header = () => {
   const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
-    const notyfSocketId = localStorage.getItem("notyfSocketId");
-    const ACCESS_TOKEN = localStorage.getItem("jwt");
+    const notyfSocketId = sessionStorage.getItem("notyfSocketId");
+    const ACCESS_TOKEN = sessionStorage.getItem("jwt");
     const notyfSocket = io.connect(`${process.env.REACT_APP_API_LINK}/notifications`, {
       transports: ['websocket'],
       query: { userId: loggedInUser.id },
@@ -36,7 +36,7 @@ const Header = () => {
     });
 
     notyfSocket.on("connect", () => {
-      localStorage.setItem("notyfSocketId", notyfSocket.id);
+      sessionStorage.setItem("notyfSocketId", notyfSocket.id);
       console.log(`Notyf socket connected with ID ${notyfSocket.id}`);
       setIsConnected(true);
     });
@@ -78,7 +78,7 @@ const Header = () => {
     // Listen for disconnect event
     notyfSocket.on('disconnect', () => {
       initialSocketId = null;
-      localStorage.removeItem("notyfSocketId");
+      sessionStorage.removeItem("notyfSocketId");
       console.log('Socket disconnected with disconnect event');
       setIsConnected(false);
     });

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Link } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import Dropdown from 'react-bootstrap/Dropdown';
@@ -8,88 +8,13 @@ import { changeRegion } from "../../redux/slices/staticSlice";
 import { useHistory } from "react-router-dom";
 import ubehero from "../../images/ubehero-dark.svg";
 import Notification from "../Common/Notification/Notification";
-import io from 'socket.io-client';
 
 // let initialSocketId = null;
 
-const Header = () => {
+const Header = ({socket, isConnected, userId}) => {
   const dispatch = useDispatch();
-  const { loggedInUser, handlelogOut } = useAuth();
   const history = useHistory();
-
-  //socket implementation
-  const [socket, setSocket] = useState(null);
-  const [isConnected, setIsConnected] = useState(false);
-
-  useEffect(() => {
-    const notyfSocketId = localStorage.getItem("notyfSocketId");
-    const ACCESS_TOKEN = localStorage.getItem("jwt");
-    const notyfSocket = io.connect(`${process.env.REACT_APP_API_LINK}/notifications`, {
-      transports: ['websocket'],
-      query: { userId: loggedInUser.id },
-      forceNew: true,
-      reconnection: true,
-      reconnectionDelay: 1000,
-      reconnectionAttempts: Infinity,
-      auth: { token: ACCESS_TOKEN },
-      ...(notyfSocketId ? { auth: { notyfSocketId } } : {}),
-    });
-
-    notyfSocket.on("connect", () => {
-      localStorage.setItem("notyfSocketId", notyfSocket.id);
-      console.log(`Notyf socket connected with ID ${notyfSocket.id}`);
-      setIsConnected(true);
-    });
-
-    notyfSocket.on("reconnect", (attemptNumber) => {
-      console.log(`Notyf socket reconnected after ${attemptNumber} attempts`);
-      setIsConnected(true);
-    });
-  
-    notyfSocket.on("reconnect_error", (error) => {
-      console.log("Notyf socket reconnection error", error);
-      setIsConnected(false);
-    });
-
-    // Listen for pong event
-  //   notyfSocket.on("pong", (receivedDate, pingReceivedAt, pongSocketId) => {
-
-  //     const timeStamp = new Date().getTime();
-  //     const latency = timeStamp - receivedDate;
-  //     console.log(`Received pong of ${notyfSocket.id} at ${pingReceivedAt} with latency ${latency}ms`);
-
-  //     if(!initialSocketId){
-  //         console.log("pongSocketId, initialSocketId", pongSocketId, initialSocketId)
-  //         initialSocketId = pongSocketId;
-  //     }
-
-  //     // Compare the socketId with the initial socketId to see if the socket is still connected
-  //     if(initialSocketId){
-  //         if (pongSocketId !== initialSocketId) {
-  //             initialSocketId = null;
-  //             console.log('Socket disconnected for inactivity!');
-  //             setIsConnected(false);
-
-  //             // notyfSocket.emit("leave_room", { timeStamp });
-  //         }
-  //     }
-  //   });
-
-    // Listen for disconnect event
-    notyfSocket.on('disconnect', () => {
-      // initialSocketId = null;
-      localStorage.removeItem("notyfSocketId");
-      console.log('Socket disconnected with disconnect event');
-      setIsConnected(false);
-    });
-
-    setSocket(notyfSocket);
-
-    // Disconnect socket on unmount
-    return () => {
-      notyfSocket.disconnect();
-    };
-  }, []);
+  const { loggedInUser, handlelogOut } = useAuth();
     
   return (
     <div className='py-1 border-bottom header'>
@@ -111,11 +36,13 @@ const Header = () => {
                 Logout
               </button>
 
+              
+              {/* <Notification loggedInUser={loggedInUser}/> */}
               {
                 socket ? <Notification 
                             socket={socket} 
                             isConnected={isConnected}
-                            loggedInUser={loggedInUser}
+                            userId={userId}
                           />  : null
               }
               
@@ -154,4 +81,5 @@ const Header = () => {
   );
 };
 
+// export default withNotyfSocket(Header);
 export default Header;
