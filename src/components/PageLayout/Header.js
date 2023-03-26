@@ -11,7 +11,7 @@ import Notification from "../Common/Notification/Notification";
 
 // let initialSocketId = null;
 
-const Header = ({socket, isConnected, userId}) => {
+const Header = ({socketN, isConnected, userId}) => {
   const dispatch = useDispatch();
   const history = useHistory();
   const { loggedInUser, handlelogOut } = useAuth();
@@ -20,7 +20,6 @@ const Header = ({socket, isConnected, userId}) => {
     <div className='py-1 border-bottom header'>
       <div className='container d-flex justify-content-between align-items-center'>
         <Link className='h5 text-dark text-decoration-none' to='/'>
-          {/* E24<strong className='text-primary'>Games</strong> */}
           <img src={ubehero} className='img-fluid' alt="ubehero" />
         </Link>
         {loggedInUser.isSignedIn ? (
@@ -37,10 +36,9 @@ const Header = ({socket, isConnected, userId}) => {
               </button>
 
               
-              {/* <Notification loggedInUser={loggedInUser}/> */}
               {
-                socket ? <Notification 
-                            socket={socket} 
+                socketN ? <Notification 
+                            socketN={socketN} 
                             isConnected={isConnected}
                             userId={userId}
                           />  : null
@@ -81,5 +79,4 @@ const Header = ({socket, isConnected, userId}) => {
   );
 };
 
-// export default withNotyfSocket(Header);
 export default Header;

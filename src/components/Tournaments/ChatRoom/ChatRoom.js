@@ -3,22 +3,28 @@ import useAuth from '../../../hooks/useAuth';
 import UserList from './UserList';
 import SendBox from './SendBox';
 import MessagePanel from './MessagePanel';
+import { useSelector } from 'react-redux';
 
 const ChatRoom = ({socket, isConnected, tournamentDetails, leaderboardDetails, routeKey, isTyping, setIsTyping}) => {
     const { _id, tournamentName } = tournamentDetails;
     const { leaderboard } = leaderboardDetails;
     const { loggedInUser } = useAuth();
+    const user = useSelector((state) => state.profile.data)
 
     useEffect(() => {
         if (socket) {
             const roomId = _id;
+            const userId = loggedInUser.id;
             const senderName = loggedInUser.name;
             const senderPhoto = loggedInUser.photo;
+            const stats = user.stats;
 
             const data = {
+              userId: userId,
               roomId: roomId,
               senderName: senderName,
-              senderPhoto: senderPhoto
+              senderPhoto: senderPhoto,
+              stats: stats
             }
 
             socket.emit("join_room", data);

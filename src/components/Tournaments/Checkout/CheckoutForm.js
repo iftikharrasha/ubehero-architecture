@@ -11,9 +11,9 @@ const CheckoutForm = ({method, tournament}) => {
     //just for testing purposes for notifications
     const user = useSelector((state) => state.profile.data)
     const jwt = localStorage.getItem("jwt");
-    const { socket } = useNotyf(user, jwt);
+    const { socketN } = useNotyf(user, jwt);
 
-    const sendMessage = () => {
+    const sendNotification = () => {
         const timeStamp = Date.now();
         const date = moment(timeStamp);
         const output = date.format('YYYY-MM-DDTHH:mm:ss.SSS');
@@ -25,14 +25,14 @@ const CheckoutForm = ({method, tournament}) => {
           invokedByName: tournamentName,
           invokedById: _id,
           receivedByName: loggedInUser.name,
-          receivedById: loggedInUser.id,
+          receivedById: loggedInUser.id,  //this user will receive notification
           route: `tournament/details/${_id}`,
           timeStamp: output,
           read: false
         }
 
         // Send message to server
-        socket.emit("send_notification", data);
+        socketN.emit("send_notification", data);
     };
 
     return (
@@ -139,7 +139,7 @@ const CheckoutForm = ({method, tournament}) => {
 
                             <div className="row my-4">
                                 <div className="col-12">
-                                    <button type="button" id="btnSubmit" className="btn btn-primary d-block mx-auto btn-submit" onClick={sendMessage}>Submit</button>
+                                    <button type="button" id="btnSubmit" className="btn btn-primary d-block mx-auto btn-submit" onClick={sendNotification}>Submit</button>
                                 </div>
                             </div>
                         </div>

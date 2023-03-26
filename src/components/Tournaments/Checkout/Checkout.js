@@ -54,7 +54,7 @@ const Checkout = ({handleOrder, handlePaymentMethod, method, setMethod, itemName
                                 <h6>You've picked {method} method to pay</h6>
                             </div> : null
                         }
-                        <button className="btn btn-primary mx-3" onClick={handleOrder}>Checkout</button>
+                        <button className="btn btn-primary mx-3 mt-3" onClick={handleOrder}>Checkout</button>
                         <p onClick={() => setMethod('')} role="button">cancel</p>
                     </div>
                 }

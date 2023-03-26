@@ -7,14 +7,14 @@ import useNotyf from '../../hooks/useNotyf';
 const PageLayout = ({ children }) => {
   const user = useSelector((state) => state.profile.data)
   const jwt = localStorage.getItem("jwt");
-  const { socket, isConnected } = useNotyf(user, jwt);
+  const { socketN, isConnected } = useNotyf(user, jwt);
 
   return (
     <div>
       <Header 
-        socket={socket} 
+        socketN={socketN} 
         isConnected={isConnected}
-        userId={user._id}
+        userId={user?._id}
       />
 
       <div className="container my-4">

@@ -4,14 +4,14 @@ import io from "socket.io-client";
 const SOCKET_URL = `${process.env.REACT_APP_API_LINK}/notifications`;
 
 const useNotyf = (user, jwt) => {
-  const [socket, setSocket] = useState(null);
+  const [socketN, setSocketN] = useState(null);
   const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
-    if(user._id){
+    if(user?._id){
       const notyfSocket = io.connect(SOCKET_URL, {
         transports: ["websocket"],
-        query: { userId: user._id, userName: user.userName },
+        query: { userId: user?._id, userName: user?.userName },
         forceNew: true,
         reconnection: true,
         reconnectionDelay: 1000,
@@ -29,18 +29,18 @@ const useNotyf = (user, jwt) => {
         setIsConnected(false);
       });
   
-      setSocket(notyfSocket);
+      setSocketN(notyfSocket);
   
       return () => {
         notyfSocket.disconnect();
       };
     }else{
-      return { socket: null, isConnected: false };
+      return { socketN: null, isConnected: false };
     }
-  }, [user._id, user.userName, jwt]);
+  }, [user?._id, user?.userName, jwt]);
 
   return {
-    socket,
+    socketN,
     isConnected,
   };
 };

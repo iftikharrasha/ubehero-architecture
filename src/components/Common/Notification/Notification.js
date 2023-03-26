@@ -1,34 +1,34 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-const Notification = ({socket, isConnected, userId}) => {
+const Notification = ({socketN, isConnected, userId}) => {
   const [notyfReceived, setNotyfReceived] = useState([]);
 
     useEffect(() => {
-        if (socket) {
+        if (socketN) {
             const data = {
               userId: userId,
             }
 
-            socket.emit("join_notifications", data);
+            socketN.emit("join_notifications", data);
         }
     }, []);
   
     // useEffect(() => {
     //   let interval;
-    //   if (socket) {
+    //   if (socketN) {
     //     interval = setInterval(() => {
-    //       socket.emit("ping");
+    //       socketN.emit("ping");
     //     }, 15000);
     //     setIsConnected(true);
     //   }
     
     //   return () => clearInterval(interval);
-    // }, [socket]);
+    // }, [socketN]);
 
     useEffect(() => {
-      if(socket){
-          socket.on('receive_notification', (data) => {
+      if(socketN){
+          socketN.on('receive_notification', (data) => {
             setNotyfReceived((state) => [
                 ...state,
                 {
@@ -47,18 +47,18 @@ const Notification = ({socket, isConnected, userId}) => {
         });
 
         // Remove event listener on component unmount
-        return () => socket.off('receive_notification');
+        return () => socketN.off('receive_notification');
       }
-  }, [socket]);
+  }, [socketN]);
 
   // Runs whenever a socket event is received from the server
   useEffect(() => {
-    socket.on("last_10_notifications", (last10Notifications) => {
+    socketN.on("last_10_notifications", (last10Notifications) => {
       setNotyfReceived((state) => [...last10Notifications, ...state]);
     });
 
-    return () => socket.off("last_10_notifications");
-}, [socket]);
+    return () => socketN.off("last_10_notifications");
+}, [socketN]);
 
     return (
         <div className="dropdown">
@@ -70,7 +70,7 @@ const Notification = ({socket, isConnected, userId}) => {
             <ul className="dropdown-menu p-0" aria-labelledby="navbarDropdownMenuLink">
               {
                 notyfReceived.length > 0 ?
-                  notyfReceived.map((item, index) => (
+                  notyfReceived.reverse().map((item, index) => (
                     <li key={index} className="notyf-item">
                         <a className="dropdown-item" href={`${process.env.REACT_APP_CLIENT_ORIGIN}/${item.route}`}>
                           <div className='d-flex justify-content-between align-items-center'>
@@ -99,5 +99,4 @@ const Notification = ({socket, isConnected, userId}) => {
     );
 };
 
-// export default withNotyfSocket(Notification);
 export default Notification;

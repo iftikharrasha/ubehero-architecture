@@ -2,9 +2,23 @@ import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
+import PopupModal from '../../Common/PopupModal/PopupModal';
 
 const UserList = ({socket, leaderboard}) => {
     const [roomUsers, setRoomUsers] = useState([]);
+    
+    //for popup
+    const [popupUser, setPopupUser] = useState(null);
+    console.log(popupUser)
+    const [show, setShow] = useState(false);
+    const handleClose = () => {
+        setPopupUser(null)
+        setShow(false)
+    };
+    const handleShow = (user) => {
+        setPopupUser(user)
+        setShow(true)
+    };
 
     useEffect(() => {
         socket.on("chatroom_users", (data) => {
@@ -15,10 +29,11 @@ const UserList = ({socket, leaderboard}) => {
     }, [socket]);
 
     const isUserOnline = (user) => {
-        return roomUsers.some((roomUser) => roomUser.name === user.userName);
+        return roomUsers.some((roomUser) => roomUser.userName === user.userName);
     }
 
     return (
+        <>
         <Tabs
             defaultActiveKey="online"
             id="uncontrolled-tab-example"
@@ -36,10 +51,10 @@ const UserList = ({socket, leaderboard}) => {
                         </li>
                         {
                             roomUsers.map((participant, index) => (
-                                <li className="clearfix active mb-1" key={index}>
-                                    <img src={participant.senderPhoto} alt="avatar"/>
+                                <li className="clearfix active mb-1" key={index} onClick={(e) => handleShow(participant)}>
+                                    <img src={participant.photo} alt="avatar"/>
                                     <div className="about">
-                                        <div className="name"><i className="fa fa-circle online"></i> {participant.name}</div>
+                                        <div className="name"><i className="fa fa-circle online"></i> {participant.userName}</div>
                                         <div className="status">Joined {moment(participant.timeStamp).fromNow()} </div>                                            
                                     </div>
                                 </li>
@@ -53,7 +68,7 @@ const UserList = ({socket, leaderboard}) => {
                     <ul className="list-unstyled chat-list mb-0">
                         {
                             leaderboard.map((participant, index) => (
-                                <li className="clearfix active mb-1" key={index}>
+                                <li className="clearfix active mb-1" key={index} onClick={(e) => handleShow(participant)}>
                                     <img src={participant.photo} alt="avatar"/>
                                     <div className="about">
                                         <div className="name"><i className={`fa fa-circle ${isUserOnline(participant) ? 'online' : 'offline'}`}></i> {participant.userName}</div>
@@ -66,6 +81,10 @@ const UserList = ({socket, leaderboard}) => {
                 </div>
             </Tab>
         </Tabs>
+
+        {/* popup for user profile */}
+        <PopupModal show={show} handleClose={handleClose} popupUser={popupUser}/>
+      </>
     );
 };
 
