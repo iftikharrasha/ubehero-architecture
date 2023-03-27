@@ -87,7 +87,7 @@ const Notification = ({socketN, isConnected, userId}) => {
         <ul className="dropdown-menu p-0" aria-labelledby="navbarDropdownMenuLink">
           {
             notyfReceived.length > 0 ?
-              notyfReceived.reverse().map((item, index) => (
+              notyfReceived.slice().reverse().map((item, index) => (
                 <li key={index} className={item.read === false ? "notyf-item unread" : "notyf-item"}>
                     <a className="dropdown-item" href={`${process.env.REACT_APP_CLIENT_ORIGIN}/${item.route}`}>
                       <div className='d-flex justify-content-between align-items-center'>
