@@ -14,7 +14,7 @@ const PopupModal = ({show, handleClose, popupUser}) => {
 
      const { socketN } = useNotyf(user, jwt);
      
-     const sendNotification = () => {
+     const sendFollowNotyf = () => {
        const timeStamp = Date.now();
        const date = moment(timeStamp);
        const output = date.format('YYYY-MM-DDTHH:mm:ss.SSS');
@@ -76,7 +76,7 @@ const PopupModal = ({show, handleClose, popupUser}) => {
                                         </div> :
                                         <div className="d-flex pt-1">
                                             <button type="button" className="btn btn-outline-success me-1 flex-grow-1 disabled" disabled>Chat</button>
-                                            <button type="button" className="btn btn-primary flex-grow-1" onClick={sendNotification}>Follow</button>
+                                            <button type="button" className="btn btn-primary flex-grow-1" onClick={sendFollowNotyf}>Follow</button>
                                         </div>
                                     }
                                 </div>

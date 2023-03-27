@@ -8,11 +8,24 @@ import Login from './pages/Login'
 import Profile from './pages/Profile.js'
 import Wallet from './pages/Wallet'
 import PrivateRoute from './pages/PrivateRoute';
+import Header from './components/PageLayout/Header';
+import { useSelector } from 'react-redux';
+import useNotyf from './hooks/useNotyf';
 
 function App() {
+  const user = useSelector((state) => state.profile.data)
+  const jwt = localStorage.getItem("jwt");
+  const { socketN, isConnected } = useNotyf(user, jwt);
+  
   return (
     <AuthProvider>
+
       <Router>
+        <Header 
+          socketN={socketN} 
+          isConnected={isConnected}
+          userId={user?._id}
+        />
         <Route render={({location}) => (
 
             <Switch location={location}>

@@ -13,7 +13,7 @@ const CheckoutForm = ({method, tournament}) => {
     const jwt = localStorage.getItem("jwt");
     const { socketN } = useNotyf(user, jwt);
 
-    const sendNotification = () => {
+    const sendFollowNotyf = () => {
         const timeStamp = Date.now();
         const date = moment(timeStamp);
         const output = date.format('YYYY-MM-DDTHH:mm:ss.SSS');
@@ -139,7 +139,7 @@ const CheckoutForm = ({method, tournament}) => {
 
                             <div className="row my-4">
                                 <div className="col-12">
-                                    <button type="button" id="btnSubmit" className="btn btn-primary d-block mx-auto btn-submit" onClick={sendNotification}>Submit</button>
+                                    <button type="button" id="btnSubmit" className="btn btn-primary d-block mx-auto btn-submit" onClick={sendFollowNotyf}>Submit</button>
                                 </div>
                             </div>
                         </div>

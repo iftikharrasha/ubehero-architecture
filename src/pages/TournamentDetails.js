@@ -79,6 +79,10 @@ const TournamentDetails = () => {
     useEffect(() => {
       const chatRoomSocket = io.connect(`${process.env.REACT_APP_API_LINK}/chatRoom`, {
         transports: ['websocket'],
+        cors: {
+          origin: `${process.env.REACT_APP_CLIENT_ORIGIN}`,
+          methods: ['GET', 'POST'],
+        },
       });
   
       setSocket(chatRoomSocket);

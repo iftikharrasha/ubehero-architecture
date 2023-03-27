@@ -19,8 +19,8 @@ const Leaderboards = (props) => {
     <div className='card d-flex mb-3 p-3' 
       style={{position: 'relative'}}
     >
-      <table class="table align-middle mb-0 bg-white">
-        <thead class="bg-light">
+      <table className="table align-middle mb-0 bg-white">
+        <thead className="bg-light">
           <tr>
             <th>#</th>
             <th>Username</th>
@@ -38,28 +38,28 @@ const Leaderboards = (props) => {
               <tr key={index} onClick={(e) => handleShow(row)} className="cursor-pointer">
                 <td>{index+1}</td>
                 <td>
-                  <div class="d-flex align-items-center">
+                  <div className="d-flex align-items-center">
                     <img
                         src={row.photo}
                         alt=""
                         style={{width: "45px", height: "45px"}}
-                        class="rounded-circle"
+                        className="rounded-circle"
                         />
-                    <div class="ms-3">
-                      <p class="fw-bold mb-1">{row.userName}</p>
-                      <p class="text-muted mb-0">Country: {row.country}</p>
+                    <div className="ms-3">
+                      <p className="fw-bold mb-1">{row.userName}</p>
+                      <p className="text-muted mb-0">Country: {row.country}</p>
                     </div>
                   </div>
                 </td>
                 <td>
-                  <p class="fw-normal mb-1">{row.stats?.levelTitle}</p>
-                  <p class="text-muted mb-0">Level {row.stats?.level}</p>
+                  <p className="fw-normal mb-1">{row.stats?.levelTitle}</p>
+                  <p className="text-muted mb-0">Level {row.stats?.level}</p>
                 </td>
                 <td>{row.stats?.totalGamePlayed}</td>
                 <td>{row.stats?.totalWins}</td>
                 <td>{row.stats.totalXp}</td>
                 <td>
-                  <span class="badge badge-success rounded-pill d-inline">Verified</span>
+                  <span className="badge badge-success rounded-pill d-inline">Verified</span>
                 </td>
               </tr>
             ))

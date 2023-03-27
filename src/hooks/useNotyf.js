@@ -17,6 +17,10 @@ const useNotyf = (user, jwt) => {
         reconnectionDelay: 1000,
         reconnectionAttempts: Infinity,
         auth: { token: jwt },
+        cors: {
+          origin: `${process.env.REACT_APP_CLIENT_ORIGIN}`,
+          methods: ['GET', 'POST'],
+        },
       });
   
       notyfSocket.on("connect", () => {
