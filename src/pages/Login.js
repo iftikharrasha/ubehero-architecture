@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 
 const Login = () => {
   const isLoggedIn = useSelector(state => state.profile.signed_in);
+  const actingAs = useSelector(state => state.profile.actingAs);
   const id = useSelector(state => state.profile.data ? state.profile.data._id : null);
   const {  signInWithGoogle, handleLogin, errorMessage } = useAuth();
   const [logData, setLogData] = useState({ emailAddress: "", password: "" });
@@ -23,9 +24,15 @@ const Login = () => {
 
   useEffect(() => {
     if (isLoggedIn && id) {
-       history.push(`/profile/${id}`);
+      if(actingAs === "user"){
+        history.push(`/profile/${id}`);
+      }else if(actingAs === "master"){
+        history.push(`/master/${id}`);
+      }else{
+        history.push(`/profile/${id}`);
+      }
     }
-}, [isLoggedIn]);
+}, [isLoggedIn, id, actingAs, history]);
 
   return (
     <div

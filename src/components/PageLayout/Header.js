@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import Dropdown from 'react-bootstrap/Dropdown';
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import { changeRegion } from "../../redux/slices/staticSlice";
 import { useHistory } from "react-router-dom";
@@ -16,6 +16,11 @@ const Header = ({socketN, isConnected, userId}) => {
   const dispatch = useDispatch();
   const history = useHistory();
   const { loggedInUser, handlelogOut } = useAuth();
+  const actingAs = useSelector(state => state.profile.actingAs);
+
+  const switchRoute = () => {
+    history.push(`/master/${userId}`);
+  }
     
   return (
     <div className='py-1 border-bottom header'>
@@ -49,9 +54,9 @@ const Header = ({socketN, isConnected, userId}) => {
               
               {
                 loggedInUser.permissions.includes("master") ? 
-                <Link className='h6 text-white text-decoration-none mb-0 ms-5' to={`/master/${loggedInUser.id}`}>
-                  <strong className='text-white'>Switch to Master</strong>
-                </Link> : null
+                <span className='mb-0 ms-5'>
+                  <button className='btn-outline-light bg-dark h6 text-white' onClick={switchRoute}>Master Panel</button>
+                </span> : null
               }
               
             </div>

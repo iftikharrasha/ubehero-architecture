@@ -367,3 +367,36 @@ body {
 .walletFont p{
   font-size: 16px;
 }
+
+.masterNav {
+    position: fixed;
+    top: 80px;
+    bottom: 0;
+    left: 0;
+    padding: 58px 0 0;
+    box-shadow: 0 2px 5px 0 rgb(0 0 0 / 5%), 0 2px 10px 0 rgb(0 0 0 / 5%);
+    width: 240px;
+    z-index: 600;
+}
+
+.inbox {
+  position: fixed;
+  bottom: 0;
+  right: 20px;
+  width: 400px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+  z-index: 9999;
+}
+.inbox .inbox-wapper{
+  width: 100% !important;
+}
+
+.inbox .card-body{
+  overflow-y: scroll;
+}
+
+.cursor-pointer{
+  cursor: pointer;
+}

@@ -11,7 +11,7 @@ export const fetchProfileDetails = createAsyncThunk(
         const data = await response.json();
 
         if(data.status === 304) {
-            return getState().user.data;
+            return getState().profile.data;
         } else{
             return data;
         }
@@ -24,6 +24,7 @@ const profileSlice = createSlice({
         data: null,
         version: 0,
         signed_in: false,
+        actingAs: "user",
         status: 'idle',
     },
     reducers: {
@@ -36,6 +37,9 @@ const profileSlice = createSlice({
             state.version = 0;
             state.signed_in = false;
             state.status = 'idle';
+        },
+        setRoute: (state, action) => {
+            state.actingAs = action.payload || state.actingAs;
         },
     },
     extraReducers: (builder) => {
@@ -57,5 +61,5 @@ const profileSlice = createSlice({
     },
 });
 
-export const { setLogIn, setLogOut } = profileSlice.actions;
+export const { setLogIn, setLogOut, setRoute } = profileSlice.actions;
 export default profileSlice.reducer;

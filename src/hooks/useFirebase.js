@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from 'axios';
-import { setLogIn, setLogOut } from "../redux/slices/profileSlice";
+import { setLogIn, setLogOut, setRoute } from "../redux/slices/profileSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 const useFirebase = () => {
@@ -17,6 +17,7 @@ const useFirebase = () => {
                 localStorage.setItem('jwt', response.data.data.jwt);
                 localStorage.setItem('refresh', response.data.data.refreshToken);
                 dispatch(setLogIn(response.data.data.user));
+                dispatch(setRoute("user"))
 
                 setErrorMessage(null);
                 const destination = location?.state?.from || '/';

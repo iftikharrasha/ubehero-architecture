@@ -1,8 +1,10 @@
 import moment from 'moment';
 import React from 'react';
+import { useContext } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import InboxContext from '../../../Contexts/InboxContext/InboxContext';
 import useAuth from '../../../hooks/useAuth';
 import useNotyf from '../../../hooks/useNotyf';
 
@@ -58,6 +60,11 @@ const PopupModal = ({show, handleClose, popupUser}) => {
         socketN.emit("send_notification", data);
     };
 
+    const { showInbox, setShowInbox } = useContext(InboxContext);
+    const handleInboxPop = () => {
+        setShowInbox(!showInbox);
+        handleClose();
+    };
     return (
         <Modal show={show} onHide={handleClose} className='popupModal' aria-labelledby="contained-modal-title-vcenter" centered>
             <Modal.Body>
@@ -74,7 +81,7 @@ const PopupModal = ({show, handleClose, popupUser}) => {
                                     style={{width: "180px", borderRadius: "10px"}}/>
                                 </div>
                                 <div className="flex-grow-1 ms-3">
-                                    <h5 className="mb-1">{popupUser?.userName}</h5>
+                                    <h5 className="mb-1">{popupUser?.userName} | <i className="fas fa-message text-primary cursor-pointer" onClick={handleInboxPop}></i></h5>
                                     <p className="mb-2 pb-1" style={{color: "#2b2a2a"}}>Country {popupUser?.country}</p>
                                     <div className="d-flex justify-content-start rounded-3 py-3 mb-2 px-4" style={{backgroundColor: "#ffffff"}}>
                                         <div>
