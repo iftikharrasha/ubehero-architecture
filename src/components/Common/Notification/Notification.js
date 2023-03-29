@@ -1,5 +1,7 @@
+import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import useAuth from '../../../hooks/useAuth';
 
 const Notification = ({socketN, isConnected, userId}) => {
   const [notyfReceived, setNotyfReceived] = useState([]);
@@ -77,6 +79,87 @@ const Notification = ({socketN, isConnected, userId}) => {
     });
   }
 
+  //just for testing purposes for notifications
+  const { loggedInUser } = useAuth();
+     
+  const handleFriendRequest = (e, item) => {
+    e.preventDefault();
+    const timeStamp = Date.now();
+    const date = moment(timeStamp);
+    const output = date.format('YYYY-MM-DDTHH:mm:ss.SSS');
+
+    const data = {
+          type: "friend_request_accept",
+          subject: "Accepted your friend request",
+          subjectPhoto: loggedInUser.photo,
+          invokedByName: loggedInUser.name,
+          invokedById: loggedInUser.id,
+          receivedByName: item.userName,
+          receivedById: item.invokedById, 
+          route: `profile/${loggedInUser.id}`,
+          timeStamp: output,
+          read: false
+    }
+
+    //Send message to server
+    socketN.emit("send_notification", data);
+
+    // Update the state locally
+    setNotyfReceived((notifications) => {
+      const updatedNotifications = notifications.map((notification) => {
+        if (notification._id === item._id) {
+          return  { ...notification, 
+                    type: "friend_request_accept", 
+                    subject: `You're now friend with ${notification.invokedByName}`, 
+                    invokedByName: "Request Accepted",
+                    read: true 
+                  };
+        }
+        return notification;
+      });
+      return updatedNotifications;
+    });
+  };
+
+  const handleFollowRequest = (e, item) => {
+    e.preventDefault();
+    const timeStamp = Date.now();
+    const date = moment(timeStamp);
+    const output = date.format('YYYY-MM-DDTHH:mm:ss.SSS');
+
+    const data = {
+          type: "follow_request_accept",
+          subject: "Following you back",
+          subjectPhoto: loggedInUser.photo,
+          invokedByName: loggedInUser.name,
+          invokedById: loggedInUser.id,
+          receivedByName: item.userName,
+          receivedById: item.invokedById, 
+          route: `profile/${loggedInUser.id}`,
+          timeStamp: output,
+          read: false
+    }
+
+    //Send message to server
+    socketN.emit("send_notification", data);
+
+    // Update the state locally
+    setNotyfReceived((notifications) => {
+      const updatedNotifications = notifications.map((notification) => {
+        if (notification._id === item._id) {
+          return  { ...notification, 
+                    type: "follow_request_accept", 
+                    subject: `You're now following ${notification.invokedByName}`, 
+                    invokedByName: "Following back",
+                    read: true 
+                  };
+        }
+        return notification;
+      });
+      return updatedNotifications;
+    });
+  };
+
   return (
     <div className="dropdown">
         <Link to="/" className="mx-4 dropdown-toggle hidden-arrow text-white" id="navbarDropdownMenuLink"
@@ -101,14 +184,18 @@ const Notification = ({socketN, isConnected, userId}) => {
                           </div>
                         </div>
                         <div>
-                          {item.type === 'follow_request' || item.type === 'team_invite' ?  
+                          {item.type === 'friend_request' || item.type === 'team_invite' ?  
                           <>
-                            <i className="fas fa-check check me-3"></i>
-                            <i className="fas fa-close close"></i>
+                            <i className="fas fa-check check me-3" onClick={(e) => {e.stopPropagation(); handleFriendRequest(e, item)}}></i>
+                            <i className="fas fa-close close" onClick={(e) => {e.stopPropagation(); handleRead(e, item._id, "reject")}}></i>
+                          </> : 
+                          item.type === 'follow_request' ? 
+                          <>
+                            <button className="btn btn-success follow" onClick={(e) => {e.stopPropagation(); handleFollowRequest(e, item)}}>Follow Back</button> 
                           </> : 
                           item.read ? 
-                            <i className="fas fa-envelope-open" onClick={(e) => handleRead(e, item._id)}></i> : 
-                            <i className="fas fa-envelope" onClick={(e) => handleRead(e, item._id)}></i>
+                            <i className="fas fa-envelope-open" onClick={(e) => {e.stopPropagation(); handleRead(e, item._id)}}></i> : 
+                            <i className="fas fa-envelope" onClick={(e) => {e.stopPropagation(); handleRead(e, item._id)}}></i>
                           }
                         </div>
                       </div>

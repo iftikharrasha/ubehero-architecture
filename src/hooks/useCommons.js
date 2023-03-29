@@ -4,7 +4,7 @@
 //   const [socketN, setSocketN] = useState(null);
 
   
-//     const sendFollowNotyf = () => {
+//     const sendFriendRequestNotyf = () => {
 //         const timeStamp = Date.now();
 //         const date = moment(timeStamp);
 //         const output = date.format('YYYY-MM-DDTHH:mm:ss.SSS');

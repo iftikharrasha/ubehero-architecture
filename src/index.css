@@ -347,6 +347,14 @@ body {
   color: #f37878;
 }
 
+.notyf-item .follow{
+  font-size: 0.75rem;
+  background-color: #6c757d;
+  outline: none;
+  box-shadow: 0 4px 9px -4px #000000;
+  border-color: #6c757d;
+}
+
  .unread{
   background-color: #e5e6e9;
 }
@@ -354,4 +362,8 @@ body {
 .dropdown-menu.show{
   max-height: 90vh;
   overflow-y: scroll;
+}
+
+.walletFont p{
+  font-size: 16px;
 }

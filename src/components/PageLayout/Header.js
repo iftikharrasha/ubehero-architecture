@@ -8,6 +8,7 @@ import { changeRegion } from "../../redux/slices/staticSlice";
 import { useHistory } from "react-router-dom";
 import ubehero from "../../images/ubehero-dark.svg";
 import Notification from "../Common/Notification/Notification";
+import WalletPopUp from '../Common/WalletPopUp/WalletPopUp';
 
 // let initialSocketId = null;
 
@@ -43,14 +44,9 @@ const Header = ({socketN, isConnected, userId}) => {
                             userId={userId}
                           />  : null
               }
-              
 
-              <div className="dropdown">
-                <Link className="me-3 dropdown-toggle hidden-arrow text-white mx-4 font-xl" to={`/wallet/${loggedInUser.id}`}>
-                    <i className="fas fa-wallet"></i>
-                    <span className="badge rounded-pill badge-notification bg-secondary">94.85$</span>
-                </Link>
-              </div>
+              <WalletPopUp userId={userId}/>
+              
               {
                 loggedInUser.permissions.includes("master") ? 
                 <Link className='h6 text-white text-decoration-none mb-0 ms-5' to={`/master/${loggedInUser.id}`}>

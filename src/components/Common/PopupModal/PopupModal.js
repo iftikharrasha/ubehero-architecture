@@ -8,33 +8,55 @@ import useNotyf from '../../../hooks/useNotyf';
 
 const PopupModal = ({show, handleClose, popupUser}) => {
     //just for testing purposes for notifications
-     const { loggedInUser } = useAuth();
-     const user = useSelector((state) => state.profile.data)
-     const jwt = localStorage.getItem("jwt");
+    const { loggedInUser } = useAuth();
+    const user = useSelector((state) => state.profile.data)
+    const jwt = localStorage.getItem("jwt");
 
-     const { socketN } = useNotyf(user, jwt);
-     
-     const sendFollowNotyf = () => {
-       const timeStamp = Date.now();
-       const date = moment(timeStamp);
-       const output = date.format('YYYY-MM-DDTHH:mm:ss.SSS');
-   
-       const data = {
-             type: "follow_request",
-             subject: "Sent you a follow request",
-             subjectPhoto: loggedInUser.photo,
-             invokedByName: loggedInUser.name,
-             invokedById: loggedInUser.id,
-             receivedByName: popupUser.userName,
-             receivedById: popupUser.id, 
-             route: `profile/${loggedInUser.id}`,
-             timeStamp: output,
-             read: false
-       }
-   
-       // // Send message to server
-       socketN.emit("send_notification", data);
-   };
+    const { socketN } = useNotyf(user, jwt);
+    
+    const sendFriendRequestNotyf = () => {
+        const timeStamp = Date.now();
+        const date = moment(timeStamp);
+        const output = date.format('YYYY-MM-DDTHH:mm:ss.SSS');
+
+        const data = {
+                type: "friend_request",
+                subject: "Sent you a friend request",
+                subjectPhoto: loggedInUser.photo,
+                invokedByName: loggedInUser.name,
+                invokedById: loggedInUser.id,
+                receivedByName: popupUser.userName,
+                receivedById: popupUser.id, 
+                route: `profile/${loggedInUser.id}`,
+                timeStamp: output,
+                read: false
+        }
+
+        // // Send message to server
+        socketN.emit("send_notification", data);
+    };
+
+    const sendFollowRequestNotyf = () => {
+        const timeStamp = Date.now();
+        const date = moment(timeStamp);
+        const output = date.format('YYYY-MM-DDTHH:mm:ss.SSS');
+
+        const data = {
+                type: "follow_request",
+                subject: "Started following you",
+                subjectPhoto: loggedInUser.photo,
+                invokedByName: loggedInUser.name,
+                invokedById: loggedInUser.id,
+                receivedByName: popupUser.userName,
+                receivedById: popupUser.id, 
+                route: `profile/${loggedInUser.id}`,
+                timeStamp: output,
+                read: false
+        }
+
+        // // Send message to server
+        socketN.emit("send_notification", data);
+    };
 
     return (
         <Modal show={show} onHide={handleClose} className='popupModal' aria-labelledby="contained-modal-title-vcenter" centered>
@@ -75,8 +97,8 @@ const PopupModal = ({show, handleClose, popupUser}) => {
                                             <button type="button" className="btn btn-primary flex-grow-1"><Link to={`/profile/${popupUser?.id}`} className="text-white">My Profile</Link></button>
                                         </div> :
                                         <div className="d-flex pt-1">
-                                            <button type="button" className="btn btn-outline-success me-1 flex-grow-1 disabled" disabled>Chat</button>
-                                            <button type="button" className="btn btn-primary flex-grow-1" onClick={sendFollowNotyf}>Follow</button>
+                                            <button type="button" className="btn btn-info text-white me-1 flex-grow-1" onClick={sendFriendRequestNotyf}>Add Friend</button>
+                                            <button type="button" className="btn btn-primary flex-grow-1" onClick={sendFollowRequestNotyf}>Follow</button>
                                         </div>
                                     }
                                 </div>
