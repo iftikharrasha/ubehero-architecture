@@ -2,7 +2,7 @@ import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
-import PopupModal from '../../Common/PopupModal/PopupModal';
+import PopupModal from '../PopupModal/PopupModal';
 
 const UserList = ({socket, leaderboard}) => {
     const [roomUsers, setRoomUsers] = useState([]);
@@ -51,7 +51,7 @@ const UserList = ({socket, leaderboard}) => {
                         {
                             roomUsers.map((participant, index) => (
                                 <li className="clearfix active mb-1" key={index} onClick={(e) => handleShow(participant)}>
-                                    <span className="avatarUser"><img src={participant.photo} alt="avatar"/></span>
+                                    <img src={participant.photo} alt="avatar"/>
                                     <div className="about">
                                         <div className="name"><i className="fa fa-circle online"></i> {participant.userName}</div>
                                         <div className="status">Joined {moment(participant.timeStamp).fromNow()} </div>                                            
@@ -68,7 +68,7 @@ const UserList = ({socket, leaderboard}) => {
                         {
                             leaderboard.map((participant, index) => (
                                 <li className="clearfix active mb-1" key={index} onClick={(e) => handleShow(participant)}>
-                                    <span className="avatarUser"><img src={participant.photo} alt="avatar"/></span>
+                                    <img src={participant.photo} alt="avatar"/>
                                     <div className="about">
                                         <div className="name"><i className={`fa fa-circle ${isUserOnline(participant) ? 'online' : 'offline'}`}></i> {participant.userName}</div>
                                         <div className="status">{`${isUserOnline(participant) ? 'Online' : 'offline'}`}</div>                                            

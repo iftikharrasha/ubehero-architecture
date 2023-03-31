@@ -39,12 +39,6 @@ const Profile = () => {
         }
     }, [location]);
 
-    // useEffect(() => {
-    //     if(routeKey === 'chatroom'){
-    //         dispatch(fetchChatRoom({ id, versionChatroom }));
-    //     }
-    // }, [routeKey])
-
     return (
         <PageLayout>
             {

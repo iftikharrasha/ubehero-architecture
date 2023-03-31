@@ -19,6 +19,7 @@ import InboxContext from './Contexts/InboxContext/InboxContext';
 
 function App() {
   const [showInbox, setShowInbox] = useState(false);
+  const [popUser, setPopUser] = useState({});
 
   const handleInboxPop = () => {
     setShowInbox(!showInbox);
@@ -30,7 +31,7 @@ function App() {
   
   return (
     <AuthProvider>
-      <InboxContext.Provider value={{ showInbox, setShowInbox }}>
+      <InboxContext.Provider value={{ showInbox, setShowInbox, popUser, setPopUser }}>
         <Router>
           <Header 
             socketN={socketN} 

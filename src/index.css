@@ -257,6 +257,11 @@ body {
           transform: translate(50%, 0);
 }
 
+.typingInbox {
+  bottom: 100px;
+  right: 50%;
+}
+
 .typing .tidot {
   -webkit-animation: mercuryTypingAnimation 1.5s infinite ease-in-out;
           animation: mercuryTypingAnimation 1.5s infinite ease-in-out;
@@ -399,4 +404,33 @@ body {
 
 .cursor-pointer{
   cursor: pointer;
+}
+
+.avatarUser{
+  width: 45px;
+  height: 45px;
+}
+
+.avatarUser img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.myMessage{
+  justify-content: flex-end;
+}
+
+.otherMessage{
+  justify-content: flex-start;
+}
+
+.myMessage .color{
+  background-color: #6c757d;
+  color: #ffffff;
+}
+
+.otherMessage .color{
+  background-color: #f5f6f7;
+  color: #000000;
 }
