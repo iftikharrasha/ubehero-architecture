@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useRef } from 'react';
-import msg from '../../../sounds/msg.mp3';
-import bot from '../../../sounds/bot.mp3';
 import moment from 'moment';
+// import msg from '../../../sounds/msg.mp3';
+// import bot from '../../../sounds/bot.mp3';
 
 const TextPanel = ({socketInbox, user, popUser, messagesRecieved, setMessagesReceived}) => {
     const messagesColumnRef = useRef(null);
-    const [sound, setSound] = useState(null);
+    // const [sound, setSound] = useState(null);
 
      // Runs whenever a socket event is recieved from the server
     useEffect(() => {
@@ -21,19 +21,19 @@ const TextPanel = ({socketInbox, user, popUser, messagesRecieved, setMessagesRec
                 },
             ]);
 
-            if(data.senderName.toLowerCase() !== user.userName){
-                if(data.sound === "bot"){
-                    setSound(bot)
-                    const newMessageSound = document.getElementById("newMessageSound2");
-                    newMessageSound.play();
-                }else if(data.sound === "msg"){
-                    setSound(msg)
-                    const newMessageSound = document.getElementById("newMessageSound2");
-                    newMessageSound.play();
-                }else{
-                    setSound(null)
-                }
-            }
+            // if(data.senderName.toLowerCase() !== user.userName){
+            //     if(data.sound === "bot"){
+            //         setSound(bot)
+            //         const newMessageSound = document.getElementById("newMessageSound2");
+            //         newMessageSound.play();
+            //     }else if(data.sound === "msg"){
+            //         setSound(msg)
+            //         const newMessageSound = document.getElementById("newMessageSound2");
+            //         newMessageSound.play();
+            //     }else{
+            //         setSound(null)
+            //     }
+            // }
         });
 
         // Remove event listener on component unmount
@@ -89,7 +89,7 @@ const TextPanel = ({socketInbox, user, popUser, messagesRecieved, setMessagesRec
                     </div>
                 ))
             }
-            <audio id="newMessageSound2" src={sound} type="audio/mpeg"></audio>
+            {/* <audio id="newMessageSound2" src={sound} type="audio/mpeg"></audio> */}
         </div>
     );
 };

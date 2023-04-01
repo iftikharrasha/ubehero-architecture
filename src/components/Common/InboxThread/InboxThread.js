@@ -5,13 +5,16 @@ import { useContext } from 'react';
 import InboxContext from '../../../Contexts/InboxContext/InboxContext';
 import useNotyf from '../../../hooks/useNotyf';
 import { useSelector } from 'react-redux';
+import msg from '../../../sounds/msg.mp3';
+import bot from '../../../sounds/bot.mp3';
 
 const InboxThread = ({socketN, isConnected, userId}) => {
     const [inboxReceived, setInboxReceived] = useState([]);
     const { showInbox, setShowInbox, popUser, setPopUser } = useContext(InboxContext);
-    console.log(inboxReceived)
+    const [sound, setSound] = useState(null);
 
     const handleInboxPop = (item) => {
+      //this is to have popup user
         const user =  {
             id: item.senderId,
             userName: item.senderName,
@@ -24,79 +27,64 @@ const InboxThread = ({socketN, isConnected, userId}) => {
         setPopUser(user);
     };
 
-    // useEffect(() => {
-    //     if (socketN) {
-    //         const data = {
-    //           userId: userId,
-    //         }
-  
-    //         socketN.emit("join_tracking", data);
-    //     }
-    // }, []);
-
     useEffect(() => {
-        if(socketN){
-            socketN.on('track_inbox', (data) => {
-                setInboxReceived((state) => [
-                  ...state,
-                  {
-                    roomId: data.roomId,
-                    room: data.room,
-                    senderId: data.senderId,
-                    senderName: data.senderName,
-                    senderPhoto: data.senderPhoto,
-                    senderPermissions: data.senderPermissions,
-                    receiverId: data.receiverId,
-                    message: data.message,
-                    timeStamp: data.output,
-                    read: data.read,
-                  },
-              ]);
-          });
-    
-          // Remove event listener on component unmount
-          return () => socketN.off('track_inbox');
-        }
-      }, [socketN]);
+      if(socketN){
+          socketN.on('track_inbox', (data) => {
+              setInboxReceived(state => {
+                const existingMessage = findExistingMessage(state, data.senderId, data.roomId);
+                if (existingMessage) {
+                  return state.map(item => {
+                    if (item === existingMessage) {
+                      return {
+                        ...item,
+                        message: data.message,
+                        timeStamp: data.timeStamp,
+                        messageCount: item.messageCount + 1
+                      };
+                    }
+                    return item;
+                  });
+                } else {
+                  return [
+                    ...state,
+                    {
+                      roomId: data.roomId,
+                      room: data.room,
+                      senderId: data.senderId,
+                      senderName: data.senderName,
+                      senderPhoto: data.senderPhoto,
+                      senderPermissions: data.senderPermissions,
+                      receiverId: data.receiverId,
+                      message: data.message,
+                      timeStamp: data.timeStamp,
+                      read: data.read,
+                      messageCount: 1
+                    }
+                  ];
+                }
+              });
 
-    // const inboxReceived = [
-    //     {
-    //         id: "63cedf7d249ceb980798ce48",
-    //         userName: "cena235",
-    //         country: "JP",
-    //         photo: "https://image.pngaaa.com/371/1423371-middle.png",
-    //         gender: "male",
-    //         emailVerified: true,
-    //         message: "This is a new message",
-    //         read: false,
-    //         stats: {
-    //             totalGamePlayed: 17,
-    //             totalWins: 12,
-    //             totalXp: 3500,
-    //             level: 4,
-    //             levelTitle: "expert",
-    //             noOfFollowers: 20
-    //         }
-    //     },
-    //     {
-    //         id: "63ff919d1fedd9f164d8cc23",
-    //         userName: "harrykane",
-    //         country: "UK",
-    //         photo: "https://png.pngtree.com/png-clipart/20210311/original/pngtree-cute-boy-cartoon-mascot-logo-png-image_6059924.jpg",
-    //         gender: "female",
-    //         emailVerified: true,
-    //         message: "This is a old message",
-    //         read: true,
-    //         stats: {
-    //             totalGamePlayed: 7,
-    //             totalWins: 4,
-    //             totalXp: 1500,
-    //             level: 2,
-    //             levelTitle: "amateur",
-    //             noOfFollowers: 8
-    //         }
-    //     }
-    // ]
+              if(data.sound === "bot"){
+                  setSound(bot)
+                  const newMessageSound = document.getElementById("newMessageSound3");
+                  newMessageSound.play();
+              }else if(data.sound === "msg"){
+                  setSound(msg)
+                  const newMessageSound = document.getElementById("newMessageSound3");
+                  newMessageSound.play();
+              }else{
+                  setSound(null)
+              }
+            });
+  
+        // Remove event listener on component unmount
+        return () => socketN.off('track_inbox');
+      }
+    }, [socketN]);
+
+    function findExistingMessage(inboxReceived, senderId, roomId) {
+      return inboxReceived.find(item => item.senderId === senderId && item.roomId === roomId);
+    }
 
   return (
     <div className="dropdown">
@@ -135,7 +123,7 @@ const InboxThread = ({socketN, isConnected, userId}) => {
                                                     <p className="small text-muted mb-1">Just now</p>
                                                     {
                                                         item.read === false ? 
-                                                        <span className="badge bg-danger float-end">1</span> : null
+                                                        <span className="badge bg-danger float-end">{item.messageCount}</span> : null
                                                     }
                                                 </div>
                                             </div>
@@ -152,6 +140,7 @@ const InboxThread = ({socketN, isConnected, userId}) => {
                 </div>
             </div>
         </ul>
+        <audio id="newMessageSound3" src={sound} type="audio/mpeg"></audio>
     </div>
   );
 };

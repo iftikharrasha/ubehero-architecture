@@ -32,17 +32,6 @@ const Header = ({socketN, isConnected, userId}) => {
         {loggedInUser.isSignedIn ? (
           <>
             <div className='d-flex align-items-center'>
-              <Link className='h5 text-dark text-decoration-none mb-0' to={`/profile/${loggedInUser.id}`}>
-                <strong className='text-white'>{loggedInUser.name}</strong>
-              </Link>
-              <button
-                onClick={() => handlelogOut(history)}
-                className='btn btn-sm ms-2 btn-outline-light text-white'
-              >
-                Logout
-              </button>
-
-              
               {
                 socketN ? <Notification 
                             socketN={socketN} 
@@ -60,11 +49,22 @@ const Header = ({socketN, isConnected, userId}) => {
               }
 
               <WalletPopUp userId={userId}/>
+
+              <Link className='h5 text-dark text-decoration-none mb-0 ms-5' to={`/profile/${loggedInUser.id}`}>
+                <strong className='text-white'>{loggedInUser.name}</strong>
+              </Link>
+              
+              <button
+                onClick={() => handlelogOut(history)}
+                className='btn btn-sm ms-2 btn-outline-light text-white'
+              >
+                Logout
+              </button>
               
               {
                 loggedInUser.permissions.includes("master") ? 
                 <span className='mb-0 ms-5'>
-                  <button className='btn-outline-light bg-dark h6 text-white' onClick={switchRoute}>Master Panel</button>
+                  <button className='btn-outline-light bg-dark h6 text-white mb-0' onClick={switchRoute}>Master Panel</button>
                 </span> : null
               }
               
