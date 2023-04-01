@@ -307,6 +307,7 @@ body {
   min-width: 400px;
   border-bottom: 1px solid gray;
   padding: 4px 0;
+  cursor: pointer;
 }
 
 .notyf-item a span{

@@ -5,7 +5,7 @@ import SendBox from './SendBox';
 import MessagePanel from './MessagePanel';
 import { useSelector } from 'react-redux';
 
-const ChatRoom = ({socket, isConnected, tournamentDetails, leaderboardDetails, routeKey, isTyping, setIsTyping}) => {
+const ChatRoom = ({socket, isConnected, tournamentDetails, leaderboardDetails, routeKey, unreadCount, setUnreadCount}) => {
     const { _id, tournamentName } = tournamentDetails;
     const { leaderboard } = leaderboardDetails;
     const { loggedInUser } = useAuth();
@@ -41,7 +41,9 @@ const ChatRoom = ({socket, isConnected, tournamentDetails, leaderboardDetails, r
                             socket={socket} 
                             tournamentDetails={tournamentDetails} 
                             loggedInUser={loggedInUser}
-                            routeKey={routeKey}/>
+                            routeKey={routeKey}
+                            unreadCount={unreadCount}
+                            setUnreadCount={setUnreadCount}/>
                         <SendBox 
                             socket={socket} 
                             isConnected={isConnected}

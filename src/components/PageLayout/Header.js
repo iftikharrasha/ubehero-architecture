@@ -9,6 +9,7 @@ import { useHistory } from "react-router-dom";
 import ubehero from "../../images/ubehero-dark.svg";
 import Notification from "../Common/Notification/Notification";
 import WalletPopUp from '../Common/WalletPopUp/WalletPopUp';
+import InboxThread from '../Common/InboxThread/InboxThread';
 
 // let initialSocketId = null;
 
@@ -44,6 +45,14 @@ const Header = ({socketN, isConnected, userId}) => {
               
               {
                 socketN ? <Notification 
+                            socketN={socketN} 
+                            isConnected={isConnected}
+                            userId={userId}
+                          />  : null
+              }
+
+              {
+                socketN ? <InboxThread 
                             socketN={socketN} 
                             isConnected={isConnected}
                             userId={userId}

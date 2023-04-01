@@ -164,10 +164,15 @@ const Notification = ({socketN, isConnected, userId}) => {
     <div className="dropdown">
         <Link to="/" className="mx-4 dropdown-toggle hidden-arrow text-white" id="navbarDropdownMenuLink"
         role="button" data-mdb-toggle="dropdown" aria-expanded="false">
-            <i className="fas fa-bell"></i>
+            <i className="fa-solid fa-bell"></i>
             <span className="badge rounded-pill badge-notification bg-success">{notyfReceived.filter(n => !n.read).length}</span>
         </Link>
         <ul className="dropdown-menu p-0" aria-labelledby="navbarDropdownMenuLink">
+      
+        <div
+            className="card-header d-flex justify-content-between align-items-center p-3 bg-secondary text-white border-bottom-0">
+            <p className="mb-0 fw-bold">Notifications</p>
+        </div>
           {
             notyfReceived.length > 0 ?
               notyfReceived.slice().reverse().map((item, index) => (

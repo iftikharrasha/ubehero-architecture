@@ -75,6 +75,7 @@ const TournamentDetails = () => {
     //socket implementation
     const [socket, setSocket] = useState(null);
     const [isConnected, setIsConnected] = useState(false);
+    const [unreadCount, setUnreadCount] = useState(0);
   
     useEffect(() => {
       const chatRoomSocket = io.connect(`${process.env.REACT_APP_API_LINK}/chatRoom`, {
@@ -172,6 +173,7 @@ const TournamentDetails = () => {
                             activeKey={routeKey}
                             onSelect={(k) => {
                                 setRouteKey(k);
+                                setUnreadCount(0);
                                 switch (k) {
                                     case 'leaderboards':
                                         history.push(`/tournament/details/${id}`);
@@ -195,7 +197,7 @@ const TournamentDetails = () => {
                             </Tab>
                             {
                                 isLoggedIn && (
-                                    <Tab eventKey="chatroom" title="Chatroom">
+                                    <Tab eventKey="chatroom" title={`ChatRoom (${unreadCount})`}>
         
                                         {
                                             socket ? <ChatRoom 
@@ -204,6 +206,8 @@ const TournamentDetails = () => {
                                                         tournamentDetails={tournamentDetails} 
                                                         leaderboardDetails={leaderboardDetails}
                                                         routeKey={routeKey}
+                                                        unreadCount={unreadCount}
+                                                        setUnreadCount={setUnreadCount}
                                                     />
                                             : <Preloader/>
                                         }

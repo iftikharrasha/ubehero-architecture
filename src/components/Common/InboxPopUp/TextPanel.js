@@ -4,9 +4,8 @@ import msg from '../../../sounds/msg.mp3';
 import bot from '../../../sounds/bot.mp3';
 import moment from 'moment';
 
-const TextPanel = ({socketInbox, user, popUser}) => {
+const TextPanel = ({socketInbox, user, popUser, messagesRecieved, setMessagesReceived}) => {
     const messagesColumnRef = useRef(null);
-    const [messagesRecieved, setMessagesReceived] = useState([]);
     const [sound, setSound] = useState(null);
 
      // Runs whenever a socket event is recieved from the server

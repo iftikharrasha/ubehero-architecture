@@ -5,7 +5,7 @@ import msg from '../../../sounds/msg.mp3';
 import bot from '../../../sounds/bot.mp3';
 import typing from '../../../sounds/typing.mp3';
 
-const MessagePanel = ({socket, tournamentDetails, loggedInUser, routeKey}) => {
+const MessagePanel = ({socket, tournamentDetails, loggedInUser, routeKey, unreadCound, setUnreadCount}) => {
     const [messagesRecieved, setMessagesReceived] = useState([]);
     const [sound, setSound] = useState(null);
 
@@ -36,6 +36,12 @@ const MessagePanel = ({socket, tournamentDetails, loggedInUser, routeKey}) => {
                 }else{
                     setSound(null)
                 }
+
+                if(routeKey === "chatroom"){
+                    setUnreadCount(0)
+                }else{
+                    setUnreadCount(count => count + 1);
+                }
             }
         });
 
@@ -51,6 +57,15 @@ const MessagePanel = ({socket, tournamentDetails, loggedInUser, routeKey}) => {
 
         return () => socket.off("last_100_messages");
     }, [socket]);
+
+    // check how many unread messages have been received
+    // useEffect(() => {
+    //     socket.on("get_unread_counts", (count) => {
+    //         setUnreadCount(count);
+    //     });
+
+    //     return () => socket.off("get_unread_counts");
+    // }, [socket]);
 
     const messagesColumnRef = useRef(null);
     

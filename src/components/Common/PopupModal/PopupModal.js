@@ -1,5 +1,5 @@
 import moment from 'moment';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useContext } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import { useSelector } from 'react-redux';
@@ -34,7 +34,7 @@ const PopupModal = ({show, handleClose, popupUser}) => {
             read: false
         }
 
-        // // Send message to server
+        // Send message to server
         socketN.emit("send_notification", data);
     };
 
@@ -56,13 +56,14 @@ const PopupModal = ({show, handleClose, popupUser}) => {
             read: false
         }
 
-        // // Send message to server
+        // Send message to server
         socketN.emit("send_notification", data);
     };
     
-    const { showInbox, setShowInbox, setPopUser } = useContext(InboxContext);
+    const { setShowInbox, setPopUser } = useContext(InboxContext);
+
     const handleInboxPop = () => {
-        setShowInbox(!showInbox);
+        setShowInbox(true);
         handleClose();
 
         setPopUser(popupUser);

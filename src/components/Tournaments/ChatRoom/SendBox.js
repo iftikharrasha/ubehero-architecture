@@ -25,6 +25,7 @@ const SendBox = ({socket, isConnected, roomId, room, loggedInUser}) => {
             senderPhoto: senderPhoto,
             message: message,
             timeStamp: output,
+            read: false,
           }
           // Send message to server
           socket.emit("send_message", data);

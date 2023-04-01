@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import moment from "moment/moment";
 
-const SendInbox = ({socketInbox, isInboxConnected, roomId, room, user}) => {
+const SendInbox = ({socketInbox, isInboxConnected, roomId, receiverId, room, user}) => {
   const [message, setMessage] = useState("");
   const [isTyping, setIsTyping] = useState(false);
 
@@ -21,10 +21,12 @@ const SendInbox = ({socketInbox, isInboxConnected, roomId, room, user}) => {
           room: room,
           senderId: senderId,
           senderName: senderName,
-          senderPermissions: senderPermissions,
           senderPhoto: senderPhoto,
+          senderPermissions: senderPermissions,
+          receiverId: receiverId,
           message: message,
           timeStamp: output,
+          read: false
         }
 
         //Send message to server

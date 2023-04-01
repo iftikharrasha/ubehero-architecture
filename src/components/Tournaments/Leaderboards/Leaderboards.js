@@ -28,7 +28,7 @@ const Leaderboards = (props) => {
             <th>Played</th>
             <th>Wins</th>
             <th>XP</th>
-            <th>Verified</th>
+            <th>Status</th>
           </tr>
         </thead>
         <tbody>

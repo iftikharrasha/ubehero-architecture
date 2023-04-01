@@ -9,19 +9,17 @@ import TextPanel from './TextPanel';
 
 const InboxPopUp = () => {
     const { showInbox, setShowInbox, popUser, setPopUser } = useContext(InboxContext);
-    const [uniqueRoomId, setUniqueRoomId] = useState(null)
+    const [uniqueRoomId, setUniqueRoomId] = useState(null);
+    const [messagesRecieved, setMessagesReceived] = useState([]);
 
     const user = useSelector((state) => state.profile.data)
-    const handleInboxPop = () => {
-        setShowInbox(!showInbox);
-        setPopUser({})
-    };
 
     //socket implementation
-    const { socketInbox, isInboxConnected } = useInbox();
+    const { socketInbox, isInboxConnected } = useInbox(); 
 
     useEffect(() => {
         if (socketInbox) {
+            setMessagesReceived([]);
             const uniqueRoom = generateRoomId(user._id, popUser.id);
             setUniqueRoomId(uniqueRoom);
     
@@ -35,11 +33,18 @@ const InboxPopUp = () => {
         
             socketInbox.emit("join_inbox", data);
         }
-    }, [socketInbox]);
+    }, [socketInbox, popUser]);
 
     const generateRoomId = (userId1, userId2) => {
         return userId1 < userId2 ? `${userId1}-${userId2}` : `${userId2}-${userId1}`;
     }
+    const handleInboxPop = () => {
+        setMessagesReceived([]);
+        setShowInbox(false);
+        setPopUser({});
+
+        socketInbox.disconnect();
+    };
 
     return (
         <section className='inbox' style={{backgroundColor: "#eee"}}>
@@ -73,12 +78,15 @@ const InboxPopUp = () => {
                                         socketInbox={socketInbox}
                                         user={user}
                                         popUser={popUser}
+                                        messagesRecieved={messagesRecieved}
+                                        setMessagesReceived={setMessagesReceived}
                                     />
                                     <SendInbox 
                                         socketInbox={socketInbox}
                                         isInboxConnected={isInboxConnected}
                                         roomId={uniqueRoomId}
                                         room={popUser.id}
+                                        receiverId={popUser.id}
                                         user={user}
                                     />
                                 </>
@@ -90,7 +98,7 @@ const InboxPopUp = () => {
                 </div>
 
             </div>
-            </section>
+        </section>
     );
 };
 
