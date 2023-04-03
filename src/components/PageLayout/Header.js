@@ -43,8 +43,6 @@ const Header = ({socketN, isConnected, userId}) => {
               {
                 socketN ? <InboxThread 
                             socketN={socketN} 
-                            isConnected={isConnected}
-                            userId={userId}
                           />  : null
               }
 

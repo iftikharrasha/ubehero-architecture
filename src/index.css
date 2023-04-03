@@ -435,3 +435,20 @@ body {
   background-color: #f5f6f7;
   color: #000000;
 }
+
+.inboxTop{
+  background-color: #e5e6e9;
+}
+
+.inboxTop a{
+ font-weight: bold !important;
+}
+
+.inboxBelow{
+  min-width: 400px;
+}
+
+.inboxBelow a{
+  text-decoration: none !important;
+  color: #000000;
+}

@@ -26,7 +26,8 @@ const SendInbox = ({socketInbox, isInboxConnected, roomId, receiverId, room, use
           receiverId: receiverId,
           message: message,
           timeStamp: output,
-          read: false
+          read: false,
+          messageCount: 0
         }
 
         //Send message to server
