@@ -8,7 +8,7 @@ export const fetchGiftCards = createAsyncThunk(
         }
 
         try{
-            const response = await fetch(`${process.env.REACT_APP_API_LINK}/api/wallet/topup?version=${versionGiftCard}`)
+            const response = await fetch(`${process.env.REACT_APP_API_LINK}/api/v1/wallet/topup?version=${versionGiftCard}`)
 
             if(response.status === 200){
                 const data = await response.json();

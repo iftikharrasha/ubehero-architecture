@@ -12,7 +12,7 @@ export const fetchLanding = createAsyncThunk(
         versionLanding = 0; //validation left
 
         try{
-            const response = await fetch(`${process.env.REACT_APP_API_LINK}/api/settings/landing?version=${versionLanding}&country=${country}`)
+            const response = await fetch(`${process.env.REACT_APP_API_LINK}/api/v1/statics/landing?version=${versionLanding}&country=${country}`)
 
             if(response.status === 200){
                 const data = await response.json();

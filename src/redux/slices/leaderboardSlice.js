@@ -7,7 +7,7 @@ export const fetchLeaderboards = createAsyncThunk(
             versionLeaderboard = 0;
         }
 
-        const response = await fetch(`${process.env.REACT_APP_API_LINK}/api/tournament/leaderboards/${id}?version=${versionLeaderboard}`);
+        const response = await fetch(`${process.env.REACT_APP_API_LINK}/api/v1/tournament/leaderboards/${id}?version=${versionLeaderboard}`);
         const data = await response.json();
 
 

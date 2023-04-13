@@ -7,7 +7,7 @@ export const fetchProfileDetails = createAsyncThunk(
             version = 0;
         }
 
-        const response = await fetch(`${process.env.REACT_APP_API_LINK}/api/account/profile/${id}?version=${version}`);
+        const response = await fetch(`${process.env.REACT_APP_API_LINK}/api/v1/account/profile/${id}?version=${version}`);
         const data = await response.json();
 
         if(data.status === 304) {

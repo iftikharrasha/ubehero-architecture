@@ -11,7 +11,7 @@ const useFirebase = () => {
 
     const handleLogin = async (data, history, location) => {
         try {
-            const response = await axios.post(`${process.env.REACT_APP_API_LINK}/api/account/login`, data);
+            const response = await axios.post(`${process.env.REACT_APP_API_LINK}/api/v1/account/login`, data);
     
             if(response.data.status === 200){
                 localStorage.setItem('jwt', response.data.data.jwt);
