@@ -11,20 +11,31 @@ import Tabs from 'react-bootstrap/Tabs';
 import MyTeams from '../components/Profile/MyTeams';
 import MyStats from '../components/Profile/MyStats';
 import Settings from '../components/Profile/Settings';
+import { fetchMyTeams } from '../redux/slices/teamSlice';
 
 const Profile = () => { 
     const { id } = useParams();
 
     const dispatch = useDispatch();
 
-    useEffect(() => {
-        dispatch(fetchProfileDetails({ id, version }));
-    }, [])
-
     const userDetails = useSelector((state) => state.profile.data)
     const version = userDetails ? userDetails.version : 0;
 
     const [routeKey, setRouteKey] = useState('mystats');
+
+    const myTeams = useSelector((state) => state.myTeams.data)
+    const versionTeams = useSelector((state) => state.myTeams.version)
+    // console.log('1. versionChatroomC:', versionChatroom);
+
+    useEffect(() => {
+        dispatch(fetchProfileDetails({ id, version }));
+    }, [])
+
+    useEffect(() => {
+        if(routeKey === 'teams'){
+            dispatch(fetchMyTeams({ id, versionTeams }));
+        }
+    }, [routeKey])
 
     const location = useLocation();
     const history = useHistory();
@@ -70,7 +81,7 @@ const Profile = () => {
                             <MyStats stats={userDetails.stats}/>
                         </Tab>
                         <Tab eventKey="teams" title="Teams">
-                            <MyTeams teams={userDetails.teams}/>
+                            <MyTeams routeKey={routeKey} myTeams={myTeams}/>
                         </Tab>
                         <Tab eventKey="settings" title="Settings">
                             <Settings/>

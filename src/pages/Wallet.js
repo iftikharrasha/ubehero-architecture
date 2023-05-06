@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import Tab from 'react-bootstrap/Tab';
+import Tabs from 'react-bootstrap/Tabs';
 import PageLayout from '../components/PageLayout/PageLayout';
 import { useSelector } from 'react-redux';
 import { fetchProfileDetails } from '../redux/slices/profileSlice'
@@ -6,8 +8,6 @@ import { useDispatch } from 'react-redux';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 import Preloader from '../components/PageLayout/Preloader';
 import WalletDetails from '../components/Wallet/WalletDetails';
-import Tab from 'react-bootstrap/Tab';
-import Tabs from 'react-bootstrap/Tabs';
 import Transactions from '../components/Wallet/Transactions/Transactions';
 import { fetchGiftCards } from '../redux/slices/giftCardSlice';
 import PurchaseLayout from '../components/Common/Purchase/PurchaseLayout';
@@ -39,6 +39,13 @@ const Wallet = () => {
         }
     }, [location]);
 
+    const userDetails = useSelector((state) => state.profile.data)
+    const version = userDetails ? userDetails.version : 0;
+
+    const giftcards = useSelector((state) => state.giftcards.data)
+    const versionGiftCard = useSelector((state) => state.giftcards.version)
+    // console.log('1. versionChatroomC:', versionChatroom);
+
     useEffect(() => {
         dispatch(fetchProfileDetails({ id, version }));
     }, [])
@@ -48,15 +55,6 @@ const Wallet = () => {
             dispatch(fetchGiftCards({ versionGiftCard }));
         }
     }, [routeKey])
-
-    const userDetails = useSelector((state) => state.profile.data)
-    const version = userDetails ? userDetails.version : 0;
-
-
-    const giftcards = useSelector((state) => state.giftcards.data)
-    const versionGiftCard = useSelector((state) => state.giftcards.version)
-    
-    // console.log('1. versionChatroomC:', versionChatroom);
 
     const [method, setMethod]  = useState('');
     const handlePaymentMethod = (e, m) => {
@@ -122,6 +120,7 @@ const Wallet = () => {
                                         <div>
                                             <div className='row'>
                                                 {
+                                                    giftcards.length === 0 ? <p>No tops up found!</p> :
                                                     giftcards.map((item, index) => (
                                                         <Giftcard key={index} gift={item} handleCheckout={handleTopUpCheckout} routeKey={routeKey} />
                                                     ))

@@ -37,7 +37,7 @@ const Login = () => {
   return (
     <div
       className='d-flex flex-column align-items-center justify-content-center'
-      style={{ height: "100vh" }}
+      style={{ height: "70vh" }}
     >
       <h5 className='mb-5'>
         Sing into <strong className='text-primary '>your account</strong>

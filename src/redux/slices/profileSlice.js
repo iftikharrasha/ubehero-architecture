@@ -7,7 +7,15 @@ export const fetchProfileDetails = createAsyncThunk(
             version = 0;
         }
 
-        const response = await fetch(`${process.env.REACT_APP_API_LINK}/api/v1/account/profile/${id}?version=${version}`);
+        const isLoggedIn = getState().profile.signed_in;
+        let config = {}
+
+        if(isLoggedIn){
+            const token = localStorage.getItem('jwt');
+            config.headers = { "Authorization": "Bearer " + token, ...config.headers};
+        }
+
+        const response = await fetch(`${process.env.REACT_APP_API_LINK}/api/v1/account/profile/${id}?version=${version}`, config);
         const data = await response.json();
 
         if(data.status === 304) {
@@ -29,6 +37,7 @@ const profileSlice = createSlice({
     },
     reducers: {
         setLogIn: (state, action) => {
+            console.log("action.payload", action.payload)
             state.data = action.payload || state.data;
             state.signed_in = true;
         },

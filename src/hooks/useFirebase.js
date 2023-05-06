@@ -14,9 +14,9 @@ const useFirebase = () => {
             const response = await axios.post(`${process.env.REACT_APP_API_LINK}/api/v1/account/login`, data);
     
             if(response.data.status === 200){
-                localStorage.setItem('jwt', response.data.data.jwt);
-                localStorage.setItem('refresh', response.data.data.refreshToken);
-                dispatch(setLogIn(response.data.data.user));
+                localStorage.setItem('jwt', response.data.jwt);
+                localStorage.setItem('refresh', response.data.refreshToken);
+                dispatch(setLogIn(response.data.data));
                 dispatch(setRoute("user"))
 
                 setErrorMessage(null);

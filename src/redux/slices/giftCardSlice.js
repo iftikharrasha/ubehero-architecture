@@ -7,8 +7,16 @@ export const fetchGiftCards = createAsyncThunk(
             versionGiftCard = 0;
         }
 
+        const isLoggedIn = getState().profile.signed_in;
+        let config = {}
+
+        if(isLoggedIn){
+            const token = localStorage.getItem('jwt');
+            config.headers = { "Authorization": "Bearer " + token, ...config.headers};
+        }
+
         try{
-            const response = await fetch(`${process.env.REACT_APP_API_LINK}/api/v1/wallet/topup?version=${versionGiftCard}`)
+            const response = await fetch(`${process.env.REACT_APP_API_LINK}/api/v1/wallet/topup?version=${versionGiftCard}`, config)
 
             if(response.status === 200){
                 const data = await response.json();

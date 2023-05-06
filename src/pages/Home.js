@@ -3,7 +3,7 @@ import Tournaments from '../components/Tournaments/Tournaments';
 import PageLayout from '../components/PageLayout/PageLayout';
 import { useSelector } from 'react-redux';
 import { fetchTournaments } from '../redux/slices/tournamentSlice'
-import { fetchLanding } from '../redux/slices/staticSlice'
+import { fetchStatics } from '../redux/slices/staticSlice'
 import { useDispatch } from 'react-redux';
 import Landing from '../components/Landing/Landing';
 import Preloader from '../components/PageLayout/Preloader';
@@ -15,7 +15,7 @@ const Home = () => {
     const country = useSelector(state => state.statics.country);
 
     useEffect(() => {
-        dispatch(fetchLanding({ versionLanding, country }));
+        dispatch(fetchStatics({ versionLanding, country }));
     }, [country])
 
     useEffect(() => {

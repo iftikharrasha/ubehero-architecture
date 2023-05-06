@@ -195,7 +195,7 @@ const TournamentDetails = () => {
                             <Tab eventKey="prizes" title="Prizes">
                                 <Prizes prizes={tournamentDetails.prizes}/>
                             </Tab>
-                            {
+                            {/* {
                                 isLoggedIn && (
                                     <Tab eventKey="chatroom" title={`ChatRoom (${unreadCount})`}>
         
@@ -214,7 +214,7 @@ const TournamentDetails = () => {
                                         
                                     </Tab>
                                 )
-                            }
+                            } */}
                         </Tabs>
                     </>
                     }

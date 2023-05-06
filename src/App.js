@@ -51,12 +51,12 @@ function App() {
                 <PrivateRoute path="/profile/:id">
                   <Profile/>
                 </PrivateRoute>
-                <MasterRoute path="/master/:id">
-                  <Master/>
-                </MasterRoute>
                 <PrivateRoute path="/wallet/:id">
                   <Wallet/>
                 </PrivateRoute>
+                {/* <MasterRoute path="/master/:id">
+                  <Master/>
+                </MasterRoute> */}
               </Switch>
 
           )} />

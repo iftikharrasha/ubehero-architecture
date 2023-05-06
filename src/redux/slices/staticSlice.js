@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-export const fetchLanding = createAsyncThunk(
-    'static/fetchLanding',
+export const fetchStatics = createAsyncThunk(
+    'static/fetchStatics',
     async ({versionLanding, country}, {getState}) => {
         if(!versionLanding){
             versionLanding = 0;
@@ -9,10 +9,12 @@ export const fetchLanding = createAsyncThunk(
         if(!country){
             country = 'uk';
         }
-        versionLanding = 0; //validation left
+
+        //validation left need to update the api and redux
+        versionLanding = 0;
 
         try{
-            const response = await fetch(`${process.env.REACT_APP_API_LINK}/api/v1/statics/landing?version=${versionLanding}&country=${country}`)
+            const response = await fetch(`${process.env.REACT_APP_API_LINK}/api/v1/statics?version=${versionLanding}&country=${country}`)
 
             if(response.status === 200){
                 const data = await response.json();
@@ -47,16 +49,16 @@ const staticSlice = createSlice({
     },
     extraReducers: (builder) => {
         // Add reducers for additional action types here, and handle loading state as needed
-        builder.addCase(fetchLanding.fulfilled, (state, action) => {
+        builder.addCase(fetchStatics.fulfilled, (state, action) => {
             state.landing = action.payload.data || state.landing;
             state.version = action.payload.version || state.version;
             state.country = action.payload.country || state.country; 
             state.status = 'success';
         })
-        builder.addCase(fetchLanding.pending, (state) => {
+        builder.addCase(fetchStatics.pending, (state) => {
             state.status = 'loading';
         });
-        builder.addCase(fetchLanding.rejected, (state, action) => {
+        builder.addCase(fetchStatics.rejected, (state, action) => {
             state.status = 'error';
             console.log("rejected");
         });

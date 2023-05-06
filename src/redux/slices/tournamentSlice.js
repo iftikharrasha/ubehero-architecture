@@ -15,7 +15,7 @@ export const fetchTournaments = createAsyncThunk(
             config.headers = { "Authorization": "Bearer " + token, ...config.headers};
         }
         
-        const response = await fetch(`${process.env.REACT_APP_API_LINK}/api/v1/tournament/all?version=${versionTournaments}`, config)
+        const response = await fetch(`${process.env.REACT_APP_API_LINK}/api/v1/tournaments?version=${versionTournaments}`, config)
 
         if(response.status === 200){
             const data = await response.json();
@@ -35,7 +35,7 @@ export const fetchTournamentDetails = createAsyncThunk(
             versionTournament = 0;
         }
 
-        const response = await fetch(`${process.env.REACT_APP_API_LINK}/api/v1/tournament/${id}?version=${versionTournament}`);
+        const response = await fetch(`${process.env.REACT_APP_API_LINK}/api/v1/tournaments/${id}?version=${versionTournament}`);
         const data = await response.json();
 
         if(data.status === 304) {
@@ -53,6 +53,8 @@ export const fetchTournamentDetails = createAsyncThunk(
     }
 );
 
+
+//extra need to work on
 // export const updateTournament = (tournament) => (dispatch, getState) => {
 //     const tournaments = [...getState().tournaments.data];
 //     const index = tournaments.findIndex(t => t._id === tournament._id);
