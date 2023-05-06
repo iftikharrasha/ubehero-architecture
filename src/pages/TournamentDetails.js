@@ -190,7 +190,7 @@ const TournamentDetails = () => {
                             }}
                         >
                             <Tab eventKey="leaderboards" title="Leaderboards">
-                                <Leaderboard leaderboards={leaderboardDetails}/>
+                                <Leaderboard leaderboards={leaderboardDetails.leaderboards}/>
                             </Tab>
                             <Tab eventKey="prizes" title="Prizes">
                                 <Prizes prizes={tournamentDetails.prizes}/>

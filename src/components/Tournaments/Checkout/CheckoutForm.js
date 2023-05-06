@@ -88,7 +88,7 @@ const CheckoutForm = ({method, tournament}) => {
                                 <div className="col-12">
                                     <label className="order-form-label">Name</label>
                                     <div className="form-outline">
-                                        <input type="text" id="form1" className="form-control order-form-input" />
+                                        <input type="text" id="form1" className="form-control order-form-input border" />
                                     </div>
                                 </div>
                             </div>
@@ -99,31 +99,31 @@ const CheckoutForm = ({method, tournament}) => {
                                 </div>
                                 <div className="col-12">
                                     <div className="form-outline">
-                                        <input type="email" id="form5" className="form-control order-form-input" />
+                                        <input type="email" id="form5" className="form-control order-form-input border" />
                                     </div>
                                 </div>
                                 <div className="col-sm-6 mt-2 pe-sm-2">
                                     <div className="form-outline">
                                         <label className="form-label" for="form5">Card Number</label>
-                                        <input type="text" id="form7" className="form-control order-form-input" />
+                                        <input type="text" id="form7" className="form-control order-form-input border" />
                                     </div>
                                 </div>
                                 <div className="col-sm-6 mt-2 ps-sm-0">
                                     <div className="form-outline">
                                         <label className="form-label" for="form8">CVC</label>
-                                        <input type="text" id="form8" className="form-control order-form-input" />
+                                        <input type="text" id="form8" className="form-control order-form-input border" />
                                     </div>
                                 </div>
                                 <div className="col-sm-6 mt-2 pe-sm-2">
                                     <div className="form-outline">
                                         <label className="form-label" for="form9">Expiry Date</label>
-                                        <input type="text" id="form9" className="form-control order-form-input" />
+                                        <input type="text" id="form9" className="form-control order-form-input border" />
                                     </div>
                                 </div>
                                 <div className="col-sm-6 mt-2 ps-sm-0">
                                     <div className="form-outline">
                                         <label className="form-label" for="form10">Postal / Zip Code</label>
-                                        <input type="text" id="form10" className="form-control order-form-input" />
+                                        <input type="text" id="form10" className="form-control order-form-input border" />
                                     </div>
                                 </div>
                             </div>

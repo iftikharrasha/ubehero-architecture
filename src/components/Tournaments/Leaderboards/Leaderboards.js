@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 import PopupModal from "../../Common/PopupModal/PopupModal";
 
-const Leaderboards = (props) => {
-  const { tId, tName, leaderboards, version } = props.leaderboards;
-  
+const Leaderboards = ({leaderboards}) => {
   const [popupUser, setPopupUser] = useState(null);
   const [show, setShow] = useState(false);
   const handleClose = () => {
@@ -45,30 +43,30 @@ const Leaderboards = (props) => {
               </td>
             </tr>
             :
-              leaderboards.map((row, index) => (
-                <tr key={index} onClick={(e) => handleShow(row)} className="cursor-pointer">
+              leaderboards.map((item, index) => (
+                <tr key={index} onClick={(e) => handleShow(item)} className="cursor-pointer">
                   <td>{index+1}</td>
                   <td>
                     <div className="d-flex align-items-center">
                       <img
-                          src={row.photo}
+                          src={item.photo}
                           alt=""
                           style={{width: "45px", height: "45px"}}
                           className="rounded-circle"
                           />
                       <div className="ms-3">
-                        <p className="fw-bold mb-1">{row.userName}</p>
-                        <p className="text-muted mb-0">Country: {row.country}</p>
+                        <p className="fw-bold mb-1">{item.userName}</p>
+                        <p className="text-muted mb-0">Country: {item.country}</p>
                       </div>
                     </div>
                   </td>
                   <td>
-                    <p className="fw-normal mb-1">{row.stats?.levelTitle}</p>
-                    <p className="text-muted mb-0">Level {row.stats?.level}</p>
+                    <p className="fw-normal mb-1">{item.stats?.levelTitle}</p>
+                    <p className="text-muted mb-0">Level {item.stats?.level}</p>
                   </td>
-                  <td>{row.stats?.totalGamePlayed}</td>
-                  <td>{row.stats?.totalWins}</td>
-                  <td>{row.stats.totalXp}</td>
+                  <td>{item.stats?.totalGamePlayed}</td>
+                  <td>{item.stats?.totalWins}</td>
+                  <td>{item.stats?.totalXp}</td>
                   <td>
                     <span className="badge badge-success rounded-pill d-inline">Verified</span>
                   </td>

@@ -1,8 +1,6 @@
 import React from "react";
 
-const Transactions = (props) => {
-//   const { _id, tName, leaderboard, version } = props.leaderboards;
-  
+const Transactions = ({transactions}) => {
   return (
     <div className='card d-flex mb-3 p-3' 
       style={{position: 'relative'}}
@@ -23,60 +21,64 @@ const Transactions = (props) => {
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>
-            <span className="text-black">
-              <i className="fas fa-money me-1"></i><span>1</span>
-            </span>
-          </td>
-          <td>Money Transferred to cena235</td>
-          <td>EToken</td>
-          <td>pm_2312123</td>
-          <td>
-            <span className="text-danger">
-              <i className="fas fa-caret-down me-1"></i><span>-$12.72</span>
-            </span>
-          </td>
-          <td>USD</td>
-          <td>Send Money</td>
-          <td><span className="badge badge-warning rounded-pill d-inline">Pending</span></td>
-        </tr>
-        <tr>
-          <td>
-            <span className="text-black">
-              <i className="fas fa-money me-1"></i><span>2</span>
-            </span>
-          </td>
-          <td>Money Transferred from harrykane</td>
-          <td>EToken</td>
-          <td>pm_2312123</td>
-          <td>
-            <span className="text-success">
-              <i className="fas fa-caret-up me-1"></i><span>$80.23</span>
-            </span>
-          </td>
-          <td>USD</td>
-          <td>Send Money</td>
-          <td><span className="badge badge-warning rounded-pill d-inline">Awaiting</span></td>
-        </tr>
-        <tr>
-          <td>
-            <span className="text-black">
-              <i className="fas fa-money me-1"></i><span>3</span>
-            </span>
-          </td>
-          <td>Money Transferred to harrykane</td>
-          <td>EToken</td>
-          <td>pm_2312123</td>
-          <td>
-            <span className="text-danger">
-              <i className="fas fa-caret-down me-1"></i><span>$11.05</span>
-            </span>
-          </td>
-          <td>USD</td>
-          <td>Send Money</td>
-          <td><span className="badge badge-success rounded-pill d-inline">Succeeded</span></td>
-        </tr>
+
+
+      {
+        transactions.length === 0 ? <p className="mt-3">No transactions found!</p> :
+          transactions.map((item, index) => (
+              <tr key={index}>
+                <td>
+                  <span className="text-black">
+                    <i className="fas fa-money me-1"></i><span>{index+1}</span>
+                  </span>
+                </td>
+                <td>{item.description}</td>
+                <td>{item.method}</td>
+                <td>{item.trx}</td>
+                <td>
+                    {
+                        item.activity === 'expense' ? 
+                        <span className="text-danger">
+                          <i className="fas fa-caret-down me-1"></i><span>-{item.amount}</span> 
+                        </span> 
+                      : item.activity === 'earning' ? 
+                        <span className="text-success">
+                          <i className="fas fa-caret-up me-1"></i><span>{item.amount}</span>
+                        </span>
+                      : item.activity === 'withdrawal' ? 
+                      <span className="text-success">
+                        <i className="fas fa-check me-1"></i><span>{item.amount}</span>
+                      </span>
+                      : '-'
+                    }
+                  
+                </td>
+                <td>{item.currency}</td>
+                <td>{item.remarks}</td>
+                <td>
+                  {
+                      item.status === 'approved' ? 
+                      <span className="badge badge-success rounded-pill d-inline">
+                        {item.status}
+                      </span> 
+                    : item.status === 'pending' ? 
+                      <span className="badge badge-warning rounded-pill d-inline">
+                        {item.status}
+                      </span>
+                    : item.status === 'cancelled' ? 
+                      <span className="badge badge-warning rounded-pill d-inline">
+                        {item.status}
+                      </span> 
+                    : item.status === 'incoming' ? 
+                    <span className="badge badge-warning rounded-pill d-inline">
+                      {item.status}
+                    </span> 
+                    : '-'
+                  }
+                </td>
+              </tr>
+          ))
+      }
       </tbody>
     </table>
     </div>

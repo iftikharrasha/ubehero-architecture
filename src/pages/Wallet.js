@@ -13,6 +13,7 @@ import { fetchGiftCards } from '../redux/slices/giftCardSlice';
 import PurchaseLayout from '../components/Common/Purchase/PurchaseLayout';
 import CheckoutLayout from '../components/Common/Checkout/CheckoutLayout';
 import Giftcard from '../components/Wallet/Topup/Giftcard';
+import { fetchMyTransactions } from '../redux/slices/walletSlice';
 
 const Wallet = () => { 
     const { id } = useParams();
@@ -44,6 +45,9 @@ const Wallet = () => {
 
     const giftcards = useSelector((state) => state.giftcards.data)
     const versionGiftCard = useSelector((state) => state.giftcards.version)
+
+    const myTransactions = useSelector((state) => state.myTransactions.data)
+    const versionTransactions = useSelector((state) => state.myTransactions.version)
     // console.log('1. versionChatroomC:', versionChatroom);
 
     useEffect(() => {
@@ -53,6 +57,10 @@ const Wallet = () => {
     useEffect(() => {
         if(routeKey === 'topup'){
             dispatch(fetchGiftCards({ versionGiftCard }));
+        }else if(routeKey === 'transactions'){
+            dispatch(fetchMyTransactions({ id, versionTransactions }));
+        }else{
+           console.log('other route')
         }
     }, [routeKey])
 
@@ -112,7 +120,7 @@ const Wallet = () => {
                                 }}
                             >
                                 <Tab eventKey="transactions" title="Transactions">
-                                    <Transactions />
+                                    <Transactions transactions={myTransactions.transactions}/>
                                 </Tab>
                                 <Tab eventKey="topup" title="Top Up">
                                     {
