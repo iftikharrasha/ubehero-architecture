@@ -9,7 +9,6 @@ import useAuth from '../../../hooks/useAuth';
 import useNotyf from '../../../hooks/useNotyf';
 
 const PopupModal = ({show, handleClose, popupUser}) => {
-    //just for testing purposes for notifications
     const { loggedInUser } = useAuth();
     const user = useSelector((state) => state.profile.data)
     const jwt = localStorage.getItem("jwt");
@@ -17,10 +16,6 @@ const PopupModal = ({show, handleClose, popupUser}) => {
     const { socketN } = useNotyf(user, jwt);
     
     const sendFriendRequestNotyf = () => {
-        const timeStamp = Date.now();
-        const date = moment(timeStamp);
-        const output = date.format('YYYY-MM-DDTHH:mm:ss.SSS');
-
         const data = {
             type: "friend_request",
             subject: "Sent you a friend request",
@@ -28,10 +23,8 @@ const PopupModal = ({show, handleClose, popupUser}) => {
             invokedByName: loggedInUser.name,
             invokedById: loggedInUser.id,
             receivedByName: popupUser.userName,
-            receivedById: popupUser.id, 
-            route: `profile/${loggedInUser.id}`,
-            timeStamp: output,
-            read: false
+            receivedById: popupUser._id, 
+            route: `profile/${loggedInUser.id}`
         }
 
         // Send message to server
@@ -39,10 +32,6 @@ const PopupModal = ({show, handleClose, popupUser}) => {
     };
 
     const sendFollowRequestNotyf = () => {
-        const timeStamp = Date.now();
-        const date = moment(timeStamp);
-        const output = date.format('YYYY-MM-DDTHH:mm:ss.SSS');
-
         const data = {
             type: "follow_request",
             subject: "Started following you",
@@ -50,10 +39,8 @@ const PopupModal = ({show, handleClose, popupUser}) => {
             invokedByName: loggedInUser.name,
             invokedById: loggedInUser.id,
             receivedByName: popupUser.userName,
-            receivedById: popupUser.id, 
-            route: `profile/${loggedInUser.id}`,
-            timeStamp: output,
-            read: false
+            receivedById: popupUser._id, 
+            route: `profile/${loggedInUser.id}`
         }
 
         // Send message to server

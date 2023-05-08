@@ -34,6 +34,7 @@ const Notification = ({socketN, isConnected, userId}) => {
           setNotyfReceived((state) => [
               ...state,
               {
+                  _id: data._id,
                   type: data.type,
                   subject: data.subject,
                   subjectPhoto: data.subjectPhoto,
@@ -42,7 +43,7 @@ const Notification = ({socketN, isConnected, userId}) => {
                   receivedByName: data.receivedByName,
                   receivedById: data.receivedById,
                   route: data.route,
-                  timeStamp: data.timeStamp,
+                  timeStamp: data.createdAt,
                   read: data.read
               },
           ]);
@@ -62,15 +63,15 @@ const Notification = ({socketN, isConnected, userId}) => {
     return () => socketN.off("last_10_notifications");
   }, [socketN]);
 
-  const handleRead = (e, notificationId) => {
+  const handleRead = (e, item) => {
     e.preventDefault();
 
-    socketN.emit("read_notification", notificationId);
+    socketN.emit("update_notification", item._id, item);
 
     // Update the state locally
     setNotyfReceived((notifications) => {
       const updatedNotifications = notifications.map((notification) => {
-        if (notification._id === notificationId) {
+        if (notification._id === item._id) {
           return { ...notification, read: !notification.read };
         }
         return notification;
@@ -79,14 +80,28 @@ const Notification = ({socketN, isConnected, userId}) => {
     });
   }
 
+  const handleReject = (e, notificationId, type) => {
+    // e.preventDefault();
+
+    // socketN.emit("update_notification", notificationId);
+
+    // // Update the state locally
+    // setNotyfReceived((notifications) => {
+    //   const updatedNotifications = notifications.map((notification) => {
+    //     if (notification._id === notificationId) {
+    //       return { ...notification, read: !notification.read };
+    //     }
+    //     return notification;
+    //   });
+    //   return updatedNotifications;
+    // });
+  }
+
   //just for testing purposes for notifications
   const { loggedInUser } = useAuth();
      
   const handleFriendRequest = (e, item) => {
     e.preventDefault();
-    const timeStamp = Date.now();
-    const date = moment(timeStamp);
-    const output = date.format('YYYY-MM-DDTHH:mm:ss.SSS');
 
     const data = {
           type: "friend_request_accept",
@@ -94,25 +109,29 @@ const Notification = ({socketN, isConnected, userId}) => {
           subjectPhoto: loggedInUser.photo,
           invokedByName: loggedInUser.name,
           invokedById: loggedInUser.id,
-          receivedByName: item.userName,
+          receivedByName: item.invokedByName,
           receivedById: item.invokedById, 
-          route: `profile/${loggedInUser.id}`,
-          timeStamp: output,
-          read: false
+          route: `profile/${loggedInUser.id}`
     }
 
     //Send message to server
     socketN.emit("send_notification", data);
+
+    const updatadData = {
+      type: "friend_request_accept", 
+      subject: `You're now friend with ${item.invokedByName}`, 
+      invokedByName: "Request Accepted"
+    }
+    
+    // Update the database on server
+    socketN.emit("update_notification", item._id, updatadData);
 
     // Update the state locally
     setNotyfReceived((notifications) => {
       const updatedNotifications = notifications.map((notification) => {
         if (notification._id === item._id) {
           return  { ...notification, 
-                    type: "friend_request_accept", 
-                    subject: `You're now friend with ${notification.invokedByName}`, 
-                    invokedByName: "Request Accepted",
-                    read: true 
+                    ...updatadData
                   };
         }
         return notification;
@@ -123,9 +142,6 @@ const Notification = ({socketN, isConnected, userId}) => {
 
   const handleFollowRequest = (e, item) => {
     e.preventDefault();
-    const timeStamp = Date.now();
-    const date = moment(timeStamp);
-    const output = date.format('YYYY-MM-DDTHH:mm:ss.SSS');
 
     const data = {
           type: "follow_request_accept",
@@ -133,25 +149,29 @@ const Notification = ({socketN, isConnected, userId}) => {
           subjectPhoto: loggedInUser.photo,
           invokedByName: loggedInUser.name,
           invokedById: loggedInUser.id,
-          receivedByName: item.userName,
+          receivedByName: item.invokedByName,
           receivedById: item.invokedById, 
-          route: `profile/${loggedInUser.id}`,
-          timeStamp: output,
-          read: false
+          route: `profile/${loggedInUser.id}`
     }
 
     //Send message to server
     socketN.emit("send_notification", data);
+
+    const updatadData = {
+      type: "follow_request_accept", 
+      subject: `You're following back ${item.invokedByName}`, 
+      invokedByName: "Following back",
+    }
+    
+    // Update the database on server
+    socketN.emit("update_notification", item._id, updatadData);
 
     // Update the state locally
     setNotyfReceived((notifications) => {
       const updatedNotifications = notifications.map((notification) => {
         if (notification._id === item._id) {
           return  { ...notification, 
-                    type: "follow_request_accept", 
-                    subject: `You're now following ${notification.invokedByName}`, 
-                    invokedByName: "Following back",
-                    read: true 
+                    ...updatadData
                   };
         }
         return notification;
@@ -192,15 +212,15 @@ const Notification = ({socketN, isConnected, userId}) => {
                           {item.type === 'friend_request' || item.type === 'team_invite' ?  
                           <>
                             <i className="fas fa-check check me-3" onClick={(e) => {e.stopPropagation(); handleFriendRequest(e, item)}}></i>
-                            <i className="fas fa-close close" onClick={(e) => {e.stopPropagation(); handleRead(e, item._id, "reject")}}></i>
+                            <i className="fas fa-close close" onClick={(e) => {e.stopPropagation(); handleReject(e, item._id, "reject")}}></i>
                           </> : 
                           item.type === 'follow_request' ? 
                           <>
                             <button className="btn btn-success follow" onClick={(e) => {e.stopPropagation(); handleFollowRequest(e, item)}}>Follow Back</button> 
                           </> : 
                           item.read ? 
-                            <i className="fas fa-envelope-open" onClick={(e) => {e.stopPropagation(); handleRead(e, item._id)}}></i> : 
-                            <i className="fas fa-envelope" onClick={(e) => {e.stopPropagation(); handleRead(e, item._id)}}></i>
+                            <i className="fas fa-envelope-open" onClick={(e) => {e.stopPropagation(); handleRead(e, item)}}></i> : 
+                            <i className="fas fa-envelope" onClick={(e) => {e.stopPropagation(); handleRead(e, item)}}></i>
                           }
                         </div>
                       </div>

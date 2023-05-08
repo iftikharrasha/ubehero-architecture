@@ -13,11 +13,7 @@ const CheckoutForm = ({method, tournament}) => {
     const jwt = localStorage.getItem("jwt");
     const { socketN } = useNotyf(user, jwt);
 
-    const sendFriendRequestNotyf = () => {
-        const timeStamp = Date.now();
-        const date = moment(timeStamp);
-        const output = date.format('YYYY-MM-DDTHH:mm:ss.SSS');
-
+    const tournamentRegistration = () => {
         const data = {
           type: "tournament_registration",
           subject: "You’ve joined the tournament",
@@ -26,9 +22,7 @@ const CheckoutForm = ({method, tournament}) => {
           invokedById: _id,
           receivedByName: loggedInUser.name,
           receivedById: loggedInUser.id,  //this user will receive notification
-          route: `tournament/details/${_id}`,
-          timeStamp: output,
-          read: false
+          route: `tournament/details/${_id}`
         }
 
         // Send message to server
@@ -139,7 +133,7 @@ const CheckoutForm = ({method, tournament}) => {
 
                             <div className="row my-4">
                                 <div className="col-12">
-                                    <button type="button" id="btnSubmit" className="btn btn-primary d-block mx-auto btn-submit" onClick={sendFriendRequestNotyf}>Submit</button>
+                                    <button type="button" id="btnSubmit" className="btn btn-primary d-block mx-auto btn-submit" onClick={tournamentRegistration}>Submit</button>
                                 </div>
                             </div>
                         </div>
