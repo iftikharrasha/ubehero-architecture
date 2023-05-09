@@ -85,7 +85,6 @@ const InboxPopUp = () => {
                                         socketInbox={socketInbox}
                                         isInboxConnected={isInboxConnected}
                                         roomId={uniqueRoomId}
-                                        room={popUser.id}
                                         receiverId={popUser.id}
                                         user={user}
                                     />

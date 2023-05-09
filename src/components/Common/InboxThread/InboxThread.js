@@ -29,16 +29,16 @@ const InboxThread = ({socketN}) => {
       ]);
 
       //this is to have popup user
-        const user =  {
-            id: item.senderId,
-            userName: item.senderName,
-            photo: item.senderPhoto,
-            message: item.message,
-            read: item.read,
-        }
+      const user =  {
+        id: item.senderId,
+        userName: item.senderName,
+        photo: item.senderPhoto,
+        message: item.message,
+        read: item.read,
+      }
 
-        setShowInbox(true);
-        setPopUser(user);
+      setShowInbox(true);
+      setPopUser(user);
     };
 
     useEffect(() => {
@@ -63,7 +63,6 @@ const InboxThread = ({socketN}) => {
                     ...state,
                     {
                       roomId: data.roomId,
-                      room: data.room,
                       senderId: data.senderId,
                       senderName: data.senderName,
                       senderPhoto: data.senderPhoto,
@@ -161,36 +160,36 @@ const InboxThread = ({socketN}) => {
                       <div className="card p-0">
                           <div className="card-body p-0">
 
-                              <ul className="list-unstyled mb-0">
-                                  {
-                                      inboxReceived.length > 0 ?
-                                          inboxReceived.slice().reverse().map((item, index) => (
-                                          <li className={`p-2 px-3 border-bottom ${item.read === false ? "notyf-item unread" : "notyf-item"}`} key={index} onClick={(e) => handleInboxPop(item)}>
-                                              <div className="d-flex justify-content-between">
-                                                  <div className="d-flex flex-row">
-                                                      <span className='avatar'>
-                                                          <img src={item.senderPhoto} alt="avatar" className="rounded-circle d-flex align-self-center me-3" width="45"/>
-                                                      </span>
-                                                      <div className="pt-1">
-                                                          <h6 className="mb-0">{item.senderName}</h6>
-                                                          <p className="small text-muted">{item.message}</p>
-                                                      </div>
-                                                  </div>
-                                                  <div className="pt-1">
-                                                      <p className="small text-muted mb-1">{moment(item.timeStamp).fromNow()}</p>
-                                                      {
-                                                          item.messageCount !== 0 ? 
-                                                          <span className="badge bg-danger float-end">{item.messageCount}</span> : null
-                                                      }
-                                                  </div>
-                                              </div>
-                                          </li>
-                                  )) : 
-                                  <li className='notyf-item'>
-                                      <Link className="dropdown-item" to="/">No new messages</Link>
-                                  </li>
-                              }
-                              </ul>
+                            <ul className="list-unstyled mb-0">
+                                {
+                                  inboxReceived.length > 0 ?
+                                    inboxReceived.slice().reverse().map((item, index) => (
+                                    <li className={`p-2 px-3 border-bottom ${item.read === false ? "notyf-item unread" : "notyf-item"}`} key={index} onClick={(e) => handleInboxPop(item)}>
+                                        <div className="d-flex justify-content-between">
+                                            <div className="d-flex flex-row">
+                                                <span className='avatar'>
+                                                    <img src={item.senderPhoto} alt="avatar" className="rounded-circle d-flex align-self-center me-3" width="45"/>
+                                                </span>
+                                                <div className="pt-1">
+                                                    <h6 className="mb-0">{item.senderName}</h6>
+                                                    <p className="small text-muted">{item.message}</p>
+                                                </div>
+                                            </div>
+                                            <div className="pt-1">
+                                                <p className="small text-muted mb-1">{moment(item.timeStamp).fromNow()}</p>
+                                                {
+                                                    item.messageCount !== 0 ? 
+                                                    <span className="badge bg-danger float-end">{item.messageCount}</span> : null
+                                                }
+                                            </div>
+                                        </div>
+                                    </li>
+                                )) : 
+                                <li className='notyf-item'>
+                                    <Link className="dropdown-item" to="/">No new messages</Link>
+                                </li>
+                            }
+                            </ul>
 
                           </div>
                       </div>

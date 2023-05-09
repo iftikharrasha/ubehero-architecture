@@ -31,12 +31,16 @@ const Home = () => {
                 landing ? <Landing landing={landing}/> : null
             }
             
+            <div className="row">
             {
                 tournaments ? 
-                tournaments.map((tournament) => (
-                    <Tournaments routeKey={tournament._id} tournament={tournament} details={false}/>
-                )) : <Preloader />
+                    tournaments.map((tournament, index) => (
+                        <div className=" col-lg-4 col-sm-6" key={index}>
+                            <Tournaments routeKey={tournament._id} tournament={tournament} details={false}/>
+                        </div>
+                    )) : <Preloader />
             }
+            </div>
         </PageLayout>
     );
 };

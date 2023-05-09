@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import moment from "moment/moment";
 
-const SendInbox = ({socketInbox, isInboxConnected, roomId, receiverId, room, user}) => {
+const SendInbox = ({socketInbox, isInboxConnected, roomId, receiverId, user}) => {
   const [message, setMessage] = useState("");
   const [isTyping, setIsTyping] = useState(false);
 
@@ -18,7 +18,6 @@ const SendInbox = ({socketInbox, isInboxConnected, roomId, receiverId, room, use
 
         const data = {
           roomId: roomId,
-          room: room,
           senderId: senderId,
           senderName: senderName,
           senderPhoto: senderPhoto,

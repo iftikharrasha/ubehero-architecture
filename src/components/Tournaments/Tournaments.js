@@ -22,10 +22,8 @@ const Tournaments = ({remark, route, handleCancel, tournament, detailsPage, hand
       style={{position: 'relative'}}
     >
       <div className='row'>
-        <div className='col-md-3'>
-          <img className="img-fluid" src={tournamentThumbnail} alt='' />
-        </div>
-        <div className='col-md-9'>
+        <div className='col-md-12'>
+          <img className="img-fluid" src={tournamentThumbnail} alt='thumb' />
           <div className='card-body'>
             <h5 className='card-title'>{tournamentName}</h5>
             {/* <h6>{gameType}</h6> */}

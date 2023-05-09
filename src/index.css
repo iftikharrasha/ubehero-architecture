@@ -368,6 +368,7 @@ body {
 .dropdown-menu.show{
   max-height: 90vh;
   overflow-y: scroll;
+  z-index: 9999;
 }
 
 .walletFont p{

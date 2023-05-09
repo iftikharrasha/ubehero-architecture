@@ -14,10 +14,15 @@ const WishList = () => {
                     <p>Looks like you do not have any item selected! Check them out in the home page to <Link to="/">discover more</Link>.</p>
                 )
             }
-             
+
+            <div className="row">
             {
-                wish.map((tournament) => (<Tournaments routeKey={tournament._id} tournament={tournament} />))
-            }
+                wish.map((tournament, index) => (
+                    <div className="col-lg-4 col-sm-6" key={index}>
+                        <Tournaments routeKey={tournament._id} tournament={tournament} />
+                    </div>
+            ))}
+            </div>
         </PageLayout>
     );
 };

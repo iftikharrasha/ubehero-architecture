@@ -5,6 +5,7 @@ import useAuth from '../../../hooks/useAuth';
 
 const Notification = ({socketN, isConnected, userId}) => {
   const [notyfReceived, setNotyfReceived] = useState([]);
+  const { loggedInUser } = useAuth();
 
   useEffect(() => {
       if (socketN) {
@@ -80,25 +81,17 @@ const Notification = ({socketN, isConnected, userId}) => {
     });
   }
 
-  const handleReject = (e, notificationId, type) => {
-    // e.preventDefault();
+  const handleDelete = (e, notificationId) => {
+    e.preventDefault();
 
-    // socketN.emit("update_notification", notificationId);
+    socketN.emit("delete_notification", notificationId);
 
-    // // Update the state locally
-    // setNotyfReceived((notifications) => {
-    //   const updatedNotifications = notifications.map((notification) => {
-    //     if (notification._id === notificationId) {
-    //       return { ...notification, read: !notification.read };
-    //     }
-    //     return notification;
-    //   });
-    //   return updatedNotifications;
-    // });
+    // Update the state locally
+    setNotyfReceived((notifications) => {
+      const updatedNotifications = notifications.filter(notification => notification._id !== notificationId);
+      return updatedNotifications;
+    });
   }
-
-  //just for testing purposes for notifications
-  const { loggedInUser } = useAuth();
      
   const handleFriendRequest = (e, item) => {
     e.preventDefault();
@@ -212,7 +205,7 @@ const Notification = ({socketN, isConnected, userId}) => {
                           {item.type === 'friend_request' || item.type === 'team_invite' ?  
                           <>
                             <i className="fas fa-check check me-3" onClick={(e) => {e.stopPropagation(); handleFriendRequest(e, item)}}></i>
-                            <i className="fas fa-close close" onClick={(e) => {e.stopPropagation(); handleReject(e, item._id, "reject")}}></i>
+                            <i className="fas fa-close close" onClick={(e) => {e.stopPropagation(); handleDelete(e, item._id)}}></i>
                           </> : 
                           item.type === 'follow_request' ? 
                           <>

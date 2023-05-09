@@ -74,7 +74,7 @@ const PopupModal = ({show, handleClose, popupUser}) => {
                                 <div className="flex-grow-1 ms-3">
                                     <h5 className="mb-1">{popupUser?.userName}
                                     {
-                                        popupUser?.id === loggedInUser.id ? null :
+                                        popupUser?._id === loggedInUser.id ? null :
                                         <span className='ms-2'>| <i className="fas fa-message text-danger cursor-pointer ms-2" onClick={handleInboxPop}></i></span>
                                     }
                                      
@@ -96,9 +96,9 @@ const PopupModal = ({show, handleClose, popupUser}) => {
                                     </div>
 
                                     {
-                                        popupUser?.id === loggedInUser.id ? 
+                                        popupUser?._id === loggedInUser.id ? 
                                         <div className="d-flex pt-1">
-                                            <button type="button" className="btn btn-primary flex-grow-1"><Link to={`/profile/${popupUser?.id}`} className="text-white">My Profile</Link></button>
+                                            <button type="button" className="btn btn-primary flex-grow-1"><Link to={`/profile/${popupUser?._id}`} className="text-white">My Profile</Link></button>
                                         </div> :
                                         <div className="d-flex pt-1">
                                             <button type="button" className="btn btn-info text-white me-1 flex-grow-1" onClick={sendFriendRequestNotyf}>Add Friend</button>
