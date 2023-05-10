@@ -188,7 +188,7 @@ const Notification = ({socketN, isConnected, userId}) => {
         </div>
           {
             notyfReceived.length > 0 ?
-              notyfReceived.slice().reverse().map((item, index) => (
+              notyfReceived.slice().map((item, index) => (
                 <li key={index} className={item.read === false ? "notyf-item unread" : "notyf-item"}>
                     <a className="dropdown-item" href={`${process.env.REACT_APP_CLIENT_ORIGIN}/${item.route}`}>
                       <div className='d-flex justify-content-between align-items-center'>

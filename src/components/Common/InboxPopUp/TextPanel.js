@@ -16,7 +16,7 @@ const TextPanel = ({socketInbox, user, popUser, messagesRecieved, setMessagesRec
                 {
                     message: data.message,
                     senderName: data.senderName,
-                    timeStamp: data.timeStamp,
+                    createdAt: data.createdAt,
                     senderPhoto: data.senderPhoto,
                 },
             ]);
@@ -80,7 +80,7 @@ const TextPanel = ({socketInbox, user, popUser, messagesRecieved, setMessagesRec
                         }
                         <div>
                             <p className="small p-2 mx-3 mb-1 rounded-3 color">{item.message}</p>
-                            <p className="small mx-3 mb-3 rounded-3 text-muted d-flex justify-content-end">{moment(item.timeStamp).fromNow()}</p>
+                            <p className="small mx-3 mb-3 rounded-3 text-muted d-flex justify-content-end">{moment(item.createdAt).fromNow()}</p>
                         </div>
                         {
                             item.senderName.toLowerCase() === user.userName ? 

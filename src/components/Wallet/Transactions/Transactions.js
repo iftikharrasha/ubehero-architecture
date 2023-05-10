@@ -1,6 +1,6 @@
 import React from "react";
 
-const Transactions = ({transactions}) => {
+const Transactions = ({myTransactions}) => {
   return (
     <div className='card d-flex mb-3 p-3' 
       style={{position: 'relative'}}
@@ -24,8 +24,8 @@ const Transactions = ({transactions}) => {
 
 
       {
-        transactions.length === 0 ? <p className="mt-3">No transactions found!</p> :
-          transactions.map((item, index) => (
+        myTransactions?.transactions.length === 0 ? <p className="mt-3">No transactions found!</p> :
+            myTransactions?.transactions.map((item, index) => (
               <tr key={index}>
                 <td>
                   <span className="text-black">

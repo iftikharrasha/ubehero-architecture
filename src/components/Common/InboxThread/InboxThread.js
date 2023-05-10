@@ -52,7 +52,7 @@ const InboxThread = ({socketN}) => {
                       return {
                         ...item,
                         message: data.message,
-                        timeStamp: data.timeStamp,
+                        createdAt: data.createdAt,
                         messageCount: item.messageCount + 1
                       };
                     }
@@ -69,7 +69,7 @@ const InboxThread = ({socketN}) => {
                       senderPermissions: data.senderPermissions,
                       receiverId: data.receiverId,
                       message: data.message,
-                      timeStamp: data.timeStamp,
+                      createdAt: data.createdAt,
                       read: data.read,
                       messageCount: 1
                     }
@@ -176,7 +176,7 @@ const InboxThread = ({socketN}) => {
                                                 </div>
                                             </div>
                                             <div className="pt-1">
-                                                <p className="small text-muted mb-1">{moment(item.timeStamp).fromNow()}</p>
+                                                <p className="small text-muted mb-1">{moment(item.createdAt).fromNow()}</p>
                                                 {
                                                     item.messageCount !== 0 ? 
                                                     <span className="badge bg-danger float-end">{item.messageCount}</span> : null

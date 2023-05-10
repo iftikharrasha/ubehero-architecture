@@ -48,10 +48,9 @@ const Wallet = () => {
 
     const myTransactions = useSelector((state) => state.myTransactions.data)
     const versionTransactions = useSelector((state) => state.myTransactions.version)
-    // console.log('1. versionChatroomC:', versionChatroom);
 
     useEffect(() => {
-        dispatch(fetchProfileDetails({ id, version }));
+        dispatch(fetchMyTransactions({ id, version }));
     }, [])
 
     useEffect(() => {
@@ -60,7 +59,7 @@ const Wallet = () => {
         }else if(routeKey === 'transactions'){
             dispatch(fetchMyTransactions({ id, versionTransactions }));
         }else{
-           console.log('other route')
+           console.log('no toute')
         }
     }, [routeKey])
 
@@ -120,7 +119,10 @@ const Wallet = () => {
                                 }}
                             >
                                 <Tab eventKey="transactions" title="Transactions">
-                                    <Transactions transactions={myTransactions.transactions}/>
+                                    {
+                                        myTransactions.transactions ? 
+                                        <Transactions myTransactions={myTransactions}/> : <Preloader/>
+                                    }
                                 </Tab>
                                 <Tab eventKey="topup" title="Top Up">
                                     {

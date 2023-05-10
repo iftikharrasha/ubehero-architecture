@@ -20,6 +20,7 @@ let initialSocketId = null;
 
 const TournamentDetails = () => { 
     const isLoggedIn = useSelector(state => state.profile.signed_in);
+    const purchasedItems = useSelector(state => state.profile?.data?.purchasedItems);
     const [routeKey, setRouteKey] = useState('leaderboards');
     const { id } = useParams();
 
@@ -157,7 +158,7 @@ const TournamentDetails = () => {
                                 <h6 className='mb-3'>Category: {tournamentDetails.gameType} | Mode: {tournamentDetails.settings.mode} | version: {tournamentDetails.version}</h6>
                                 {
                                     !isLoggedIn ? <Link to={`/login`}><button>Join Now</button></Link> :
-                                    tournamentDetails.purchased ? <Link to={`/tournament/details/${tournamentDetails._id}`}><button>Purchased</button></Link> :
+                                    purchasedItems.tournaments?.includes(tournamentDetails._id) ? <Link to={`/tournament/details/${tournamentDetails._id}`}><button>Purchased</button></Link> :
                                                 routeKey === 'checkout' ? <button to={`/`} className="btn btn-success" onClick={handleCancel}>Cancel</button> 
                                                 : <button to={`/tournament/details/${tournamentDetails._id}/checkout`} className="btn btn-success" onClick={handleCheckout}>Join Now</button> 
                                 }

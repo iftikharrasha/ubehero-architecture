@@ -13,6 +13,7 @@ const Tournaments = ({remark, route, handleCancel, tournament, detailsPage, hand
   const { _id, tournamentName, gameType, tournamentThumbnail, version, purchased } = tournament;
   const { wishList } = useSelector((state) => state.tournaments);
   const isLoggedIn = useSelector(state => state.profile.signed_in);
+  const purchasedItems = useSelector(state => state.profile?.data?.purchasedItems);
   const isWishListed = wishList.find((t) => t._id === tournament._id);
 
   const dispatch = useDispatch();
@@ -31,7 +32,7 @@ const Tournaments = ({remark, route, handleCancel, tournament, detailsPage, hand
             {
               remark ? null :
               !isLoggedIn ? <Link to={`/tournament/details/${_id}`}><button>Join Now</button></Link> :
-                            purchased ? <Link to={`/tournament/details/${_id}`}><button>Purchased</button></Link> :
+                purchasedItems.tournaments?.includes(_id) ? <Link to={`/tournament/details/${_id}`}><button>Purchased</button></Link> :
                                   detailsPage ? 
                                        route === 'checkout' ? <button to={`/`} className="btn btn-success" onClick={handleCancel}>Cancel</button> 
                                        : <button to={`/tournament/details/${_id}/checkout`} className="btn btn-success" onClick={handleCheckout}>Buy Now</button> 

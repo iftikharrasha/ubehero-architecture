@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import moment from "moment/moment";
 
 const SendInbox = ({socketInbox, isInboxConnected, roomId, receiverId, user}) => {
   const [message, setMessage] = useState("");
@@ -12,10 +11,6 @@ const SendInbox = ({socketInbox, isInboxConnected, roomId, receiverId, user}) =>
         const senderPhoto = user.photo;
         const senderPermissions = user.permissions;
 
-        const timeStamp = Date.now();
-        const date = moment(timeStamp);
-        const output = date.format('YYYY-MM-DDTHH:mm:ss.SSS');
-
         const data = {
           roomId: roomId,
           senderId: senderId,
@@ -24,7 +19,6 @@ const SendInbox = ({socketInbox, isInboxConnected, roomId, receiverId, user}) =>
           senderPermissions: senderPermissions,
           receiverId: receiverId,
           message: message,
-          timeStamp: output,
           read: false,
           messageCount: 0
         }

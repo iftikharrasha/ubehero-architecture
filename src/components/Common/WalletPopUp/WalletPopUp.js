@@ -7,7 +7,7 @@ const WalletPopUp = ({userId}) => {
         <Link to={`/`} className="mx-4 dropdown-toggle hidden-arrow text-white" id="navbarDropdownMenuLink"
         role="button" data-mdb-toggle="dropdown" aria-expanded="false">
             <i className="fas fa-wallet"></i>
-            <span className="badge rounded-pill badge-notification bg-secondary">$94.85</span>
+            <span className="badge rounded-pill badge-notification bg-secondary">$0</span>
         </Link>
 
         <ul className="dropdown-menu p-0 overflow-hidden" aria-labelledby="navbarDropdownMenuLink">
@@ -24,7 +24,7 @@ const WalletPopUp = ({userId}) => {
                             <div className="d-flex justify-content-between text-center mt-2 mb-2 walletFont">
                                 <div>
                                     <p className="text-muted mb-0">Balance</p>
-                                    <p className="mb-2 h5">$94.85</p>
+                                    <p className="mb-2 h5">$0</p>
                                 </div>
                                 <div className="px-4">
                                     <p className="text-muted mb-0">Income</p>
