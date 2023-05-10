@@ -12,10 +12,6 @@ const SendBox = ({socket, isConnected, roomId, room, loggedInUser}) => {
           const senderPhoto = loggedInUser.photo;
           const senderPermissions = loggedInUser.permissions;
 
-          const timeStamp = Date.now();
-          const date = moment(timeStamp);
-          const output = date.format('YYYY-MM-DDTHH:mm:ss.SSS');
-
           const data = {
             roomId: roomId,
             room: room,
@@ -24,7 +20,6 @@ const SendBox = ({socket, isConnected, roomId, room, loggedInUser}) => {
             senderPermissions: senderPermissions,
             senderPhoto: senderPhoto,
             message: message,
-            timeStamp: output,
             read: false,
           }
           // Send message to server

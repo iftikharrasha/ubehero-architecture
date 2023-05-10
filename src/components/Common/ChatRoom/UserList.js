@@ -54,7 +54,7 @@ const UserList = ({socket, leaderboard}) => {
                                     <img src={participant.photo} alt="avatar"/>
                                     <div className="about">
                                         <div className="name"><i className="fa fa-circle online"></i> {participant.userName}</div>
-                                        <div className="status">Joined {moment(participant.timeStamp).fromNow()} </div>                                            
+                                        <div className="status">Joined {moment(participant.createdAt).fromNow()} </div>                                            
                                     </div>
                                 </li>
                             ))

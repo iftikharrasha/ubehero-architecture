@@ -44,7 +44,7 @@ const Notification = ({socketN, isConnected, userId}) => {
                   receivedByName: data.receivedByName,
                   receivedById: data.receivedById,
                   route: data.route,
-                  timeStamp: data.createdAt,
+                  createdAt: data.createdAt,
                   read: data.read
               },
           ]);

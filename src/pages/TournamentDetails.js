@@ -92,8 +92,8 @@ const TournamentDetails = () => {
       // Listen for pong event
       chatRoomSocket.on("pong", (receivedDate, pingReceivedAt, pongSocketId) => {
 
-        const timeStamp = new Date().getTime();
-        const latency = timeStamp - receivedDate;
+        const createdAt = new Date().getTime();
+        const latency = createdAt - receivedDate;
         console.log(`Received pong of ${chatRoomSocket.id} at ${pingReceivedAt} with latency ${latency}ms`);
 
         if(!initialSocketId){
@@ -108,7 +108,7 @@ const TournamentDetails = () => {
                 console.log('Socket disconnected for inactivity!');
                 setIsConnected(false);
 
-                chatRoomSocket.emit("leave_room", { timeStamp });
+                chatRoomSocket.emit("leave_room", { createdAt });
             }
         }
       });
@@ -196,8 +196,8 @@ const TournamentDetails = () => {
                             <Tab eventKey="prizes" title="Prizes">
                                 <Prizes prizes={tournamentDetails.prizes}/>
                             </Tab>
-                            {/* {
-                                isLoggedIn && (
+                            {
+                                purchasedItems.tournaments?.includes(tournamentDetails._id) && (
                                     <Tab eventKey="chatroom" title={`ChatRoom (${unreadCount})`}>
         
                                         {
@@ -205,7 +205,7 @@ const TournamentDetails = () => {
                                                         socket={socket}
                                                         isConnected={isConnected}
                                                         tournamentDetails={tournamentDetails} 
-                                                        leaderboardDetails={leaderboardDetails}
+                                                        leaderboards={leaderboardDetails.leaderboards}
                                                         routeKey={routeKey}
                                                         unreadCount={unreadCount}
                                                         setUnreadCount={setUnreadCount}
@@ -215,7 +215,7 @@ const TournamentDetails = () => {
                                         
                                     </Tab>
                                 )
-                            } */}
+                            }
                         </Tabs>
                     </>
                     }

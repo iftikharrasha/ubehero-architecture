@@ -19,7 +19,7 @@ const MessagePanel = ({socket, tournamentDetails, loggedInUser, routeKey, unread
                 {
                     message: data.message,
                     senderName: data.senderName,
-                    timeStamp: data.timeStamp,
+                    createdAt: data.createdAt,
                     senderPhoto: data.senderPhoto,
                 },
             ]);
@@ -112,7 +112,7 @@ const MessagePanel = ({socket, tournamentDetails, loggedInUser, routeKey, unread
                                 }
                                 >
                                     <p>{item.message}</p>
-                                    <span>{moment(item.timeStamp).fromNow()}</span>
+                                    <span>{moment(item.createdAt).fromNow()}</span>
                                 </div>                                    
                             </li>
                         ))

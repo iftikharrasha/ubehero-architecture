@@ -4,7 +4,7 @@ import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import PopupModal from '../../Common/PopupModal/PopupModal';
 
-const UserList = ({socket, leaderboard}) => {
+const UserList = ({socket, leaderboards}) => {
     const [roomUsers, setRoomUsers] = useState([]);
     
     //for popup
@@ -54,7 +54,7 @@ const UserList = ({socket, leaderboard}) => {
                                     <span className="avatarUser"><img src={participant.photo} alt="avatar"/></span>
                                     <div className="about">
                                         <div className="name"><i className="fa fa-circle online"></i> {participant.userName}</div>
-                                        <div className="status">Joined {moment(participant.timeStamp).fromNow()} </div>                                            
+                                        <div className="status">Joined {moment(participant.createdAt).fromNow()} </div>                                            
                                     </div>
                                 </li>
                             ))
@@ -62,11 +62,11 @@ const UserList = ({socket, leaderboard}) => {
                     </ul>
                 </div>
             </Tab>
-            <Tab eventKey="participants" title={`Participants (${leaderboard.length})`}>
+            <Tab eventKey="participants" title={`Participants (${leaderboards.length})`}>
                 <div id="plist" className="people-list px-1">
                     <ul className="list-unstyled chat-list mb-0">
                         {
-                            leaderboard.map((participant, index) => (
+                            leaderboards.map((participant, index) => (
                                 <li className="clearfix active mb-1" key={index} onClick={(e) => handleShow(participant)}>
                                     <span className="avatarUser"><img src={participant.photo} alt="avatar"/></span>
                                     <div className="about">
