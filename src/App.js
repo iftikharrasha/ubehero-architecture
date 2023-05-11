@@ -16,6 +16,7 @@ import useNotyf from './hooks/useNotyf';
 import InboxPopUp from './components/Common/InboxPopUp/InboxPopUp';
 import { useState } from 'react';
 import InboxContext from './Contexts/InboxContext/InboxContext';
+import Signup from './pages/Signup';
 
 function App() {
   const [showInbox, setShowInbox] = useState(false);
@@ -42,11 +43,12 @@ function App() {
 
               <Switch location={location}>
                 <Route exact path="/" component={Home} />
+                <Route exact path="/login" component={Login} />
+                <Route exact path="/signup" component={Signup} />
                 <Route exact path="/tournament/details/:id" render={() => <TournamentDetails/>}  />
                 <Route path="/tournament/details/:id/chatroom" render={() => <TournamentDetails tabKey={'chatroom'}/>} />
                 <Route path="/tournament/details/:id/prizes" render={() => <TournamentDetails tabKey={'prizes'} />}/>
                 <Route path="/tournament/details/:id/checkout" render={() => <TournamentDetails tabKey={'checkout'}/>} />
-                <Route exact path="/login" component={Login} />
                 <Route path="/tournaments/wishList" component={WishList} />
                 <PrivateRoute path="/profile/:id">
                   <Profile/>

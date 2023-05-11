@@ -9,7 +9,10 @@ import { useSelector } from 'react-redux';
 
 const InboxThread = ({socketN}) => {
     const [inboxReceived, setInboxReceived] = useState([]);
-    const wish = useSelector((state) => state.tournaments.wishList);
+    const [roomsReceived, setRoomsReceived] = useState([]);
+
+    const purchasedItems = useSelector(state => state.profile?.data?.purchasedItems?.tournaments);
+    const allTournaments = useSelector(state => state.tournaments?.data);
 
     const { setShowInbox, setPopUser } = useContext(InboxContext);
     const [sound, setSound] = useState(null);
@@ -103,6 +106,14 @@ const InboxThread = ({socketN}) => {
 
       return () => socketN.off("track_uniqueInbox");
     }, [socketN]);
+
+    //filter tournaments and get the common one that the user purchased
+    useEffect(() => {
+      if(purchasedItems){
+          const myRooms = allTournaments.filter(tournament => purchasedItems.some(itemId => tournament._id === itemId));
+          setRoomsReceived(myRooms)
+      }
+    }, [purchasedItems, allTournaments]);
 
     const findExistingMessage = (inboxReceived, senderId, roomId) => {
       return inboxReceived.find(item => item.senderId === senderId && item.roomId === roomId);
@@ -202,33 +213,34 @@ const InboxThread = ({socketN}) => {
                               <ul className="list-unstyled mb-0 inboxBelow">
 
                                 {
-                                  wish.length === 0 ? <li className='notyf-item'>
-                                                        <div className="dropdown-item">No rooms found!</div>
-                                                    </li> :
-                                                    wish.map((tournament, index) => (
-                                                      <li className="p-2 px-3 border-bottom" key={index}>
-                                                        <a href={`/tournament/details/${tournament._id}/chatroom`}>
-                                                            <div className="d-flex justify-content-between">
-                                                                <div className="d-flex flex-row">
-                                                                    <span className='avatar'>
-                                                                        <img src={tournament.tournamentThumbnail} alt="avatar" className="rounded d-flex align-self-center me-3" width="45"/>
-                                                                    </span>
-                                                                    <div className="pt-1">
-                                                                        <h6 className="mb-0">{tournament.tournamentName}</h6>
-                                                                        <p className="small text-muted">{moment(tournament.dates?.tournamentStart).fromNow()}</p>
-                                                                    </div>
-                                                                </div>
-                                                                <div className="pt-1">
-                                                                    <p className="small text-muted mb-1">Gamers: {tournament.settings?.maxParticipitant}</p>
-                                                                    {tournament.categories?.includes("upcoming") ? 
-                                                                      <span className="badge bg-success float-end">upcoming</span> : 
-                                                                      <span className="badge bg-danger float-end">archived</span>
-                                                                     }
-                                                                    
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                      </li>
+                                  roomsReceived.length === 0 ? 
+                                    <li className='notyf-item'>
+                                        <div className="dropdown-item">No rooms found!</div>
+                                    </li> :
+                                    roomsReceived.map((tournament, index) => (
+                                      <li className="p-2 px-3 border-bottom" key={index}>
+                                        <a href={`/tournament/details/${tournament._id}/chatroom`}>
+                                            <div className="d-flex justify-content-between">
+                                                <div className="d-flex flex-row">
+                                                    <span className='avatar'>
+                                                        <img src={tournament.tournamentThumbnail} alt="avatar" className="rounded d-flex align-self-center me-3" width="45"/>
+                                                    </span>
+                                                    <div className="pt-1">
+                                                        <h6 className="mb-0">{tournament.tournamentName}</h6>
+                                                        <p className="small text-muted">{moment(tournament.dates?.registrationStart).fromNow()}</p>
+                                                    </div>
+                                                </div>
+                                                <div className="pt-1">
+                                                    <p className="small text-muted mb-1">Fee: ${tournament.settings?.joiningFee}</p>
+                                                    {tournament.filter?.includes("latest") ? 
+                                                      <span className="badge bg-success float-end">latest</span> : 
+                                                      <span className="badge bg-danger float-end">archived</span>
+                                                      }
+                                                    
+                                                </div>
+                                            </div>
+                                        </a>
+                                      </li>
                                   ))
                                 }
                               </ul>

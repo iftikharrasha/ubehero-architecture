@@ -50,6 +50,10 @@ const profileSlice = createSlice({
         setRoute: (state, action) => {
             state.actingAs = action.payload || state.actingAs;
         },
+        setPurchasedItem: (state, action) => {
+            let payloadArray = [action.payload];
+            state.data.purchasedItems.tournaments = payloadArray;
+        },
     },
     extraReducers: (builder) => {
         // Add reducers for additional action types here, and handle loading state as needed
@@ -70,5 +74,5 @@ const profileSlice = createSlice({
     },
 });
 
-export const { setLogIn, setLogOut, setRoute } = profileSlice.actions;
+export const { setLogIn, setLogOut, setRoute, setPurchasedItem } = profileSlice.actions;
 export default profileSlice.reducer;

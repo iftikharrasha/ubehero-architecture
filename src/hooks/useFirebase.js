@@ -31,6 +31,23 @@ const useFirebase = () => {
         }
     }
 
+    const handleRegistration = async (data, history) => {
+        try {
+            const response = await axios.post(`${process.env.REACT_APP_API_LINK}/api/v1/account/signup`, data);
+    
+            if(response.data.status === 200){
+                setErrorMessage(null);
+                const destination = '/login';
+                history.replace(destination);
+            }else{
+                setErrorMessage(response.data.error.message);
+            }
+            return response.data
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     useEffect(() => {
         const unsubscribed = () => {
             const token = localStorage.getItem('jwt');
@@ -78,7 +95,8 @@ const useFirebase = () => {
         errorMessage,
         loggedInUser,
         handlelogOut,
-        handleLogin
+        handleLogin,
+        handleRegistration
     }
 }
 

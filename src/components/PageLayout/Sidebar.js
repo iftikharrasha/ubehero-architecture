@@ -14,9 +14,6 @@ const Sidebar = () => {
         <NavLink as='li' className='list-group-item' to='/tournaments/wishList'>
           Wishlist <span className='badge badge-sm bg-primary'>{wishList.length}</span>
         </NavLink>
-        <NavLink as='li' className='list-group-item' to='/tournaments/registered'>
-          Registered <span className='badge badge-sm bg-primary'>0</span>
-        </NavLink>
       </ul>
     </div>
   );

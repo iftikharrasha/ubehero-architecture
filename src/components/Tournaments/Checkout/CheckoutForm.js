@@ -3,10 +3,14 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import useAuth from '../../../hooks/useAuth';
 import useNotyf from '../../../hooks/useNotyf';
+import { useHistory } from 'react-router-dom';
+import usePurchase from '../../../hooks/usePurchase';
 
 const CheckoutForm = ({method, tournament}) => {
-    const { _id, tournamentName, gameType, tournamentThumbnail, version, purchased, settings } = tournament;
+    const history = useHistory();
+    const { _id, tournamentName, tournamentThumbnail, settings } = tournament;
     const { loggedInUser } = useAuth();
+    const { handleTournamentPurchase } = usePurchase();
 
     //just for testing purposes for notifications
     const user = useSelector((state) => state.profile.data)
@@ -14,19 +18,7 @@ const CheckoutForm = ({method, tournament}) => {
     const { socketN } = useNotyf(user, jwt);
 
     const tournamentRegistration = () => {
-        const data = {
-          type: "tournament_registration",
-          subject: "You’ve joined the tournament",
-          subjectPhoto: tournamentThumbnail,
-          invokedByName: tournamentName,
-          invokedById: _id,
-          receivedByName: loggedInUser.name,
-          receivedById: loggedInUser.id,  //this user will receive notification
-          route: `tournament/details/${_id}`
-        }
-
-        // Send message to server
-        socketN.emit("send_notification", data);
+        handleTournamentPurchase(tournament, method, socketN, history);
     };
 
     return (

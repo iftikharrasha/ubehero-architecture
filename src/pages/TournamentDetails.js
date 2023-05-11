@@ -197,7 +197,7 @@ const TournamentDetails = () => {
                                 <Prizes prizes={tournamentDetails.prizes}/>
                             </Tab>
                             {
-                                purchasedItems.tournaments?.includes(tournamentDetails._id) && (
+                                purchasedItems?.tournaments?.includes(tournamentDetails._id) && (
                                     <Tab eventKey="chatroom" title={`ChatRoom (${unreadCount})`}>
         
                                         {

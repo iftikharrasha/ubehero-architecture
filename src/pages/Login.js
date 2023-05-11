@@ -4,7 +4,7 @@ import Form from 'react-bootstrap/Form';
 import useAuth from "../hooks/useAuth";
 import { FcGoogle } from "react-icons/fc";
 import { useState } from "react";
-import { useHistory, useLocation } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import { useSelector } from "react-redux";
 
 const Login = () => {
@@ -37,7 +37,7 @@ const Login = () => {
   return (
     <div
       className='d-flex flex-column align-items-center justify-content-center'
-      style={{ height: "70vh" }}
+      style={{ paddingTop: "150px" }}
     >
       <h5 className='mb-5'>
         Sing into <strong className='text-primary '>your account</strong>
@@ -79,6 +79,12 @@ const Login = () => {
           Sign In
         </Button>
       </Form>
+
+        <div className="mt-4 text-center lit--14 below">Don't have any account?
+            <Link to="/signup" className="ml-1"> <u>Create Account</u>
+            </Link>
+        </div>
+
         <strong className='text-primary my-4'>Or</strong>
         <button onClick={signInWithGoogle} className='btn btn-light'>
           <FcGoogle className='me-3' /> Sign in with Google

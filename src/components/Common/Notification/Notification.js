@@ -220,7 +220,7 @@ const Notification = ({socketN, isConnected, userId}) => {
                     </a>
                 </li>
               )) : 
-              <li>
+              <li className='notyf-item'>
                   <Link className="dropdown-item" to="/">No new notifications</Link>
               </li>
           }
