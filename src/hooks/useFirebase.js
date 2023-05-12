@@ -45,6 +45,7 @@ const useFirebase = () => {
             return response.data
         } catch (error) {
             console.log(error);
+            setErrorMessage('You are not authorized');
         }
     }
 

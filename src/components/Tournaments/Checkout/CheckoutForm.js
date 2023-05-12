@@ -1,24 +1,12 @@
-import moment from 'moment';
 import React from 'react';
-import { useSelector } from 'react-redux';
-import useAuth from '../../../hooks/useAuth';
-import useNotyf from '../../../hooks/useNotyf';
-import { useHistory } from 'react-router-dom';
-import usePurchase from '../../../hooks/usePurchase';
+import useTournament from '../../../hooks/useTournament';
 
 const CheckoutForm = ({method, tournament}) => {
-    const history = useHistory();
     const { _id, tournamentName, tournamentThumbnail, settings } = tournament;
-    const { loggedInUser } = useAuth();
-    const { handleTournamentPurchase } = usePurchase();
-
-    //just for testing purposes for notifications
-    const user = useSelector((state) => state.profile.data)
-    const jwt = localStorage.getItem("jwt");
-    const { socketN } = useNotyf(user, jwt);
+    const { handleTournamentPurchase } = useTournament();
 
     const tournamentRegistration = () => {
-        handleTournamentPurchase(tournament, method, socketN, history);
+        handleTournamentPurchase(tournament, method);
     };
 
     return (

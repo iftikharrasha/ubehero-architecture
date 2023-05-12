@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import Dropdown from 'react-bootstrap/Dropdown';
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import { changeRegion } from "../../redux/slices/staticSlice";
 import { useHistory } from "react-router-dom";
@@ -11,17 +11,10 @@ import Notification from "../Common/Notification/Notification";
 import WalletPopUp from '../Common/WalletPopUp/WalletPopUp';
 import InboxThread from '../Common/InboxThread/InboxThread';
 
-// let initialSocketId = null;
-
 const Header = ({socketN, isConnected, userId}) => {
   const dispatch = useDispatch();
   const history = useHistory();
   const { loggedInUser, handlelogOut } = useAuth();
-  const actingAs = useSelector(state => state.profile.actingAs);
-
-  const switchRoute = () => {
-    history.push(`/master/${userId}`);
-  }
     
   return (
     <div className='py-1 border-bottom header'>
@@ -29,7 +22,8 @@ const Header = ({socketN, isConnected, userId}) => {
         <Link className='h5 text-dark text-decoration-none' to='/'>
           <img src={ubehero} className='img-fluid' alt="ubehero" />
         </Link>
-        {loggedInUser.isSignedIn ? (
+        {
+        loggedInUser.isSignedIn ? (
           <>
             <div className='d-flex align-items-center'>
               {
@@ -60,12 +54,34 @@ const Header = ({socketN, isConnected, userId}) => {
               </button>
               
               {
+                loggedInUser.permissions.includes("admin") ? 
+                <div className="d-flex ms-5">
+                  <DropdownButton id="dropdown-basic-button" title="Switch To" variant="dark">
+                    <Dropdown.Item>
+                      <Link to={`/profile/${loggedInUser.id}`}>Gamer Profile</Link>
+                    </Dropdown.Item>
+                    <Dropdown.Item>
+                      <Link to={`/master/${loggedInUser.id}`}>Master Profile</Link>
+                    </Dropdown.Item>
+                    <Dropdown.Item>
+                      <Link to={`/internal/${loggedInUser.id}`}>Admin Profile</Link>
+                    </Dropdown.Item>
+                  </DropdownButton>
+                </div>
+                :
                 loggedInUser.permissions.includes("master") ? 
-                <span className='mb-0 ms-5'>
-                  <button className='btn-outline-light bg-dark h6 text-white mb-0' onClick={switchRoute}>Master Panel</button>
-                </span> : null
+                <div className="d-flex ms-5">
+                  <DropdownButton id="dropdown-basic-button" title="Switch To" variant="dark">
+                    <Dropdown.Item>
+                      <Link to={`/profile/${loggedInUser.id}`}>Gamer Profile</Link>
+                    </Dropdown.Item>
+                    <Dropdown.Item>
+                      <Link to={`/master/${loggedInUser.id}`}>Master Profile</Link>
+                    </Dropdown.Item>
+                  </DropdownButton>
+                </div> 
+                :  null
               }
-              
             </div>
           </>
         ) : 
