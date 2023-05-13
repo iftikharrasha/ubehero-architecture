@@ -39,9 +39,9 @@ const MasterUpdateDraft = () => {
         });
     };
   
-    const handleTournamentUpdate = (e) => {
+    const handleTournamentUpdate = (e, role, status) => {
       e.preventDefault();
-      handleTournamentDraftUpdate(updatedTournament);
+      handleTournamentDraftUpdate(updatedTournament, role, status);
     };
 
     useEffect(() => {
@@ -59,7 +59,7 @@ const MasterUpdateDraft = () => {
         <h5 className='mb-5'>
             Update the <strong className='text-primary '>Tournament</strong>
         </h5>
-            <Form className="w-25" onSubmit={handleTournamentUpdate}>
+            <Form className="w-25">
                 <Form.Group className="mb-3" controlId="formBasicName">
                 <Form.Label>Tournament Name</Form.Label>
                 <Form.Control type="name" placeholder="Enter Name" 
@@ -123,8 +123,11 @@ const MasterUpdateDraft = () => {
                     errorMessage ? <p className="text-warning text-center">{errorMessage}</p> : null
                 }
 
-                <Button variant="primary" type="submit">
-                    Submit Draft
+                <Button variant="success" type="submit" onClick={(e) => handleTournamentUpdate(e, 'master', 'pending')}>
+                    Submit
+                </Button>
+                <Button variant="primary" type="submit" onClick={(e) => handleTournamentUpdate(e, 'master', 'draft')} className='ms-3'>
+                    Save Draft
                 </Button>
                 <Button variant="danger" type="submit" className='ms-3'>
                     Delete Draft

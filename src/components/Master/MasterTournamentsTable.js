@@ -1,23 +1,34 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { Link } from 'react-router-dom';
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import moment from 'moment';
 import "react-datepicker/dist/react-datepicker.css";
 import Preloader from '../PageLayout/Preloader';
+import { fetchMastersTournaments } from "../../redux/slices/masterTournamentSlice";
 
 const MasterTournamentsTable = () => {
-    const tournaments = useSelector(state => state.tournaments.data);
-    const [masterTournaments, setMasterTournaments] = useState([]);
+    // const tournaments = useSelector(state => state.tournaments.data);
+    // const [masterTournaments, setMasterTournaments] = useState([]);
 
-    const id = useSelector(state => state.profile.data ? state.profile.data._id : null);
+    // const id = useSelector(state => state.profile.data ? state.profile.data._id : null);
   
+    // useEffect(() => {
+    //     if(tournaments){
+    //         const masters = tournaments.filter(tournament => tournament?.masterProfile?._id === id);
+    //         setMasterTournaments(masters)
+    //     }
+    // }, [tournaments, id]);
+
+    const dispatch = useDispatch();
+    const versionTournaments = useSelector(state => state.masterTournaments.version);
+    const id = useSelector(state => state.profile.data ? state.profile.data._id : null);
+
     useEffect(() => {
-        if(tournaments){
-            const masters = tournaments.filter(tournament => tournament?.masterProfile?._id === id);
-            setMasterTournaments(masters)
-        }
-    }, [tournaments, id]);
+        dispatch(fetchMastersTournaments({id, versionTournaments}));
+    }, [])
+
+    const masterTournaments = useSelector((state) => state.masterTournaments.data)
 
     return (
         <div className="container pt-4">
@@ -34,7 +45,7 @@ const MasterTournamentsTable = () => {
                         <thead>
                             <tr>
                             <th scope="col">No.</th>
-                            <th scope="col">Tournament</th>
+                            <th scope="col">Tournament Name</th>
                             <th scope="col">Category</th>
                             <th scope="col">Registration Start</th>
                             <th scope="col">Joining Fee</th>
@@ -86,6 +97,10 @@ const MasterTournamentsTable = () => {
                                                     <span className="badge badge-warning rounded-pill d-inline">
                                                         {tournament.status}
                                                     </span> 
+                                                    : tournament.status === 'revision' ? 
+                                                    <span className="badge badge-dark rounded-pill d-inline">
+                                                        {tournament.status}
+                                                    </span> 
                                                     : tournament.status === 'draft' ? 
                                                     <span className="badge badge-warning rounded-pill d-inline">
                                                         {tournament.status}
@@ -101,7 +116,7 @@ const MasterTournamentsTable = () => {
                                                                     <i className="fas fa-hand-point-right me-1"></i>Preview
                                                                 </span>
                                                             </Link> :
-                                                        tournament.status === 'pending' ?
+                                                        tournament.status === 'pending' || tournament.status === 'blocked' ?
                                                             <span className="text-primary">
                                                                 N/A
                                                             </span> :

@@ -27,6 +27,8 @@ const Signup = () => {
         history.push(`/profile/${id}`);
       }else if(actingAs === "master"){
         history.push(`/master/${id}`);
+      }else if(actingAs === "admin"){
+        history.push(`/internal/${id}`);
       }else{
         history.push(`/profile/${id}`);
       }

@@ -93,6 +93,9 @@ const tournamentSlice = createSlice({
                 state.data[index] = {...action.payload};
             }
         },
+        deleteTournamentsDetails: (state, action) => {
+            state.data = state.data.filter(t => t._id !== action.payload);
+        },
     },
     extraReducers: (builder) => {
         // Add reducers for additional action types here, and handle loading state as needed
@@ -123,5 +126,5 @@ const tournamentSlice = createSlice({
     },
 });
 
-export const { addToWishList, removeFromWishList, addToTournamentsList, updateTournamentsDetails } = tournamentSlice.actions;
+export const { addToWishList, removeFromWishList, addToTournamentsList, updateTournamentsDetails, deleteTournamentsDetails } = tournamentSlice.actions;
 export default tournamentSlice.reducer;

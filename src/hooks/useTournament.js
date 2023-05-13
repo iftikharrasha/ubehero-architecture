@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from 'axios';
 import { setPurchasedItem } from "../redux/slices/profileSlice";
-import { addToTournamentsList, updateTournamentsDetails } from "../redux/slices/tournamentSlice";
+import { addToTournamentsList, updateTournamentsDetails, deleteTournamentsDetails } from "../redux/slices/tournamentSlice";
 import { useDispatch, useSelector } from "react-redux";
 import useNotyf from "./useNotyf";
 import { useHistory } from "react-router-dom";
@@ -69,7 +69,7 @@ const useTournament = () => {
         }
     }
 
-    const handleTournamentDraftCreate = async (data) => {
+    const handleTournamentDraftCreate = async (data, role) => {
         let config = {}
 
         if(profile.signed_in){
@@ -91,23 +91,23 @@ const useTournament = () => {
             console.log(response)
             
             if(response.data.status === 200){
-                const notificationData = {
-                    type: "tournament_creation",
-                    subject: "You’ve created this tournament draft",
-                    subjectPhoto:"https://i.ibb.co/5FFYTs7/avatar.jpg",
-                    invokedByName: data.tournamentName,
-                    invokedById: "645b60abe95cd95bcfad6894",
-                    receivedByName: profile.data.userName,
-                    receivedById: profile.data._id,  //this user will receive notification
-                    route: `master/${profile.data._id}/tournaments`
-                }
+                // const notificationData = {
+                //     type: "tournament_creation",
+                //     subject: "You’ve created this tournament draft",
+                //     subjectPhoto:"https://i.ibb.co/5FFYTs7/avatar.jpg",
+                //     invokedByName: data.tournamentName,
+                //     invokedById: "645b60abe95cd95bcfad6894",
+                //     receivedByName: profile.data.userName,
+                //     receivedById: profile.data._id,  //this user will receive notification
+                //     route: `master/${profile.data._id}/tournaments`
+                // }
 
-                // Send message to server
-                socketN.emit("send_notification", notificationData);
+                // // Send message to server
+                // socketN.emit("send_notification", notificationData);
 
                 setErrorMessage(null);
                 dispatch(addToTournamentsList(response.data.data));
-                const destination = `/master/${data._id}/tournaments`;
+                const destination = `/${role}/${data._id}/tournaments`;
                 history.replace(destination);
             }else{
                 setErrorMessage(response.data.error.message);
@@ -118,7 +118,7 @@ const useTournament = () => {
         }
     }
 
-    const handleTournamentDraftUpdate = async (data) => {
+    const handleTournamentDraftUpdate = async (data, role, status) => {
         let config = {}
 
         if(profile.signed_in){
@@ -128,7 +128,7 @@ const useTournament = () => {
 
         const draftItem = {
             ...data,
-            status: "pending"
+            status: status
         }
 
         try {
@@ -137,7 +137,32 @@ const useTournament = () => {
             if(response.data.status === 200){
                 setErrorMessage(null);
                 dispatch(updateTournamentsDetails(response.data.data));
-                const destination = `/master/${data._id}/tournaments`;
+                const destination = `/${role}/${data._id}/tournaments`;
+                history.replace(destination);
+            }else{
+                setErrorMessage(response.data.error.message);
+            }
+            return response.data
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const handleTournamentDraftDelete = async (id, role) => {
+        let config = {}
+
+        if(profile.signed_in){
+            const token = localStorage.getItem('jwt');
+            config.headers = { "Authorization": "Bearer " + token, ...config.headers};
+        }
+
+        try {
+            const response = await axios.delete(`${process.env.REACT_APP_API_LINK}/api/v1/tournaments/${id}`, config);
+            
+            if(response.data.status === 200){
+                setErrorMessage(null);
+                dispatch(deleteTournamentsDetails(id));
+                const destination = `/${role}/${id}/tournaments`;
                 history.replace(destination);
             }else{
                 setErrorMessage(response.data.error.message);
@@ -152,7 +177,8 @@ const useTournament = () => {
         errorMessage,
         handleTournamentPurchase,
         handleTournamentDraftCreate,
-        handleTournamentDraftUpdate
+        handleTournamentDraftUpdate,
+        handleTournamentDraftDelete
     }
 }
 

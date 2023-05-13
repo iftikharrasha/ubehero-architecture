@@ -24,8 +24,8 @@ const Login = () => {
 
   useEffect(() => {
     if (isLoggedIn && id) {
-      if(actingAs === "user"){
-        history.push(`/profile/${id}`);
+      if(actingAs === "admin"){
+        history.push(`/internal/${id}`);
       }else if(actingAs === "master"){
         history.push(`/master/${id}`);
       }else{

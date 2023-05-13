@@ -24,7 +24,7 @@ const InternalTournamentsTable = () => {
                         <thead>
                             <tr>
                             <th scope="col">No.</th>
-                            <th scope="col">Tournament</th>
+                            <th scope="col">Tournament Name</th>
                             <th scope="col">Category</th>
                             <th scope="col">Registration Start</th>
                             <th scope="col">Joining Fee</th>
@@ -43,7 +43,9 @@ const InternalTournamentsTable = () => {
                                                 <th scope="row">{index+1}</th>
                                                 <td>
                                                     <img className='img-fluid' src={tournament.tournamentThumbnail} alt='tournamentThumbnail' width="50px" height="50px"/>
-                                                    <span className='ms-3'>{tournament.tournamentName}</span>
+                                                    <Link to={`/tournament/details/${tournament._id}`}>
+                                                        <span className='ms-3'>{tournament.tournamentName}</span>
+                                                    </Link>
                                                 </td>
                                                 <td>
                                                     <i className="fas fa-tag me-1 text-secondary"></i><span>{tournament.category}</span>
@@ -72,35 +74,27 @@ const InternalTournamentsTable = () => {
                                                     <span className="badge badge-primary rounded-pill d-inline">
                                                         {tournament.status}
                                                     </span>
-                                                    : tournament.status === 'blocked' ? 
+                                                    : tournament.status === 'draft' ? 
                                                     <span className="badge badge-warning rounded-pill d-inline">
                                                         {tournament.status}
                                                     </span> 
-                                                    : tournament.status === 'draft' ? 
-                                                    <span className="badge badge-warning rounded-pill d-inline">
+                                                    : tournament.status === 'revision' ? 
+                                                    <span className="badge badge-dark rounded-pill d-inline">
+                                                        {tournament.status}
+                                                    </span> 
+                                                    : tournament.status === 'blocked' ? 
+                                                    <span className="badge badge-danger rounded-pill d-inline">
                                                         {tournament.status}
                                                     </span> 
                                                     : '-'
                                                 }
                                                 </td>
                                                 <td>
-                                                    {
-                                                        tournament.status === 'active' ?
-                                                            <Link to={`/tournament/details/${tournament._id}`}>
-                                                                <span className="text-success">
-                                                                    <i className="fas fa-hand-point-right me-1"></i>Preview
-                                                                </span>
-                                                            </Link> :
-                                                        tournament.status === 'pending' ?
-                                                            <span className="text-primary">
-                                                                N/A
-                                                            </span> :
-                                                        <Link to={`/master/${id}/tournaments/${tournament._id}`}>
-                                                            <span className="text-warning">
-                                                                <i className="fas fa-pen-to-square me-1"></i>Edit
-                                                            </span>
-                                                        </Link>
-                                                    }
+                                                    <Link to={`/internal/${id}/tournaments/${tournament._id}`}>
+                                                        <span className="text-warning">
+                                                            <i className="fas fa-pen-to-square me-1"></i>Edit
+                                                        </span>
+                                                    </Link>
                                                 </td>
                                             </tr>
                                         )) 

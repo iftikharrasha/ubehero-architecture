@@ -13,7 +13,7 @@ const InternalUpdateDraft = () => {
     const [updatedTournament, setUpdatedTournament] = useState({});
     const { tId } = useParams();
 
-    const { handleTournamentDraftUpdate, errorMessage } = useTournament();
+    const { handleTournamentDraftUpdate, handleTournamentDraftDelete, errorMessage } = useTournament();
 
     const handleRegStartDateChange = (date) => {
         setUpdatedTournament((prevTournament) => {
@@ -39,9 +39,14 @@ const InternalUpdateDraft = () => {
         });
     };
   
-    const handleTournamentUpdate = (e) => {
+    const handleTournamentUpdate = (e, role, status) => {
       e.preventDefault();
-      handleTournamentDraftUpdate(updatedTournament);
+      handleTournamentDraftUpdate(updatedTournament, role, status);
+    };
+  
+    const handleTournamentDelete = (e, id, role) => {
+      e.preventDefault();
+      handleTournamentDraftDelete(id, role);
     };
 
     useEffect(() => {
@@ -59,7 +64,7 @@ const InternalUpdateDraft = () => {
         <h5 className='mb-5'>
             Update the <strong className='text-primary '>Tournament</strong>
         </h5>
-            <Form className="w-25" onSubmit={handleTournamentUpdate}>
+            <Form className="w-50">
                 <Form.Group className="mb-3" controlId="formBasicName">
                 <Form.Label>Tournament Name</Form.Label>
                 <Form.Control type="name" placeholder="Enter Name" 
@@ -123,11 +128,17 @@ const InternalUpdateDraft = () => {
                     errorMessage ? <p className="text-warning text-center">{errorMessage}</p> : null
                 }
 
-                <Button variant="primary" type="submit">
-                    Submit Draft
+                <Button variant="success" type="submit" onClick={(e) => handleTournamentUpdate(e, 'internal', 'active')}>
+                    Approve
                 </Button>
-                <Button variant="danger" type="submit" className='ms-3'>
-                    Delete Draft
+                <Button variant="primary" type="submit" className='ms-3' onClick={(e) => handleTournamentUpdate(e, 'internal', 'revision')}>
+                    Revision
+                </Button>
+                <Button variant="secondary" type="submit" className='ms-3' onClick={(e) => handleTournamentUpdate(e, 'internal', 'blocked')}>
+                    Block
+                </Button>
+                <Button variant="danger" type="submit" className='ms-3' onClick={(e) => handleTournamentDelete(e, updatedTournament._id, 'internal')}>
+                    Delete
                 </Button>
             </Form>
         </div>

@@ -17,9 +17,9 @@ const InternalCreateDraft = () => {
         });
     };
   
-    const handleTournamentCreate = (e) => {
+    const handleTournamentCreate = (e, role) => {
       e.preventDefault();
-      handleTournamentDraftCreate(createData);
+      handleTournamentDraftCreate(createData, role);
     };
 
     return (
@@ -30,7 +30,7 @@ const InternalCreateDraft = () => {
         <h5 className='mb-5'>
             Create a new <strong className='text-primary '>Tournament</strong>
         </h5>
-            <Form className="w-25" onSubmit={handleTournamentCreate}>
+            <Form className="w-25" onSubmit={(e) => handleTournamentCreate(e, 'internal')}>
                 <Form.Group className="mb-3" controlId="formBasicName">
                 <Form.Label>Tournament Name</Form.Label>
                 <Form.Control type="name" placeholder="Enter Name" 

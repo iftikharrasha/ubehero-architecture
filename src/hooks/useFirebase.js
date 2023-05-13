@@ -14,13 +14,30 @@ const useFirebase = () => {
             const response = await axios.post(`${process.env.REACT_APP_API_LINK}/api/v1/account/login`, data);
     
             if(response.data.status === 200){
+                setErrorMessage(null);
                 localStorage.setItem('jwt', response.data.jwt);
                 localStorage.setItem('refresh', response.data.refreshToken);
                 dispatch(setLogIn(response.data.data));
-                dispatch(setRoute("user"))
 
-                setErrorMessage(null);
-                const destination = location?.state?.from || '/';
+                const role = response.data.data.permissions.includes("admin") ? "admin" : 
+                             response.data.data.permissions.includes("master") ? "master" : 
+                             "user"
+
+
+                let destination;
+                const parsedAccessToken = parseJwtToken(response.data.jwt);
+                const sub = parsedAccessToken["sub"];
+
+                if(role === "admin"){
+                    dispatch(setRoute("admin"))
+                    destination = location?.state?.from || `/internal/${sub}`;
+                }else if(role === "master"){
+                    dispatch(setRoute("master"))
+                    destination = location?.state?.from || `/master/${sub}`;
+                }else{
+                    dispatch(setRoute("user"))
+                    destination = location?.state?.from || `/`;
+                }
                 history.replace(destination);
             }else{
                 setErrorMessage(response.data.error.message);
