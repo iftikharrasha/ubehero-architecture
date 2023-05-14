@@ -1,13 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from 'react-router-dom';
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import moment from 'moment';
 import "react-datepicker/dist/react-datepicker.css";
 import Preloader from '../PageLayout/Preloader';
+import { fetchInternalsTournaments } from "../../redux/slices/internalTournamentSlice";
 
 const InternalTournamentsTable = () => {
-    const tournaments = useSelector(state => state.tournaments.data);
+    const dispatch = useDispatch();
+    const versionTournaments = useSelector(state => state.internalTournaments.version);
     const id = useSelector(state => state.profile.data ? state.profile.data._id : null);
+
+    useEffect(() => {
+        dispatch(fetchInternalsTournaments({id, versionTournaments}));
+    }, [])
+
+    const internalTournaments = useSelector((state) => state.internalTournaments.data)
 
     return (
         <div className="container pt-4">
@@ -36,9 +44,9 @@ const InternalTournamentsTable = () => {
                         </thead>
                         <tbody>
                             {
-                                tournaments ? 
-                                    tournaments?.length === 0 ? <p className="mt-3">No tournaments found!</p> :
-                                        tournaments.map((tournament, index) => (
+                                internalTournaments ? 
+                                    internalTournaments?.length === 0 ? <p className="mt-3">No tournaments found!</p> :
+                                        internalTournaments.map((tournament, index) => (
                                             <tr key={index}>
                                                 <th scope="row">{index+1}</th>
                                                 <td>

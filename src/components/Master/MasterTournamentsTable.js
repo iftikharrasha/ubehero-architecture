@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { useState } from "react";
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 import moment from 'moment';
@@ -8,18 +7,6 @@ import Preloader from '../PageLayout/Preloader';
 import { fetchMastersTournaments } from "../../redux/slices/masterTournamentSlice";
 
 const MasterTournamentsTable = () => {
-    // const tournaments = useSelector(state => state.tournaments.data);
-    // const [masterTournaments, setMasterTournaments] = useState([]);
-
-    // const id = useSelector(state => state.profile.data ? state.profile.data._id : null);
-  
-    // useEffect(() => {
-    //     if(tournaments){
-    //         const masters = tournaments.filter(tournament => tournament?.masterProfile?._id === id);
-    //         setMasterTournaments(masters)
-    //     }
-    // }, [tournaments, id]);
-
     const dispatch = useDispatch();
     const versionTournaments = useSelector(state => state.masterTournaments.version);
     const id = useSelector(state => state.profile.data ? state.profile.data._id : null);
@@ -51,6 +38,7 @@ const MasterTournamentsTable = () => {
                             <th scope="col">Joining Fee</th>
                             <th scope="col">Max Participants</th>
                             <th scope="col">Joined</th>
+                            <th scope="col">Created By</th>
                             <th scope="col">Status</th>
                             <th scope="col">Action</th>
                             </tr>
@@ -82,6 +70,9 @@ const MasterTournamentsTable = () => {
                                                     <span className="text-danger">
                                                     <i className="fas fa-chart-line me-1"></i><span>{tournament.settings?.maxParticipitant}</span>
                                                     </span>
+                                                </td>
+                                                <td>
+                                                    <i className="fas fa-user me-1"></i><span>{tournament.masterProfile?.userName}</span>
                                                 </td>
                                                 <td>
                                                 {

@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import axios from 'axios';
-import { setLogIn, setLogOut, setRoute } from "../redux/slices/profileSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { setLogIn, setLogOut, setRoute } from "../redux/slices/profileSlice";
+import { setMasterLogOut } from "../redux/slices/masterTournamentSlice";
+import { setInternalLogOut } from "../redux/slices/internalTournamentSlice";
 
 const useFirebase = () => {
     const dispatch = useDispatch();
@@ -103,6 +105,9 @@ const useFirebase = () => {
 
     const handlelogOut = (history) => {
         dispatch(setLogOut())
+        dispatch(setMasterLogOut())
+        dispatch(setInternalLogOut())
+        dispatch(setRoute("user"))
         setLoggedInUser({});
         localStorage.removeItem('jwt');
         localStorage.removeItem('refresh');

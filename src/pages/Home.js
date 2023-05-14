@@ -34,20 +34,12 @@ const Home = () => {
             <div className="row">
             {
                 tournaments ? 
-                    tournaments.filter(tournament => tournament.status === "active").map((item, index) => (
-                        <div className=" col-lg-4 col-sm-6" key={index}>
-                            <Tournaments routeKey={item._id} tournament={item} details={false}/>
-                        </div>
-                    )) : <Preloader />
-            }
-             {/* {
-                tournaments ? 
                     tournaments.map((tournament, index) => (
                         <div className=" col-lg-4 col-sm-6" key={index}>
                             <Tournaments routeKey={tournament._id} tournament={tournament} details={false}/>
                         </div>
                     )) : <Preloader />
-            } */}
+            }
             </div>
         </PageLayout>
     );

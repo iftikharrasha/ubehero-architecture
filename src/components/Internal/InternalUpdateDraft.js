@@ -9,7 +9,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import useTournament from '../../hooks/useTournament';
 
 const InternalUpdateDraft = () => {
-    const tournaments = useSelector(state => state.tournaments.data);
+    const internalTournaments = useSelector(state => state.internalTournaments.data);
     const [updatedTournament, setUpdatedTournament] = useState({});
     const { tId } = useParams();
 
@@ -50,11 +50,11 @@ const InternalUpdateDraft = () => {
     };
 
     useEffect(() => {
-        if(tournaments){
-            const thisTournament = tournaments.find(tournament => tournament._id === tId);
+        if(internalTournaments){
+            const thisTournament = internalTournaments.find(tournament => tournament._id === tId);
             setUpdatedTournament(thisTournament)
         }
-    }, [tournaments, tId]);
+    }, [internalTournaments, tId]);
 
     return (
         <div

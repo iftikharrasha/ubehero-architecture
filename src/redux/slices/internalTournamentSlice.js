@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-export const fetchMastersTournaments = createAsyncThunk(
-    'masterTournament/fetchMastersTournaments',
+export const fetchInternalsTournaments = createAsyncThunk(
+    'internalTournament/fetchInternalsTournaments',
     async ({id, versionTournaments}, {getState}) => {
         if(!versionTournaments){
             versionTournaments = 0;
@@ -15,12 +15,12 @@ export const fetchMastersTournaments = createAsyncThunk(
             config.headers = { "Authorization": "Bearer " + token, ...config.headers};
         }
         
-        const response = await fetch(`${process.env.REACT_APP_API_LINK}/api/v1/tournaments/master/${id}?version=${versionTournaments}`, config)
+        const response = await fetch(`${process.env.REACT_APP_API_LINK}/api/v1/tournaments/internal/${id}?version=${versionTournaments}`, config)
 
         if(response.status === 200){
             const data = await response.json();
             if(data.status === 304) {
-                return getState().masterTournament.data;
+                return getState().internalTournament.data;
             }else{
                 return data;
             }
@@ -28,15 +28,15 @@ export const fetchMastersTournaments = createAsyncThunk(
     }
 )
 
-const masterTournamentSlice = createSlice({
-    name: 'masterTournament',
+const internalTournamentSlice = createSlice({
+    name: 'internalTournament',
     initialState: {
         data: [],
         version: 0,
         status: 'idle',
     },
     reducers: {
-        setMasterLogOut: (state, action) => {
+        setInternalLogOut: (state, action) => {
             state.data = [];
             state.version = 0;
             state.status = 'idle';
@@ -44,7 +44,7 @@ const masterTournamentSlice = createSlice({
     },
     extraReducers: (builder) => {
         // Add reducers for additional action types here, and handle loading state as needed
-        builder.addCase(fetchMastersTournaments.fulfilled, (state, action) => {
+        builder.addCase(fetchInternalsTournaments.fulfilled, (state, action) => {
             state.data = action.payload.data || state.data;
             state.version = action.payload.version || state.version;
             state.status = 'success';
@@ -52,5 +52,5 @@ const masterTournamentSlice = createSlice({
     },
 });
 
-export const { setMasterLogOut } = masterTournamentSlice.actions;
-export default masterTournamentSlice.reducer;
+export const { setInternalLogOut } = internalTournamentSlice.actions;
+export default internalTournamentSlice.reducer;

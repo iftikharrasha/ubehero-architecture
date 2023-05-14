@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import tournamentReducer from './slices/tournamentSlice';
 import masterTournamentReducer from './slices/masterTournamentSlice';
+import internalTournamentReducer from './slices/internalTournamentSlice';
 import staticReducer from './slices/staticSlice';
 import profileReducer from './slices/profileSlice';
 import leaderboardReducer from './slices/leaderboardSlice';
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
   statics: staticReducer,
   tournaments: tournamentReducer,
   masterTournaments: masterTournamentReducer,
+  internalTournaments: internalTournamentReducer,
   profile: profileReducer,
   leaderboards: leaderboardReducer,
   giftcards: giftCardReducer,
@@ -25,7 +27,7 @@ const rootReducer = combineReducers({
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['tournaments', 'masterTournaments', 'statics', 'profile', 'leaderboards', 'giftcards', 'myTeams', 'myTransactions']
+  whitelist: ['tournaments', 'masterTournaments', 'internalTournaments', 'statics', 'profile', 'leaderboards', 'giftcards', 'myTeams', 'myTransactions']
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

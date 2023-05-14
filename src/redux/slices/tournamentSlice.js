@@ -83,19 +83,6 @@ const tournamentSlice = createSlice({
         removeFromWishList: (state, action) => {
             state.wishList = state.wishList.filter(t => t._id !== action.payload);
         },
-        addToTournamentsList: (state, action) => {
-            state.data.push(action.payload);
-        },
-        updateTournamentsDetails: (state, action) => {
-            console.log("index", action.payload)
-            const index = state.data.findIndex(t => t._id === action.payload._id)
-            if (index !== -1) {
-                state.data[index] = {...action.payload};
-            }
-        },
-        deleteTournamentsDetails: (state, action) => {
-            state.data = state.data.filter(t => t._id !== action.payload);
-        },
     },
     extraReducers: (builder) => {
         // Add reducers for additional action types here, and handle loading state as needed
@@ -126,5 +113,5 @@ const tournamentSlice = createSlice({
     },
 });
 
-export const { addToWishList, removeFromWishList, addToTournamentsList, updateTournamentsDetails, deleteTournamentsDetails } = tournamentSlice.actions;
+export const { addToWishList, removeFromWishList } = tournamentSlice.actions;
 export default tournamentSlice.reducer;

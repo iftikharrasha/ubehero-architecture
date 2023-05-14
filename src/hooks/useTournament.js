@@ -1,7 +1,6 @@
 import { useState } from "react";
 import axios from 'axios';
 import { setPurchasedItem } from "../redux/slices/profileSlice";
-import { addToTournamentsList, updateTournamentsDetails, deleteTournamentsDetails } from "../redux/slices/tournamentSlice";
 import { useDispatch, useSelector } from "react-redux";
 import useNotyf from "./useNotyf";
 import { useHistory } from "react-router-dom";
@@ -106,7 +105,6 @@ const useTournament = () => {
                 // socketN.emit("send_notification", notificationData);
 
                 setErrorMessage(null);
-                dispatch(addToTournamentsList(response.data.data));
                 const destination = `/${role}/${data._id}/tournaments`;
                 history.replace(destination);
             }else{
@@ -136,7 +134,6 @@ const useTournament = () => {
             
             if(response.data.status === 200){
                 setErrorMessage(null);
-                dispatch(updateTournamentsDetails(response.data.data));
                 const destination = `/${role}/${data._id}/tournaments`;
                 history.replace(destination);
             }else{
@@ -161,7 +158,6 @@ const useTournament = () => {
             
             if(response.data.status === 200){
                 setErrorMessage(null);
-                dispatch(deleteTournamentsDetails(id));
                 const destination = `/${role}/${id}/tournaments`;
                 history.replace(destination);
             }else{

@@ -9,7 +9,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import useTournament from '../../hooks/useTournament';
 
 const MasterUpdateDraft = () => {
-    const tournaments = useSelector(state => state.tournaments.data);
+    const masterTournaments = useSelector((state) => state.masterTournaments.data)
     const [updatedTournament, setUpdatedTournament] = useState({});
     const { tId } = useParams();
 
@@ -45,11 +45,11 @@ const MasterUpdateDraft = () => {
     };
 
     useEffect(() => {
-        if(tournaments){
-            const thisTournament = tournaments.find(tournament => tournament._id === tId);
+        if(masterTournaments){
+            const thisTournament = masterTournaments.find(tournament => tournament._id === tId);
             setUpdatedTournament(thisTournament)
         }
-    }, [tournaments, tId]);
+    }, [masterTournaments, tId]);
 
     return (
         <div
@@ -128,9 +128,6 @@ const MasterUpdateDraft = () => {
                 </Button>
                 <Button variant="primary" type="submit" onClick={(e) => handleTournamentUpdate(e, 'master', 'draft')} className='ms-3'>
                     Save Draft
-                </Button>
-                <Button variant="danger" type="submit" className='ms-3'>
-                    Delete Draft
                 </Button>
             </Form>
         </div>
