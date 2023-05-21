@@ -68,7 +68,7 @@ const MasterTournamentsTable = () => {
                                                 </td>
                                                 <td>
                                                     <span className="text-danger">
-                                                    <i className="fas fa-chart-line me-1"></i><span>{tournament.settings?.maxParticipitant}</span>
+                                                    <i className="fas fa-chart-line me-1"></i><span>{tournament.leaderboards?.length}</span>
                                                     </span>
                                                 </td>
                                                 <td>

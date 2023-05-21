@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import { BrowserRouter as Router } from 'react-router-dom'
 import AuthProvider from './Contexts/AuthProvider/AuthProvider'
 import Header from './components/PageLayout/Header';
 import { useSelector } from 'react-redux';
@@ -9,8 +9,6 @@ import InboxContext from './Contexts/InboxContext/InboxContext';
 import MasterRouter from './routes/Router/MasterRouter';
 import { GamerRouter } from './routes/Router/GamerRouter';
 import InternalRouter from './routes/Router/InternalRouter';
-import InternalControlls from './components/PageLayout/InternalControlls';
-import MasterControlls from './components/PageLayout/MasterControlls';
 
 function App() {
   const [showInbox, setShowInbox] = useState(false);
@@ -33,26 +31,10 @@ function App() {
             isConnected={isConnected}
             userId={user?._id}
           />
-
-          <Route path="/internal">
-            <InternalControlls />
-          </Route>
-
-          <Route path="/master">
-            <MasterControlls />
-          </Route>
-  
-          <Switch>
-            <Route path="/internal">
-              <InternalRouter />
-            </Route>
-            <Route path="/master">
-              <MasterRouter />
-            </Route>
-            <Route path="/">
-              <GamerRouter />
-            </Route>
-          </Switch>
+          
+          <GamerRouter />
+          <MasterRouter/>
+          <InternalRouter/>
 
           {showInbox && <InboxPopUp handleInboxPop={handleInboxPop}/>}
         </Router>

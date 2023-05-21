@@ -1,10 +1,9 @@
 import React from "react";
 import ProgressBar from 'react-bootstrap/ProgressBar';
 
-const ProfileDetails = (props) => {
-  const { _id, userName, joiningDate, photo, version, stats } = props.user;
+const ProfileDetails = ({profile}) => {
+  const { _id, userName, joiningDate, photo, version, stats } = profile;
   const now = ((stats.currentXP / (stats.currentXP  + stats.nextLevelRequiredXP)) * 100)
-  console.log(now);
   
   return (
     <div className='card d-flex mb-3 p-3' 
@@ -22,11 +21,11 @@ const ProfileDetails = (props) => {
             {/* <Link to={`/tournament/details/${_id}`}><button>Join Now</button></Link> */}
           </div>
           <div className='card-body'>
-            <h5 className='card-title'>Level {stats.currentLevel}: {stats.levelTitle}</h5>
+            <h5 className='card-title'>Level {stats?.currentLevel}: {stats?.levelTitle}</h5>
             <ProgressBar striped animated variant="success" now={now} label={`${now}%`} />
             <div className="d-flex justify-content-between mt-2">
-              <h6>Current XP: {stats.currentXP}</h6>
-              <p className='card-text'>XP required to reach level 2: {stats.nextLevelRequiredXP}</p>
+              <h6>Current XP: {stats?.currentXP}</h6>
+              <p className='card-text'>XP required to reach level 2: {stats?.nextLevelRequiredXP}</p>
             </div>
           </div>
         </div>

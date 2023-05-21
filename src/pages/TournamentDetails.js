@@ -155,7 +155,7 @@ const TournamentDetails = () => {
                             <div className='col-md-9'>
                                 <div className='card-body'>
                                 <h5 className='card-title'>{tournamentDetails.tournamentName} | Registration Ends: {tournamentDetails.dates.registrationEnd}</h5>
-                                <h6 className='mb-3'>Category: {tournamentDetails.gameType} | Mode: {tournamentDetails.settings.mode} | version: {tournamentDetails.version}</h6>
+                                <h6 className='mb-3'>Category: {tournamentDetails.gameType} | Mode: {tournamentDetails.settings.mode} | Version: {tournamentDetails.version} | Joined: {tournamentDetails.leaderboards.length}</h6>
                                 {
                                     !isLoggedIn ? <Link to={`/login`}><button>Join Now</button></Link> :
                                     purchasedItems.tournaments?.includes(tournamentDetails._id) ? <Link to={`/tournament/details/${tournamentDetails._id}`}><button>Purchased</button></Link> :

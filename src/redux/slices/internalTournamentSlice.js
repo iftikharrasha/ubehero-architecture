@@ -31,13 +31,13 @@ export const fetchInternalsTournaments = createAsyncThunk(
 const internalTournamentSlice = createSlice({
     name: 'internalTournament',
     initialState: {
-        data: [],
+        data: null,
         version: 0,
         status: 'idle',
     },
     reducers: {
         setInternalLogOut: (state, action) => {
-            state.data = [];
+            state.data = null;
             state.version = 0;
             state.status = 'idle';
         },

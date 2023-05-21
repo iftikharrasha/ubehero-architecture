@@ -55,7 +55,7 @@ const Profile = () => {
             {
                 userDetails ? 
                 <>
-                    <ProfileDetails user={userDetails} />
+                    <ProfileDetails profile={userDetails} />
                     <Tabs
                         id="controlled-tab-example"
                         className="mb-3"
@@ -84,7 +84,7 @@ const Profile = () => {
                             <MyTeams routeKey={routeKey} myTeams={myTeams}/>
                         </Tab>
                         <Tab eventKey="settings" title="Settings">
-                            <Settings/>
+                            <Settings profile={userDetails}/>
                         </Tab>
                     </Tabs>
                 </>

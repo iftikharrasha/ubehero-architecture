@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 const InternalControlls = () => {
-  const { id } = useParams();
+  const profile = useSelector(state => state.profile.data);
 
   const [expanded, setExpanded] = useState(-1);
 
@@ -18,7 +19,7 @@ const InternalControlls = () => {
     {
       label: 'Dashboard',
       icon: 'fas fa-tachometer-alt fa-fw',
-      link: `/internal/${id}`,
+      link: `/internal/${profile._id}`,
       submenu: null
     },
     {
@@ -28,25 +29,29 @@ const InternalControlls = () => {
       submenu: [
         {
           label: 'My Tournaments',
-          link: `/internal/${id}/tournaments`,
+          link: `/internal/${profile._id}/tournaments`,
         },
         {
           label: 'Create Tournament',
-          link: `/internal/${id}/create-tournament`,
+          link: `/internal/${profile._id}/create-tournament`,
+        },
+        {
+          label: 'Leaderboards',
+          link: `/internal/${profile._id}/leaderboards`,
         },
       ],
+    },
+    {
+      label: 'Applications',
+      icon: 'fas fa-shield fa-fw',
+      link: `/internal/${profile._id}/master-applications`,
+      submenu: null
     },
     {
       label: 'Analytics',
       icon: 'fas fa-chart-line fa-fw',
       link: '/internal/inner-page',
       submenu: null
-    },
-    {
-      label: 'Leaderboards',
-      icon: 'fas fa-building fa-fw',
-      link: '/internal/inner-page',
-      submenu: null,
     },
     {
       label: 'Results',
@@ -62,7 +67,7 @@ const InternalControlls = () => {
     },
     {
       label: 'Teams',
-      icon: 'fas fa-money-bill fa-fw',
+      icon: 'fas fa-award fa-fw',
       link: '/internal/inner-page',
       submenu: null,
     },
@@ -74,19 +79,19 @@ const InternalControlls = () => {
     },
     {
       label: 'Topups',
-      icon: 'fas fa-money-bill fa-fw',
+      icon: 'fas fa-coins fa-fw',
       link: '/internal/inner-page',
       submenu: null,
     },
     {
       label: 'Point System',
-      icon: 'fas fa-money-bill fa-fw',
+      icon: 'fas fa-award fa-fw',
       link: '/internal/inner-page',
       submenu: null,
     },
     {
       label: 'Support',
-      icon: 'fas fa-money-bill fa-fw',
+      icon: 'fas fa-circle-info fa-fw',
       link: '/internal/inner-page',
       submenu: null,
     },

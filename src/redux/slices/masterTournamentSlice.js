@@ -31,13 +31,13 @@ export const fetchMastersTournaments = createAsyncThunk(
 const masterTournamentSlice = createSlice({
     name: 'masterTournament',
     initialState: {
-        data: [],
+        data: null,
         version: 0,
         status: 'idle',
     },
     reducers: {
         setMasterLogOut: (state, action) => {
-            state.data = [];
+            state.data = null;
             state.version = 0;
             state.status = 'idle';
         },

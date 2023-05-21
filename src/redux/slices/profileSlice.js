@@ -37,7 +37,6 @@ const profileSlice = createSlice({
     },
     reducers: {
         setLogIn: (state, action) => {
-            console.log("action.payload", action.payload)
             state.data = action.payload || state.data;
             state.signed_in = true;
         },

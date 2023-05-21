@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import Dropdown from 'react-bootstrap/Dropdown';
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import { changeRegion } from "../../redux/slices/staticSlice";
 import { useHistory } from "react-router-dom";
@@ -10,14 +10,16 @@ import ubehero from "../../images/ubehero-dark.svg";
 import Notification from "../Common/Notification/Notification";
 import WalletPopUp from '../Common/WalletPopUp/WalletPopUp';
 import InboxThread from '../Common/InboxThread/InboxThread';
+import useProfile from '../../hooks/useProfile';
 
 const Header = ({socketN, isConnected, userId}) => {
   const dispatch = useDispatch();
   const history = useHistory();
   const { loggedInUser, handlelogOut } = useAuth();
+  const { handleSwitchProfile, actingAs } = useProfile();
     
   return (
-    <div className='py-1 border-bottom header'>
+    <div className={`py-1 border-bottom header ${actingAs}`}>
       <div className='container d-flex justify-content-between align-items-center'>
         <Link className='h5 text-dark text-decoration-none' to='/'>
           <img src={ubehero} className='img-fluid' alt="ubehero" />
@@ -57,14 +59,14 @@ const Header = ({socketN, isConnected, userId}) => {
                 loggedInUser.permissions.includes("admin") ? 
                 <div className="d-flex ms-5">
                   <DropdownButton id="dropdown-basic-button" title="Switch To" variant="dark">
-                    <Dropdown.Item>
-                      <Link to={`/profile/${loggedInUser.id}`}>Gamer Profile</Link>
+                    <Dropdown.Item onClick={(e) => handleSwitchProfile(e, "user")}>
+                      Gamer Profile
                     </Dropdown.Item>
-                    <Dropdown.Item>
-                      <Link to={`/master/${loggedInUser.id}`}>Master Profile</Link>
+                    <Dropdown.Item onClick={(e) => handleSwitchProfile(e, "master")}>
+                      Master Profile
                     </Dropdown.Item>
-                    <Dropdown.Item>
-                      <Link to={`/internal/${loggedInUser.id}`}>Admin Profile</Link>
+                    <Dropdown.Item onClick={(e) => handleSwitchProfile(e, "admin")}>
+                      Admin Profile
                     </Dropdown.Item>
                   </DropdownButton>
                 </div>
@@ -72,11 +74,11 @@ const Header = ({socketN, isConnected, userId}) => {
                 loggedInUser.permissions.includes("master") ? 
                 <div className="d-flex ms-5">
                   <DropdownButton id="dropdown-basic-button" title="Switch To" variant="dark">
-                    <Dropdown.Item>
-                      <Link to={`/profile/${loggedInUser.id}`}>Gamer Profile</Link>
+                    <Dropdown.Item onClick={(e) => handleSwitchProfile(e, "user")}>
+                      Gamer Profile
                     </Dropdown.Item>
-                    <Dropdown.Item>
-                      <Link to={`/master/${loggedInUser.id}`}>Master Profile</Link>
+                    <Dropdown.Item onClick={(e) => handleSwitchProfile(e, "master")}>
+                      Master Profile
                     </Dropdown.Item>
                   </DropdownButton>
                 </div> 

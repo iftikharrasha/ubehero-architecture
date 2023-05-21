@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
-// import { useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 const MasterControlls = () => {
-  const { id } = useParams();
-  // const roles = useSelector((state) => state.profile.data.permissions)
-  // master: roles.includes("admin")
+  const profile = useSelector(state => state.profile.data);
 
   const [expanded, setExpanded] = useState(-1);
 
@@ -21,7 +19,7 @@ const MasterControlls = () => {
     {
       label: 'Dashboard',
       icon: 'fas fa-tachometer-alt fa-fw',
-      link: `/master/${id}`,
+      link: `/master/${profile._id}`,
       submenu: null
     },
     {
@@ -31,11 +29,11 @@ const MasterControlls = () => {
       submenu: [
         {
           label: 'My Tournaments',
-          link: `/master/${id}/tournaments`,
+          link: `/master/${profile._id}/tournaments`,
         },
         {
           label: 'Create Tournament',
-          link: `/master/${id}/create-tournament`,
+          link: `/master/${profile._id}/create-tournament`,
         },
       ],
     },
