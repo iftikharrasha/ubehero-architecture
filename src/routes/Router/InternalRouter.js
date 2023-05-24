@@ -5,10 +5,14 @@ import InternalUpdateTournamentDetails from '../../pages/Internal/InternalUpdate
 import InternalCreateTournament from '../../pages/Internal/InternalCreateTournament';
 import InternalTournaments from '../../pages/Internal/InternalTournaments';
 import InternalDashboard from '../../pages/Internal/InternalDashboard';
+import InternalUsersTable from '../../pages/Internal/InternalUsersTable';
 
 const InternalRouter = () => {
   return (
     <Switch>
+        <InternalRoute path="/internal/:id/users">
+            <InternalUsersTable/>
+        </InternalRoute>
         <InternalRoute path="/internal/:id/tournaments/:tId">
             <InternalUpdateTournamentDetails/>
         </InternalRoute>

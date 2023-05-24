@@ -1,13 +1,13 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom'
 import PrivateRoute from '../Privates/PrivateRoute';
-import Home from '../../pages/Home';
-import Login from '../../pages/Login';
-import Signup from '../../pages/Signup';
-import TournamentDetails from '../../pages/TournamentDetails';
-import WishList from '../../pages/WishList';
-import Profile from '../../pages/Profile';
-import Wallet from '../../pages/Wallet';
+import Home from '../../pages/Common/Home';
+import Login from '../../pages/Common/Login';
+import Signup from '../../pages/Common/Signup';
+import TournamentDetails from '../../pages/Common/TournamentDetails';
+import Profile from '../../pages/Common/Profile';
+import Wallet from '../../pages/Common/Wallet';
+import WishList from '../../pages/Common/WishList';
 
 const GamerRouter = () => {
   return (

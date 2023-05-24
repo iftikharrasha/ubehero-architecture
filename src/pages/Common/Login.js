@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import useAuth from "../hooks/useAuth";
+import useAuth from "../../hooks/useAuth";
 import { FcGoogle } from "react-icons/fc";
 import { useState } from "react";
 import { Link, useHistory, useLocation } from 'react-router-dom';

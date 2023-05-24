@@ -1,8 +1,8 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import PageLayout from '../components/PageLayout/PageLayout';
-import Tournaments from '../components/Tournaments/Tournaments';
+import PageLayout from '../../components/PageLayout/PageLayout';
+import Tournaments from '../../components/Tournaments/Tournaments';
 
 const WishList = () => {
     const wish = useSelector((state) => state.tournaments.wishList);

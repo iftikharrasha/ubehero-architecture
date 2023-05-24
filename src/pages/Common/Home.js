@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
-import Tournaments from '../components/Tournaments/Tournaments';
-import PageLayout from '../components/PageLayout/PageLayout';
+import Tournaments from '../../components/Tournaments/Tournaments';
+import PageLayout from '../../components/PageLayout/PageLayout';
 import { useSelector } from 'react-redux';
-import { fetchTournaments } from '../redux/slices/tournamentSlice'
-import { fetchStatics } from '../redux/slices/staticSlice'
+import { fetchTournaments } from '../../redux/slices/tournamentSlice'
+import { fetchStatics } from '../../redux/slices/staticSlice'
 import { useDispatch } from 'react-redux';
-import Landing from '../components/Landing/Landing';
-import Preloader from '../components/PageLayout/Preloader';
+import Landing from '../../components/Landing/Landing';
+import Preloader from '../../components/PageLayout/Preloader';
 
 const Home = () => {
     const dispatch = useDispatch();

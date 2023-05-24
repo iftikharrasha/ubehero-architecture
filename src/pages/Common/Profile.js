@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import PageLayout from '../components/PageLayout/PageLayout';
+import PageLayout from '../../components/PageLayout/PageLayout';
 import { useSelector } from 'react-redux';
-import { fetchProfileDetails } from '../redux/slices/profileSlice'
+import { fetchProfileDetails } from '../../redux/slices/profileSlice'
 import { useDispatch } from 'react-redux';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
-import ProfileDetails from '../components/Profile/ProfileDetails';
-import Preloader from '../components/PageLayout/Preloader';
+import ProfileDetails from '../../components/Profile/ProfileDetails';
+import Preloader from '../../components/PageLayout/Preloader';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
-import MyTeams from '../components/Profile/MyTeams';
-import MyStats from '../components/Profile/MyStats';
-import Settings from '../components/Profile/Settings';
-import { fetchMyTeams } from '../redux/slices/teamSlice';
+import MyTeams from '../../components/Profile/MyTeams';
+import MyStats from '../../components/Profile/MyStats';
+import Settings from '../../components/Profile/Settings';
+import { fetchMyTeams } from '../../redux/slices/teamSlice';
 
 const Profile = () => { 
     const { id } = useParams();

@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import tournamentReducer from './slices/tournamentSlice';
 import masterTournamentReducer from './slices/masterTournamentSlice';
 import internalTournamentReducer from './slices/internalTournamentSlice';
+import internalUserReducer from './slices/internalUsersSlice';
 import staticReducer from './slices/staticSlice';
 import profileReducer from './slices/profileSlice';
 import leaderboardReducer from './slices/leaderboardSlice';
@@ -17,6 +18,7 @@ const rootReducer = combineReducers({
   tournaments: tournamentReducer,
   masterTournaments: masterTournamentReducer,
   internalTournaments: internalTournamentReducer,
+  internalUsers: internalUserReducer,
   profile: profileReducer,
   leaderboards: leaderboardReducer,
   giftcards: giftCardReducer,

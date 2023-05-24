@@ -87,7 +87,6 @@ const useTournament = () => {
 
         try {
             const response = await axios.post(`${process.env.REACT_APP_API_LINK}/api/v1/tournaments`, draftItem, config);
-            console.log(response)
             
             if(response.data.status === 200){
                 // const notificationData = {
@@ -105,7 +104,7 @@ const useTournament = () => {
                 // socketN.emit("send_notification", notificationData);
 
                 setErrorMessage(null);
-                const destination = `/${role}/${data._id}/tournaments`;
+                const destination = `/${role}/${profile.data._id}/tournaments`;
                 history.replace(destination);
             }else{
                 setErrorMessage(response.data.error.message);

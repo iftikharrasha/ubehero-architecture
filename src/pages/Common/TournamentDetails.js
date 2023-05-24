@@ -4,17 +4,17 @@ import { useDispatch } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
-import PageLayout from '../components/PageLayout/PageLayout';
-import Leaderboard from '../components/Tournaments/Leaderboards/Leaderboards';
-import { fetchTournamentDetails } from '../redux/slices/tournamentSlice'
-import { fetchLeaderboards } from '../redux/slices/leaderboardSlice';
-import Preloader from '../components/PageLayout/Preloader';
-import Prizes from '../components/Tournaments/Prizes/Prizes';
-import ChatRoom from '../components/Tournaments/ChatRoom/ChatRoom';
+import PageLayout from '../../components/PageLayout/PageLayout';
+import Leaderboard from '../../components/Tournaments/Leaderboards/Leaderboards';
+import { fetchTournamentDetails } from '../../redux/slices/tournamentSlice'
+import { fetchLeaderboards } from '../../redux/slices/leaderboardSlice';
+import Preloader from '../../components/PageLayout/Preloader';
+import Prizes from '../../components/Tournaments/Prizes/Prizes';
+import ChatRoom from '../../components/Tournaments/ChatRoom/ChatRoom';
 import { useLocation, useHistory  } from 'react-router-dom';
-import CheckoutForm from '../components/Tournaments/Checkout/CheckoutForm';
-import CheckoutLayout from '../components/Common/Checkout/CheckoutLayout';
+import CheckoutForm from '../../components/Tournaments/Checkout/CheckoutForm';
 import io from 'socket.io-client';
+import CheckoutLayout from '../../components/Common/Checkout/CheckoutLayout';
 
 let initialSocketId = null;
 

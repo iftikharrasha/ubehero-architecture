@@ -62,7 +62,7 @@ const InternalControlls = () => {
     {
       label: 'Users',
       icon: 'fas fa-users fa-fw',
-      link: '/internal/inner-page',
+      link: `/internal/${profile._id}/users`,
       submenu: null,
     },
     {

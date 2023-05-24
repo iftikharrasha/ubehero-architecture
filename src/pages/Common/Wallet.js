@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
-import PageLayout from '../components/PageLayout/PageLayout';
+import PageLayout from '../../components/PageLayout/PageLayout';
 import { useSelector } from 'react-redux';
-import { fetchProfileDetails } from '../redux/slices/profileSlice'
+import { fetchProfileDetails } from '../../redux/slices/profileSlice'
 import { useDispatch } from 'react-redux';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
-import Preloader from '../components/PageLayout/Preloader';
-import WalletDetails from '../components/Wallet/WalletDetails';
-import Transactions from '../components/Wallet/Transactions/Transactions';
-import { fetchGiftCards } from '../redux/slices/giftCardSlice';
-import PurchaseLayout from '../components/Common/Purchase/PurchaseLayout';
-import CheckoutLayout from '../components/Common/Checkout/CheckoutLayout';
-import Giftcard from '../components/Wallet/Topup/Giftcard';
-import { fetchMyTransactions } from '../redux/slices/walletSlice';
+import Preloader from '../../components/PageLayout/Preloader';
+import WalletDetails from '../../components/Wallet/WalletDetails';
+import Transactions from '../../components/Wallet/Transactions/Transactions';
+import { fetchGiftCards } from '../../redux/slices/giftCardSlice';
+import PurchaseLayout from '../../components/Common/Purchase/PurchaseLayout';
+import CheckoutLayout from '../../components/Common/Checkout/CheckoutLayout';
+import Giftcard from '../../components/Wallet/Topup/Giftcard';
+import { fetchMyTransactions } from '../../redux/slices/walletSlice';
 
 const Wallet = () => { 
     const { id } = useParams();

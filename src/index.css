@@ -514,3 +514,7 @@ a:hover{
 .admin{
   background: linear-gradient(90deg, #1C2331 5.76%, #3c1411 94.27%);
 }
+
+.draft .tab-content {
+  width: 50%;
+}
