@@ -8,14 +8,19 @@ import "react-datepicker/dist/react-datepicker.css";
 import useTournament from '../../hooks/useTournament';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
+import axios from "axios";
+import FileUploadPopUp from "../../components/Common/FileUploadPopUp/FileUploadPopUp";
 
 const MasterUpdateDraft = () => {
     const masterTournaments = useSelector((state) => state.masterTournaments.data)
     const [updatedTournament, setUpdatedTournament] = useState({});
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [previewURL, setPreviewURL] = useState(null);
+
     console.log(updatedTournament);
     const { tId } = useParams();
 
-    const { handleTournamentDraftUpdate, errorMessage } = useTournament();
+    const { handleTournamentDraftUpdate, errorMessage, setErrorMessage } = useTournament();
 
     const handleRegDateChange = (date, field) => {
         setUpdatedTournament((prevTournament) => {
@@ -70,6 +75,7 @@ const MasterUpdateDraft = () => {
         if(masterTournaments){
             const thisTournament = masterTournaments.find(tournament => tournament._id === tId);
             setUpdatedTournament(thisTournament)
+            setPreviewURL(thisTournament.tournamentThumbnail)
         }
     }, [masterTournaments, tId]);
 
@@ -80,7 +86,7 @@ const MasterUpdateDraft = () => {
         { eventKey: 'settings', title: 'Settings' },
         { eventKey: 'pricing', title: 'Pricing' },
         { eventKey: 'descriptions', title: 'Descriptions' },
-        { eventKey: 'thumbnails', title: 'Thumbnails' },
+        { eventKey: 'thumbnail', title: 'Thumbnail' },
         { eventKey: 'credentials', title: 'Credentials' },
         { eventKey: 'result', title: 'Result' },
         { eventKey: 'prize', title: 'Prize' },
@@ -102,6 +108,65 @@ const MasterUpdateDraft = () => {
         const nextIndex = currentIndex < tabList.length - 1 ? currentIndex + 1 : currentIndex;
         // Set the active tab key to the next tab
         setRouteKey(tabList[nextIndex].eventKey);
+    }; // Function to handle form submission
+
+
+    const [show, setShow] = useState(false);
+    const handleClose = () => {
+        setErrorMessage(null);
+        setShow(false)
+    };
+    const handleShow = () => {
+        setShow(true)
+    };
+
+    const handleFileSelect = (event) => {
+        setErrorMessage(null);
+        const file = event.target.files[0];
+        setSelectedFile(file);
+        setPreviewURL(URL.createObjectURL(file));
+    };
+    
+    const [picProgress, setPicProgress] = useState(0);
+    const handleTournamentImageUploadToS3 = async (e) => {
+        e.preventDefault();
+        if (selectedFile) {
+            const formData = new FormData();
+            formData.append("file", selectedFile);
+    
+            try {
+                const response = await axios.post(`${process.env.REACT_APP_API_LINK}/api/v1/upload/${tId}`, formData, {
+                    // headers: {
+                    //     "Content-Type": "multipart/form-data",
+                    //     Authorization: " Bearer " + token,
+                    // },
+                    onUploadProgress: (progressEvent) => {
+                        const percentCompleted = Math.round(
+                            (progressEvent.loaded / progressEvent.total) * 100
+                        );
+                        setPicProgress(percentCompleted);
+                    },
+                });
+                if(response.data.status === 200){
+                    setPicProgress(0);
+                    setSelectedFile(null)
+                    setPreviewURL(response.data.data.imageUrl)
+                    handleClose();
+                    return setUpdatedTournament({
+                        ...updatedTournament, 
+                        tournamentThumbnail: response.data.data.imageUrl
+                    });
+                }else{
+                    setPicProgress(0);
+                    setSelectedFile(null)
+                    setPreviewURL(updatedTournament.tournamentThumbnail)
+                    setErrorMessage(response.data.error.message);
+                }
+            } catch (error) {
+                // Handle error
+                console.log(error);
+            }
+        }
     };
 
     return (
@@ -341,12 +406,51 @@ const MasterUpdateDraft = () => {
                         <h2>Rules</h2>
                         <p>This section will be avaible when rules are described!</p>
                     </Tab>
-                    <Tab eventKey="thumbnails" title="6. Thumbnails">
-                        <h2>Thumbnails</h2>
+                    <Tab eventKey="thumbnail" title="6. Thumbnail">
+                        <h2>Thumbnail</h2>
                         <Form.Group className="mb-3" controlId="formBasicRound">
-                            <Form.Label>Add a tournament thumbnail</Form.Label>
-                            <br />
-                            <input type="file" class="form-control" id="customFile" />
+                            {
+                                !previewURL ? 
+                                <section className="p-4 d-flex justify-content-center align-items-center w-50 mx-auto border border-warning mb-5 rounded  file-upload file-upload-blank" onClick={handleShow}>
+                                    <div className="file-upload-message text-center text-red">
+                                        <i className="fas fa-cloud-upload-alt file-upload-cloud-icon"></i>
+                                        <p className="file-upload-default-message">Click here to upload a file</p>
+                                    </div>
+                                </section>
+                                 :
+                                 <section className="p-4 d-flex justify-content-center align-items-center w-50 mx-auto border border-warning file-upload file-uploaded mb-5 rounded" style={{backgroundImage: `url(${updatedTournament.tournamentThumbnail})`}} onClick={handleShow}>
+                                    <div className="file-upload-message text-center">
+                                        <i className="fas fa-cloud-upload-alt file-upload-cloud-icon"></i>
+                                        <p className="file-upload-default-message">Click here to change thumbnail</p>
+                                    </div>
+                                </section>
+                                // <>
+                                //     <div><img src={previewURL} alt="Preview" className="img-fluid my-3 w-25"/></div>
+                                //     <div className="mb-5">
+                                //         <Button variant="warning" onClick={handleTournamentImageUploadToS3}>
+                                //             CHANGE
+                                //         </Button>
+                                //     </div>
+                                // </>
+
+                                
+                            }
+                            {/* {
+                                !previewURL ? 
+                                <>
+                                    <Form.Label>Upload tournament thumbnail</Form.Label>
+                                    <br />
+                                    <input type="file" className="form-control" id="customFile" onChange={handleFileSelect}  />
+                                </> :
+                                <>
+                                    <div><img src={previewURL} alt="Preview" className="img-fluid my-3 w-25"/></div>
+                                    <div className="mb-5">
+                                        <Button variant="warning" onClick={handleTournamentImageUploadToS3}>
+                                            CHANGE
+                                        </Button>
+                                    </div>
+                                </>
+                            } */}
                         </Form.Group>
                     </Tab>
                     <Tab eventKey="credentials" title="7. Credentials">
@@ -380,6 +484,10 @@ const MasterUpdateDraft = () => {
                     Save Draft
                 </Button>
             </Form>
+
+            
+            {/* popup for user profile */}
+            <FileUploadPopUp show={show} handleClose={handleClose} previewURL={previewURL} selectedFile={selectedFile} handleFileSelect={handleFileSelect} handleTournamentImageUploadToS3={handleTournamentImageUploadToS3} picProgress={picProgress} errorMessage={errorMessage}/>
         </div>
     );
 };

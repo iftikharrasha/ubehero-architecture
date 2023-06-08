@@ -170,10 +170,11 @@ const useTournament = () => {
 
     return {
         errorMessage,
+        setErrorMessage,
         handleTournamentPurchase,
         handleTournamentDraftCreate,
         handleTournamentDraftUpdate,
-        handleTournamentDraftDelete
+        handleTournamentDraftDelete,
     }
 }
 
