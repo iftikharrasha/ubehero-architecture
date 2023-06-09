@@ -27,8 +27,8 @@ const PageLayout = ({ children }) => {
       }
       
       <div className="row">
-        <Sidebar />
-        <div className="col-md-9 my-2">{children}</div>
+        {/* <Sidebar /> */}
+        <div className="col-md-12 my-2">{children}</div>
       </div>
     </div>
   )

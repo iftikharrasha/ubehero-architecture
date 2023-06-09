@@ -35,7 +35,7 @@ const Home = () => {
             {
                 tournaments ? 
                     tournaments.map((tournament, index) => (
-                        <div className=" col-lg-4 col-sm-6" key={index}>
+                        <div className="col-lg-3 col-sm-6" key={index}>
                             <Tournaments routeKey={tournament._id} tournament={tournament} details={false}/>
                         </div>
                     )) : <Preloader />
