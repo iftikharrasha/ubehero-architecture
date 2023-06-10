@@ -9,6 +9,7 @@ import useAuth from '../../../hooks/useAuth';
 import useNotyf from '../../../hooks/useNotyf';
 
 const PopupModal = ({show, handleClose, popupUser}) => {
+    console.log(popupUser)
     const { loggedInUser } = useAuth();
     const user = useSelector((state) => state.profile.data)
     const jwt = localStorage.getItem("jwt");
@@ -23,7 +24,7 @@ const PopupModal = ({show, handleClose, popupUser}) => {
             invokedByName: loggedInUser.name,
             invokedById: loggedInUser.id,
             receivedByName: popupUser.userName,
-            receivedById: popupUser._id, 
+            receivedById: popupUser.key, 
             route: `profile/${loggedInUser.id}`
         }
 
@@ -39,7 +40,7 @@ const PopupModal = ({show, handleClose, popupUser}) => {
             invokedByName: loggedInUser.name,
             invokedById: loggedInUser.id,
             receivedByName: popupUser.userName,
-            receivedById: popupUser._id, 
+            receivedById: popupUser.key, 
             route: `profile/${loggedInUser.id}`
         }
 
@@ -50,10 +51,9 @@ const PopupModal = ({show, handleClose, popupUser}) => {
     const { setShowInbox, setPopUser } = useContext(InboxContext);
 
     const handleInboxPop = () => {
+        setPopUser(popupUser);
         setShowInbox(true);
         handleClose();
-
-        setPopUser(popupUser);
     };
 
     return (
@@ -74,7 +74,7 @@ const PopupModal = ({show, handleClose, popupUser}) => {
                                 <div className="flex-grow-1 ms-3">
                                     <h5 className="mb-1">{popupUser?.userName}
                                     {
-                                        popupUser?._id === loggedInUser.id ? null :
+                                        popupUser?.key === loggedInUser.id ? null :
                                         <span className='ms-2'>| <i className="fas fa-message text-danger cursor-pointer ms-2" onClick={handleInboxPop}></i></span>
                                     }
                                      
@@ -83,22 +83,22 @@ const PopupModal = ({show, handleClose, popupUser}) => {
                                     <div className="d-flex justify-content-start rounded-3 py-3 mb-2 px-4" style={{backgroundColor: "#ffffff"}}>
                                         <div>
                                             <p className="small text-muted mb-1">Level</p>
-                                            <p className="mb-0">{popupUser?.stats?.levelTitle}</p>
+                                            <p className="mb-0">{popupUser?.levelTitle}</p>
                                         </div>
                                         <div className="px-3">
                                             <p className="small text-muted mb-1">Played</p>
-                                            <p className="mb-0">{popupUser?.stats?.totalGamePlayed}</p>
+                                            <p className="mb-0">{popupUser?.totalGamePlayed}</p>
                                         </div>
                                         <div>
                                             <p className="small text-muted mb-1">Followers</p>
-                                            <p className="mb-0">{popupUser?.stats?.noOfFollowers}</p>
+                                            <p className="mb-0">{popupUser?.noOfFollowers}</p>
                                         </div>
                                     </div>
 
                                     {
-                                        popupUser?._id === loggedInUser.id ? 
+                                        popupUser?.key === loggedInUser.id ? 
                                         <div className="d-flex pt-1">
-                                            <button type="button" className="btn btn-primary flex-grow-1"><Link to={`/profile/${popupUser?._id}`} className="text-white">My Profile</Link></button>
+                                            <button type="button" className="btn btn-primary flex-grow-1"><Link to={`/profile/${popupUser?.key}`} className="text-white">My Profile</Link></button>
                                         </div> :
                                         <div className="d-flex pt-1">
                                             <button type="button" className="btn btn-info text-white me-1 flex-grow-1" onClick={sendFriendRequestNotyf}>Add Friend</button>

@@ -9,6 +9,7 @@ import TextPanel from './TextPanel';
 
 const InboxPopUp = () => {
     const { showInbox, setShowInbox, popUser, setPopUser } = useContext(InboxContext);
+    console.log("popUser", popUser)
     const [uniqueRoomId, setUniqueRoomId] = useState(null);
     const [messagesRecieved, setMessagesReceived] = useState([]);
 
@@ -20,7 +21,7 @@ const InboxPopUp = () => {
     useEffect(() => {
         if (socketInbox) {
             setMessagesReceived([]);
-            const uniqueRoom = generateRoomId(user._id, popUser.id);
+            const uniqueRoom = generateRoomId(user._id, popUser.key);
             setUniqueRoomId(uniqueRoom);
     
             const userId = user._id;
@@ -85,7 +86,7 @@ const InboxPopUp = () => {
                                         socketInbox={socketInbox}
                                         isInboxConnected={isInboxConnected}
                                         roomId={uniqueRoomId}
-                                        receiverId={popUser.id}
+                                        receiverId={popUser.key}
                                         user={user}
                                     />
                                 </>
