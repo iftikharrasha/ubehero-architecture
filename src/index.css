@@ -551,3 +551,13 @@ a:hover{
   position: relative;
   z-index: 2;
 }
+
+.popCard .ant-card-meta-title{
+  margin-bottom: 0px !important;
+}
+.popCard .ant-card-body{
+  padding: 10px;
+}
+.popBody .ant-card-body{
+  padding: 10px;
+}

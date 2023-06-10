@@ -1,20 +1,9 @@
-import React, { useRef, useState } from "react";
-import { Table, Input, Space, Button } from 'antd';
-import PopupModal from "../../Common/PopupModal/PopupModal";
+import React, { useRef } from "react";
+import { Table, Input, Space, Button, Popover } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
+import UserPopup from "../../Common/UserPopup/UserPopup";
 
 const Leaderboards = ({leaderboards}) => {
-  const [popupUser, setPopupUser] = useState(null);
-  const [show, setShow] = useState(false);
-  const handleClose = () => {
-      setPopupUser(null)
-      setShow(false)
-  };
-  const handleShow = (user) => {
-      setPopupUser(user)
-      setShow(true)
-  };
-
   const searchInput = useRef(null);
 
   const columns = [
@@ -62,18 +51,20 @@ const Leaderboards = ({leaderboards}) => {
         }
       },
       render: (text, record) => (
-        <div className="d-flex align-items-center" onClick={(e) => handleShow(record)}>
-          <img
-            src={record.photo}
-            alt="user-pic"
-            style={{ width: '45px', height: '45px' }}
-            className="rounded-circle"
-          />
-          <div className="ms-3">
-            <p className="fw-bold mb-1">{record.userName}</p>
-            <p className="text-muted mb-0">Country: {record.country}</p>
+        <Popover placement="topLeft" content={<UserPopup popupUser={record}/>}>
+          <div className="d-flex align-items-center">
+            <img
+              src={record.photo}
+              alt="user-pic"
+              style={{ width: '45px', height: '45px' }}
+              className="rounded-circle"
+            />
+            <div className="ms-3">
+              <p className="fw-bold mb-1">{record.userName}</p>
+              <p className="text-muted mb-0">Country: {record.country}</p>
+            </div>
           </div>
-        </div>
+        </Popover>
       ),
     },
     {
@@ -143,12 +134,14 @@ const Leaderboards = ({leaderboards}) => {
     userName: item.userName,
     photo: item.photo,
     country: "BD",
+    joined: item.createdAt,
     totalGamePlayed: item.stats?.totalGamePlayed,
     wins: item.stats?.totalWins,
     xp: item.stats?.totalXp,
     levelTitle: item.stats?.levelTitle,
     currentLevel: item.stats?.currentLevel,
     noOfFollowers: item.requests?.followers.length,
+    noOfFollowings: item.requests?.followings.length,
   }));
 
   const onChange = (pagination, filters, sorter, extra) => {
@@ -156,10 +149,7 @@ const Leaderboards = ({leaderboards}) => {
   };
 
   return (
-    <div className='card d-flex mb-3 p-3' 
-      style={{position: 'relative'}}
-    >
-
+    <div className='card mb-3 p-3'>
       <Table 
         columns={columns} 
         dataSource={data} 
@@ -168,13 +158,9 @@ const Leaderboards = ({leaderboards}) => {
           pageSize: 10,
           hideOnSinglePage: true,
         }}
+        scroll={{ x: true }}
+        responsive
       />
-
-      {/* popup for user profile */}
-      {
-        popupUser &&
-        <PopupModal show={show} handleClose={handleClose} popupUser={popupUser}/>
-      }
       
     </div>
   );

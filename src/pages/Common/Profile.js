@@ -54,13 +54,13 @@ const Profile = () => {
 
     const handleTabChange = (key) => {
       switch (key) {
-        case '1':
+        case 'mystats':
           history.push(`/profile/${id}`);
           break;
-        case '2':
+        case 'teams':
           history.push(`/profile/${id}/teams`);
           break;
-        case '3':
+        case 'settings':
           history.push(`/profile/${id}/settings`);
           break;
         default:
@@ -84,10 +84,10 @@ const Profile = () => {
                             </div>
                             <div className='col-md-9'>
 
-                                <Tabs defaultActiveKey="1" onChange={handleTabChange}
+                                <Tabs activeKey={routeKey} onChange={handleTabChange}
                                 >
                                     <TabPane
-                                        key="1"
+                                        key="mystats"
                                         tab={
                                             <Row justify="left" align="middle">
                                                 <HistoryOutlined /> <span>My Stats</span>
@@ -97,7 +97,7 @@ const Profile = () => {
                                         <MyStats stats={userDetails.stats} />
                                     </TabPane>
                                     <TabPane
-                                        key="2"
+                                        key="teams"
                                         tab={
                                             <Row justify="left" align="middle">
                                                 <TeamOutlined /> <span>Teams</span>
@@ -107,7 +107,7 @@ const Profile = () => {
                                         <MyTeams routeKey={routeKey} myTeams={myTeams} />
                                     </TabPane>
                                     <TabPane
-                                        key="3"
+                                        key="settings"
                                         tab={
                                             <Row justify="left" align="middle">
                                                 <SettingOutlined /> <span>Settings</span>
