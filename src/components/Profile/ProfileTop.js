@@ -1,6 +1,7 @@
 import React from "react";
 import { Card, Button, Row, Image } from 'antd';
 import { CameraOutlined } from '@ant-design/icons';
+import moment from "moment";
 
 const ProfileTop = ({profile}) => {
   const { _id, userName, createdAt, photo, version, stats } = profile;
@@ -19,7 +20,7 @@ const ProfileTop = ({profile}) => {
             />
             <div className="ps-4">
               <h5 className='card-title'>{userName}</h5>
-              <h6>Joining Date: {createdAt}</h6>
+              <h6>Member Since: {moment(createdAt).format('ll')}</h6>
             </div>
           </Row>
           <Row justify="space-between" align="start" style={{ flexDirection: 'column' }} className="my-3" >

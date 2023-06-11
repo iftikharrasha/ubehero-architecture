@@ -155,7 +155,7 @@ const Leaderboards = ({leaderboards}) => {
         dataSource={data} 
         onChange={onChange}
         pagination={{
-          pageSize: 10,
+          pageSize: 1,
           hideOnSinglePage: true,
         }}
         scroll={{ x: true }}

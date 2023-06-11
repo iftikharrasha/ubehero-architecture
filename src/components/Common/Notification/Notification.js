@@ -1,7 +1,9 @@
 import moment from 'moment';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import useAuth from '../../../hooks/useAuth';
+import { Badge, List, Popover, Skeleton, Button } from 'antd';
+import { BellOutlined } from '@ant-design/icons';
 
 const Notification = ({socketN, isConnected, userId}) => {
   const [notyfReceived, setNotyfReceived] = useState([]);
@@ -173,58 +175,122 @@ const Notification = ({socketN, isConnected, userId}) => {
     });
   };
 
+  const [initLoading, setInitLoading] = useState(true);
+  const [data, setData] = useState([]);
+  const [isLoadingMore, setLoadingMore] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const itemLimit = 3; // Number of items to display initially
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    // Simulating initial data loading
+    setTimeout(() => {
+      setInitLoading(false);
+      setData(notyfReceived.slice(0, itemLimit)); // Slice the data to display limited items
+      setHasMore(itemLimit < notyfReceived.length); // Check if there are more items to load
+    }, 1000);
+  }, [notyfReceived, itemLimit]);
+
+  const loadMore = () => {
+    setHasMore(false)
+    setLoadingMore(true);
+  
+    // Simulating loading more data with a delay
+    setTimeout(() => {
+      const currentDataLength = data.length;
+      const newData = [
+        ...data,
+        ...Array(itemLimit).fill({ loading: true }) // Add skeleton items with loading state
+      ];
+  
+      setData(newData);
+  
+      // Simulating data loading with a delay
+      setTimeout(() => {
+        const updatedData = [
+          ...data.slice(0, currentDataLength),
+          ...notyfReceived.slice(currentDataLength, currentDataLength + itemLimit)
+        ];
+  
+        setData(updatedData);
+        setLoadingMore(false);
+        setHasMore(currentDataLength + itemLimit < notyfReceived.length); // Check if there are more items to load
+      }, 2000);
+    }, 0);
+  };
+
+  const scrollToBottom = () => {
+    if (containerRef.current) {
+      const { scrollHeight } = containerRef.current;
+      containerRef.current.scrollTo({
+        top: scrollHeight,
+        behavior: 'smooth',
+      });
+    }
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [data]);
+
+  const content = (
+    <div className="notyf-item scrollable" ref={containerRef}>
+      <List
+        className="demo-loadmore-list"
+        itemLayout="horizontal"
+        size='larger'
+        loading={initLoading}
+        loadMore={loadMore}
+        dataSource={data}
+        renderItem={(item) => (
+          <List.Item
+            actions={
+              isLoadingMore ? null :
+                item.type === 'friend_request' || item.type === 'team_invite' ?  
+                [
+                  <i className="fas fa-check check me-3" onClick={(e) => {e.stopPropagation(); handleFriendRequest(e, item)}}></i>,
+                  <i className="fas fa-close close" onClick={(e) => {e.stopPropagation(); handleDelete(e, item._id)}}></i>,
+                ] : 
+                item.type === 'follow_request' ? 
+                [
+                  <Button type='default' size='small' onClick={(e) => {e.stopPropagation(); handleFollowRequest(e, item)}}>
+                    Follow Back
+                  </Button>
+                ] : 
+                item.read ? 
+                [
+                  <i className="fas fa-envelope-open" onClick={(e) => {e.stopPropagation(); handleRead(e, item)}}></i>
+                ] : 
+                [
+                  <i className="fas fa-envelope" onClick={(e) => {e.stopPropagation(); handleRead(e, item)}}></i>
+                ]
+            }
+          >
+            <Skeleton avatar title={false} loading={item.loading} active>
+              <List.Item.Meta
+                avatar={<BellOutlined />}
+                title={<Link to={`/${item.route}`}>{item.invokedByName}</Link>}
+                description={item.subject}
+              />
+            </Skeleton>
+          </List.Item>
+        )}
+      />
+      {hasMore && (
+        <Button onClick={loadMore} block className='loadmore' danger>
+          Load More
+        </Button>
+      )}
+    </div>
+  );
+
   return (
-    <div className="dropdown">
-        <Link to="/" className="mx-4 dropdown-toggle hidden-arrow text-white" id="navbarDropdownMenuLink"
-        role="button" data-mdb-toggle="dropdown" aria-expanded="false">
-            <i className="fa-solid fa-bell"></i>
-            <span className="badge rounded-pill badge-notification bg-success">{notyfReceived.filter(n => !n.read).length}</span>
-        </Link>
-        <ul className="dropdown-menu p-0" aria-labelledby="navbarDropdownMenuLink">
-      
-        <div
-            className="card-header d-flex justify-content-between align-items-center p-3 bg-secondary text-white border-bottom-0">
-            <p className="mb-0 fw-bold">Notifications</p>
-        </div>
-          {
-            notyfReceived.length > 0 ?
-              notyfReceived.slice().map((item, index) => (
-                <li key={index} className={item.read === false ? "notyf-item unread" : "notyf-item"}>
-                    <Link className="dropdown-item" to={`/${item.route}`}>
-                      <div className='d-flex justify-content-between align-items-center'>
-                        <div className='text-left subject d-flex justify-content-center align-items-center'>
-                          <span className='d-flex justify-content-center align-items-center'>
-                            <i className="fas fa-bell text-secondary"></i>
-                          </span>
-                          <div>
-                            <h6>{item.invokedByName}</h6>
-                            <p>{item.subject}</p>
-                          </div>
-                        </div>
-                        <div>
-                          {item.type === 'friend_request' || item.type === 'team_invite' ?  
-                          <>
-                            <i className="fas fa-check check me-3" onClick={(e) => {e.stopPropagation(); handleFriendRequest(e, item)}}></i>
-                            <i className="fas fa-close close" onClick={(e) => {e.stopPropagation(); handleDelete(e, item._id)}}></i>
-                          </> : 
-                          item.type === 'follow_request' ? 
-                          <>
-                            <button className="btn btn-success follow" onClick={(e) => {e.stopPropagation(); handleFollowRequest(e, item)}}>Follow Back</button> 
-                          </> : 
-                          item.read ? 
-                            <i className="fas fa-envelope-open" onClick={(e) => {e.stopPropagation(); handleRead(e, item)}}></i> : 
-                            <i className="fas fa-envelope" onClick={(e) => {e.stopPropagation(); handleRead(e, item)}}></i>
-                          }
-                        </div>
-                      </div>
-                    </Link>
-                </li>
-              )) : 
-              <li className='notyf-item'>
-                  <Link className="dropdown-item" to="/">No new notifications</Link>
-              </li>
-          }
-        </ul>
+    <div className='me-3'>
+      <Popover placement="bottomLeft" title="Notifications" content={content} trigger="click" className='popup'>
+        <Badge count={notyfReceived.filter(n => !n.read).length} size="small">
+          <i className="fa-solid fa-bell text-white"></i>
+        </Badge>
+      </Popover>
     </div>
   );
 };

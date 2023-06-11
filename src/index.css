@@ -313,9 +313,9 @@ a:hover{
 }
 
 .notyf-item {
-  min-width: 400px;
-  border-bottom: 1px solid gray;
-  padding: 4px 0;
+  min-width: 300px;
+  /* border-bottom: 1px solid gray; */
+  padding: 4px 10px 4px 0;
   cursor: pointer;
 }
 
@@ -370,8 +370,55 @@ a:hover{
   border-color: #6c757d;
 }
 
+.notyf-item::-webkit-scrollbar {
+  width: 0.1875rem;
+  height: 0.1875rem;
+  border-radius: 0.625rem;
+}
+
+.notyf-item::-webkit-scrollbar-track {
+  border-radius: 0.625rem;
+  background: white;
+}
+
+.notyf-item::-webkit-scrollbar-thumb {
+  border-radius: 0.625rem;
+  background: rgb(212, 212, 212);
+}
+
+.notyf-item::-webkit-scrollbar-thumb:window-inactive {
+  background: rgb(212, 212, 212);
+}
+
+.loadmore{
+  position: absolute;
+  width: 50% !important;
+  margin: 0 auto;
+  left: 0;
+  right: 0;
+  text-align: center;
+  bottom: -1rem;
+}
+
+.notyf-item .ant-list-item-action{
+  margin-inline-start: 10px !important;
+}
+
+.notyf-item .ant-list-item-action li{
+ padding: 0 !important;
+}
+
  .unread{
   background-color: #e5e6e9;
+}
+
+.popup{
+  cursor: pointer;
+}
+
+.scrollable{
+  height: 400px;
+  overflow: auto;
 }
 
 .dropdown-menu.show{
@@ -560,4 +607,18 @@ a:hover{
 }
 .popBody .ant-card-body{
   padding: 10px;
+}
+
+/* .overlayThumb::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5); 
+}*/
+
+.demo-loadmore-list {
+  min-height: 350px;
 }

@@ -3,14 +3,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { addToWishList, removeFromWishList } from "../../redux/slices/tournamentSlice";
 
-import { StockOutlined, UsergroupAddOutlined, PlusCircleOutlined, MinusCircleOutlined, TrophyOutlined } from '@ant-design/icons';
-import { Avatar, Card, Button, Progress, Row, Typography } from 'antd';
+import { UsergroupAddOutlined, PlusCircleOutlined, MinusCircleOutlined, TrophyOutlined } from '@ant-design/icons';
+import { Avatar, Card, Button, Progress, Row, Typography, message, Popconfirm } from 'antd';
 
 const { Paragraph } = Typography;
 const { Meta } = Card;
 
 const Tournaments = ({remark, route, handleCancel, tournament, detailsPage, handleCheckout}) => {
-  const { _id, tournamentName, tournamentThumbnail, settings, leaderboards, gameType, version, purchased } = tournament;
+  const { _id, tournamentName, tournamentThumbnail, settings, leaderboards, category, version, purchased } = tournament;
   const { wishList } = useSelector((state) => state.tournaments);
   const isLoggedIn = useSelector(state => state.profile.signed_in);
   const purchasedItems = useSelector(state => state.profile?.data?.purchasedItems);
@@ -18,6 +18,10 @@ const Tournaments = ({remark, route, handleCancel, tournament, detailsPage, hand
 
   const dispatch = useDispatch();
   
+  const confirm = (e) => {
+    dispatch(addToWishList(tournament))
+    message.success('Saved');
+  };
   return (
     <div className='p-3' 
         style={{position: 'relative'}}
@@ -39,7 +43,18 @@ const Tournaments = ({remark, route, handleCancel, tournament, detailsPage, hand
             <Row justify="center" align="middle">
               <UsergroupAddOutlined  style={{ fontSize: '20px' }} /> <span className="ps-1" style={{ fontSize: '16px' }}>{leaderboards.length}</span>
             </Row>,
-            isWishListed ? <MinusCircleOutlined style={{ fontSize: '18px' }}  onClick={() => dispatch(removeFromWishList(tournament._id))} /> : <PlusCircleOutlined style={{ fontSize: '18px' }}  onClick={() => dispatch(addToWishList(tournament))}/>,
+            // isWishListed ? 
+            // <MinusCircleOutlined style={{ fontSize: '18px' }}  onClick={() => dispatch(removeFromWishList(tournament._id))} /> : 
+            // <PlusCircleOutlined style={{ fontSize: '18px' }}  onClick={() => dispatch(addToWishList(tournament))}/>,
+            isWishListed ? 
+            <MinusCircleOutlined style={{ fontSize: '18px' }} onClick={() => dispatch(removeFromWishList(tournament._id))} /> :
+            <Popconfirm
+                title="Save this for later?"
+                onConfirm={confirm}
+                okText="Yes"
+            >
+                <PlusCircleOutlined style={{ fontSize: '18px' }}/>
+            </Popconfirm>,
           ]}
         >
           <Meta
@@ -51,9 +66,9 @@ const Tournaments = ({remark, route, handleCancel, tournament, detailsPage, hand
                 //   <Avatar src="https://png.pngtree.com/png-vector/20190114/ourmid/pngtree-vector-video-game-icon-png-image_313030.jpg" />
                 // }
                 description={
-                    <Row justify="left" align="middle" className="mt-1">
-                      <TrophyOutlined  style={{ fontSize: '24px' }} /> <span className="ps-1">Prize ${settings?.joiningFee}.00</span>
-                    </Row>
+                  <Row justify="left" align="middle" className="mt-1">
+                    <TrophyOutlined  style={{ fontSize: '24px' }} /> <span className="ps-1">Prize ${settings?.joiningFee}.00</span>
+                  </Row>
                 }
               />
               <div>

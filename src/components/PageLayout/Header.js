@@ -11,6 +11,7 @@ import Notification from "../Common/Notification/Notification";
 import WalletPopUp from '../Common/WalletPopUp/WalletPopUp';
 import InboxThread from '../Common/InboxThread/InboxThread';
 import useProfile from '../../hooks/useProfile';
+import WishList from '../../pages/Common/WishList';
 
 const Header = ({socketN, isConnected, userId}) => {
   const dispatch = useDispatch();
@@ -43,6 +44,8 @@ const Header = ({socketN, isConnected, userId}) => {
               }
 
               <WalletPopUp userId={userId}/>
+
+              <WishList/>
 
               <Link className='h5 text-dark text-decoration-none mb-0 ms-5' to={`/profile/${loggedInUser.id}`}>
                 <strong className='text-white'>{loggedInUser.name}</strong>

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
+import moment from 'moment';
 import { Link, useParams } from 'react-router-dom';
 import PageLayout from '../../components/PageLayout/PageLayout';
 import Leaderboard from '../../components/Tournaments/Leaderboards/Leaderboards';
@@ -14,9 +15,10 @@ import CheckoutForm from '../../components/Tournaments/Checkout/CheckoutForm';
 import io from 'socket.io-client';
 import CheckoutLayout from '../../components/Common/Checkout/CheckoutLayout';
 
-import { Tabs, Row } from 'antd';
+import { Tabs, Row, Steps, Image, Popover, Button } from 'antd';
 import { StockOutlined, TrophyOutlined, MessageOutlined } from '@ant-design/icons';
 import TournamentSide from '../../components/Tournaments/TournamentSide';
+
 const { TabPane } = Tabs;
 
 let initialSocketId = null;
@@ -75,6 +77,7 @@ const TournamentDetails = () => {
     const leaderboardDetails = leaderboards[id];
     const versionLeaderboard = leaderboardDetails ? leaderboardDetails.version : 0;
 
+    const [step, setStep]  = useState(1);
     const [method, setMethod]  = useState('');
     const handlePaymentMethod = (e, m) => {
         e.preventDefault();
@@ -159,6 +162,41 @@ const TournamentDetails = () => {
       return () => clearInterval(interval);
     }, [socket]);
 
+    const [loadings, setLoadings] = useState([]);
+    const [popoverVisible, setPopoverVisible] = useState(false);
+    const [loadingCompleted, setLoadingCompleted] = useState(false);
+
+    const content = (
+        <div>
+          <p className='mb-0'>RoomID: 12213sdasd</p>
+          <p className='mb-0'>Password: fdasd#Q4</p>
+        </div>
+    );
+
+    const enterLoading = (index) => {
+        setLoadings((prevLoadings) => {
+          const newLoadings = [...prevLoadings];
+          newLoadings[index] = true;
+          return newLoadings;
+        });
+      
+        setTimeout(() => {
+          setLoadings((prevLoadings) => {
+            const newLoadings = [...prevLoadings];
+            newLoadings[index] = false;
+            return newLoadings;
+          });
+          setLoadingCompleted(true); // Set loading completion flag after 6 seconds
+        }, 3000);
+    };
+
+    //To reset the loading state and hide the popover when clicking outside
+    // const handleContainerClick = () => {
+    //     setPopoverVisible(false); // Hide the popover
+    //     setLoadings([]); // Reset the loading state
+    //     setLoadingCompleted(false); // Reset the loading completion flag
+    // };
+
     return (
         <PageLayout>
          
@@ -172,18 +210,48 @@ const TournamentDetails = () => {
                         <div className='row'>
                             <div className='col-md-12'>
                                 <div className='card d-flex mb-3 p-3' 
-                                    style={{position: 'relative'}}
+                                    style={{ backgroundImage: `url(null)`, backgroundPosition: 'center', backgroundRepeat: 'no-repeat', backgroundSize: 'cover' }}
                                 >
                                     <div className='row'>
-                                        <div className='col-md-3'>
-                                            <img className="img-fluid" src={tournamentDetails.tournamentThumbnail} alt='thumb' />
+                                        <div className='col-md-2'>
+                                            <Image
+                                                width={200}
+                                                src={tournamentDetails.tournamentThumbnail}
+                                            />
                                         </div>
-                                        <div className='col-md-9'>
-                                            <div className='card-body'>
-                                            <h5 className='card-title'>{tournamentDetails.tournamentName} | Registration Ends: {tournamentDetails.dates.registrationEnd}</h5>
-                                            <h6 className='mb-3'>Category: {tournamentDetails.gameType} | Mode: {tournamentDetails.settings.mode} | Version: {tournamentDetails.version} | Joined: {tournamentDetails.leaderboards.length}</h6>
+                                        <div className='col-md-10 pt-4'>
+                                                <Row justify="center" align="middle">
+                                                    <Steps
+                                                        current={step}
+                                                        size="small"
+                                                        // percent={60}
+                                                        items={[
+                                                        {
+                                                            title: step > 0 ? 'Registration Closed': 'Registration Open' ,
+                                                            description: moment(tournamentDetails.dates?.registrationStart).format('lll'),
+                                                            status: step > 0 ? 'finish': null,
+                                                        },
+                                                        {
+                                                            title: 'Lineups',
+                                                            description: <Popover content={content} title="Lobby Credentials" trigger="click" open={popoverVisible && loadingCompleted} onOpenChange={setPopoverVisible}>
+                                                                            <Button type="dashed" size="small" loading={loadings[0]} className='mt-1' onClick={() => enterLoading(0)}>Get Credentials</Button>
+                                                                        </Popover>,
+                                                            status: step > 1 ? 'finish': null,
+                                                        },
+                                                        {
+                                                            title: 'Started',
+                                                            description: moment(tournamentDetails.dates?.tournamentStart).format('lll'),
+                                                            status: step > 2 ? 'finish': null,
+                                                        },
+                                                        {
+                                                            title: 'Finished',
+                                                            description: moment(tournamentDetails.dates?.tournamentEnd).format('lll'),
+                                                            status: step > 3 ? 'finish': null,
+                                                        },
+                                                        ]}
+                                                    />
+                                                </Row>
                                         </div>
-                                    </div>
                                     </div>
                                 </div>
                             </div>
