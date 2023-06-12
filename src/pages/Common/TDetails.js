@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import moment from 'moment';
@@ -15,7 +15,7 @@ import CheckoutForm from '../../components/Tournaments/Checkout/CheckoutForm';
 import io from 'socket.io-client';
 import CheckoutLayout from '../../components/Common/Checkout/CheckoutLayout';
 
-import { Tabs, Row, Steps, Image, Popover, Button } from 'antd';
+import { Tabs, Row, Steps, Image, Popover, Button, Modal, Tour } from 'antd';
 import { StockOutlined, TrophyOutlined, MessageOutlined } from '@ant-design/icons';
 import TournamentSide from '../../components/Tournaments/TournamentSide';
 
@@ -197,6 +197,74 @@ const TournamentDetails = () => {
     //     setLoadingCompleted(false); // Reset the loading completion flag
     // };
 
+    /* this is to handler the modal of tour */
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    useEffect(() => {
+        const page1 = sessionStorage.getItem('tour');
+        if(!page1){
+            setIsModalOpen(true);
+        }
+    }, [])
+    const handleTakeTour = () => {
+        sessionStorage.setItem('tour', "page1")
+        setIsModalOpen(false);
+        setTourOpen(true)
+    };
+    /* */
+
+    /* this is to handler the site tour */
+    const ref1TSummery1 = useRef(null);
+    const ref1TSummery2 = useRef(null);
+    const ref1TSummery3 = useRef(null);
+    const ref2Leaderboard = useRef(null);
+    const ref2Prize = useRef(null);
+    const ref3Timeline = useRef(null);
+    const ref4Credentials = useRef(null);
+    const [tourOpen, setTourOpen] = useState(false);
+    
+    const steps = [
+        {
+          title: 'ref1TSummery1',
+          description: 'Put your files here.',
+          target: () => ref1TSummery1.current,
+        },
+        {
+          title: 'Time Left.',
+          description: 'ref1TSummery2',
+          target: () => ref1TSummery2.current,
+        },
+        {
+          title: 'Join Now.',
+          description: 'ref1TSummery3',
+          target: () => ref1TSummery3.current,
+        },
+        {
+          title: 'Leaderboard',
+          description: 'ref2Leaderboard',
+          target: () => ref2Leaderboard.current,
+        },
+        {
+          title: 'Prize',
+          description: 'ref2Prize',
+          target: () => ref2Prize.current,
+        },
+        {
+          title: 'Tournament Timeline.',
+          description: 'ref3Timeline',
+          target: () => ref3Timeline.current,
+        },
+        {
+          title: 'Get Credentials.',
+          description: 'ref4Credentials',
+          target: () => ref4Credentials.current,
+        },
+        {
+          title: 'Completed! Enjoy The Game',
+          description: 'ref4Credentials',
+        },
+    ];
+    /* */
+
     return (
         <PageLayout>
          
@@ -219,7 +287,7 @@ const TournamentDetails = () => {
                                                 src={tournamentDetails.tournamentThumbnail}
                                             />
                                         </div>
-                                        <div className='col-md-10 pt-4'>
+                                        <div className='col-md-10 pt-4' ref={ref3Timeline}>
                                                 <Row justify="center" align="middle">
                                                     <Steps
                                                         current={step}
@@ -234,7 +302,7 @@ const TournamentDetails = () => {
                                                         {
                                                             title: 'Lineups',
                                                             description: <Popover content={content} title="Lobby Credentials" trigger="click" open={popoverVisible && loadingCompleted} onOpenChange={setPopoverVisible}>
-                                                                            <Button type="dashed" size="small" loading={loadings[0]} className='mt-1' onClick={() => enterLoading(0)}>Get Credentials</Button>
+                                                                            <Button type="dashed" size="small" loading={loadings[0]} className='mt-1' onClick={() => enterLoading(0)} ref={ref4Credentials}>Get Credentials</Button>
                                                                         </Popover>,
                                                             status: step > 1 ? 'finish': null,
                                                         },
@@ -259,6 +327,9 @@ const TournamentDetails = () => {
                                 <div className='row'>
                                     <div className='col-md-3'>
                                         <TournamentSide 
+                                            ref1TSummery1={ref1TSummery1}
+                                            ref1TSummery2={ref1TSummery2}
+                                            ref1TSummery3={ref1TSummery3}
                                             isLoggedIn={isLoggedIn}
                                             routeKey={routeKey}
                                             tournament={tournamentDetails} 
@@ -272,7 +343,7 @@ const TournamentDetails = () => {
                                             <TabPane
                                                 key="leaderboards"
                                                 tab={
-                                                    <Row justify="left" align="middle">
+                                                    <Row justify="left" align="middle" ref={ref2Leaderboard}>
                                                         <StockOutlined /> <span>Leaderboards</span>
                                                     </Row>
                                                 }
@@ -282,7 +353,7 @@ const TournamentDetails = () => {
                                             <TabPane
                                                 key="prizes"
                                                 tab={
-                                                    <Row justify="left" align="middle">
+                                                    <Row justify="left" align="middle" ref={ref2Prize}>
                                                         <TrophyOutlined /> <span>Prizes</span>
                                                     </Row>
                                                 }
@@ -336,6 +407,12 @@ const TournamentDetails = () => {
                         </div>
                     : <Preloader />
                 }
+
+                <Modal title="Take a tour | page 1/4" open={isModalOpen} onOk={handleTakeTour} onCancel={() => setIsModalOpen(false)}>
+                    <p>New to our tournament page? Kindly take a tour to make things easy for you! See how it works.</p>
+                </Modal>
+
+                <Tour  open={tourOpen} onClose={() => setTourOpen(false)} steps={steps} zIndex={1001} type="primary"/>
         </PageLayout>
     );
 };

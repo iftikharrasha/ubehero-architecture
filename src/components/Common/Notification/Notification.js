@@ -286,7 +286,7 @@ const Notification = ({socketN, isConnected, userId}) => {
 
   return (
     <div className='me-3'>
-      <Popover placement="bottomLeft" title="Notifications" content={content} trigger="click" className='popup'>
+      <Popover placement="bottomLeft" title={`Notifications (${notyfReceived.filter(n => !n.read).length} unread)`} content={content} trigger="click" className='popup'>
         <Badge count={notyfReceived.filter(n => !n.read).length} size="small">
           <i className="fa-solid fa-bell text-white"></i>
         </Badge>
