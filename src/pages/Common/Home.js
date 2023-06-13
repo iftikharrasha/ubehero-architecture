@@ -33,7 +33,7 @@ const Home = () => {
     };
 
      // Pagination configuration
-    const pageSize = 1; // Number of tournaments to show per page
+    const pageSize = 4; // Number of tournaments to show per page
     const totalTournaments = tournaments ? tournaments.length : 0;
     const startIndex = (currentPage - 1) * pageSize;
     const endIndex = startIndex + pageSize;

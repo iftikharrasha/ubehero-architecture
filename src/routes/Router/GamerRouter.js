@@ -7,7 +7,6 @@ import Signup from '../../pages/Common/Signup';
 import TDetails from '../../pages/Common/TDetails';
 import Profile from '../../pages/Common/Profile';
 import Wallet from '../../pages/Common/Wallet';
-import WishList from '../../pages/Common/WishList';
 
 const GamerRouter = () => {
   return (
@@ -19,7 +18,6 @@ const GamerRouter = () => {
         <Route path="/tournament/details/:id/chatroom" render={() => <TDetails tabKey={'chatroom'}/>} />
         <Route path="/tournament/details/:id/prizes" render={() => <TDetails tabKey={'prizes'} />}/>
         <Route path="/tournament/details/:id/checkout" render={() => <TDetails tabKey={'checkout'}/>} />
-        <Route path="/tournaments/wishList" component={WishList} />
         <PrivateRoute path="/profile/:id">
             <Profile/>
         </PrivateRoute>

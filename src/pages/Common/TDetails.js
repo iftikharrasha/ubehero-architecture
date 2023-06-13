@@ -18,12 +18,14 @@ import CheckoutLayout from '../../components/Common/Checkout/CheckoutLayout';
 import { Tabs, Row, Steps, Image, Popover, Button, Modal, Tour } from 'antd';
 import { StockOutlined, TrophyOutlined, MessageOutlined } from '@ant-design/icons';
 import TournamentSide from '../../components/Tournaments/TournamentSide';
+import useTour from '../../hooks/useTour';
 
 const { TabPane } = Tabs;
 
 let initialSocketId = null;
 
 const TournamentDetails = () => { 
+    const { checkInTourStorage, addTourToStorage } = useTour();
     const isLoggedIn = useSelector(state => state.profile.signed_in);
     const purchasedItems = useSelector(state => state.profile?.data?.purchasedItems);
     const [routeKey, setRouteKey] = useState('leaderboards');
@@ -200,13 +202,14 @@ const TournamentDetails = () => {
     /* this is to handler the modal of tour */
     const [isModalOpen, setIsModalOpen] = useState(false);
     useEffect(() => {
-        const page1 = sessionStorage.getItem('tour');
-        if(!page1){
+        const alreadyToured = checkInTourStorage('tournamentTour')
+        if(!alreadyToured){
             setIsModalOpen(true);
         }
     }, [])
+    
     const handleTakeTour = () => {
-        sessionStorage.setItem('tour', "page1")
+        addTourToStorage('tournamentTour')
         setIsModalOpen(false);
         setTourOpen(true)
     };
@@ -224,8 +227,8 @@ const TournamentDetails = () => {
     
     const steps = [
         {
-          title: 'ref1TSummery1',
-          description: 'Put your files here.',
+          title: 'Summery card',
+          description: 'ref1TSummery1.',
           target: () => ref1TSummery1.current,
         },
         {
@@ -260,7 +263,7 @@ const TournamentDetails = () => {
         },
         {
           title: 'Completed! Enjoy The Game',
-          description: 'ref4Credentials',
+          description: 'DONE',
         },
     ];
     /* */
@@ -408,7 +411,7 @@ const TournamentDetails = () => {
                     : <Preloader />
                 }
 
-                <Modal title="Take a tour | page 1/4" open={isModalOpen} onOk={handleTakeTour} onCancel={() => setIsModalOpen(false)}>
+                <Modal title="Take a tour | Tournament Page" open={isModalOpen} onOk={handleTakeTour} onCancel={() => setIsModalOpen(false)}>
                     <p>New to our tournament page? Kindly take a tour to make things easy for you! See how it works.</p>
                 </Modal>
 

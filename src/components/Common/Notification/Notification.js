@@ -179,7 +179,7 @@ const Notification = ({socketN, isConnected, userId}) => {
   const [data, setData] = useState([]);
   const [isLoadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
-  const itemLimit = 3; // Number of items to display initially
+  const itemLimit = 6; // Number of items to display initially
   const containerRef = useRef(null);
 
   useEffect(() => {
