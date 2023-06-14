@@ -9,7 +9,6 @@ import TextPanel from './TextPanel';
 
 const InboxPopUp = () => {
     const { showInbox, setShowInbox, popUser, setPopUser } = useContext(InboxContext);
-    console.log("popUser", popUser)
     const [uniqueRoomId, setUniqueRoomId] = useState(null);
     const [messagesRecieved, setMessagesReceived] = useState([]);
 
