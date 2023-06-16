@@ -416,6 +416,11 @@ a:hover{
   cursor: pointer;
 }
 
+.popup i{
+  font-size: 1.125rem;
+  color: rgb(196, 196, 196) !important;
+}
+
 .scrollable{
   height: 400px;
   overflow: auto;
@@ -637,11 +642,11 @@ a:hover{
     0 6px 16px -11px rgba(0, 0, 0, 0.08);
   position: sticky;
   top: 0;
+  padding: 0;
 }
 
 .nav-header {
   border-bottom: 0;
-  padding: 0 4px 0 24px;
 }
 
 .logo {
@@ -665,6 +670,10 @@ a:hover{
 
 .navbar-menu .ant-menu-horizontal {
   border-bottom: 0;
+}
+
+.navbar .ant-menu{
+  background: rgba(0, 0, 0, 0);
 }
 
 .navbar-menu .ant-menu-item {

@@ -47,7 +47,7 @@ const Home = () => {
                 {visibleTournaments.length > 0 ? (
                     visibleTournaments.map((tournament, index) => (
                         <div className="col-lg-3 col-sm-6" key={index}>
-                        <Tournaments routeKey={tournament._id} tournament={tournament} details={false} />
+                            <Tournaments routeKey={tournament._id} tournament={tournament} details={false} />
                         </div>
                     ))
                     ) : (

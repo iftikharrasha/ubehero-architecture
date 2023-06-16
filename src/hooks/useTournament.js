@@ -50,7 +50,7 @@ const useTournament = () => {
                     receivedByName: profile.data.userName,
                     receivedById: profile.data._id,  //this user will receive notification
                     route: `tournament/details/${data._id}`
-                  }
+                }
 
                 // Send message to server
                 socketN.emit("send_notification", notificationData);

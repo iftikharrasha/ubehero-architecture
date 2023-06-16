@@ -64,7 +64,7 @@ const InboxPopUp = () => {
                             <i className="fas fa-close" onClick={handleInboxPop}></i>
                         </div>
                     </div>
-                    {/* <span class="position-absolute top-0 start-50 translate-middle badge rounded-pill badge-danger">
+                    {/* <span className="position-absolute top-0 start-50 translate-middle badge rounded-pill badge-danger">
                         9+
                     </span> */}
                     </a>

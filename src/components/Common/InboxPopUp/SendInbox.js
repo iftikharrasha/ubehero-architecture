@@ -22,6 +22,7 @@ const SendInbox = ({socketInbox, isInboxConnected, roomId, receiverId, user}) =>
           read: false,
           messageCount: 0
         }
+        console.log("send_message", data);
 
         //Send message to server
         socketInbox.emit("send_message", data);

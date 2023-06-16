@@ -3,8 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { addToWishList, removeFromWishList } from "../../redux/slices/tournamentSlice";
 
-import { UsergroupAddOutlined, PlusCircleOutlined, MinusCircleOutlined, TrophyOutlined } from '@ant-design/icons';
 import { Avatar, Card, Button, Progress, Row, Typography, message, Popconfirm } from 'antd';
+import { UsergroupAddOutlined, PlusCircleOutlined, MinusCircleOutlined, TrophyOutlined } from '@ant-design/icons';
+import useTimer from "../../hooks/useTimer";
 
 const { Paragraph } = Typography;
 const { Meta } = Card;
@@ -16,12 +17,15 @@ const Tournaments = ({remark, route, handleCancel, tournament, detailsPage, hand
   const purchasedItems = useSelector(state => state.profile?.data?.purchasedItems);
   const isWishListed = wishList.find((t) => t._id === tournament._id);
 
+  const { buttonStatus, timeLeftPercent } = useTimer(tournament.dates);
+
   const dispatch = useDispatch();
   
   const confirm = (e) => {
     dispatch(addToWishList(tournament))
     message.success('Saved');
   };
+
   return (
     <div className='p-3' 
         style={{position: 'relative'}}
@@ -33,7 +37,10 @@ const Tournaments = ({remark, route, handleCancel, tournament, detailsPage, hand
           cover={
             <img
               alt="example"
-              src={tournamentThumbnail}
+              src={tournamentThumbnail} 
+              style={{
+                minHeight: '180px',
+              }}
             />
           }
           actions={[
@@ -43,9 +50,6 @@ const Tournaments = ({remark, route, handleCancel, tournament, detailsPage, hand
             <Row justify="center" align="middle">
               <UsergroupAddOutlined  style={{ fontSize: '20px' }} /> <span className="ps-1" style={{ fontSize: '16px' }}>{leaderboards.length}</span>
             </Row>,
-            // isWishListed ? 
-            // <MinusCircleOutlined style={{ fontSize: '18px' }}  onClick={() => dispatch(removeFromWishList(tournament._id))} /> : 
-            // <PlusCircleOutlined style={{ fontSize: '18px' }}  onClick={() => dispatch(addToWishList(tournament))}/>,
             isWishListed ? 
             <MinusCircleOutlined style={{ fontSize: '18px' }} onClick={() => dispatch(removeFromWishList(tournament._id))} /> :
             <Popconfirm
@@ -73,7 +77,7 @@ const Tournaments = ({remark, route, handleCancel, tournament, detailsPage, hand
               />
               <div>
                 <Paragraph className="mb-0">Time Left</Paragraph>
-                <Progress percent={30} steps={3} /> 
+                <Progress percent={timeLeftPercent} steps={15} size="small" showInfo={false}/> 
               </div>
           </Row>
           
@@ -81,7 +85,7 @@ const Tournaments = ({remark, route, handleCancel, tournament, detailsPage, hand
             remark ? null :
             !isLoggedIn ? <Link to={`/tournament/details/${_id}`}>
                               <Button type="primary" size="small" className="mt-3">
-                                  JOIN NOW
+                                {buttonStatus}
                               </Button>
                           </Link> :
               purchasedItems.tournaments?.includes(_id) ? 
@@ -95,10 +99,10 @@ const Tournaments = ({remark, route, handleCancel, tournament, detailsPage, hand
                                                   CANCEL
                                               </Button>
                       : <Button type="primary" size="small" className="mt-3" onClick={handleCheckout}>
-                            BUY NOW
+                            {buttonStatus}
                         </Button> : <Link to={`/tournament/details/${_id}`}>
                                       <Button type="primary" size="small" className="mt-3">
-                                          JOIN NOW
+                                      {buttonStatus}
                                       </Button>
                                     </Link>
           }

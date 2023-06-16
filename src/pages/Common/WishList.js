@@ -1,13 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from 'react-router-dom';
-// import PageLayout from '../../components/PageLayout/PageLayout';
-// import Tournaments from '../../components/Tournaments/Tournaments';
+import { removeFromWishList } from '../../redux/slices/tournamentSlice';
+import moment from 'moment';
 
 import { Badge, List, Popover, Skeleton, Button } from 'antd';
 import { BookOutlined, MinusCircleOutlined } from '@ant-design/icons';
-import { removeFromWishList } from '../../redux/slices/tournamentSlice';
-import moment from 'moment';
 
 const WishList = () => {
     const wish = useSelector((state) => state.tournaments.wishList);
@@ -105,30 +103,15 @@ const WishList = () => {
           )}
         </div>
     );
+
     return (
-        <div className='me-3 ms-2'>
+        <div className='me-3'>
           <Popover placement="bottomLeft" title="Saved Tournaments" content={content} trigger="click" className='popup'>
-            <Badge count={wish.length} size="small">
+            <Badge count={wish.length} size="small" color="red" style={{ color: 'white' }}>
               <i className="fa-solid fa-bookmark text-white"></i>
             </Badge>
           </Popover>
         </div>
-        // <PageLayout>
-        //     {
-        //         wish.length === 0 && (
-        //             <p>Looks like you do not have any item selected! Check them out in the home page to <Link to="/">discover more</Link>.</p>
-        //         )
-        //     }
-
-        //     <div className="row">
-        //     {
-        //         wish.map((tournament, index) => (
-        //             <div className="col-lg-4 col-sm-6" key={index}>
-        //                 <Tournaments routeKey={tournament._id} tournament={tournament} />
-        //             </div>
-        //     ))}
-        //     </div>
-        // </PageLayout>
     );
 };
 

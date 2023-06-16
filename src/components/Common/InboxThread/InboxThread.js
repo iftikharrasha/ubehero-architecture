@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import { useContext } from 'react';
@@ -6,6 +6,10 @@ import InboxContext from '../../../Contexts/InboxContext/InboxContext';
 import msg from '../../../sounds/msg.mp3';
 import bot from '../../../sounds/bot.mp3';
 import { useSelector } from 'react-redux';
+import { Avatar, Badge, Button, List, Popover, Row, Skeleton, Tabs } from 'antd';
+import { UsergroupAddOutlined, MessageOutlined } from '@ant-design/icons';
+
+const { TabPane } = Tabs;
 
 const InboxThread = ({socketN}) => {
     const [inboxReceived, setInboxReceived] = useState([]);
@@ -33,7 +37,7 @@ const InboxThread = ({socketN}) => {
 
       //this is to have popup user
       const user =  {
-        id: item.senderId,
+        key: item.senderId,
         userName: item.senderName,
         photo: item.senderPhoto,
         message: item.message,
@@ -47,6 +51,7 @@ const InboxThread = ({socketN}) => {
     useEffect(() => {
       if(socketN){
           socketN.on('track_incoming', (data) => {
+            console.log('track_incoming', data);
               setInboxReceived(state => {
                 const existingMessage = findExistingMessage(state, data.senderId, data.roomId);
                 if (existingMessage) {
@@ -123,138 +128,227 @@ const InboxThread = ({socketN}) => {
       return total + item.messageCount;
     }, 0);
 
-  return (
-    <div className="dropdown">
-        <Link to="/" className="mx-2 dropdown-toggle hidden-arrow text-white" id="navbarDropdownMenuLink"
-        role="button" data-mdb-toggle="dropdown" aria-expanded="false">
-            <i className="fa-solid fa-message"></i>
-            <span className="badge rounded-pill badge-notification bg-danger">{totalMessageCount}</span>
-        </Link>
-        <ul className="dropdown-menu p-0" aria-labelledby="navbarDropdownMenuLink">
+    const [activeKey, setActiveKey] = useState('inbox');
+    const handleTabChange = (key) => {
+      setActiveKey(key)
+    };
 
-            <div className="container">
-                <div className="row">
+  //loader to load inbox datas
+  const [initLoading1, setInitLoading1] = useState(true);
+  const [inboxData, setInboxData] = useState([]);
+  const [isLoadingMore1, setLoadingMore1] = useState(false);
+  const [hasMore1, setHasMore1] = useState(true);
+  const itemLimit1 = 6; // Number of items to display initially
+  const containerRef1 = useRef(null);
 
-                  <ul className="nav nav-tabs mb-2 inboxTop" id="ex1" role="tablist">
-                    <li className="nav-item" role="presentation">
-                      <a
-                        className="nav-link active"
-                        id="ex1-tab-1"
-                        data-mdb-toggle="tab"
-                        href="#ex1-tabs-1"
-                        role="tab"
-                        aria-controls="ex1-tabs-1"
-                        aria-selected="true"
-                        onClick={(e) => {e.stopPropagation();}}
-                        >My Inbox</a>
-                    </li>
-                    <li className="nav-item" role="presentation">
-                      <a
-                        className="nav-link"
-                        id="ex1-tab-2"
-                        data-mdb-toggle="tab"
-                        href="#ex1-tabs-2"
-                        role="tab"
-                        aria-controls="ex1-tabs-2"
-                        aria-selected="false"
-                        onClick={(e) => {e.stopPropagation();}}
-                        >Rooms</a>
-                    </li>
-                  </ul>
-                  <div className="tab-content mb-2" id="ex1-content">
-                    <div
-                      className="tab-pane fade show active"
-                      id="ex1-tabs-1"
-                      role="tabpanel"
-                      aria-labelledby="ex1-tab-1"
-                    >
-                      <div className="card p-0">
-                          <div className="card-body p-0">
+  //loader to load inbox datas
+  const [initLoading2, setInitLoading2] = useState(true);
+  const [chatRoom, setChatRoom] = useState([]);
+  const [isLoadingMore2, setLoadingMore2] = useState(false);
+  const [hasMore2, setHasMore2] = useState(true);
+  const itemLimit2 = 6; // Number of items to display initially
+  const containerRef2 = useRef(null);
 
-                            <ul className="list-unstyled mb-0">
-                                {
-                                  inboxReceived.length > 0 ?
-                                    inboxReceived.slice().reverse().map((item, index) => (
-                                    <li className={`p-2 px-3 border-bottom ${item.read === false ? "notyf-item unread" : "notyf-item"}`} key={index} onClick={(e) => handleInboxPop(item)}>
-                                        <div className="d-flex justify-content-between">
-                                            <div className="d-flex flex-row">
-                                                <span className='avatar'>
-                                                    <img src={item.senderPhoto} alt="avatar" className="rounded-circle d-flex align-self-center me-3" width="45"/>
-                                                </span>
-                                                <div className="pt-1">
-                                                    <h6 className="mb-0">{item.senderName}</h6>
-                                                    <p className="small text-muted">{item.message}</p>
-                                                </div>
-                                            </div>
-                                            <div className="pt-1">
-                                                <p className="small text-muted mb-1">{moment(item.createdAt).fromNow()}</p>
-                                                {
-                                                    item.messageCount !== 0 ? 
-                                                    <span className="badge bg-danger float-end">{item.messageCount}</span> : null
-                                                }
-                                            </div>
-                                        </div>
-                                    </li>
-                                )) : 
-                                <li className='notyf-item'>
-                                    <Link className="dropdown-item" to="/">No new messages</Link>
-                                </li>
-                            }
-                            </ul>
+  useEffect(() => {
+    // Simulating initial inboxData loading
+    setTimeout(() => {
+      setInitLoading1(false);
+      setInboxData(inboxReceived.slice(0, itemLimit1)); // Slice the inboxData to display limited items
+      setHasMore1(itemLimit1 < inboxReceived.length); // Check if there are more items to load
+    }, 1000);
+  }, [inboxReceived, itemLimit1]);
 
-                          </div>
-                      </div>
-                    </div>
+  useEffect(() => {
+    // Simulating initial inboxData loading
+    setTimeout(() => {
+      setInitLoading2(false);
+      setChatRoom(roomsReceived.slice(0, itemLimit2)); // Slice the inboxData to display limited items
+      setHasMore2(itemLimit2 < roomsReceived.length); // Check if there are more items to load
+    }, 1000);
+  }, [roomsReceived, itemLimit1]);
 
-                    <div className="tab-pane fade" id="ex1-tabs-2" role="tabpanel" aria-labelledby="ex1-tab-2">
-                      <div className="card p-0">
-                          <div className="card-body p-0">
+  const loadMore1 = () => {
+    setHasMore1(false)
+    setLoadingMore1(true);
+  
+    // Simulating loading more inboxData with a delay
+    setTimeout(() => {
+      const currentDataLength = inboxData.length;
+      const newData = [
+        ...inboxData,
+        ...Array(itemLimit1).fill({ loading: true }) // Add skeleton items with loading state
+      ];
+  
+      setInboxData(newData);
+  
+      // Simulating inboxData loading with a delay
+      setTimeout(() => {
+        const updatedData = [
+          ...inboxData.slice(0, currentDataLength),
+          ...inboxReceived.slice(currentDataLength, currentDataLength + itemLimit1)
+        ];
+  
+        setInboxData(updatedData);
+        setLoadingMore1(false);
+        setHasMore1(currentDataLength + itemLimit1 < inboxReceived.length); // Check if there are more items to load
+      }, 2000);
+    }, 0);
+  };
 
-                              <ul className="list-unstyled mb-0 inboxBelow">
+  const loadMore2 = () => {
+    setHasMore2(false)
+    setLoadingMore2(true);
+  
+    // Simulating loading more inboxData with a delay
+    setTimeout(() => {
+      const currentDataLength = roomsReceived.length;
+      const newData = [
+        ...roomsReceived,
+        ...Array(itemLimit1).fill({ loading: true }) // Add skeleton items with loading state
+      ];
+  
+      setChatRoom(newData);
+  
+      // Simulating inboxData loading with a delay
+      setTimeout(() => {
+        const updatedData = [
+          ...roomsReceived.slice(0, currentDataLength),
+          ...roomsReceived.slice(currentDataLength, currentDataLength + itemLimit2)
+        ];
+  
+        setChatRoom(updatedData);
+        setLoadingMore2(false);
+        setHasMore2(currentDataLength + itemLimit2 < roomsReceived.length); // Check if there are more items to load
+      }, 2000);
+    }, 0);
+  };
 
-                                {
-                                  roomsReceived.length === 0 ? 
-                                    <li className='notyf-item'>
-                                        <div className="dropdown-item">No rooms found!</div>
-                                    </li> :
-                                    roomsReceived.map((tournament, index) => (
-                                      <li className="p-2 px-3 border-bottom" key={index}>
-                                        <a href={`/tournament/details/${tournament._id}/chatroom`}>
-                                            <div className="d-flex justify-content-between">
-                                                <div className="d-flex flex-row">
-                                                    <span className='avatar'>
-                                                        <img src={tournament.tournamentThumbnail} alt="avatar" className="rounded d-flex align-self-center me-3" width="45"/>
-                                                    </span>
-                                                    <div className="pt-1">
-                                                        <h6 className="mb-0">{tournament.tournamentName}</h6>
-                                                        <p className="small text-muted">{moment(tournament.dates?.registrationStart).fromNow()}</p>
-                                                    </div>
-                                                </div>
-                                                <div className="pt-1">
-                                                    <p className="small text-muted mb-1">Fee: ${tournament.settings?.joiningFee}</p>
-                                                    {tournament.filter?.includes("latest") ? 
-                                                      <span className="badge bg-success float-end">latest</span> : 
-                                                      <span className="badge bg-danger float-end">archived</span>
-                                                      }
-                                                    
-                                                </div>
-                                            </div>
-                                        </a>
-                                      </li>
-                                  ))
-                                }
-                              </ul>
+  const scrollToBottom = () => {
+    if (containerRef2.current) {
+      const { scrollHeight } = containerRef2.current;
+      containerRef2.current.scrollTo({
+        top: scrollHeight,
+        behavior: 'smooth',
+      });
+    }
+  };
 
-                          </div>
-                      </div>
-                    </div>
+  useEffect(() => {
+    scrollToBottom();
+  }, [inboxData]);
+
+    const content = (
+        <div className="notyf-item scrollable">
+          <Tabs activeKey={activeKey} onChange={handleTabChange}>
+              <TabPane
+                  key="inbox"
+                  tab={
+                      <Row justify="left" align="middle">
+                          <MessageOutlined /> <span>My inbox</span>
+                      </Row>
+                  }
+              >
+                  <div className="notyf-item" ref={containerRef1}>
+                    <List
+                      className="demo-loadMore1-list"
+                      itemLayout="horizontal"
+                      size='larger'
+                      loading={initLoading1}
+                      loadMore1={loadMore1}
+                      dataSource={inboxData}
+                      renderItem={(item) => (
+                        <List.Item
+                          onClick={(e) => handleInboxPop(item)}
+                          actions={
+                            isLoadingMore1 ? null :
+                              [
+                                <p>{moment(item.createdAt).fromNow()}</p>
+                              ] 
+                          }
+                        >
+                          <Skeleton avatar title={false} loading={item.loading} active>
+                            <List.Item.Meta
+                              avatar={
+                                  <Badge count={item.messageCount}>
+                                    <Avatar src={item.senderPhoto}/>
+                                  </Badge>
+                              }
+                              title={item.senderName}
+                              description={item.message}
+                            />
+                          </Skeleton>
+                        </List.Item>
+                      )}
+                    />
+                    {hasMore1 && (
+                      <Button onClick={loadMore1} block className='loadMore1' danger>
+                        Load More
+                      </Button>
+                    )}
                   </div>
 
+              </TabPane>
+
+              <TabPane
+                  key="prizes"
+                  tab={
+                      <Row justify="left" align="middle">
+                          <UsergroupAddOutlined /> <span>Chat Rooms</span>
+                      </Row>
+                  }
+              >
+                <div className="notyf-item" ref={containerRef2}>
+                  <List
+                    className="demo-loadMore1-list"
+                    itemLayout="horizontal"
+                    size='larger'
+                    loading={initLoading1}
+                    loadMore1={loadMore1}
+                    dataSource={roomsReceived}
+                    renderItem={(item) => (
+                      <List.Item
+                        actions={
+                          isLoadingMore1 ? null :
+                            [
+                              <Button block size='small'>
+                                <Link to={`/tournament/details/${item._id}/chatroom`}>Enter Room</Link>
+                              </Button>
+                            ] 
+                        }
+                      >
+                        <Skeleton avatar title={false} loading={item.loading} active>
+                          <List.Item.Meta
+                            avatar={
+                                <Badge>
+                                  <Avatar src={item.tournamentThumbnail}/>
+                                </Badge>
+                            }
+                            title={item.tournamentName}
+                            description={moment(item.dates?.registrationStart).fromNow()}
+                          />
+                        </Skeleton>
+                      </List.Item>
+                    )}
+                  />
+                  {hasMore1 && (
+                    <Button onClick={loadMore1} block className='loadMore1' danger>
+                      Load More
+                    </Button>
+                  )}
                 </div>
-            </div>
-            
-        </ul>
-        <audio id="newMessageSound3" src={sound} type="audio/mpeg"></audio>
+              </TabPane>
+          </Tabs>
+        </div>
+    );
+
+  return (
+    <div className='me-4'>
+      <Popover placement="bottomLeft" title="Saved Tournaments" content={content} trigger="click" className='popup'>
+          <Badge count={totalMessageCount} size="small" color="red" style={{ color: 'white' }}>
+            <i className="fa-solid fa-message text-white"></i>
+          </Badge>
+      </Popover>
+      <audio id="newMessageSound3" src={sound} type="audio/mpeg"></audio>
     </div>
   );
 };

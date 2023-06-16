@@ -149,19 +149,20 @@ const Leaderboards = ({leaderboards}) => {
   };
 
   return (
-    <div className='card mb-3 p-3'>
+    <div className='mb-3'>
       <Table 
+        responsive
+        bordered 
         columns={columns} 
         dataSource={data} 
         onChange={onChange}
+        scroll={{ x: true }}
+        style={{ boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)' }}
         pagination={{
           pageSize: 1,
           hideOnSinglePage: true,
         }}
-        scroll={{ x: true }}
-        responsive
       />
-      
     </div>
   );
 };
