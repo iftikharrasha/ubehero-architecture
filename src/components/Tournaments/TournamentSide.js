@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Card, Button, Progress, Typography } from 'antd';
+import { Card, Button, Progress, Typography, Tag } from 'antd';
 const { Paragraph } = Typography;
 
 const TournamentSide = ({ref1TSummery1, ref1TSummery2, ref1TSummery3, isLoggedIn, routeKey, tournament, purchasedItems, handleCancel, handleCheckout, step, buttonStatus, timeLeftPercent}) => {
@@ -57,13 +57,13 @@ const TournamentSide = ({ref1TSummery1, ref1TSummery2, ref1TSummery3, isLoggedIn
                             </Button>  
                         </Link> :
                         purchasedItems.tournaments?.includes(_id) ? 
-                            <Button type="primary" size="small" className="mt-3" ref={ref1TSummery3}>
-                                PURCHASED
-                            </Button> :
+                            <Tag color="success" ref={ref1TSummery3} className="mt-3">PURCHASED</Tag> :
                                 routeKey === 'checkout' ? 
                                 <Button type="primary" size="small" className="mt-3" onClick={handleCancel} ref={ref1TSummery3}>
                                     CANCEL
                                 </Button> : 
+                                    buttonStatus !== 'Join Now' ? 
+                                    <Tag color="volcano" ref={ref1TSummery3} className="mt-3">{buttonStatus}</Tag> :
                                     <Button type="primary" size="small" className="mt-3" onClick={handleCheckout} ref={ref1TSummery3}>
                                         {buttonStatus}
                                     </Button>

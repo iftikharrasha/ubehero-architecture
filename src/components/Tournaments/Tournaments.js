@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { addToWishList, removeFromWishList } from "../../redux/slices/tournamentSlice";
 
-import { Avatar, Card, Button, Progress, Row, Typography, message, Popconfirm } from 'antd';
+import { Avatar, Card, Button, Progress, Row, Typography, message, Popconfirm, Tag } from 'antd';
 import { UsergroupAddOutlined, PlusCircleOutlined, MinusCircleOutlined, TrophyOutlined } from '@ant-design/icons';
 import useTimer from "../../hooks/useTimer";
 
@@ -90,9 +90,9 @@ const Tournaments = ({remark, route, handleCancel, tournament, detailsPage, hand
                           </Link> :
               purchasedItems.tournaments?.includes(_id) ? 
                 <Link to={`/tournament/details/${_id}`}>
-                    <Button type="primary" danger size="small" className="mt-3">
+                    <Tag color="success" size="small" className="mt-3">
                         PURCHASED
-                    </Button>
+                    </Tag>
                 </Link> :
                 detailsPage ? 
                       route === 'checkout' ?  <Button type="primary" size="small" className="mt-3" onClick={handleCancel}>

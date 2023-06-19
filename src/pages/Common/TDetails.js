@@ -20,6 +20,7 @@ import { StockOutlined, TrophyOutlined, MessageOutlined } from '@ant-design/icon
 import TournamentSide from '../../components/Tournaments/TournamentSide';
 import useTour from '../../hooks/useTour';
 import useTimer from '../../hooks/useTimer';
+import UserPopup from '../../components/Common/UserPopup/UserPopup';
 
 const { Meta } = Card;
 const { TabPane } = Tabs;
@@ -270,6 +271,7 @@ const TournamentDetails = () => {
     /* */
 
     const { step, buttonStatus, timeLeftPercent } = useTimer(tournamentDetails.dates);
+    console.log(tournamentDetails.masterProfile)
 
     return (
         <PageLayout>
@@ -283,10 +285,24 @@ const TournamentDetails = () => {
                         />  : 
                         <>
                         <div className='mb-3'>
-                            <Card hoverable
+                            <Card 
                                 actions={[
                                     <Row justify="center" align="middle">
-                                        <span className="ps-1" style={{ fontSize: '16px' }}>Maintained By: {tournamentDetails.masterProfile.userName}</span>
+                                        <span className="ps-1" style={{ fontSize: '16px' }}>Hosted by: 
+                                            <Popover placement="topLeft" content={<UserPopup popupUser={tournamentDetails.masterProfile}/>}>
+                                                <div className="d-flex align-items-center">
+                                                    <img
+                                                        src={tournamentDetails.masterProfile.photo}
+                                                        alt="user-pic"
+                                                        style={{ width: '30px', height: '30px' }}
+                                                        className="rounded-circle"
+                                                    />
+                                                    <div className="ms-2">
+                                                    <p className="fw-bold mb-1">{tournamentDetails.masterProfile.userName}</p>
+                                                    </div>
+                                                </div>
+                                            </Popover>
+                                        </span>
                                     </Row>,
                                     <Row justify="center" align="middle">
                                         <span className="ps-1" style={{ fontSize: '16px' }}>Platforms</span>

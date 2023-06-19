@@ -4,11 +4,11 @@ import { UserOutlined, SettingOutlined, LogoutOutlined } from "@ant-design/icons
 import { useHistory } from "react-router-dom";
 import useAuth from "../../../hooks/useAuth";
 import { Link } from "react-router-dom";
-import WishList from "../../../pages/Common/WishList";
 import WalletPopUp from "../WalletPopUp/WalletPopUp";
 import Notification from "../Notification/Notification";
 import InboxThread from "../InboxThread/InboxThread";
 import useProfile from "../../../hooks/useProfile";
+import WishList from "../../Profile/WishList";
 
 const RightMenu = ({ socketN, isConnected, userId, mode }) => {
     const history = useHistory();

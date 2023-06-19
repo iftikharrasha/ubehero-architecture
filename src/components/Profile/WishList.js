@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from 'react-router-dom';
-import { removeFromWishList } from '../../redux/slices/tournamentSlice';
 import moment from 'moment';
 
 import { Badge, List, Popover, Skeleton, Button } from 'antd';
 import { BookOutlined, MinusCircleOutlined } from '@ant-design/icons';
+import { removeFromWishList } from '../../redux/slices/tournamentSlice';
 
 const WishList = () => {
     const wish = useSelector((state) => state.tournaments.wishList);

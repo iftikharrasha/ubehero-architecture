@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { Table, Input, Space, Button, Popover } from 'antd';
+import { Table, Input, Space, Button, Popover, Tag } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import UserPopup from "../../Common/UserPopup/UserPopup";
 
@@ -78,7 +78,7 @@ const Leaderboards = ({leaderboards}) => {
         },
         {
           text: 'rockie',
-          value: 'aockie',
+          value: 'rockie',
         },
       ],
       onFilter: (value, record) => record.levelTitle === value,
@@ -123,7 +123,7 @@ const Leaderboards = ({leaderboards}) => {
       dataIndex: 'status',
       key: 'status',
       render: (text, record) => (
-        <span className="badge badge-success rounded-pill d-inline">Verified</span>
+        <Tag color="success">Verified</Tag>
       ),
     },
   ];

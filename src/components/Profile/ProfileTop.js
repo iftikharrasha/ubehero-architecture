@@ -10,7 +10,7 @@ const ProfileTop = ({ref3ProfilePic, ref4CoverPhoto, profile}) => {
     <div className='d-flex mb-3' 
       style={{position: 'relative'}}
     >
-      <Card ref={ref4CoverPhoto} bordered style={{ width: "100%", boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)', backgroundImage: `url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYDF5ACFSXXvJZ1jjzEcsrjd_kD6-TYHn9Mw&usqp=CAU')`, backgroundPosition: 'center', backgroundRepeat: 'no-repeat', backgroundSize: 'cover' }}>
+      <Card ref={ref4CoverPhoto} bordered style={{ width: "100%", boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)', backgroundImage: `url('')`, backgroundPosition: 'center', backgroundRepeat: 'no-repeat', backgroundSize: 'cover' }}>
         <Row justify="space-between" align="end">
           <Row justify="left" align="middle" ref={ref3ProfilePic}>
             <Image
@@ -24,7 +24,7 @@ const ProfileTop = ({ref3ProfilePic, ref4CoverPhoto, profile}) => {
             </div>
           </Row>
           <Row justify="space-between" align="start" style={{ flexDirection: 'column' }} className="my-3" >
-            <CameraOutlined style={{ fontSize: '24px', color: 'white' }} />
+            <CameraOutlined style={{ fontSize: '24px'}} />
             <Button type="default" size="small">
               FOLLOWERS 30
             </Button>

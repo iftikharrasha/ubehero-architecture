@@ -11,7 +11,7 @@ import Notification from "../Common/Notification/Notification";
 import WalletPopUp from '../Common/WalletPopUp/WalletPopUp';
 import InboxThread from '../Common/InboxThread/InboxThread';
 import useProfile from '../../hooks/useProfile';
-import WishList from '../../pages/Common/WishList';
+import WishList from '../Profile/WishList';
 
 const Header = ({socketN, isConnected, userId}) => {
   const dispatch = useDispatch();

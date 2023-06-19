@@ -1,19 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import Tab from 'react-bootstrap/Tab';
-import Tabs from 'react-bootstrap/Tabs';
 import PageLayout from '../../components/PageLayout/PageLayout';
 import { useSelector } from 'react-redux';
-import { fetchProfileDetails } from '../../redux/slices/profileSlice'
 import { useDispatch } from 'react-redux';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 import Preloader from '../../components/PageLayout/Preloader';
-import WalletDetails from '../../components/Wallet/WalletDetails';
 import Transactions from '../../components/Wallet/Transactions/Transactions';
 import { fetchGiftCards } from '../../redux/slices/giftCardSlice';
 import PurchaseLayout from '../../components/Common/Purchase/PurchaseLayout';
 import CheckoutLayout from '../../components/Common/Checkout/CheckoutLayout';
 import Giftcard from '../../components/Wallet/Topup/Giftcard';
 import { fetchMyTransactions } from '../../redux/slices/walletSlice';
+import { Link } from 'react-router-dom';
+
+import { Card, Row, Tabs, Empty, Skeleton, Button  } from 'antd';
+import { StockOutlined, SettingOutlined, DollarOutlined, SendOutlined } from '@ant-design/icons';
+
+const { Meta } = Card;
+const { TabPane } = Tabs;
 
 const Wallet = () => { 
     const { id } = useParams();
@@ -39,6 +42,26 @@ const Wallet = () => {
             setRouteKey('transactions');
         }
     }, [location]);
+
+    const handleTabChange = (key) => {
+        setRouteKey(key);
+        switch (key) {
+            case 'transactions':
+                history.push(`/wallet/${id}`);
+                break;
+            case 'topup':
+                history.push(`/wallet/${id}/topup`);
+                break;
+            case 'sendmoney':
+                history.push(`/wallet/${id}/sendmoney`);
+                break;
+            case 'settings':
+                history.push(`/wallet/${id}/settings`);
+                break;
+            default:
+                break;
+        }
+    };
 
     const userDetails = useSelector((state) => state.profile.data)
     const version = userDetails ? userDetails.version : 0;
@@ -93,61 +116,110 @@ const Wallet = () => {
                 <>
                     {routeKey === 'order' ? null : 
                         <>
-                            <WalletDetails user={userDetails} />
-                            <Tabs
-                                id="controlled-tab-example"
-                                className="mb-3"
-                                activeKey={routeKey}
-                                onSelect={(k) => {
-                                    setRouteKey(k);
-                                    switch (k) {
-                                        case 'transactions':
-                                            history.push(`/wallet/${id}`);
-                                            break;
-                                        case 'topup':
-                                            history.push(`/wallet/${id}/topup`);
-                                            break;
-                                        case 'sendmoney':
-                                            history.push(`/wallet/${id}/sendmoney`);
-                                            break;
-                                        case 'settings':
-                                            history.push(`/wallet/${id}/settings`);
-                                            break;
-                                        default:
-                                            break;
-                                    }
-                                }}
-                            >
-                                <Tab eventKey="transactions" title="Transactions">
-                                    {
-                                        myTransactions.transactions ? 
-                                        <Transactions myTransactions={myTransactions}/> : <Preloader/>
-                                    }
-                                </Tab>
-                                <Tab eventKey="topup" title="Top Up">
-                                    {
-                                        giftcards ? 
-                                        <div>
-                                            <div className='row'>
-                                                {
-                                                    giftcards.length === 0 ? <p>No tops up found!</p> :
-                                                    giftcards.map((item, index) => (
-                                                        <Giftcard key={index} gift={item} handleCheckout={handleTopUpCheckout} routeKey={routeKey} />
-                                                    ))
-                                                }
-                                                
-                                            </div>
+                            <div className='mb-3'>
+                                <Card 
+                                    actions={[
+                                        <Row justify="center" align="middle">
+                                            <span className="ps-1" style={{ fontSize: '16px' }}>Income: 0$</span>
+                                        </Row>,
+                                        <Row justify="center" align="middle">
+                                            <span className="ps-1" style={{ fontSize: '16px' }}>Balance: 0$</span>
+                                        </Row>,
+                                        <Row justify="center" align="middle">
+                                            <span className="ps-1" style={{ fontSize: '16px' }}>Pending: 0$</span>
+                                        </Row>,
+                                        <Row justify="center" align="middle">
+                                            <span className="ps-1" style={{ fontSize: '16px' }}>Enpense: 0$</span>
+                                        </Row>,
+                                    ]}
+                                    >
+                                    <Meta
+                                        title="Looking for faster payments?"
+                                        avatar={
+                                            <img
+                                                width={80}
+                                                alt='coin'
+                                                src="https://i.ibb.co/vjpGbfj/balance-Coin.webp"
+                                            />
+                                        }
+                                        description={
+                                            <Row justify="space-between" align="middle">
+                                                <span style={{ fontSize: '16px' }}>Join Seller Plus today and withdraw your earnings earlier. <Link to='/'>Tell me more</Link></span>
+                                                <Button type="primary" danger>Withdraw</Button>
+                                            </Row>
+                                        }
+                                    />
+                                </Card>
+                            </div>
+
+                            <div className='row'>
+                                <div className='col-md-12'>
+                                    <div className='row'>
+                                        <div className='col-md-12'>
+                                            <Tabs activeKey={routeKey} onChange={handleTabChange}>
+                                                <TabPane
+                                                    key="transactions"
+                                                    tab={
+                                                        <Row justify="left" align="middle">
+                                                            <StockOutlined /> <span>Transactions</span>
+                                                        </Row>
+                                                    }
+                                                >
+                                                    {
+                                                        myTransactions ?
+                                                            myTransactions.length === 0 ? <Empty /> :
+                                                            <Transactions myTransactions={myTransactions}/> 
+                                                        : <Skeleton />
+                                                    }
+                                                    
+                                                </TabPane>
+                                                <TabPane
+                                                    key="topup"
+                                                    tab={
+                                                        <Row justify="left" align="middle">
+                                                            <DollarOutlined /> <span>Topups</span>
+                                                        </Row>
+                                                    }
+                                                >
+                                                    {   
+                                                        
+                                                        <Row gutter={16}>
+                                                            {
+                                                                giftcards ?
+                                                                    giftcards.length === 0 ? <Empty /> :
+                                                                        giftcards.map((item, index) => (
+                                                                            <Giftcard key={index} gift={item} handleCheckout={handleTopUpCheckout} routeKey={routeKey} />
+                                                                        ))  
+                                                                : <Skeleton />
+                                                            }
+                                                        </Row>
+                                                    }
+                                                </TabPane>
+                                                <TabPane
+                                                    key="sendmoney"
+                                                    tab={
+                                                        <Row justify="left" align="middle">
+                                                            <SendOutlined /> <span>Send Money</span>
+                                                        </Row>
+                                                    }
+                                                >
+                                                    {/* Data here */}
+                                                </TabPane>
+                                                <TabPane
+                                                    key="settings"
+                                                    tab={
+                                                        <Row justify="left" align="middle">
+                                                            <SettingOutlined /> <span>Settings</span>
+                                                        </Row>
+                                                    }
+                                                >
+                                                    {/* Data here */}
+                                                </TabPane>
+                                            </Tabs>
                                         </div>
-                                        : <Preloader/>
-                                    }
-                                </Tab>
-                                <Tab eventKey="sendmoney" title="Send Money">
-                                    
-                                </Tab>
-                                <Tab eventKey="settings" title="Settings">
-                                    
-                                </Tab>
-                            </Tabs>
+                                    </div>
+                                </div>
+                            </div>
                         </>
                     }
 
