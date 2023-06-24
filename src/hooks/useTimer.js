@@ -22,17 +22,17 @@ const useTimer = (dates) => {
             setButtonStatus('Join Now');
             setStep(0);
           } else if (currentDate >= dates.registrationEnd && currentDate < dates.tournamentStart) {
-            setButtonStatus('Lineup');
-            setStep(1);
+              setButtonStatus('Lineup');
+              setStep(1);
           } else if (currentDate >= dates.tournamentStart && currentDate < dates.tournamentEnd) {
-            setButtonStatus('Started');
-            setStep(2);
+              setButtonStatus('Started');
+              setStep(2);
           } else if (currentDate >= dates.tournamentEnd) {
-            setButtonStatus('Finished');
-            setStep(3);
+              setButtonStatus('Finished');
+              setStep(3);
           } else {
-            setButtonStatus('Upcoming');
-            setStep(4);
+              setButtonStatus('Upcoming');
+              setStep(4);
           }
         };
     

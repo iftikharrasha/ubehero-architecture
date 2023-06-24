@@ -118,8 +118,8 @@ const Navbar = ({socketN, isConnected, userId}) => {
       <FloatButton.Group
         trigger="click"
         style={{
-          left: 24,
-          bottom: 24,
+          left: '3rem',
+          bottom: '2rem',
         }}
         // icon={getButtonIcon(selectedRegion)}
         open={floatButtonVisible}
@@ -150,7 +150,7 @@ const Navbar = ({socketN, isConnected, userId}) => {
         />
       </FloatButton.Group>
 
-      <div style={{ position: 'fixed', bottom: 30, left: 80 }}>
+      <div style={{ position: 'fixed', bottom: '2.5rem', left: '6.5rem' }}>
         <Switch
             checkedChildren={<i className="fa fa-moon-o" aria-hidden="true"></i>}
             unCheckedChildren={<i className="fa fa-sun-o" aria-hidden="true"></i>}

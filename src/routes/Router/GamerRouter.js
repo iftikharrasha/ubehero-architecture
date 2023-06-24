@@ -12,6 +12,7 @@ const GamerRouter = () => {
   return (
     <Switch>
         <Route exact path="/" component={Home} />
+        <Route path="/tournament/joined" component={Home} />
         <Route exact path="/login" component={Login} />
         <Route exact path="/signup" component={Signup} />
         <Route exact path="/tournament/details/:id" render={() => <TDetails/>}  />

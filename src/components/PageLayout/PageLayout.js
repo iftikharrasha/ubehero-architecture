@@ -12,7 +12,7 @@ const PageLayout = ({ children }) => {
   };
 
   return (
-    <div className="container my-4">
+    <div className="my-4 px-5 ">
       {
         !verified ? null :
           !showAlert ? null :

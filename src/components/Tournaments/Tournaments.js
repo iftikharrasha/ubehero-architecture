@@ -32,14 +32,14 @@ const Tournaments = ({remark, route, handleCancel, tournament, detailsPage, hand
       >
 
       <Card hoverable style={{
-            width: 300,
+            width: '24rem',
           }}
           cover={
             <img
               alt="example"
               src={tournamentThumbnail} 
               style={{
-                minHeight: '180px',
+                minHeight: '14.5rem',
               }}
             />
           }

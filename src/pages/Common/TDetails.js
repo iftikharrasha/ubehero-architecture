@@ -17,10 +17,12 @@ import CheckoutLayout from '../../components/Common/Checkout/CheckoutLayout';
 
 import { Tabs, Row, Steps, Image, Popover, Button, Modal, Tour, Card, Space, Avatar } from 'antd';
 import { StockOutlined, TrophyOutlined, MessageOutlined } from '@ant-design/icons';
+
 import TournamentSide from '../../components/Tournaments/TournamentSide';
 import useTour from '../../hooks/useTour';
 import useTimer from '../../hooks/useTimer';
 import UserPopup from '../../components/Common/UserPopup/UserPopup';
+import TournamentStage from '../../components/Common/TournamentStage/TournamentStage';
 
 const { Meta } = Card;
 const { TabPane } = Tabs;
@@ -271,7 +273,6 @@ const TournamentDetails = () => {
     /* */
 
     const { step, buttonStatus, timeLeftPercent } = useTimer(tournamentDetails.dates);
-    console.log(tournamentDetails.masterProfile)
 
     return (
         <PageLayout>
@@ -284,82 +285,7 @@ const TournamentDetails = () => {
                             tournament={tournamentDetails}
                         />  : 
                         <>
-                        <div className='mb-3'>
-                            <Card 
-                                actions={[
-                                    <Row justify="center" align="middle">
-                                        <span className="ps-1" style={{ fontSize: '16px' }}>Hosted by: 
-                                            <Popover placement="topLeft" content={<UserPopup popupUser={tournamentDetails.masterProfile}/>}>
-                                                <div className="d-flex align-items-center">
-                                                    <img
-                                                        src={tournamentDetails.masterProfile.photo}
-                                                        alt="user-pic"
-                                                        style={{ width: '30px', height: '30px' }}
-                                                        className="rounded-circle"
-                                                    />
-                                                    <div className="ms-2">
-                                                    <p className="fw-bold mb-1">{tournamentDetails.masterProfile.userName}</p>
-                                                    </div>
-                                                </div>
-                                            </Popover>
-                                        </span>
-                                    </Row>,
-                                    <Row justify="center" align="middle">
-                                        <span className="ps-1" style={{ fontSize: '16px' }}>Platforms</span>
-                                    </Row>,
-                                    <Row justify="center" align="middle">
-                                        <span className="ps-1" style={{ fontSize: '16px' }}>Tutorials</span>
-                                    </Row>,
-                                ]}
-                                >
-                                <Meta
-                                    title={
-                                        tournamentDetails.tournamentName
-                                    }
-                                    avatar={
-                                        <Image
-                                            width={150}
-                                            src={tournamentDetails.tournamentThumbnail}
-                                        />
-                                    }
-                                    description={
-                                        <div ref={ref3Timeline}>
-                                            <Row justify="center" align="middle">
-                                                <Steps
-                                                    // percent={60}
-                                                    current={step}
-                                                    size="small"
-                                                    items={[
-                                                    {
-                                                        title: step > 0 ? 'Registration Closed': 'Registration Open' ,
-                                                        description: moment(tournamentDetails.dates?.registrationStart).format('lll'),
-                                                        status: step > 0 ? 'finish': null,
-                                                    },
-                                                    {
-                                                        title: 'Lineups',
-                                                        description: <Popover content={content} title="Lobby Credentials" trigger="click" open={popoverVisible && loadingCompleted} onOpenChange={setPopoverVisible}>
-                                                                        <Button type="dashed" size="small" loading={loadings[0]} className='mt-1' onClick={() => enterLoading(0)} ref={ref4Credentials}>Get Credentials</Button>
-                                                                    </Popover>,
-                                                        status: step > 1 ? 'finish': null,
-                                                    },
-                                                    {
-                                                        title: 'Started',
-                                                        description: moment(tournamentDetails.dates?.tournamentStart).format('lll'),
-                                                        status: step > 2 ? 'finish': null,
-                                                    },
-                                                    {
-                                                        title: 'Finished',
-                                                        description: moment(tournamentDetails.dates?.tournamentEnd).format('lll'),
-                                                        status: step > 3 ? 'finish': null,
-                                                    },
-                                                    ]}
-                                                />
-                                            </Row>
-                                        </div>
-                                    }
-                                />
-                            </Card>
-                        </div>
+                        <TournamentStage tournament={tournamentDetails}/>
 
                          <div className='row'>
                             <div className='col-md-12'>

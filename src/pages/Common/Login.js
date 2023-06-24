@@ -1,26 +1,20 @@
 import React, { useEffect } from "react";
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
 import useAuth from "../../hooks/useAuth";
 import { FcGoogle } from "react-icons/fc";
-import { useState } from "react";
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import { useSelector } from "react-redux";
+
+import { LockOutlined, UserOutlined } from '@ant-design/icons';
+import { Button, Card, Checkbox, Form, Input, Row } from 'antd';
 
 const Login = () => {
   const isLoggedIn = useSelector(state => state.profile.signed_in);
   const actingAs = useSelector(state => state.profile.actingAs);
   const id = useSelector(state => state.profile.data ? state.profile.data._id : null);
   const {  signInWithGoogle, handleLogin, errorMessage } = useAuth();
-  const [logData, setLogData] = useState({ emailAddress: "", password: "" });
     
   const history = useHistory();
   const location = useLocation();
-
-  const handleSignIn = (e) => {
-    e.preventDefault();
-    handleLogin(logData, history, location);
-  };
 
   useEffect(() => {
     if (isLoggedIn && id) {
@@ -34,61 +28,100 @@ const Login = () => {
     }
 }, [isLoggedIn, id, actingAs, history]);
 
+  const handleSignIn = (values) => {
+    handleLogin(values, history, location);
+  };
+
   return (
-    <div
-      className='d-flex flex-column align-items-center justify-content-center'
+    <div className='d-flex flex-column align-items-center justify-content-center'
       style={{ paddingTop: "150px" }}
     >
-      <h5 className='mb-5'>
-        Sing into <strong className='text-primary '>your account</strong>
-      </h5>
-      <Form className="w-25" onSubmit={handleSignIn}>
-        <Form.Group className="mb-3" controlId="formBasicEmail">
-          <Form.Label>Email address</Form.Label>
-          <Form.Control type="email" placeholder="Enter email" 
-            value={logData.emailAddress}
-            onChange={(e) =>
-              setLogData({
-                  ...logData,
-                  emailAddress: e.target.value,
-              })
-          }/>
-        </Form.Group>
+      <Card
+        title={
+          <h5>
+              Sign into <strong className='text-primary '>your account</strong>
+          </h5>
+        }
+        bordered={false}
+        style={{
+          width: 400,
+        }}
+      >
+        <Form name="normal_login"
+          className="login-form"
+          layout='vertical'
+          initialValues={{
+            remember: true,
+          }}
+          onFinish={handleSignIn}
+        >
+          <Form.Item  label="Enter Your Email Address"
+            name="emailAddress"
+            className="pb-1"
+            rules={[
+              {
+                type: 'email',
+                message: 'The input is not valid Email!',
+              },
+              {
+                required: true,
+                message: 'Please input your Email!',
+              },
+            ]}
+            hasFeedback
+          >
+            <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Email" />
+          </Form.Item>
+          <Form.Item label="Enter Your Password"
+            name="password"
+            rules={[
+              {
+                required: true,
+                message: 'Please input your Password!',
+              },
+            ]}
+            hasFeedback
+          >
+            <Input.Password
+              prefix={<LockOutlined className="site-form-item-icon" />}
+              type="password"
+              placeholder="Password"
+            />
+          </Form.Item>
 
-        <Form.Group className="mb-3" controlId="formBasicPassword">
-          <Form.Label>Password</Form.Label>
-          <Form.Control type="password" placeholder="Password" 
-            value={logData.password}
-            onChange={(e) =>
-              setLogData({
-                  ...logData,
-                  password: e.target.value,
-              })
-            }
-          />
-        </Form.Group>
 
+          <Form.Item>
+              <Row justify="space-between" align="middle">
+                <Form.Item name="remember" valuePropName="checked" noStyle>
+                  <Checkbox>Remember me</Checkbox>
+                </Form.Item>
+
+                <Link to="/">
+                  Forgot password
+                </Link>
+              </Row>
+          </Form.Item>
+
+          <Form.Item>
+            <Button type="primary" htmlType="submit" className="login-form-button">
+              LOG IN
+            </Button>
+          </Form.Item>
+        </Form>
+        
         {
           errorMessage ? <p className="text-warning text-center">{errorMessage}</p> : null
         }
+      </Card>
 
-        <Form.Group className="mb-3" controlId="formBasicCheckbox">
-          <Form.Check type="checkbox" label="Remember me" />
-        </Form.Group>
-        <Button variant="primary" type="submit">
-          Sign In
-        </Button>
-      </Form>
-
-        <div className="mt-4 text-center lit--14 below">Don't have any account?
-            <Link to="/signup" className="ml-1"> <u>Create Account</u>
-            </Link>
+        <div className="mt-4 text-center">Don't have any account?
+            <Link to="/signup" className="ml-1"> <u>Create Account</u></Link>
         </div>
 
-        <strong className='text-primary my-4'>Or</strong>
-        <button onClick={signInWithGoogle} className='btn btn-light'>
-          <FcGoogle className='me-3' /> Sign in with Google
-        </button>
+        <div className="text-center">
+          <div className='text-primary my-3'>Or</div>
+          <Button onClick={signInWithGoogle}><FcGoogle className='me-3' /> Sign in with Google</Button>
+        </div>
     </div>
 
   );

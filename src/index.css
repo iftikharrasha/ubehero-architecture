@@ -1,5 +1,46 @@
 @import url('https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;500;600;700&display=swap');
 
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+@media (max-width: 575.98px) {
+  html {
+    font-size: 12px;
+  }
+}
+
+@media (min-width: 576px) and (max-width: 991.98px) {
+  html {
+    font-size: 12px;
+  }
+}
+
+@media (min-width: 992px) and (max-width: 1299.98px) {
+  html {
+    font-size: 12px;
+  }
+}
+
+@media (min-width: 1300px) and (max-width: 1531.98px) {
+  html {
+    font-size: 12px;
+  }
+}
+
+@media (min-width: 1532px) and (max-width: 1600px) {
+  html {
+    font-size: 12px;
+  }
+}
+
+@media (min-width: 2500px) {
+  html {
+    font-size: 24px;
+  }
+}
+
 body {
   margin: 0;
   font-family: 'Oxanium', 'cursive';
@@ -15,6 +56,24 @@ a{
 a:hover{
   color: #000000;
 }
+
+/* @media (min-width: 1300px) {
+  .container {
+    max-width: 110rem;
+  }
+}
+
+@media (min-width: 576px) and (max-width: 767.98px) {
+  .container {
+    max-width: 720px;
+  }
+}
+
+@media (min-width: 1200px) and (max-width: 1299.98px) {
+  .container {
+    max-width: 960px;
+  }
+} */
 
 .header{
   background: #001529;
