@@ -24,37 +24,37 @@ const WalletPopUp = ({userId}) => {
                 </Row>,
             ]}
             >
-            <Meta
-                avatar={<Avatar src="https://i.ibb.co/vjpGbfj/balance-Coin.webp" />}
-                title="Wallet Details"
-                description="@mywallet"
-            />
-            <Row gutter={[16, 16]} className="pt-3">
-                <Col span={8}>
-                <Card bordered={false} className="popBody">
-                    <Row justify="center" align="middle" style={{flexDirection: 'column'}}>
-                    <Paragraph className="mb-0">Balance</Paragraph>
-                    <Paragraph className="mb-0">$94.85</Paragraph>
-                    </Row>
-                </Card>
-                </Col>
-                <Col span={8}>
-                <Card bordered={false} className="popBody">
-                    <Row justify="center" align="middle" style={{flexDirection: 'column'}}>
-                    <Paragraph className="mb-0">Income</Paragraph>
-                    <Paragraph className="mb-0">$94.85</Paragraph>
-                    </Row>
-                </Card>
-                </Col>
-                <Col span={8}>
-                <Card bordered={false} className="popBody">
-                    <Row justify="center" align="middle" style={{flexDirection: 'column'}}>
-                    <Paragraph className="mb-0">Pending</Paragraph>
-                    <Paragraph className="mb-0">$94.85</Paragraph>
-                    </Row>
-                </Card>
-                </Col>
-            </Row>
+                <Meta
+                    avatar={<Avatar src="https://i.ibb.co/vjpGbfj/balance-Coin.webp" />}
+                    title="Wallet Details"
+                    description="@mywallet"
+                />
+                <Row gutter={[16, 16]} className="pt-3">
+                    <Col span={8}>
+                        <Card bordered={false} className="popBody">
+                            <Row justify="center" align="middle" style={{flexDirection: 'column'}}>
+                            <Paragraph className="mb-0">Balance</Paragraph>
+                            <Paragraph className="mb-0">$0</Paragraph>
+                            </Row>
+                        </Card>
+                    </Col>
+                    <Col span={8}>
+                        <Card bordered={false} className="popBody">
+                            <Row justify="center" align="middle" style={{flexDirection: 'column'}}>
+                            <Paragraph className="mb-0">Income</Paragraph>
+                            <Paragraph className="mb-0">$0</Paragraph>
+                            </Row>
+                        </Card>
+                    </Col>
+                    <Col span={8}>
+                        <Card bordered={false} className="popBody">
+                            <Row justify="center" align="middle" style={{flexDirection: 'column'}}>
+                            <Paragraph className="mb-0">Pending</Paragraph>
+                            <Paragraph className="mb-0">$0</Paragraph>
+                            </Row>
+                        </Card>
+                    </Col>
+                </Row>
         </Card>
     );
 

@@ -101,12 +101,12 @@ const MasterTournamentsTable = () => {
                                                 </td>
                                                 <td>
                                                     {
-                                                        tournament.status === 'active' ?
-                                                            <Link to={`/tournament/details/${tournament._id}`}>
-                                                                <span className="text-success">
-                                                                    <i className="fas fa-hand-point-right me-1"></i>Preview
-                                                                </span>
-                                                            </Link> :
+                                                        // tournament.status === 'active' ?
+                                                        //     <Link to={`/tournament/details/${tournament._id}`}>
+                                                        //         <span className="text-success">
+                                                        //             <i className="fas fa-hand-point-right me-1"></i>Preview
+                                                        //         </span>
+                                                        //     </Link> :
                                                         tournament.status === 'pending' || tournament.status === 'blocked' ?
                                                             <span className="text-primary">
                                                                 N/A

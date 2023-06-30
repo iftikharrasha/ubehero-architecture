@@ -138,7 +138,7 @@ const InboxThread = ({socketN}) => {
   const [inboxData, setInboxData] = useState([]);
   const [isLoadingMore1, setLoadingMore1] = useState(false);
   const [hasMore1, setHasMore1] = useState(true);
-  const itemLimit1 = 6; // Number of items to display initially
+  const itemLimit1 = 5; // Number of items to display initially
   const containerRef1 = useRef(null);
 
   //loader to load inbox datas
@@ -146,7 +146,7 @@ const InboxThread = ({socketN}) => {
   const [chatRoom, setChatRoom] = useState([]);
   const [isLoadingMore2, setLoadingMore2] = useState(false);
   const [hasMore2, setHasMore2] = useState(true);
-  const itemLimit2 = 6; // Number of items to display initially
+  const itemLimit2 = 5; // Number of items to display initially
   const containerRef2 = useRef(null);
 
   useEffect(() => {
@@ -343,7 +343,7 @@ const InboxThread = ({socketN}) => {
 
   return (
     <div className='me-4'>
-      <Popover placement="bottomLeft" title="Saved Tournaments" content={content} trigger="click" className='popup'>
+      <Popover placement="bottomLeft" title="Inbox" content={content} trigger="click" className='popup'>
           <Badge count={totalMessageCount} size="small" color="red" style={{ color: 'white' }}>
             <i className="fa-solid fa-message text-white"></i>
           </Badge>

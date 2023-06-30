@@ -89,19 +89,19 @@ const useTournament = () => {
             const response = await axios.post(`${process.env.REACT_APP_API_LINK}/api/v1/tournaments`, draftItem, config);
             
             if(response.data.status === 200){
-                // const notificationData = {
-                //     type: "tournament_creation",
-                //     subject: "You’ve created this tournament draft",
-                //     subjectPhoto:"https://i.ibb.co/5FFYTs7/avatar.jpg",
-                //     invokedByName: data.tournamentName,
-                //     invokedById: "645b60abe95cd95bcfad6894",
-                //     receivedByName: profile.data.userName,
-                //     receivedById: profile.data._id,  //this user will receive notification
-                //     route: `master/${profile.data._id}/tournaments`
-                // }
+                const notificationData = {
+                    type: "tournament_creation",
+                    subject: "You’ve created this tournament draft",
+                    subjectPhoto:"https://i.ibb.co/5FFYTs7/avatar.jpg",
+                    invokedByName: data.tournamentName,
+                    invokedById: "645b60abe95cd95bcfad6894",
+                    receivedByName: profile.data.userName,
+                    receivedById: profile.data._id,  //this user will receive notification
+                    route: `master/${profile.data._id}/tournaments/${response.data.data._id}`
+                }
 
-                // // Send message to server
-                // socketN.emit("send_notification", notificationData);
+                // Send message to server
+                socketN.emit("send_notification", notificationData);
 
                 setErrorMessage(null);
                 const destination = `/${role}/${profile.data._id}/tournaments`;
@@ -144,6 +144,30 @@ const useTournament = () => {
         }
     }
 
+    const handleTournamentCredential = async (data) => {
+        let config = {}
+
+        if(profile.signed_in){
+            const token = localStorage.getItem('jwt');
+            config.headers = { "Authorization": "Bearer " + token, ...config.headers};
+        }
+
+        try {
+            const response = await axios.patch(`${process.env.REACT_APP_API_LINK}/api/v1/tournaments/${data._id}`, data, config);
+            
+            if(response.data.status === 200){
+                setErrorMessage(null);
+                const destination = `/master/${data._id}/tournaments`;
+                history.replace(destination);
+            }else{
+                setErrorMessage(response.data.error.message);
+            }
+            return response.data
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     const handleTournamentDraftDelete = async (id, role) => {
         let config = {}
 
@@ -174,6 +198,7 @@ const useTournament = () => {
         handleTournamentPurchase,
         handleTournamentDraftCreate,
         handleTournamentDraftUpdate,
+        handleTournamentCredential,
         handleTournamentDraftDelete,
     }
 }

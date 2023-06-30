@@ -6,11 +6,10 @@ import { fetchTournaments } from '../../redux/slices/tournamentSlice'
 import { fetchStatics } from '../../redux/slices/staticSlice'
 import { useDispatch } from 'react-redux';
 import Landing from '../../components/Landing/Landing';
-import Preloader from '../../components/PageLayout/Preloader';
 import useWindowSize from '../../hooks/useWindowSize';
 
-import { Col, Empty, Pagination, Row, Skeleton, Tabs } from 'antd';
-import { StockOutlined, TrophyOutlined, MessageOutlined } from '@ant-design/icons';
+import { Col, Empty, Pagination, Row, Tabs } from 'antd';
+import { StockOutlined } from '@ant-design/icons';
 import { useLocation, useHistory } from 'react-router-dom';
 
 const { TabPane } = Tabs;
@@ -106,7 +105,7 @@ const Home = () => {
     return (
         <PageLayout>
             {landing && <Landing landing={landing} />}
-            <Tabs activeKey={routeKey} onChange={handleTabChange} tabPosition={windowWidth < 991.98 ? "top" : "top"}>
+            <Tabs activeKey={routeKey} onChange={handleTabChange} tabPosition={windowWidth < 991.98 ? "top" : "left"}>
                 <TabPane
                     key="tournaments"
                     tab={
@@ -153,9 +152,9 @@ const Home = () => {
                         {
                             visibleJoinedRooms.length > 0 ? (
                                 visibleJoinedRooms.map((tournament, index) => (
-                                    <div className="col-lg-2 col-sm-6" key={index}>
+                                    <Col xs={24} sm={12} md={8} lg={12} xl={6} key={index}>
                                         <Tournaments routeKey={tournament._id} tournament={tournament} details={false} />
-                                    </div>
+                                    </Col>
                                 ))
                             ) : (
                             <div style={{width: '100%'}}>

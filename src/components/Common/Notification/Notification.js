@@ -8,6 +8,7 @@ import { BellOutlined } from '@ant-design/icons';
 const Notification = ({socketN, isConnected, userId}) => {
   const [notyfReceived, setNotyfReceived] = useState([]);
   const { loggedInUser } = useAuth();
+  console.log(notyfReceived)
 
   useEffect(() => {
       if (socketN) {
@@ -179,7 +180,7 @@ const Notification = ({socketN, isConnected, userId}) => {
   const [data, setData] = useState([]);
   const [isLoadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
-  const itemLimit = 6; // Number of items to display initially
+  const itemLimit = 5; // Number of items to display initially
   const containerRef = useRef(null);
 
   useEffect(() => {
@@ -241,7 +242,7 @@ const Notification = ({socketN, isConnected, userId}) => {
         size='larger'
         loading={initLoading}
         loadMore={loadMore}
-        dataSource={data}
+        dataSource={data.sort((a, b) => b.createdAt - a.createdAt)}
         renderItem={(item) => (
           <List.Item
             actions={

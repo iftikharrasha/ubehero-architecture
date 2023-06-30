@@ -2,42 +2,47 @@ import { useEffect, useState } from 'react';
 import moment from 'moment';
 
 const useTimer = (dates) => {
-    const [buttonStatus, setButtonStatus] = useState('Join Now');
+    const [buttonStatus, setButtonStatus] = useState('Upcoming');
     const [timeLeftPercent, setTimeLeftPercent] = useState(0);
-    const [step, setStep]  = useState(1);
+    const [step, setStep]  = useState(0);
 
     const now = moment();
     const currentDate = moment().format('YYYY-MM-DDTHH:mm:ss');
 
     useEffect(() => {
         const calculateStatus = () => {
-          if (currentDate >= dates.registrationStart && currentDate < dates.registrationEnd) {
-            const registrationStart = moment(dates.registrationStart);
-            const registrationEnd = moment(dates.registrationEnd);
-            const registrationDuration = moment.duration(registrationEnd.diff(registrationStart));
-            const timeElapsed = moment.duration(now.diff(registrationStart));
-            const percent = Math.round((timeElapsed / registrationDuration) * 100);
-
-            setTimeLeftPercent(percent);
-            setButtonStatus('Join Now');
-            setStep(0);
-          } else if (currentDate >= dates.registrationEnd && currentDate < dates.tournamentStart) {
-              setButtonStatus('Lineup');
-              setStep(1);
-          } else if (currentDate >= dates.tournamentStart && currentDate < dates.tournamentEnd) {
-              setButtonStatus('Started');
-              setStep(2);
-          } else if (currentDate >= dates.tournamentEnd) {
-              setButtonStatus('Finished');
-              setStep(3);
-          } else {
-              setButtonStatus('Upcoming');
-              setStep(4);
-          }
+            if(dates.registrationStart || dates.registrationEnd || dates.tournamentStart || dates.tournamentEnd){
+                if (currentDate >= dates.registrationStart && currentDate < dates.registrationEnd) {
+                    const registrationStart = moment(dates.registrationStart);
+                    const registrationEnd = moment(dates.registrationEnd);
+                    const registrationDuration = moment.duration(registrationEnd.diff(registrationStart));
+                    const timeElapsed = moment.duration(now.diff(registrationStart));
+                    const percent = Math.round((timeElapsed / registrationDuration) * 100);
+    
+                    setTimeLeftPercent(percent);
+                    setButtonStatus('Join Now');
+                    setStep(1);
+                } else if (currentDate >= dates.registrationEnd && currentDate < dates.tournamentStart) {
+                    setButtonStatus('Lineup');
+                    setStep(2);
+                } else if (currentDate >= dates.tournamentStart && currentDate < dates.tournamentEnd) {
+                    setButtonStatus('Started');
+                    setStep(3);
+                } else if (currentDate >= dates.tournamentEnd) {
+                    setButtonStatus('Finished');
+                    setStep(4);
+                } else {
+                    setButtonStatus('Upcoming');
+                    setStep(0);
+                }
+            }else{
+                setButtonStatus('Upcoming');
+                setStep(0);
+            }
         };
     
         calculateStatus();
-    }, []);
+    }, [dates]);
 
     return {
         step,

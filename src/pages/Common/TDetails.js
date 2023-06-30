@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
+import io from 'socket.io-client';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import moment from 'moment';
-import { Link, useParams } from 'react-router-dom';
+import {  useParams } from 'react-router-dom';
+import { useLocation, useHistory  } from 'react-router-dom';
 import PageLayout from '../../components/PageLayout/PageLayout';
 import Leaderboard from '../../components/Tournaments/Leaderboards/Leaderboards';
 import { fetchTournamentDetails } from '../../redux/slices/tournamentSlice'
@@ -10,21 +11,17 @@ import { fetchLeaderboards } from '../../redux/slices/leaderboardSlice';
 import Preloader from '../../components/PageLayout/Preloader';
 import Prizes from '../../components/Tournaments/Prizes/Prizes';
 import ChatRoom from '../../components/Tournaments/ChatRoom/ChatRoom';
-import { useLocation, useHistory  } from 'react-router-dom';
 import CheckoutForm from '../../components/Tournaments/Checkout/CheckoutForm';
-import io from 'socket.io-client';
 import CheckoutLayout from '../../components/Common/Checkout/CheckoutLayout';
 
-import { Tabs, Row, Steps, Image, Popover, Button, Modal, Tour, Card, Space, Avatar } from 'antd';
+import { Tabs, Row, Modal, Tour, Col } from 'antd';
 import { StockOutlined, TrophyOutlined, MessageOutlined } from '@ant-design/icons';
 
 import TournamentSide from '../../components/Tournaments/TournamentSide';
 import useTour from '../../hooks/useTour';
 import useTimer from '../../hooks/useTimer';
-import UserPopup from '../../components/Common/UserPopup/UserPopup';
 import TournamentStage from '../../components/Common/TournamentStage/TournamentStage';
 
-const { Meta } = Card;
 const { TabPane } = Tabs;
 
 let initialSocketId = null;
@@ -285,94 +282,90 @@ const TournamentDetails = () => {
                             tournament={tournamentDetails}
                         />  : 
                         <>
-                        <TournamentStage tournament={tournamentDetails}/>
+                        <TournamentStage tournament={tournamentDetails} purchased={purchasedItems?.tournaments?.includes(id) ? true : false }/>
 
-                         <div className='row'>
-                            <div className='col-md-12'>
-                                <div className='row'>
-                                    <div className='col-md-3'>
-                                        <TournamentSide 
-                                            ref1TSummery1={ref1TSummery1}
-                                            ref1TSummery2={ref1TSummery2}
-                                            ref1TSummery3={ref1TSummery3}
-                                            isLoggedIn={isLoggedIn}
-                                            routeKey={routeKey}
-                                            tournament={tournamentDetails} 
-                                            purchasedItems={purchasedItems}
-                                            handleCancel={handleCancel}
-                                            handleCheckout={handleCheckout}
-                                            step={step}
-                                            buttonStatus={buttonStatus}
-                                            timeLeftPercent={timeLeftPercent}
-                                        />
-                                    </div>
-                                    <div className='col-md-9'>
-                                        <Tabs activeKey={routeKey} onChange={handleTabChange}>
+                        <Row>
+                            <Col span={5}>
+                                <TournamentSide 
+                                    ref1TSummery1={ref1TSummery1}
+                                    ref1TSummery2={ref1TSummery2}
+                                    ref1TSummery3={ref1TSummery3}
+                                    isLoggedIn={isLoggedIn}
+                                    routeKey={routeKey}
+                                    tournament={tournamentDetails} 
+                                    purchasedItems={purchasedItems}
+                                    handleCancel={handleCancel}
+                                    handleCheckout={handleCheckout}
+                                    step={step}
+                                    buttonStatus={buttonStatus}
+                                    timeLeftPercent={timeLeftPercent}
+                                />
+                            </Col>
+                            <Col span={19}>
+                                <Tabs activeKey={routeKey} onChange={handleTabChange}>
+                                    <TabPane
+                                        key="leaderboards"
+                                        tab={
+                                            <Row justify="left" align="middle" ref={ref2Leaderboard}>
+                                                <StockOutlined /> <span>Leaderboards</span>
+                                            </Row>
+                                        }
+                                    >
+                                        <Leaderboard leaderboards={leaderboardDetails.leaderboards}/>
+                                    </TabPane>
+                                    <TabPane
+                                        key="prizes"
+                                        tab={
+                                            <Row justify="left" align="middle" ref={ref2Prize}>
+                                                <TrophyOutlined /> <span>Prizes</span>
+                                            </Row>
+                                        }
+                                    >
+                                        <Prizes prizes={tournamentDetails.prizes}/>
+                                    </TabPane>
+                                    {
+                                        purchasedItems?.tournaments?.includes(tournamentDetails._id) && (
                                             <TabPane
-                                                key="leaderboards"
+                                                key="chatroom"
                                                 tab={
-                                                    <Row justify="left" align="middle" ref={ref2Leaderboard}>
-                                                        <StockOutlined /> <span>Leaderboards</span>
+                                                    <Row justify="left" align="middle">
+                                                        <MessageOutlined /> <span>{`ChatRoom (${unreadCount})`}</span>
                                                     </Row>
                                                 }
                                             >
-                                                <Leaderboard leaderboards={leaderboardDetails.leaderboards}/>
-                                            </TabPane>
-                                            <TabPane
-                                                key="prizes"
-                                                tab={
-                                                    <Row justify="left" align="middle" ref={ref2Prize}>
-                                                        <TrophyOutlined /> <span>Prizes</span>
-                                                    </Row>
+                
+                                                {
+                                                    socket ? <ChatRoom 
+                                                                socket={socket}
+                                                                isConnected={isConnected}
+                                                                tournamentDetails={tournamentDetails} 
+                                                                leaderboards={leaderboardDetails.leaderboards}
+                                                                routeKey={routeKey}
+                                                                unreadCount={unreadCount}
+                                                                setUnreadCount={setUnreadCount}
+                                                            />
+                                                    : <Preloader/>
                                                 }
-                                            >
-                                                <Prizes prizes={tournamentDetails.prizes}/>
+                                                
                                             </TabPane>
-                                            {
-                                                purchasedItems?.tournaments?.includes(tournamentDetails._id) && (
-                                                    <TabPane
-                                                        key="chatroom"
-                                                        tab={
-                                                            <Row justify="left" align="middle">
-                                                                <MessageOutlined /> <span>{`ChatRoom (${unreadCount})`}</span>
-                                                            </Row>
-                                                        }
-                                                    >
-                        
-                                                        {
-                                                            socket ? <ChatRoom 
-                                                                        socket={socket}
-                                                                        isConnected={isConnected}
-                                                                        tournamentDetails={tournamentDetails} 
-                                                                        leaderboards={leaderboardDetails.leaderboards}
-                                                                        routeKey={routeKey}
-                                                                        unreadCount={unreadCount}
-                                                                        setUnreadCount={setUnreadCount}
-                                                                    />
-                                                            : <Preloader/>
-                                                        }
-                                                        
-                                                    </TabPane>
-                                                )
-                                            }
-                                        </Tabs>
-                                        
-                                        {/* this is the tab for checkout when clicked the checkout button */}
-                                        {routeKey === 'checkout' ? (
-                                            <CheckoutLayout 
-                                                remark='reg'
-                                                routeKey={routeKey} 
-                                                item={tournamentDetails} 
-                                                handleOrder={handleOrder} 
-                                                handlePaymentMethod={handlePaymentMethod} 
-                                                method={method} 
-                                                setMethod={setMethod}
-                                            />
-                                        ) : null}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                                        )
+                                    }
+                                </Tabs>
+                                
+                                {/* this is the tab for checkout when clicked the checkout button */}
+                                {routeKey === 'checkout' ? (
+                                    <CheckoutLayout 
+                                        remark='reg'
+                                        routeKey={routeKey} 
+                                        item={tournamentDetails} 
+                                        handleOrder={handleOrder} 
+                                        handlePaymentMethod={handlePaymentMethod} 
+                                        method={method} 
+                                        setMethod={setMethod}
+                                    />
+                                ) : null}
+                            </Col>
+                        </Row>
 
                         </>
                     : <Preloader />

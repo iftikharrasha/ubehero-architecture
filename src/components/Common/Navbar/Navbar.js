@@ -14,7 +14,8 @@ import { changeRegion } from "../../../redux/slices/staticSlice";
 const Navbar = ({socketN, isConnected, userId}) => {
   const dispatch = useDispatch();
   const isDarkMode = useSelector(state => state.mySiteSettings.darkMode);
-  const [selectedRegion, setSelectedRegion] = useState('eng');
+  const countrySelected = useSelector(state => state.statics.country);
+  const [selectedRegion, setSelectedRegion] = useState(countrySelected);
 
     const [visible, setVisible] = useState(false);
     const showDrawer = () => {
@@ -31,7 +32,7 @@ const Navbar = ({socketN, isConnected, userId}) => {
     // Upto here\
 
     const [floatButtonVisible, setFloatButtonVisible] = useState(false);
-    console.log('setFloatButtonVisible', floatButtonVisible)
+
     const handleThemeChange = (checked) => {
         console.log(`switch to ${checked}`);
         dispatch(setDarkMode(!isDarkMode))
@@ -51,18 +52,18 @@ const Navbar = ({socketN, isConnected, userId}) => {
     const getActiveIcon = (region) => {
       // Return the active icon for the clicked region
       // Replace this with the appropriate active icon component
-      if (region === 'bd') return <i class="fa-solid fa-bangladeshi-taka-sign"></i>;
-      if (region === 'uk') return <StopOutlined />;
-      if (region === 'ksa') return <HeatMapOutlined />;
+      if (region === 'bd') return <img src="https://cdn.jsdelivr.net/gh/lipis/flag-icons/flags/4x3/bd.svg" alt="bd"/>;
+      if (region === 'uk') return <img src="https://cdn.jsdelivr.net/gh/lipis/flag-icons/flags/4x3/gb.svg" alt="uk"/>;
+      if (region === 'ksa') return <img src="https://cdn.jsdelivr.net/gh/lipis/flag-icons/flags/4x3/sa.svg" alt="ksa"/>;
       return null;
     };
   
     const getDefaultIcon = (region) => {
       // Return the default icon for the region
       // Replace this with the appropriate default icon component
-      if (region === 'bd') return <BorderInnerOutlined />;
-      if (region === 'uk') return <StopOutlined />;
-      if (region === 'ksa') return <HeatMapOutlined />;
+      if (region === 'bd') return <img src="https://cdn.jsdelivr.net/gh/lipis/flag-icons/flags/4x3/bd.svg" alt="bd"/>;
+      if (region === 'uk') return <img src="https://cdn.jsdelivr.net/gh/lipis/flag-icons/flags/4x3/gb.svg" alt="uk"/>;
+      if (region === 'ksa') return <img src="https://cdn.jsdelivr.net/gh/lipis/flag-icons/flags/4x3/sa.svg" alt="ksa"/>;
       return null;
     };
 
@@ -121,32 +122,32 @@ const Navbar = ({socketN, isConnected, userId}) => {
           left: '3rem',
           bottom: '2rem',
         }}
-        // icon={getButtonIcon(selectedRegion)}
+        icon={getButtonIcon(selectedRegion)}
         open={floatButtonVisible}
         onOpenChange={(open) => {
           setFloatButtonVisible(open);
         }}
       >
         <FloatButton
-          description="BD"
+          // description="BD"
           tooltip="Change region to BD"
           onClick={() => handleRegionChange('bd')}
           active={selectedRegion === 'bd'}
-          // icon={getButtonIcon('bd')}
+          icon={getButtonIcon('bd')}
         />
         <FloatButton
-          description="UK"
+          // description="UK"
           tooltip="Change region to UK"
           onClick={() => handleRegionChange('uk')}
           active={selectedRegion === 'uk'}
-          // icon={getButtonIcon('uk')}
+          icon={getButtonIcon('uk')}
         />
         <FloatButton
-          description="KSA"
+          // description="KSA"
           tooltip="Change region to KSA"
           onClick={() => handleRegionChange('ksa')}
           active={selectedRegion === 'ksa'}
-          // icon={getButtonIcon('ksa')}
+          icon={getButtonIcon('ksa')}
         />
       </FloatButton.Group>
 

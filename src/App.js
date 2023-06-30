@@ -20,7 +20,6 @@ function App() {
   const isDarkMode = useSelector(state => state.mySiteSettings.darkMode);
   const [showInbox, setShowInbox] = useState(false);
   const [popUser, setPopUser] = useState({});
-  console.log('popUser', popUser)
 
   const handleInboxPop = () => {
     setShowInbox(!showInbox);

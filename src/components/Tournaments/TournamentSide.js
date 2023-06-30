@@ -8,7 +8,7 @@ const TournamentSide = ({ref1TSummery1, ref1TSummery2, ref1TSummery3, isLoggedIn
 
     let sideStep; //dynamic component
     switch (step) {
-        case 0:
+        case 1:
             sideStep = (
                 <div ref={ref1TSummery2}>
                     <Paragraph className="mb-0">Registration Time Left</Paragraph>
@@ -17,7 +17,7 @@ const TournamentSide = ({ref1TSummery1, ref1TSummery2, ref1TSummery3, isLoggedIn
             );
         break;
 
-        case 1:
+        case 2:
             sideStep = (
                 <div ref={ref1TSummery2}>
                     <Paragraph className="mb-0">Join the game Loby!</Paragraph>
@@ -25,10 +25,18 @@ const TournamentSide = ({ref1TSummery1, ref1TSummery2, ref1TSummery3, isLoggedIn
             );
         break;
 
-        case 2:
+        case 3:
             sideStep = (
                 <div ref={ref1TSummery2}>
                     <Paragraph className="mb-0">Tournament Started!</Paragraph>
+                </div>
+            );
+        break;
+
+        case 4:
+            sideStep = (
+                <div ref={ref1TSummery2}>
+                    <Paragraph className="mb-0">Tournament Finished!</Paragraph>
                 </div>
             );
         break;
@@ -43,8 +51,8 @@ const TournamentSide = ({ref1TSummery1, ref1TSummery2, ref1TSummery3, isLoggedIn
     }
   
     return (
-        <div className=" list-group sticky-top" ref={ref1TSummery1}>
-            <Card title={`WIN 50$`} bordered style={{ width: 300, boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)' }}>
+        <div className=" list-group sticky-top">
+            <Card title={`WIN 50$`} bordered style={{ width: 300, boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)' }} ref={ref1TSummery1}>
                 <h6>Joined: {leaderboards.length}</h6>
                 <p className='card-text'>Mode: {settings.mode}</p>
                 {sideStep}
@@ -57,7 +65,7 @@ const TournamentSide = ({ref1TSummery1, ref1TSummery2, ref1TSummery3, isLoggedIn
                             </Button>  
                         </Link> :
                         purchasedItems.tournaments?.includes(_id) ? 
-                            <Tag color="success" ref={ref1TSummery3} className="mt-3">PURCHASED</Tag> :
+                            <Tag color="success" ref={ref1TSummery3} className="mt-3">JOINED</Tag> :
                                 routeKey === 'checkout' ? 
                                 <Button type="primary" size="small" className="mt-3" onClick={handleCancel} ref={ref1TSummery3}>
                                     CANCEL

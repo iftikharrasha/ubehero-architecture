@@ -6,9 +6,9 @@ const { Title, Paragraph } = Typography;
 const Landing = ({landing}) => {
 
     return (
-        <div>
+        <div className='mb-5'>
             <Title>{landing.hero.h1}</Title>
-            <Paragraph>{landing.hero.p}</Paragraph>
+            <Paragraph style={{fontSize: '20px'}}>{landing.hero.p}</Paragraph>
         </div>
     );
 };

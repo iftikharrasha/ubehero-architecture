@@ -11,7 +11,7 @@ import ProfileSide from '../../components/Profile/ProfileSide';
 import { fetchMyTeams } from '../../redux/slices/teamSlice';
 import { fetchProfileDetails } from '../../redux/slices/profileSlice'
 
-import { Tabs, Row, Modal, Tour } from 'antd';
+import { Tabs, Row, Modal, Tour, Col } from 'antd';
 import { HistoryOutlined, TeamOutlined, SettingOutlined } from '@ant-design/icons';
 
 import useTour from '../../hooks/useTour';
@@ -158,66 +158,59 @@ const Profile = () => {
         <PageLayout>
             {
                 userDetails ? 
-                <div className='row'>
-                    <div className='col-md-12'>
-                        <ProfileTop 
-                            ref3ProfilePic={ref3ProfilePic} 
-                            ref4CoverPhoto={ref4CoverPhoto} 
-                            profile={userDetails} 
-                        />
-                    </div>
-                    <div className='col-md-12'>
-                        <div className='row'>
-
-                            <div className='col-md-3'>
-                                <ProfileSide 
-                                    ref1TSummery1={ref1TSummery1}
-                                    ref1TSummery2={ref1TSummery2}
-                                    ref1TSummery3={ref1TSummery3} 
-                                    ref1TSummery4={ref1TSummery4} 
-                                    profile={userDetails} 
-                                />
-                            </div>
-                            <div className='col-md-9'>
-
-                                <Tabs activeKey={routeKey} onChange={handleTabChange}
+                <>
+                    <ProfileTop 
+                        ref3ProfilePic={ref3ProfilePic} 
+                        ref4CoverPhoto={ref4CoverPhoto} 
+                        profile={userDetails} 
+                    />
+                    <Row>
+                        <Col span={5}>
+                            <ProfileSide 
+                                ref1TSummery1={ref1TSummery1}
+                                ref1TSummery2={ref1TSummery2}
+                                ref1TSummery3={ref1TSummery3} 
+                                ref1TSummery4={ref1TSummery4} 
+                                profile={userDetails} 
+                            />
+                        </Col>
+                        <Col span={19}>
+                            <Tabs activeKey={routeKey} onChange={handleTabChange}
+                            >
+                                <TabPane
+                                    key="mystats"
+                                    tab={
+                                        <Row justify="left" align="middle" ref={ref2GamingStats}>
+                                            <HistoryOutlined /> <span>My Stats</span>
+                                        </Row>
+                                    }
                                 >
-                                    <TabPane
-                                        key="mystats"
-                                        tab={
-                                            <Row justify="left" align="middle" ref={ref2GamingStats}>
-                                                <HistoryOutlined /> <span>My Stats</span>
-                                            </Row>
-                                        }
-                                    >
-                                        <MyStats stats={userDetails.stats} />
-                                    </TabPane>
-                                    <TabPane
-                                        key="teams"
-                                        tab={
-                                            <Row justify="left" align="middle" ref={ref2Teams}>
-                                                <TeamOutlined /> <span>Teams</span>
-                                            </Row>
-                                        }
-                                    >
-                                        <MyTeams routeKey={routeKey} myTeams={myTeams} />
-                                    </TabPane>
-                                    <TabPane
-                                        key="settings"
-                                        tab={
-                                            <Row justify="left" align="middle" ref={ref2Settings}>
-                                                <SettingOutlined /> <span>Settings</span>
-                                            </Row>
-                                        }
-                                    >
-                                        <Settings profile={userDetails} />
-                                    </TabPane>
-                                </Tabs>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                                    <MyStats stats={userDetails.stats} />
+                                </TabPane>
+                                <TabPane
+                                    key="teams"
+                                    tab={
+                                        <Row justify="left" align="middle" ref={ref2Teams}>
+                                            <TeamOutlined /> <span>Teams</span>
+                                        </Row>
+                                    }
+                                >
+                                    <MyTeams routeKey={routeKey} myTeams={myTeams} />
+                                </TabPane>
+                                <TabPane
+                                    key="settings"
+                                    tab={
+                                        <Row justify="left" align="middle" ref={ref2Settings}>
+                                            <SettingOutlined /> <span>Settings</span>
+                                        </Row>
+                                    }
+                                >
+                                    <Settings profile={userDetails} />
+                                </TabPane>
+                            </Tabs>
+                        </Col>
+                    </Row>
+                </>
                 : <Preloader />
             }
 

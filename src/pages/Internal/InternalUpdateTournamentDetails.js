@@ -15,27 +15,47 @@ const InternalUpdateDraft = () => {
 
     const { handleTournamentDraftUpdate, handleTournamentDraftDelete, errorMessage } = useTournament();
 
-    const handleRegStartDateChange = (date) => {
+    const handleRegDateChange = (date, field) => {
         setUpdatedTournament((prevTournament) => {
-            return {
-                ...prevTournament,
-                dates: {
-                    ...prevTournament.dates,
-                    registrationStart: date.toISOString(),
-                },
-            };
+            if(field === 'start'){
+                return {
+                    ...prevTournament,
+                    dates: {
+                        ...prevTournament.dates,
+                        registrationStart: date.toISOString(),
+                    },
+                };
+            }else{
+                return {
+                    ...prevTournament,
+                    dates: {
+                        ...prevTournament.dates,
+                        registrationEnd: date.toISOString(),
+                    },
+                };
+            }
         });
     };
     
-    const handleTournamentStartDateChange = (date) => {
+    const handleTournamentDateChange = (date, field) => {
         setUpdatedTournament((prevTournament) => {
-            return {
-                ...prevTournament,
-                dates: {
-                    ...prevTournament.dates,
-                    tournamentStart: date.toISOString(),
-                },
-            };
+            if(field === 'start'){
+                return {
+                    ...prevTournament,
+                    dates: {
+                        ...prevTournament.dates,
+                        tournamentStart: date.toISOString(),
+                    },
+                };
+            }else{
+                return {
+                    ...prevTournament,
+                    dates: {
+                        ...prevTournament.dates,
+                        tournamentEnd: date.toISOString(),
+                    },
+                };
+            }
         });
     };
   
@@ -93,12 +113,12 @@ const InternalUpdateDraft = () => {
                     </Form.Control>
                 </Form.Group>
 
-                <Form.Group className="mb-3" controlId="formBasicDate">
+                <Form.Group className="mb-3" controlId="formBasicDateRS">
                     <Form.Label>Registration Start Date</Form.Label>
                     <br />
                     <DatePicker
                         selected={updatedTournament?.dates?.registrationStart && new Date(updatedTournament.dates.registrationStart)}
-                        onChange={handleRegStartDateChange}
+                        onChange={(e) => handleRegDateChange(e, 'start')}
                         minDate={new Date()} // prevent past dates
                         dateFormat="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'" // set format
                         showTimeSelect
@@ -108,12 +128,42 @@ const InternalUpdateDraft = () => {
                     />
                 </Form.Group>
 
-                <Form.Group className="mb-3" controlId="formBasicDate">
+                <Form.Group className="mb-3" controlId="formBasicDateRE">
+                    <Form.Label>Registration End Date</Form.Label>
+                    <br />
+                    <DatePicker
+                        selected={updatedTournament?.dates?.registrationEnd && new Date(updatedTournament.dates.registrationEnd)}
+                        onChange={(e) => handleRegDateChange(e, 'end')}
+                        minDate={new Date()} // prevent past dates
+                        dateFormat="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'" // set format
+                        showTimeSelect
+                        timeFormat="HH:mm"
+                        timeIntervals={15}
+                        timeCaption="time"
+                    />
+                </Form.Group>
+
+                <Form.Group className="mb-3" controlId="formBasicDateTS">
                     <Form.Label>Tournament Start Date</Form.Label>
                     <br />
                     <DatePicker
                         selected={updatedTournament?.dates?.tournamentStart && new Date(updatedTournament.dates.tournamentStart)}
-                        onChange={handleTournamentStartDateChange}
+                        onChange={(e) => handleTournamentDateChange(e, 'start')}
+                        minDate={new Date()} // prevent past dates
+                        dateFormat="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'" // set format
+                        showTimeSelect
+                        timeFormat="HH:mm"
+                        timeIntervals={15}
+                        timeCaption="time"
+                    />
+                </Form.Group>
+
+                <Form.Group className="mb-3" controlId="formBasicDateTE">
+                    <Form.Label>Tournament End Date</Form.Label>
+                    <br />
+                    <DatePicker
+                        selected={updatedTournament?.dates?.tournamentEnd && new Date(updatedTournament.dates.tournamentEnd)}
+                        onChange={(e) => handleTournamentDateChange(e, 'end')}
                         minDate={new Date()} // prevent past dates
                         dateFormat="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'" // set format
                         showTimeSelect
