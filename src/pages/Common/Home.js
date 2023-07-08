@@ -9,7 +9,7 @@ import Landing from '../../components/Landing/Landing';
 import useWindowSize from '../../hooks/useWindowSize';
 
 import { Col, Empty, Pagination, Row, Tabs } from 'antd';
-import { StockOutlined } from '@ant-design/icons';
+import { ThunderboltOutlined, TrophyOutlined, AimOutlined, HourglassOutlined } from '@ant-design/icons';
 import { useLocation, useHistory } from 'react-router-dom';
 
 const { TabPane } = Tabs;
@@ -19,6 +19,7 @@ const Home = () => {
     const versionTournaments = useSelector(state => state.tournaments.version);
     const versionLanding = useSelector(state => state.statics.version);
     const country = useSelector(state => state.statics.country);
+    const isLoggedIn = useSelector(state => state.profile.signed_in);
     const { windowWidth } = useWindowSize();
 
     useEffect(() => {
@@ -110,11 +111,11 @@ const Home = () => {
                     key="tournaments"
                     tab={
                         <Row justify="left" align="middle">
-                            <StockOutlined /> <span>Tournaments</span>
+                            <TrophyOutlined style={{ fontSize: '1rem' }}/> <span style={{ fontSize: '1rem' }}>TOURNAMENTS</span>
                         </Row>
                     }
                 >
-                    <Row gutter={[16, 16]}>
+                    <Row gutter={[6, 6]}>
                         {visibleTournaments.length > 0 ? (
                             visibleTournaments.map((tournament, index) => (
                                 <Col xs={24} sm={12} md={8} lg={12} xl={6} key={index}>
@@ -140,28 +141,29 @@ const Home = () => {
                         
                     </div>
                 </TabPane>
+                {isLoggedIn ? 
                 <TabPane
                     key="joined"
                     tab={
                         <Row justify="left" align="middle">
-                            <StockOutlined /> <span>Joined</span>
+                            <AimOutlined style={{ fontSize: '1rem' }}/> <span style={{ fontSize: '1rem' }}>JOINED</span>
                         </Row>
                     }
                 >
-                    <Row gutter={[16, 16]}>
-                        {
-                            visibleJoinedRooms.length > 0 ? (
-                                visibleJoinedRooms.map((tournament, index) => (
-                                    <Col xs={24} sm={12} md={8} lg={12} xl={6} key={index}>
-                                        <Tournaments routeKey={tournament._id} tournament={tournament} details={false} />
-                                    </Col>
-                                ))
-                            ) : (
-                            <div style={{width: '100%'}}>
-                                <Empty />
-                            </div>
-                        )}
-                    </Row>
+                        <Row gutter={[6, 6]}>
+                            {
+                                visibleJoinedRooms.length > 0 ? (
+                                    visibleJoinedRooms.map((tournament, index) => (
+                                        <Col xs={24} sm={12} md={8} lg={12} xl={6} key={index}>
+                                            <Tournaments routeKey={tournament._id} tournament={tournament} details={false} />
+                                        </Col>
+                                    ))
+                                ) : (
+                                <div style={{width: '100%'}}>
+                                    <Empty />
+                                </div>
+                            )}
+                        </Row>
                     <Pagination
                         hideOnSinglePage={true}
                         current={currentJoinedPage}
@@ -169,6 +171,26 @@ const Home = () => {
                         total={roomsJoined.length}
                         pageSize={joinedPageSize}
                     />
+                </TabPane> : null}
+                <TabPane
+                    key="started"
+                    tab={
+                        <Row justify="left" align="middle">
+                            <ThunderboltOutlined style={{ fontSize: '1rem' }}/> <span style={{ fontSize: '1rem' }}>STARTED</span>
+                        </Row>
+                    }
+                >
+                    <Empty/>
+                </TabPane>
+                <TabPane
+                    key="archived"
+                    tab={
+                        <Row justify="left" align="middle">
+                            <HourglassOutlined style={{ fontSize: '1rem' }}/> <span style={{ fontSize: '1rem' }}>ARCHIVED</span>
+                        </Row>
+                    }
+                >
+                    <Empty/>
                 </TabPane>
             </Tabs>
         </PageLayout>

@@ -39,12 +39,12 @@ const Login = () => {
       <Card
         title={
           <h5>
-              Sign into <strong className='text-primary '>your account</strong>
+              Sign into <strong>your account</strong>
           </h5>
         }
         bordered={false}
         style={{
-          width: 400,
+          width: '35rem',
         }}
       >
         <Form name="normal_login"

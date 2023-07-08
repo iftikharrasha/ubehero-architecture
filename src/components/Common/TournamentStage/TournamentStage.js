@@ -59,7 +59,7 @@ const TournamentStage = ({ tournament, purchased }) => {
             <Card >
                 <Meta
                     title={
-                        tournament.tournamentName
+                        "Timeline"
                     }
                     avatar={
                         <Image

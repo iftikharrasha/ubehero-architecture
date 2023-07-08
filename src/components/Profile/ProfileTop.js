@@ -14,7 +14,7 @@ const ProfileTop = ({ref3ProfilePic, ref4CoverPhoto, profile}) => {
         <Row justify="space-between" align="end">
           <Row justify="left" align="middle" ref={ref3ProfilePic}>
             <Image
-              width={150}
+              width={100}
               src={photo}
               alt='profile'
             />

@@ -32,6 +32,11 @@ function App() {
   return (
       <ConfigProvider
         theme={{
+          token: {
+            colorPrimary: '#60f',
+            colorPrimaryActive: '#1677ff'
+            // colorSuccess: '#1677ff',
+          },
           algorithm: isDarkMode ? darkAlgorithm : defaultAlgorithm,
         }}>
         <Layout style={{minHeight: "100vh"}}>

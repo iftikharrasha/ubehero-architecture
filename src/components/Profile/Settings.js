@@ -1,10 +1,14 @@
 import React from "react";
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
+// import Button from 'react-bootstrap/Button';
+// import Form from 'react-bootstrap/Form';
 import { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import useProfile from "../../hooks/useProfile";
+
+import { LockOutlined, UserOutlined } from '@ant-design/icons';
+import { Button, Card, Form, Input, Select } from 'antd';
+const { Option } = Select;
 
 const Settings = ({profile}) => {
     const [updatedProfile, setUpdatedProfile] = useState(profile);
@@ -16,20 +20,21 @@ const Settings = ({profile}) => {
         });
     };
   
-    const handleProfileUpdate = (e) => {
-      e.preventDefault();
-      handleProfileDraftUpdate(updatedProfile);
+    // const handleProfileUpdate = (e) => {
+    //   e.preventDefault();
+    //   handleProfileDraftUpdate(updatedProfile);
+    // };
+
+    const handleProfileUpdate = (values) => {
+        console.log(values);
+        // handleProfileDraftUpdate(updatedProfile);
     };
 
     return (
         <div
-            className='d-flex flex-column align-items-center justify-content-center'
-            style={{ padding: "40px 0px" }}
+            className='d-flex'
         >
-        <h5 className='mb-5'>
-            Update your <strong className='text-primary '>Profile</strong>
-        </h5>
-            <Form className="w-50">
+            {/* <Form className="w-50">
                 <Form.Group className="mb-3" controlId="formBasicName">
                     <Form.Label>First Name</Form.Label>
                     <Form.Control type="name" placeholder="Enter First Name" 
@@ -95,7 +100,109 @@ const Settings = ({profile}) => {
                 <Button variant="secondary" type="submit" className='ms-3'>
                     Cancel
                 </Button>
+            </Form> */}
+
+            
+            <Card
+                title={
+                    <h5>
+                        Update your <strong>Profile</strong>
+                    </h5>
+                }
+                bordered={false}
+                style={{
+                    width: '35rem',
+                }}
+            >
+            <Form name="normal_login"
+                className="login-form"
+                layout='vertical'
+                initialValues={{
+                    remember: true,
+                }}
+                onFinish={handleProfileUpdate}
+            >
+                <Form.Item  label="Enter Your Username"
+                name="userName"
+                className="pb-1"
+                rules={[
+                    {
+                    type: 'name',
+                    message: 'The input is not valid name!',
+                    },
+                    {
+                    required: true,
+                    message: 'Please input your username!',
+                    },
+                ]}
+                hasFeedback
+                >
+                <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
+                </Form.Item>
+
+                <Form.Item  label="Enter Your Email Address"
+                name="emailAddress"
+                className="pb-1"
+                rules={[
+                    {
+                    type: 'email',
+                    message: 'The input is not valid Email!',
+                    },
+                    {
+                    required: true,
+                    message: 'Please input your Email!',
+                    },
+                ]}
+                hasFeedback
+                >
+                <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Email" />
+                </Form.Item>
+
+                <Form.Item
+                name="mobileNumber"
+                label="Phone Number"
+                rules={[
+                    {
+                    required: true,
+                    message: 'Please input your phone number!',
+                    },
+                ]}
+                >
+                <Input
+                    style={{
+                    width: '100%',
+                    }}
+                />
+                </Form.Item>
+
+                <Form.Item
+                name="gender"
+                label="Gender"
+                rules={[
+                    {
+                    required: true,
+                    message: 'Please select gender!',
+                    },
+                ]}
+                >
+                    <Select placeholder="select your gender">
+                        <Option value="male">Male</Option>
+                        <Option value="female">Female</Option>
+                        <Option value="other">Other</Option>
+                    </Select>
+                </Form.Item>
+
+                <Form.Item>
+                <Button type="primary" htmlType="submit" className="login-form-button">
+                    UPDATE
+                </Button>
+                </Form.Item>
             </Form>
+            
+            {
+                errorMessage ? <p className="text-warning text-center">{errorMessage}</p> : null
+            }
+            </Card>
         </div>
     );
 };

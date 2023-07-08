@@ -1,10 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Card, Button, Progress, Typography, Tag } from 'antd';
+import { Card, Button, Progress, Typography, Tag, Row, Col, Avatar } from 'antd';
+import { MessageOutlined, CoffeeOutlined } from '@ant-design/icons';
+import useAuth from '../../hooks/useAuth';
+
+const { Meta } = Card;
 const { Paragraph } = Typography;
 
 const TournamentSide = ({ref1TSummery1, ref1TSummery2, ref1TSummery3, isLoggedIn, routeKey, tournament, purchasedItems, handleCancel, handleCheckout, step, buttonStatus, timeLeftPercent}) => {
-    const { _id, leaderboards, settings } = tournament;
+    const { _id, leaderboards, settings, tournamentName } = tournament;
+    const { loggedInUser } = useAuth();
 
     let sideStep; //dynamic component
     switch (step) {
@@ -52,7 +57,8 @@ const TournamentSide = ({ref1TSummery1, ref1TSummery2, ref1TSummery3, isLoggedIn
   
     return (
         <div className=" list-group sticky-top">
-            <Card title={`WIN 50$`} bordered style={{ width: 300, boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)' }} ref={ref1TSummery1}>
+            <Card title={tournamentName} bordered style={{ boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)' }} ref={ref1TSummery1}>
+                <h4>WIN 50$</h4>
                 <h6>Joined: {leaderboards.length}</h6>
                 <p className='card-text'>Mode: {settings.mode}</p>
                 {sideStep}
@@ -77,6 +83,48 @@ const TournamentSide = ({ref1TSummery1, ref1TSummery2, ref1TSummery3, isLoggedIn
                                     </Button>
                     }
                 </div>
+            </Card>
+            
+            
+            <Card
+                style={{
+                    boxShadow: 'none',
+                    marginTop: '20px',
+                }}
+                className="popCard"
+                bordered={false}
+                actions={tournament.masterProfile?.key === loggedInUser.id ? null : [
+                    <Row justify="center" align="middle">
+                        <Button icon={<MessageOutlined  style={{ marginBottom: "6px" }}/>} style={{ fontSize: '12px' }}>CHAT</Button>
+                    </Row>,
+                    <Row justify="center" align="middle">
+                        <Button icon={<CoffeeOutlined style={{ marginBottom: "6px" }}/>} style={{ fontSize: '12px' }}>FOLLOW</Button>
+                    </Row>
+                ]}
+                >
+                <Meta
+                    avatar={<Avatar src={tournament.masterProfile.photo} />}
+                    title={tournament.masterProfile.userName}
+                    description={`Master of the moment`}
+                />
+                {/* <Row gutter={[16, 16]} className="pt-3">
+                    <Col span={12}>
+                        <Card bordered={false} className="popBody">
+                            <Row justify="center" align="middle" style={{flexDirection: 'column'}}>
+                            <Paragraph className="mb-0">Country</Paragraph>
+                            <Paragraph className="mb-0">BD</Paragraph>
+                            </Row>
+                        </Card>
+                    </Col>
+                    <Col span={12}>
+                        <Card bordered={false} className="popBody">
+                            <Row justify="center" align="middle" style={{flexDirection: 'column'}}>
+                            <Paragraph className="mb-0">Follower</Paragraph>
+                            <Paragraph className="mb-0">{tournament.masterProfile.noOfFollowers}</Paragraph>
+                            </Row>
+                        </Card>
+                    </Col>
+                </Row> */}
             </Card>
         </div>
     );

@@ -18,7 +18,6 @@ const Tournaments = ({remark, route, handleCancel, tournament, detailsPage, hand
   const isWishListed = wishList.find((t) => t._id === tournament._id);
 
   const { buttonStatus, timeLeftPercent } = useTimer(tournament.dates);
-  console.log(tournamentName, buttonStatus)
 
   const dispatch = useDispatch();
   
@@ -33,14 +32,14 @@ const Tournaments = ({remark, route, handleCancel, tournament, detailsPage, hand
       >
 
       <Card hoverable style={{
-            width: '24rem',
+            width: '23rem',
           }}
           cover={
             <img
               alt="example"
               src={tournamentThumbnail} 
               style={{
-                minHeight: '14.5rem',
+                minHeight: '14rem',
               }}
             />
           }
@@ -49,7 +48,7 @@ const Tournaments = ({remark, route, handleCancel, tournament, detailsPage, hand
               <span className="ps-1" style={{ fontSize: '16px' }}>SOLO</span>
             </Row>,
             <Row justify="center" align="middle">
-              <UsergroupAddOutlined  style={{ fontSize: '20px' }} /> <span className="ps-1" style={{ fontSize: '16px' }}>{leaderboards.length}</span>
+              <UsergroupAddOutlined  style={{ fontSize: '20px' }} /> <span className="ps-1" style={{ fontSize: '16px' }}>{leaderboards.length}/{settings?.maxParticipitant}</span>
             </Row>,
             isWishListed ? 
             <MinusCircleOutlined style={{ fontSize: '18px' }} onClick={() => dispatch(removeFromWishList(tournament._id))} /> :

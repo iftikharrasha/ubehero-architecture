@@ -269,7 +269,7 @@ const Notification = ({socketN, isConnected, userId}) => {
           >
             <Skeleton avatar title={false} loading={item.loading} active>
               <List.Item.Meta
-                avatar={<BellOutlined />}
+                avatar={<BellOutlined style={{color: !item.read ? 'red' : null}}/>}
                 title={<Link to={`/${item.route}`}>{item.invokedByName}</Link>}
                 description={item.subject}
               />

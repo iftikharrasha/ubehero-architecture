@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from "react";
-import moment from "moment/moment";
+import { Input } from 'antd';
+import { CloudUploadOutlined } from '@ant-design/icons';
+
+const { Search } = Input;
 
 const SendBox = ({socket, isConnected, roomId, room, loggedInUser}) => {
     const [message, setMessage] = useState("");
     const [isTyping, setIsTyping] = useState(false);
+    const [isEnterPressed, setIsEnterPressed] = useState(false);
 
     const sendMessage = () => {
         if (message !== "") {
@@ -38,22 +42,44 @@ const SendBox = ({socket, isConnected, roomId, room, loggedInUser}) => {
     }, [socket]);
 
     const handleKeyDown = (e) => {
-        if (e.key === 'Enter') {
-            sendMessage();
-        } else {
-          if (!isTyping) {
-            socket.emit('typing', { roomId: roomId, userName: loggedInUser.name });
-          }
+      if (e.key === "Enter") {
+        e.preventDefault();
+        setIsEnterPressed(true);
+      } else {
+        if (!isTyping) {
+          socket.emit("typing", { roomId: roomId, userName: loggedInUser.name });
         }
+      }
     };
 
     const handleReconnect = () => {
       window.location.reload();
     }
 
+    useEffect(() => {
+      if (isEnterPressed) {
+        sendMessage();
+        setIsEnterPressed(false);
+      }
+    }, [isEnterPressed]);
+
+    const handleSearch = (value) => {
+      setMessage(value);
+      sendMessage();
+    };
+
+    const suffix = (
+      <CloudUploadOutlined
+        style={{
+          fontSize: 16,
+          color: '#1677ff',
+        }}
+      />
+    );
+
     return (
       isConnected ? 
-      <div className="chat-message clearfix">
+      <>
           {
               isTyping ? <div className='typing'>
                               <div className="tiblock">
@@ -64,20 +90,17 @@ const SendBox = ({socket, isConnected, roomId, room, loggedInUser}) => {
                           </div> : null
           }
           
-
-          <div className="input-group mb-0">
-              <input type="text" 
-                  className="form-control" 
-                  placeholder="Enter text here..."
-                  onChange={(e) => setMessage(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                  value={message}
-              />   
-              <div className="input-group-prepend">
-                  <span className="input-group-text" onClick={sendMessage}><i className="fa fa-send"></i></span>
-              </div>                                 
-          </div>
-      </div> :
+          <Search
+            placeholder="Enter text here.."
+            enterButton="Send"
+            size="large"
+            suffix={suffix}
+            onSearch={handleSearch}
+            onChange={(e) => setMessage(e.target.value)}
+            onKeyDown={handleKeyDown}
+            value={message}
+          />
+      </> :
       <div className="d-flex justicy-content-center align-items-center flex-column pb-4">
         <p>You are disconnected!</p>
         <button onClick={handleReconnect}>Reconnect</button>

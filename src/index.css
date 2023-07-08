@@ -57,6 +57,26 @@ a:hover{
   color: #000000;
 }
 
+/* ::-webkit-scrollbar {
+  width: 0.1875rem;
+  height: 0.1875rem;
+  border-radius: 0.625rem;
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 0.625rem;
+  background: #60f;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 0.625rem;
+  background: #60f;
+}
+
+::-webkit-scrollbar-thumb:window-inactive {
+  background: #60f;
+} */
+
 /* @media (min-width: 1300px) {
   .container {
     max-width: 110rem;
@@ -437,16 +457,16 @@ a:hover{
 
 .notyf-item::-webkit-scrollbar-track {
   border-radius: 0.625rem;
-  background: white;
+  background: white !important;
 }
 
 .notyf-item::-webkit-scrollbar-thumb {
   border-radius: 0.625rem;
-  background: rgb(212, 212, 212);
+  background: rgb(212, 212, 212) !important;
 }
 
 .notyf-item::-webkit-scrollbar-thumb:window-inactive {
-  background: rgb(212, 212, 212);
+  background: rgb(212, 212, 212) !important;
 }
 
 .loadmore{
@@ -827,5 +847,190 @@ a:hover{
 
   .username {
     display: inline-block;
+  }
+}
+
+.hero {
+  margin-bottom: 3rem;
+}
+
+.hero__wrapper {
+  margin: 0 auto; 
+}
+
+@media (max-width: 575.98px) {
+  .hero__wrapper {
+    max-width: 100%; 
+    padding: 1.5rem;
+  }
+} 
+
+.hero__wrapper__content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  justify-items: center;
+}
+
+@media (max-width: 575.98px) {
+  .hero__wrapper__content {
+    flex-direction: column;
+  }
+}
+
+.hero__wrapper__content__left {
+  padding-right: 2rem;  
+}
+
+@media (max-width: 575.98px) {
+  .hero__wrapper__content__left {
+    width: 100%;
+    padding-right: 0;  
+    padding-bottom: 3rem;
+  }
+}    
+
+.hero__wrapper__content__left h1{
+  font-size: 2rem;
+}
+
+.hero__wrapper__content__left .p{
+  color: gray;
+  font-size: 1.625rem;
+  line-height: 2.25rem;
+}
+
+.hero__wrapper__content__right {
+  display: flex;
+  gap: 1.25rem;
+}
+
+@media (max-width: 575.98px) {
+  .hero__wrapper__content____right {
+    flex-direction: column;
+    width: 100%;
+  }
+}   
+
+.hero__card {
+  display: flex;
+  flex-grow: 0.5;
+  flex-shrink: 1;
+  height: 25rem;
+  min-width: 10rem;
+  justify-items: center;
+  align-items: center;
+  flex-direction: column;
+  position: relative;
+  border-radius: 1.5rem;
+  cursor: pointer;    
+  transition-property: min-width;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 50ms;
+}
+
+@media (max-width: 575.98px) {
+  .hero__card {
+    height: 4rem;
+    min-width: 100%;
+    border-radius: 1.25rem;
+  }
+}
+
+.hero__card h2 {
+  font-size: 1.375rem;
+  line-height: 1.5rem;
+  font-weight: 600;
+  color: #ffffff;
+  position: absolute;
+  bottom: 6rem;
+  transform: rotate(-90deg);
+}
+
+.hero__card p {
+  color: #ffffff;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+@media (max-width: 575.98px) {
+  .hero__card h2 {
+    transform: rotate(0deg);
+    bottom: auto;
+  }
+}
+
+.hero__card__thumb {
+  width: 100%;
+  height: 25rem;
+  border-radius: 1.5rem;
+  object-fit: cover;
+}
+
+@media (max-width: 575.98px) {
+  .hero__card__thumb {
+    height: 4rem;
+    min-width: 100%;
+    border-radius: 1.25rem;
+  }
+}
+
+
+.hero__card__expand {
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 0px 0px 1.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  position: absolute;
+  padding: 2rem;
+  bottom: 0px;
+}
+
+@media (max-width: 575.98px) {
+  .hero__card__expand {
+    border-radius: 1.25rem;
+    padding: 0 2rem 0 2rem;
+    height: 100%;
+    justify-content: center;
+  }
+} 
+
+.hero__card__expand__icon {
+  width: 3.125rem;
+  height: 3.125rem;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+}
+
+.hero__card__expand__icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.active {
+  flex-grow: 3.5;
+  min-width: 22.5rem;
+}
+
+@media (max-width: 575.98px) {
+  .active {
+    height: 15rem;
+    min-width: 100%;
+  }
+}
+
+.active h2{
+  transform: rotate(0deg);
+  position: relative;
+  bottom: auto;
+}
+
+@media (max-width: 575.98px) {
+  .active .hero__card__thumb {
+    height: 100%;
+    min-width: 100%;
   }
 }

@@ -15,6 +15,7 @@ const UserPopup = ({popupUser}) => {
     const { loggedInUser } = useAuth();
     const user = useSelector((state) => state.profile.data)
     const jwt = localStorage.getItem("jwt");
+    const isLoggedIn = useSelector(state => state.profile.signed_in);
 
     const { socketN } = useNotyf(user, jwt);
     
@@ -65,7 +66,7 @@ const UserPopup = ({popupUser}) => {
             }}
             className="popCard"
             bordered={false}
-            actions={popupUser?.key === loggedInUser.id ? null : [
+            actions={!isLoggedIn ? null : popupUser?.key === loggedInUser.id ? null : [
                 <Row justify="center" align="middle">
                     {/* <MessageOutlined style={{ fontSize: '16px' }} />
                     <span className="ps-1" style={{ fontSize: '12px' }}>CHAT</span> */}

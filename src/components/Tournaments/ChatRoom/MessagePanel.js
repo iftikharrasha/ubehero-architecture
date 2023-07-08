@@ -78,16 +78,6 @@ const MessagePanel = ({socket, tournamentDetails, loggedInUser, routeKey, unread
 
     return (
         <div className="chat">
-            <div className="chat-header clearfix">
-                <div className="row">
-                    <div className="col-lg-6">
-                        <img src={tournamentThumbnail} alt="avatar"/>
-                        <div className="chat-about">
-                            <h6 className="m-b-0">{tournamentName}</h6>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <div className="chat-history" ref={messagesColumnRef}>
                 <ul className="m-b-0">
                     {

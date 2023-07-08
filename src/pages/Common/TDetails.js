@@ -21,6 +21,7 @@ import TournamentSide from '../../components/Tournaments/TournamentSide';
 import useTour from '../../hooks/useTour';
 import useTimer from '../../hooks/useTimer';
 import TournamentStage from '../../components/Common/TournamentStage/TournamentStage';
+import useAuth from '../../hooks/useAuth';
 
 const { TabPane } = Tabs;
 
@@ -28,6 +29,7 @@ let initialSocketId = null;
 
 const TournamentDetails = () => { 
     const { checkInTourStorage, addTourToStorage } = useTour();
+    const { loggedInUser } = useAuth();
     const isLoggedIn = useSelector(state => state.profile.signed_in);
     const purchasedItems = useSelector(state => state.profile?.data?.purchasedItems);
     const [routeKey, setRouteKey] = useState('leaderboards');
@@ -281,11 +283,8 @@ const TournamentDetails = () => {
                             method={method} 
                             tournament={tournamentDetails}
                         />  : 
-                        <>
-                        <TournamentStage tournament={tournamentDetails} purchased={purchasedItems?.tournaments?.includes(id) ? true : false }/>
-
                         <Row>
-                            <Col span={5}>
+                            <Col span={4}>
                                 <TournamentSide 
                                     ref1TSummery1={ref1TSummery1}
                                     ref1TSummery2={ref1TSummery2}
@@ -301,7 +300,9 @@ const TournamentDetails = () => {
                                     timeLeftPercent={timeLeftPercent}
                                 />
                             </Col>
-                            <Col span={19}>
+                            <Col span={19} offset={1}>
+                                <TournamentStage tournament={tournamentDetails} purchased={purchasedItems?.tournaments?.includes(id) ? true : false }/>
+
                                 <Tabs activeKey={routeKey} onChange={handleTabChange}>
                                     <TabPane
                                         key="leaderboards"
@@ -350,6 +351,33 @@ const TournamentDetails = () => {
                                             </TabPane>
                                         )
                                     }
+
+                                    {
+                                        tournamentDetails.masterProfile._id === loggedInUser.id && 
+                                        <TabPane
+                                            key="chatroom"
+                                            tab={
+                                                <Row justify="left" align="middle">
+                                                    <MessageOutlined /> <span>{`ChatRoom (${unreadCount})`}</span>
+                                                </Row>
+                                            }
+                                        >
+            
+                                            {
+                                                socket ? <ChatRoom 
+                                                            socket={socket}
+                                                            isConnected={isConnected}
+                                                            tournamentDetails={tournamentDetails} 
+                                                            leaderboards={leaderboardDetails.leaderboards}
+                                                            routeKey={routeKey}
+                                                            unreadCount={unreadCount}
+                                                            setUnreadCount={setUnreadCount}
+                                                        />
+                                                : <Preloader/>
+                                            }
+                                            
+                                        </TabPane>
+                                    }
                                 </Tabs>
                                 
                                 {/* this is the tab for checkout when clicked the checkout button */}
@@ -366,8 +394,6 @@ const TournamentDetails = () => {
                                 ) : null}
                             </Col>
                         </Row>
-
-                        </>
                     : <Preloader />
                 }
 
