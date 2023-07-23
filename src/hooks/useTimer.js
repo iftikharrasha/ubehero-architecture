@@ -11,7 +11,7 @@ const useTimer = (dates) => {
 
     useEffect(() => {
         const calculateStatus = () => {
-            if(dates.registrationStart || dates.registrationEnd || dates.tournamentStart || dates.tournamentEnd){
+            if(dates.registrationStart ||  dates.registrationEnd || dates.tournamentStart || dates.tournamentEnd){
                 if (currentDate >= dates.registrationStart && currentDate < dates.registrationEnd) {
                     const registrationStart = moment(dates.registrationStart);
                     const registrationEnd = moment(dates.registrationEnd);
@@ -72,4 +72,9 @@ export default useTimer;
     // console.log('localDate', formattedDate);
 
     // console.log('moment', moment(tournamentDetails.dates?.tournamentEnd).format('lll'))
+
+    // const localRegistrationStartDate = moment.utc(dates.registrationStart).local();
+    // const localRegistrationEndDate = moment.utc(dates.registrationEnd).local();
+    // const localTournamentStartDate = moment.utc(dates.tournamentStart).local();
+    // const localTournamentEndDate = moment.utc(dates.tournamentEnd).local();
 

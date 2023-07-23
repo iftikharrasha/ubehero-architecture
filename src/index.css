@@ -57,7 +57,7 @@ a:hover{
   color: #000000;
 }
 
-/* ::-webkit-scrollbar {
+::-webkit-scrollbar {
   width: 0.1875rem;
   height: 0.1875rem;
   border-radius: 0.625rem;
@@ -74,8 +74,8 @@ a:hover{
 }
 
 ::-webkit-scrollbar-thumb:window-inactive {
-  background: #60f;
-} */
+  background: #ffffff;
+}
 
 /* @media (min-width: 1300px) {
   .container {

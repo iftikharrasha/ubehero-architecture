@@ -32,10 +32,11 @@ const Home = () => {
 
     const landing = useSelector((state) => state.statics.landing)
     const tournaments = useSelector((state) => state.tournaments.data)
+    const purchasedItems = useSelector(state => state.profile?.data?.purchasedItems?.tournaments);
 
     //filter tournaments and get the common one that the user purchased
     const [roomsJoined, setRoomsJoined] = useState([]);
-    const purchasedItems = useSelector(state => state.profile?.data?.purchasedItems?.tournaments);
+    const [notJoinedRooms, setNotJoinedRooms] = useState([]);
     
     useEffect(() => {
         if(purchasedItems){
@@ -43,6 +44,19 @@ const Home = () => {
             setRoomsJoined(myRooms)
         }
     }, [purchasedItems, tournaments]);
+    
+    useEffect(() => {
+        if(isLoggedIn){
+            if(roomsJoined.length > 0){
+                const notJoinedTournaments = tournaments.filter((tournament) =>
+                    !roomsJoined.some(room => room._id === tournament._id)
+                );
+                setNotJoinedRooms(notJoinedTournaments)
+            }
+        }else{
+            setNotJoinedRooms(tournaments)
+        }
+    }, [roomsJoined, tournaments, isLoggedIn]);
 
     // Tournaments Pagination configuration
     const [currentTournamentsPage, setCurrentTournamentsPage] = useState(1);
@@ -53,10 +67,10 @@ const Home = () => {
                                  windowWidth < 991.98 ? 2 : // Medium screens
                                  windowWidth < 1199.98 ? 4 : // Large screens
                                  4; // Extra large screens
-    const totalTournaments = tournaments ? tournaments.length : 0;
+    const totalTournaments = notJoinedRooms ? notJoinedRooms.length : 0;
     const startIndex = (currentTournamentsPage - 1) * tournamentsPageSize;
     const endIndex = startIndex + tournamentsPageSize;
-    const visibleTournaments = tournaments ? tournaments.slice(startIndex, endIndex) : [];
+    const visibleTournaments = notJoinedRooms ? notJoinedRooms.slice(startIndex, endIndex) : [];
 
 
     // Joined Pagination configuration
@@ -74,7 +88,7 @@ const Home = () => {
 
     const location = useLocation();
     const history = useHistory();
-    const [routeKey, setRouteKey] = useState('tournaments');
+    const [routeKey, setRouteKey] = useState('featured');
 
     useEffect(() => {
         if (location.pathname.endsWith('ongoing')) {
@@ -82,14 +96,14 @@ const Home = () => {
         } else if (location.pathname.endsWith('joined')) {
             setRouteKey('joined');
         }else {
-            setRouteKey('tournaments');
+            setRouteKey('featured');
         }
     }, [location]);
 
     const handleTabChange = (key) => {
         setRouteKey(key);
         switch (key) {
-            case 'tournaments':
+            case 'featured':
                 history.push(`/`);
                 break;
             case 'ongoing':
@@ -108,10 +122,10 @@ const Home = () => {
             {landing && <Landing landing={landing} />}
             <Tabs activeKey={routeKey} onChange={handleTabChange} tabPosition={windowWidth < 991.98 ? "top" : "left"}>
                 <TabPane
-                    key="tournaments"
+                    key="featured"
                     tab={
                         <Row justify="left" align="middle">
-                            <TrophyOutlined style={{ fontSize: '1rem' }}/> <span style={{ fontSize: '1rem' }}>TOURNAMENTS</span>
+                            <TrophyOutlined style={{ fontSize: '1rem' }}/> <span style={{ fontSize: '1rem' }}>FEATURED</span>
                         </Row>
                     }
                 >
