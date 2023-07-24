@@ -1,26 +1,16 @@
 import { ChannelBox, ChannelLogo } from "planby";
-// import { notyf } from "../../Utilities/Hooks/useNotification";
 
-export const ChannelItem = ({ channel, nowPlaying }) => {
+export const ChannelItem = ({ channel }) => {
   const { position, logo } = channel;
-
-  const handleChannel = (id) => {
-    // if(channel.uuid === nowPlaying.channelUuid){
-    //   notyf.open({
-    //     type: 'success',
-    //     message: "El canal ya se está reproduciendo."
-    //   });
-    // }else{
-    //   notyf.open({
-    //     type: 'error',
-    //     message: "Elige un programa en vivo desde la guía de programación."
-    //   });
-    // }
-  };
-
   return (
-    <ChannelBox {...position} className={channel.uuid === nowPlaying.channelUuid ? "isChannelLive" : "isChanneNotlLive"} onClick={() => handleChannel(channel.uuid)}>
-      <ChannelLogo src={logo} alt="Logo"/>
+    <ChannelBox {...position}>
+      {/* Overwrite styles by add eg. style={{ maxHeight: 52, maxWidth: 52,... }} */}
+      {/* Or stay with default styles */}
+      <ChannelLogo
+        src={logo}
+        alt="Logo"
+        style={{ maxHeight: 52, maxWidth: 52 }}
+      />
     </ChannelBox>
   );
 };
