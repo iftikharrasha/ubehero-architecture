@@ -7,7 +7,7 @@ const LeftMenu = ({ mode }) => {
     <Menu mode={mode}>
       <Menu.Item key="live">
         <Badge dot offset={[7, 4]}>
-          <Link to='/' style={{color: '#ffffff'}}>
+          <Link to='/Live' style={{color: '#ffffff'}}>
             Live
           </Link>
         </Badge>
