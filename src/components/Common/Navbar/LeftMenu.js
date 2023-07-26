@@ -12,14 +12,19 @@ const LeftMenu = ({ mode }) => {
           </Link>
         </Badge>
       </Menu.Item>
+      <Menu.Item key="leaderboards">
+        <Link to='/leaderboards'>
+          Leaderboards
+        </Link>
+      </Menu.Item>
       <Menu.Item key="games">
         <Link to='/games'>
           Games
         </Link>
       </Menu.Item>
-      <Menu.Item key="contact">
-        <Link to='/contact'>
-          Contact
+      <Menu.Item key="upgrade">
+        <Link to='/upgrade'>
+          Upgrade
         </Link>
       </Menu.Item>
     </Menu>

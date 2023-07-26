@@ -1,11 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Card, Button, Progress, Typography, Tag, Row, Col, Avatar } from 'antd';
-import { MessageOutlined, CoffeeOutlined } from '@ant-design/icons';
+import { Card, Button, Progress, Typography, Tag, Row, Space, Avatar, List } from 'antd';
+import { MessageOutlined, CoffeeOutlined, LikeOutlined, StarOutlined, TrophyOutlined } from '@ant-design/icons';
 import useAuth from '../../hooks/useAuth';
 
 const { Meta } = Card;
 const { Paragraph } = Typography;
+
+const IconText = ({ icon, text }) => (
+    <Space>
+      {React.createElement(icon)}
+      {text}
+    </Space>
+  );
 
 const TournamentSide = ({ref1TSummery1, ref1TSummery2, ref1TSummery3, isLoggedIn, routeKey, tournament, purchasedItems, handleCancel, handleCheckout, step, buttonStatus, timeLeftPercent}) => {
     const { _id, leaderboards, settings, tournamentName } = tournament;
@@ -15,7 +22,7 @@ const TournamentSide = ({ref1TSummery1, ref1TSummery2, ref1TSummery3, isLoggedIn
     switch (step) {
         case 1:
             sideStep = (
-                <div ref={ref1TSummery2}>
+                <div ref={ref1TSummery2} style={{ paddingTop: '20px' }}>
                     <Paragraph className="mb-0">Registration Time Left</Paragraph>
                     <Progress percent={timeLeftPercent} steps={12} showInfo={true}/> 
                 </div>
@@ -24,7 +31,7 @@ const TournamentSide = ({ref1TSummery1, ref1TSummery2, ref1TSummery3, isLoggedIn
 
         case 2:
             sideStep = (
-                <div ref={ref1TSummery2}>
+                <div ref={ref1TSummery2} style={{ paddingTop: '20px' }}>
                     <Paragraph className="mb-0">Join the game Loby!</Paragraph>
                 </div>
             );
@@ -32,7 +39,7 @@ const TournamentSide = ({ref1TSummery1, ref1TSummery2, ref1TSummery3, isLoggedIn
 
         case 3:
             sideStep = (
-                <div ref={ref1TSummery2}>
+                <div ref={ref1TSummery2} style={{ paddingTop: '20px' }}>
                     <Paragraph className="mb-0">Tournament Started!</Paragraph>
                 </div>
             );
@@ -40,7 +47,7 @@ const TournamentSide = ({ref1TSummery1, ref1TSummery2, ref1TSummery3, isLoggedIn
 
         case 4:
             sideStep = (
-                <div ref={ref1TSummery2}>
+                <div ref={ref1TSummery2} style={{ paddingTop: '20px' }}>
                     <Paragraph className="mb-0">Tournament Finished!</Paragraph>
                 </div>
             );
@@ -48,7 +55,7 @@ const TournamentSide = ({ref1TSummery1, ref1TSummery2, ref1TSummery3, isLoggedIn
 
         default:
             sideStep = (
-                <div ref={ref1TSummery2}>
+                <div ref={ref1TSummery2} style={{ paddingTop: '20px' }}>
                     <Paragraph className="mb-0">Tournament Upcoming!</Paragraph>
                 </div>
             );;
@@ -56,12 +63,29 @@ const TournamentSide = ({ref1TSummery1, ref1TSummery2, ref1TSummery3, isLoggedIn
     }
   
     return (
-        <div className=" list-group sticky-top">
-            <Card title={tournamentName} bordered style={{ boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)' }} ref={ref1TSummery1}>
-                <h4>WIN 50$</h4>
-                <h6>Joined: {leaderboards.length}</h6>
-                <p className='card-text'>Mode: {settings.mode}</p>
+        <div className="list-group sticky-top">
+            <Card bordered style={{ boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)' }} ref={ref1TSummery1}
+            cover={<img alt="example" src={tournament.tournamentThumbnail} />}>
+                <List
+                    itemLayout="vertical"
+                    size="large" 
+                >
+                    <List.Item style={{ padding: '0' }}>
+                        <List.Item.Meta
+                            avatar={<TrophyOutlined style={{ fontSize: '30px' }} />}
+                            title={<h4>WIN 50$</h4>}
+                        />
+                        <div>
+                            <IconText icon={LikeOutlined} text={<p className='card-text'>Mode: {settings.mode}</p>} key="list-vertical-like-o" />
+                        </div>
+                        <div>
+                            <IconText icon={StarOutlined} text={<p className='card-text'>Joined: {leaderboards.length}/{tournament.settings?.maxParticipitant}</p>} key="list-vertical-star-o" />
+                        </div>
+                    </List.Item>
+                </List>
+                
                 {sideStep}
+
                 <div>
                     {
                         !isLoggedIn ? 
@@ -105,7 +129,7 @@ const TournamentSide = ({ref1TSummery1, ref1TSummery2, ref1TSummery3, isLoggedIn
                 <Meta
                     avatar={<Avatar src={tournament.masterProfile.photo} />}
                     title={tournament.masterProfile.userName}
-                    description={`Master of the moment`}
+                    description={`Master of the tournament`}
                 />
                 {/* <Row gutter={[16, 16]} className="pt-3">
                     <Col span={12}>

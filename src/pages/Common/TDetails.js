@@ -45,6 +45,8 @@ const TournamentDetails = () => {
             setRouteKey('chatroom');
         } else if (location.pathname.endsWith('prizes')) {
             setRouteKey('prizes');
+        } else if (location.pathname.endsWith('result')) {
+            setRouteKey('result');
         } else if (location.pathname.endsWith('checkout')) {
             setRouteKey('checkout');
         }else {
@@ -61,6 +63,9 @@ const TournamentDetails = () => {
                 break;
             case 'prizes':
                 history.push(`/tournament/details/${id}/prizes`);
+                break;
+            case 'result':
+                history.push(`/tournament/details/${id}/result`);
                 break;
             case 'chatroom':
                 history.push(`/tournament/details/${id}/chatroom`);
@@ -301,7 +306,11 @@ const TournamentDetails = () => {
                                 />
                             </Col>
                             <Col span={19} offset={1}>
-                                <TournamentStage tournament={tournamentDetails} purchased={purchasedItems?.tournaments?.includes(id) ? true : false }/>
+                                <TournamentStage 
+                                    setRouteKey={setRouteKey}
+                                    tournament={tournamentDetails} 
+                                    purchased={purchasedItems?.tournaments?.includes(id) ? true : false }
+                                />
 
                                 <Tabs activeKey={routeKey} onChange={handleTabChange}>
                                     <TabPane
@@ -323,6 +332,16 @@ const TournamentDetails = () => {
                                         }
                                     >
                                         <Prizes prizes={tournamentDetails.prizes}/>
+                                    </TabPane>
+                                    <TabPane
+                                        key="result"
+                                        tab={
+                                            <Row justify="left" align="middle">
+                                                <TrophyOutlined /> <span>Result</span>
+                                            </Row>
+                                        }
+                                    >
+                                        <h4>Master hasn't published the result yet!</h4>
                                     </TabPane>
                                     {
                                         purchasedItems?.tournaments?.includes(tournamentDetails._id) && (

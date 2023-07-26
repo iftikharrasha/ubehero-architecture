@@ -33,9 +33,10 @@ function App() {
       <ConfigProvider
         theme={{
           token: {
-            colorPrimary: '#60f',
-            colorPrimaryActive: '#1677ff'
-            // colorSuccess: '#1677ff',
+            colorPrimary: '#9551fb',
+            colorPrimaryActive: '#1677ff',
+            colorPrimaryHover: '#F030C0',
+            // colorSuccess: '#F030C0',
           },
           algorithm: isDarkMode ? darkAlgorithm : defaultAlgorithm,
         }}>

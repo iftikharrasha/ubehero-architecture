@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 // import Tab from 'react-bootstrap/Tab';
 // import Tabs from 'react-bootstrap/Tabs';
 import PopupModal from '../../Common/PopupModal/PopupModal';
-import { Row, Tabs } from 'antd';
+import { Card, Row, Tabs } from 'antd';
 
 const { TabPane } = Tabs;
 
@@ -41,27 +41,29 @@ const UserList = ({socket, leaderboards}) => {
                 key="1"
                 tab={
                     <Row justify="left" align="middle">
-                        <span>{`Online (${roomUsers.length + 1})`}</span>
+                        <span>{`Online (${roomUsers.length})`}</span>
                     </Row>
                 }
             >
                 <div id="plist" className="people-list px-1">
                     <ul className="list-unstyled chat-list mb-0">
-                        <li className="clearfix active mb-1">
+                        {/* <li className="clearfix active mb-1">
                             <img src="https://img.freepik.com/free-vector/cute-cat-gaming-cartoon_138676-2969.jpg" alt="avatar"/>
                             <div className="about">
                                 <div className="name"><i className="fa fa-circle online"></i> ChatBot</div>
                                 <div className="status">Joined a few seconds ago </div>                                            
                             </div>
-                        </li>
+                        </li> */}
                         {
                             roomUsers.map((participant, index) => (
                                 <li className="clearfix active mb-1" key={index} onClick={(e) => handleShow(participant)}>
-                                    <span className="avatarUser"><img src={participant.photo} alt="avatar"/></span>
-                                    <div className="about">
-                                        <div className="name"><i className="fa fa-circle online"></i> {participant.userName}</div>
-                                        <div className="status">Joined {moment(participant.createdAt).fromNow()} </div>                                            
-                                    </div>
+                                    <Card>
+                                        <span className="avatarUser"><img src={participant.photo} alt="avatar"/></span>
+                                        <div className="about">
+                                            <div className="name"><i className="fa fa-circle online"></i> {participant.userName}</div>
+                                            <div className="status">Joined {moment(participant.createdAt).fromNow()} </div>                                            
+                                        </div>
+                                    </Card>
                                 </li>
                             ))
                         }
@@ -81,11 +83,13 @@ const UserList = ({socket, leaderboards}) => {
                         {
                             leaderboards.map((participant, index) => (
                                 <li className="clearfix active mb-1" key={index} onClick={(e) => handleShow(participant)}>
-                                    <span className="avatarUser"><img src={participant.photo} alt="avatar"/></span>
-                                    <div className="about">
-                                        <div className="name"><i className={`fa fa-circle ${isUserOnline(participant) ? 'online' : 'offline'}`}></i> {participant.userName}</div>
-                                        <div className="status">{`${isUserOnline(participant) ? 'Online' : 'offline'}`}</div>                                            
-                                    </div>
+                                    <Card>
+                                        <span className="avatarUser"><img src={participant.photo} alt="avatar"/></span>
+                                        <div className="about">
+                                            <div className="name"><i className={`fa fa-circle ${isUserOnline(participant) ? 'online' : 'offline'}`}></i> {participant.userName}</div>
+                                            <div className="status">{`${isUserOnline(participant) ? 'Online' : 'offline'}`}</div>                                            
+                                        </div>
+                                    </Card>
                                 </li>
                             ))
                         }

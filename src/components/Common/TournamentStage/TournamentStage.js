@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import moment from "moment";
-
-import { Row, Steps, Image, Popover, Card, Button } from 'antd';
-import useTimer from '../../../hooks/useTimer';
 import axios from 'axios';
+import { Row, Steps, Image, Popover, Card, Button } from 'antd';
+import { useHistory  } from 'react-router-dom';
+import useTimer from '../../../hooks/useTimer';
 
 const { Meta } = Card;
 
-const TournamentStage = ({ tournament, purchased }) => {
+const TournamentStage = ({ setRouteKey, tournament, purchased }) => {
     const { step } = useTimer(tournament.dates);
     const [loadings, setLoadings] = useState([]);
     const [popoverVisible, setPopoverVisible] = useState(false);
@@ -51,7 +51,13 @@ const TournamentStage = ({ tournament, purchased }) => {
                 return newLoadings;
             });
         }
-      };
+    };
+
+    const history = useHistory();
+    const handleResult = () => {
+        history.push(`/tournament/details/${tournament._id}/result`);
+        setRouteKey('result');
+    };
       
 
     return (
@@ -59,14 +65,14 @@ const TournamentStage = ({ tournament, purchased }) => {
             <Card >
                 <Meta
                     title={
-                        "Timeline"
+                        <h4>{tournament.tournamentName}</h4>
                     }
-                    avatar={
-                        <Image
-                            width={150}
-                            src={tournament.tournamentThumbnail}
-                        />
-                    }
+                    // avatar={
+                    //     <Image
+                    //         width={150}
+                    //         src={tournament.tournamentThumbnail}
+                    //     />
+                    // }
                     description={
                         <div>
                             <Row justify="center" align="middle">
@@ -77,26 +83,31 @@ const TournamentStage = ({ tournament, purchased }) => {
                                     items={[
                                         {
                                             title: step > 1 ? 'Registration Closed': 'Registration Open' ,
-                                            description: moment(tournament.dates?.registrationStart).format('lll'),
+                                            description: step > 1 ? `On ${moment(tournament.dates?.registrationEnd).format('lll')}` : `Till ${moment(tournament.dates?.registrationEnd).format('lll')}`,
                                             status: step > 1 ? 'finish': null,
                                         },
                                         {
-                                            title: 'Lineups',
-                                            description: purchased ? <Popover content={content} title="Lobby Credentials" trigger="click" open={popoverVisible && loadingCompleted} onOpenChange={setPopoverVisible}>
+                                            title: 'Lineup',
+                                            description: purchased ? 
+                                                        <Popover content={content} title="Lobby Credentials" trigger="click" open={popoverVisible && loadingCompleted} onOpenChange={setPopoverVisible}>
                                                             <Button type="dashed" size="small" loading={loadings[0]} className='mt-1' onClick={() => enterLobby(0)}>Join Lobby</Button>
                                                         </Popover> : 
-                                                         moment(tournament.dates?.registrationEnd).format('lll'),
+                                                         `Starts ${moment(tournament.dates?.registrationEnd).format('lll')}`,
                                             status: step > 2 ? 'finish': null,
                                         },
                                         {
-                                            title: 'Started',
-                                            description: moment(tournament.dates?.tournamentStart).format('lll'),
+                                            title: step > 3 ? 'Battle Started' : 'Battle Starts',
+                                            description: `On ${moment(tournament.dates?.tournamentStart).format('lll')}`,
                                             status: step > 3 ? 'finish': null,
                                         },
                                         {
-                                            title: 'Finished',
-                                            description: moment(tournament.dates?.tournamentEnd).format('lll'),
-                                            status: step > 4 ? 'finish': null,
+                                            title: step === 4 ? 'Battle Ended' : 'Battle Ends',
+                                            description: step === 4 ? 
+                                                        <Button type="dashed" size="small" className='mt-1' onClick={handleResult}>
+                                                            View Result
+                                                        </Button> : 
+                                                        `On ${moment(tournament.dates?.tournamentEnd).format('lll')}`,
+                                            status: step === 4 ? 'finish': null,
                                         },
                                     ]}
                                 />

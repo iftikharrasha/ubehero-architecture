@@ -65,7 +65,7 @@ a:hover{
 
 ::-webkit-scrollbar-track {
   border-radius: 0.625rem;
-  background: #60f;
+  background: #bebebe;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -74,7 +74,7 @@ a:hover{
 }
 
 ::-webkit-scrollbar-thumb:window-inactive {
-  background: #ffffff;
+  background: #60f;
 }
 
 /* @media (min-width: 1300px) {
@@ -123,23 +123,17 @@ a:hover{
   -o-transition: .5s;
   -webkit-transition: .5s;
   transition: .5s;
-  height: 500px;
+  height: 430px;
   overflow-y: auto;
 }
 
 .people-list .chat-list li {
-  padding: 10px 15px;
   list-style: none;
   border-radius: 3px
 }
 
 .people-list .chat-list li:hover {
-  background: #efefef;
   cursor: pointer
-}
-
-.people-list .chat-list li.active {
-  background: #efefef
 }
 
 .people-list .chat-list li .name {
@@ -184,7 +178,6 @@ a:hover{
 
 .chat .chat-history {
   padding: 20px;
-  border-bottom: 2px solid #fff;
   height: 400px;
   overflow-y: auto;
 }
@@ -217,8 +210,7 @@ a:hover{
 }
 
 .chat .chat-history .message {
-  color: #444;
-  padding: 18px 20px;
+  padding: 2px;
   line-height: 26px;
   font-size: 16px;
   border-radius: 7px;
@@ -244,7 +236,7 @@ a:hover{
   pointer-events: none;
   border-bottom-color: #fff;
   border-width: 10px;
-  margin-left: -10px
+  margin-left: -40px;
 }
 
 .chat .chat-history .other-message {
@@ -253,7 +245,7 @@ a:hover{
 
 .chat .chat-history .other-message:after {
   bottom: 100%;
-  left: 30px;
+  left: 20px;
   border: solid transparent;
   content: " ";
   height: 0;
@@ -1040,4 +1032,8 @@ a:hover{
   height: 75vh;
   position: relative;
   padding: 1.5rem 2.75rem;
+}
+
+.ant-steps-item-description{
+  max-width: 12.5rem !important;
 }

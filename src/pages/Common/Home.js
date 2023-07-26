@@ -190,7 +190,7 @@ const Home = () => {
                     key="started"
                     tab={
                         <Row justify="left" align="middle">
-                            <ThunderboltOutlined style={{ fontSize: '1rem' }}/> <span style={{ fontSize: '1rem' }}>STARTED</span>
+                            <ThunderboltOutlined style={{ fontSize: '1rem' }}/> <span style={{ fontSize: '1rem' }}>SAVED</span>
                         </Row>
                     }
                 >

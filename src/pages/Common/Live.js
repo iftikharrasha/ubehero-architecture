@@ -12,7 +12,7 @@ const Live = () => {
     <section className="epg">
       <div className="hero__wrapper__content__left">
           <Title>Live Tournaments</Title>
-          <Paragraph className='p'>You are seeing the timeline of tournaments starting today.</Paragraph>
+          <Paragraph className='p'>You are seeing the timeline of tournaments that has battle started.</Paragraph>
       </div>
       <Epg isLoading={isLoading} {...getEpgProps()}>
         <Layout

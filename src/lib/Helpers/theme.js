@@ -6,12 +6,12 @@ export const theme = {
   grey: { 300: "#d1d1d1" },
   white: "#fff",
   green: {
-    300: "#2c7a7b"
+    300: "#F030C0"
   },
   scrollbar: {
     border: "#ffffff",
     thumb: {
-      bg: "#e1e1e1"
+      bg: "#ffffff40"
     }
   },
   loader: {
@@ -22,9 +22,9 @@ export const theme = {
   },
   gradient: {
     blue: {
-      300: "#002eb3",
+      300: "#051937",
       600: "#002360",
-      900: "#051937"
+      900: "#60f"
     }
   },
 
@@ -37,7 +37,7 @@ export const theme = {
 
   timeline: {
     divider: {
-      bg: "#718096"
+      bg: "#ffffff40"
     }
   }
 };

@@ -4,6 +4,7 @@ import { useRef } from 'react';
 import msg from '../../../sounds/msg.mp3';
 import bot from '../../../sounds/bot.mp3';
 import typing from '../../../sounds/typing.mp3';
+import { Card } from 'antd';
 
 const MessagePanel = ({socket, tournamentDetails, loggedInUser, routeKey, unreadCound, setUnreadCount}) => {
     const [messagesRecieved, setMessagesReceived] = useState([]);
@@ -101,8 +102,10 @@ const MessagePanel = ({socket, tournamentDetails, loggedInUser, routeKey, unread
                                         : "message other-message bot"
                                 }
                                 >
-                                    <p>{item.message}</p>
-                                    <span>{moment(item.createdAt).fromNow()}</span>
+                                    <Card>
+                                        <p>{item.message}</p>
+                                        <span>{moment(item.createdAt).fromNow()}</span>
+                                    </Card>
                                 </div>                                    
                             </li>
                         ))

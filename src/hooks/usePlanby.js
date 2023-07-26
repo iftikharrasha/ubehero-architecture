@@ -1,8 +1,8 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { useEpg } from "planby";
 import moment from "moment";
-import axios from "axios";
 import { theme } from "../lib/Helpers/theme";
+// import axios from "axios";
 // import useLandingApi from "./useLandingApi";
 
 //THIS IS MOCK DATA WAY
@@ -16,6 +16,9 @@ export function usePlanby() {
   const channelsData = useMemo(() => channels, [channels]);
   const epgData = useMemo(() => epg, [epg]);
 
+  const date = new Date();
+  var today = moment(date).format('YYYY-MM-DD');
+
   const { getEpgProps, getLayoutProps } = useEpg({
     epg: epgData,
     channels: channelsData,
@@ -26,8 +29,10 @@ export function usePlanby() {
     isTimeline: true,
     isLine: true,
     isBaseTimeFormat: true,
-    startDate: "2022-07-24T00:00:00",
-    endDate: "2022-07-24T24:00:00",
+    startDate: `${today}T00:00:00`,
+    endDate: `${today}T24:00:00`,
+    // startDate: "2022-07-24T00:00:00",
+    // endDate: "2022-07-24T24:00:00",
     theme
   });
 

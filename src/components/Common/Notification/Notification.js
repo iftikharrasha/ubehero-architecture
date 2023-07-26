@@ -8,7 +8,6 @@ import { BellOutlined } from '@ant-design/icons';
 const Notification = ({socketN, isConnected, userId}) => {
   const [notyfReceived, setNotyfReceived] = useState([]);
   const { loggedInUser } = useAuth();
-  console.log(notyfReceived)
 
   useEffect(() => {
       if (socketN) {
@@ -269,7 +268,7 @@ const Notification = ({socketN, isConnected, userId}) => {
           >
             <Skeleton avatar title={false} loading={item.loading} active>
               <List.Item.Meta
-                avatar={<BellOutlined style={{color: !item.read ? 'red' : null}}/>}
+                avatar={<BellOutlined style={{color: !item.read ? '#F030C0' : null}}/>}
                 title={<Link to={`/${item.route}`}>{item.invokedByName}</Link>}
                 description={item.subject}
               />
@@ -278,7 +277,7 @@ const Notification = ({socketN, isConnected, userId}) => {
         )}
       />
       {hasMore && (
-        <Button onClick={loadMore} block className='loadmore' danger>
+        <Button onClick={loadMore} block className='loadmore'>
           Load More
         </Button>
       )}
@@ -288,7 +287,7 @@ const Notification = ({socketN, isConnected, userId}) => {
   return (
     <div className='me-4'>
       <Popover placement="bottomLeft" title={`Notifications (${notyfReceived.filter(n => !n.read).length} unread)`} content={content} trigger="click" className='popup'>
-        <Badge count={notyfReceived.filter(n => !n.read).length} size="small" color="red" style={{ color: 'white' }}>
+        <Badge count={notyfReceived.filter(n => !n.read).length} size="small" color="#F030C0" style={{ color: 'white' }}>
           <i className="fa-solid fa-bell text-white"></i>
         </Badge>
       </Popover>

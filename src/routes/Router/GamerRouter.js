@@ -20,6 +20,7 @@ const GamerRouter = () => {
         <Route exact path="/tournament/details/:id" render={() => <TDetails/>}  />
         <Route path="/tournament/details/:id/chatroom" render={() => <TDetails tabKey={'chatroom'}/>} />
         <Route path="/tournament/details/:id/prizes" render={() => <TDetails tabKey={'prizes'} />}/>
+        <Route path="/tournament/details/:id/result" render={() => <TDetails tabKey={'result'} />}/>
         <Route path="/tournament/details/:id/checkout" render={() => <TDetails tabKey={'checkout'}/>} />
         <PrivateRoute path="/profile/:id">
             <Profile/>
