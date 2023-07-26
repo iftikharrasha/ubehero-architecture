@@ -87,12 +87,12 @@ const TournamentStage = ({ setRouteKey, tournament, purchased }) => {
                                             status: step > 1 ? 'finish': null,
                                         },
                                         {
-                                            title: 'Lineup',
+                                            title: step > 2 ? 'Lineup Started' : 'Lineup Starts',
                                             description: purchased ? 
                                                         <Popover content={content} title="Lobby Credentials" trigger="click" open={popoverVisible && loadingCompleted} onOpenChange={setPopoverVisible}>
                                                             <Button type="dashed" size="small" loading={loadings[0]} className='mt-1' onClick={() => enterLobby(0)}>Join Lobby</Button>
                                                         </Popover> : 
-                                                         `Starts ${moment(tournament.dates?.registrationEnd).format('lll')}`,
+                                                         `On ${moment(tournament.dates?.registrationEnd).format('lll')}`,
                                             status: step > 2 ? 'finish': null,
                                         },
                                         {

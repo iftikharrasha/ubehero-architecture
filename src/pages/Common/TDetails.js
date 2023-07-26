@@ -22,6 +22,7 @@ import useTour from '../../hooks/useTour';
 import useTimer from '../../hooks/useTimer';
 import TournamentStage from '../../components/Common/TournamentStage/TournamentStage';
 import useAuth from '../../hooks/useAuth';
+import Bracket from '../../components/Tournaments/Bracket/Bracket';
 
 const { TabPane } = Tabs;
 
@@ -341,7 +342,17 @@ const TournamentDetails = () => {
                                             </Row>
                                         }
                                     >
-                                        <h4>Master hasn't published the result yet!</h4>
+                                       <h4>Result for solo games</h4>
+                                    </TabPane>
+                                    <TabPane
+                                        key="bracket"
+                                        tab={
+                                            <Row justify="left" align="middle">
+                                                <TrophyOutlined /> <span>Bracket</span>
+                                            </Row>
+                                        }
+                                    >
+                                        <Bracket/>
                                     </TabPane>
                                     {
                                         purchasedItems?.tournaments?.includes(tournamentDetails._id) && (
