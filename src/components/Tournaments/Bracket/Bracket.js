@@ -8,7 +8,6 @@ import useBracket from '../../../hooks/useBracket';
 const Bracket = () => {
     const { windowWidth } = useWindowSize();
     const { loading, bracketData } = useBracket();
-    console.log(bracketData.length)
 
     const [widthOfTheDiv, setWidthOfTheDiv] = useState(windowWidth);
 

@@ -1829,6 +1829,19 @@
 // 9 10 ----> 8 + 5 = 13
 // 11 12 ----> 8 + 6 = 14
  
+
+
+//8 particaipants
+// id    nextMatchId
+//  1    5
+//  2    5
+//  3    6
+//  4    6
+//  5    7
+//  6    7
+//  7    null
+
+
 export const matchesOf_8P_7M_3R = [
   {
       "id": 1,
