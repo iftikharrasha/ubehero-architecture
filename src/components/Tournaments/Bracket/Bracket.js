@@ -1,7 +1,7 @@
 import React, { useLayoutEffect, useRef, useState } from 'react';
 import { SingleEliminationBracket, Match, SVGViewer, createTheme } from '@g-loot/react-tournament-brackets';
 import useWindowSize from '../../../hooks/useWindowSize';
-import { matchesOf_8P_7M_3R } from '../../../lib/Data/matches';
+import { matchOf_64P_63_6R } from '../../../lib/Data/matches';
 import { Empty } from 'antd';
 import useBracket from '../../../hooks/useBracket';
 
