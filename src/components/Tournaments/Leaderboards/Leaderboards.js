@@ -4,6 +4,7 @@ import { SearchOutlined } from '@ant-design/icons';
 import UserPopup from "../../Common/UserPopup/UserPopup";
 
 const Leaderboards = ({leaderboards}) => {
+  console.log(leaderboards)
   const searchInput = useRef(null);
 
   const columns = [

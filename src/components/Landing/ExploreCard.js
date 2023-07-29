@@ -9,7 +9,7 @@ export const ExploreCard = ({ index, active, setActive, setAmount, games }) => {
     };
 
     return (
-        <div className={active === games?.id ? "hero__card active" : "hero__card"} onClick={handleClick}>
+        <div className={active === games?.id ? "hero__card heroActive" : "hero__card"} onClick={handleClick}>
             <img
                 src={games?.imgUrl}
                 className="hero__card__thumb"

@@ -40,6 +40,7 @@ const Tournaments = ({remark, route, handleCancel, tournament, detailsPage, hand
               src={tournamentThumbnail} 
               style={{
                 minHeight: '14rem',
+                maxHeight: '14rem',
               }}
             />
           }

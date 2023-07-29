@@ -6,6 +6,7 @@ import internalUserReducer from './slices/internalUsersSlice';
 import staticReducer from './slices/staticSlice';
 import profileReducer from './slices/profileSlice';
 import leaderboardReducer from './slices/leaderboardSlice';
+import bracketReducer from './slices/bracketSlice';
 import giftCardReducer from './slices/giftCardSlice';
 import myTeamReducer from './slices/teamSlice';
 import myTransactionReducer from './slices/walletSlice';
@@ -22,6 +23,7 @@ const rootReducer = combineReducers({
   internalUsers: internalUserReducer,
   profile: profileReducer,
   leaderboards: leaderboardReducer,
+  brackets: bracketReducer,
   giftcards: giftCardReducer,
   myTeams: myTeamReducer,
   myTransactions: myTransactionReducer,
@@ -31,7 +33,7 @@ const rootReducer = combineReducers({
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['tournaments', 'masterTournaments', 'internalTournaments', 'statics', 'profile', 'leaderboards', 'giftcards', 'myTeams', 'myTransactions', 'mySiteSettings']
+  whitelist: ['tournaments', 'masterTournaments', 'internalTournaments', 'statics', 'profile', 'leaderboards', 'brackets', 'giftcards', 'myTeams', 'myTransactions', 'mySiteSettings']
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

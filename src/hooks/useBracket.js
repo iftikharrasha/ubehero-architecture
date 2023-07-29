@@ -348,8 +348,8 @@ const useBracket = () => {
       let rp = particaipants;
       const totalMatch = particaipants - 1;
       const rounds = Math.log2(particaipants);
+      let offset = particaipants/2;
       let matchId = 0;
-      let totalObjects = particaipants/2;
 
       const date = new Date();
       const todayFull = moment(date);
@@ -358,7 +358,7 @@ const useBracket = () => {
         for (let i = 1; i <= (rp/2); i++) {
           const nextMatchId = i > (rp/2) ? null :
                               i % 2 === 0 ?
-                              (totalObjects) : (totalObjects+1);
+                              (offset) : (offset+1);
                         
           
           matchId = matchId + 1;
@@ -371,7 +371,7 @@ const useBracket = () => {
             state: 'SCHEDULED',
             participants: [],
           };
-          totalObjects = nextMatchId;
+          offset = nextMatchId;
           bracket.push(match);
         }
         rp = rp/2;
@@ -383,14 +383,14 @@ const useBracket = () => {
     };
     
     useEffect(() => {
-        const fetchData = async () => {
-          const bracket = patternGernerate(32);
-          setBracketData(bracket);
-          setLoading(false);
-        };
-    
-        fetchData();
-      }, []);
+      const fetchData = async () => {
+        const bracket = patternGernerate(16);
+        setBracketData(bracket);
+        setLoading(false);
+      };
+  
+      fetchData();
+    }, []);
 
     return {
         loading,

@@ -143,8 +143,6 @@ const Home = () => {
                         )}
                     </Row>
                     <div className="pagination-container">
-                        
-                        
                         <Pagination
                             hideOnSinglePage={true}
                             current={currentTournamentsPage}
@@ -152,7 +150,6 @@ const Home = () => {
                             total={totalTournaments}
                             pageSize={tournamentsPageSize}
                         />
-                        
                     </div>
                 </TabPane>
                 {isLoggedIn ? 
@@ -164,20 +161,21 @@ const Home = () => {
                         </Row>
                     }
                 >
-                        <Row gutter={[6, 6]}>
-                            {
-                                visibleJoinedRooms.length > 0 ? (
-                                    visibleJoinedRooms.map((tournament, index) => (
-                                        <Col xs={24} sm={12} md={8} lg={12} xl={6} key={index}>
-                                            <Tournaments routeKey={tournament._id} tournament={tournament} details={false} />
-                                        </Col>
-                                    ))
-                                ) : (
-                                <div style={{width: '100%'}}>
-                                    <Empty />
-                                </div>
-                            )}
-                        </Row>
+                    <Row gutter={[6, 6]}>
+                        {
+                            visibleJoinedRooms.length > 0 ? (
+                                visibleJoinedRooms.map((tournament, index) => (
+                                    <Col xs={24} sm={12} md={8} lg={12} xl={6} key={index}>
+                                        <Tournaments routeKey={tournament._id} tournament={tournament} details={false} />
+                                    </Col>
+                                ))
+                            ) : (
+                            <div style={{width: '100%'}}>
+                                <Empty />
+                            </div>
+                            )
+                        }
+                    </Row>
                     <Pagination
                         hideOnSinglePage={true}
                         current={currentJoinedPage}

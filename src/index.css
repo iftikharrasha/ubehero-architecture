@@ -1002,26 +1002,26 @@ a:hover{
   object-fit: contain;
 }
 
-.active {
+.heroActive {
   flex-grow: 3.5;
   min-width: 22.5rem;
 }
 
 @media (max-width: 575.98px) {
-  .active {
+  .heroActive {
     height: 15rem;
     min-width: 100%;
   }
 }
 
-.active h2{
+.heroActive h2{
   transform: rotate(0deg);
   position: relative;
   bottom: auto;
 }
 
 @media (max-width: 575.98px) {
-  .active .hero__card__thumb {
+  .heroActive .hero__card__thumb {
     height: 100%;
     min-width: 100%;
   }

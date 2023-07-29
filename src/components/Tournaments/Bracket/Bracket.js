@@ -1,13 +1,13 @@
 import React, { useLayoutEffect, useRef, useState } from 'react';
 import { SingleEliminationBracket, Match, SVGViewer, createTheme } from '@g-loot/react-tournament-brackets';
 import useWindowSize from '../../../hooks/useWindowSize';
-import { matchOf_64P_63_6R } from '../../../lib/Data/matches';
 import { Empty } from 'antd';
-import useBracket from '../../../hooks/useBracket';
+// import { matchOf_64P_63_6R } from '../../../lib/Data/matches';
+// import useBracket from '../../../hooks/useBracket';
 
-const Bracket = () => {
+const Bracket = ({ matches }) => {
     const { windowWidth } = useWindowSize();
-    const { loading, bracketData } = useBracket();
+    // const { loading, bracketData } = useBracket();
 
     const [widthOfTheDiv, setWidthOfTheDiv] = useState(windowWidth);
 
@@ -34,10 +34,10 @@ const Bracket = () => {
     }, [windowWidth]);
 
     const WhiteTheme = createTheme({
-        textColor: { main: '#000000', highlighted: '#ffffff', dark: '#707582' },
+        textColor: { main: '#000000', highlighted: '#ffffff', dark: '#a3a3a3' },
         matchBackground: { wonColor: '#22293b', lostColor: '#22293b' },
         score: {
-          background: { wonColor: '#f030c0', lostColor: '#000000' },
+          background: { wonColor: '#f030c0', lostColor: '#2f3648' },
           text: { highlightedWonColor: '#7BF59D', highlightedLostColor: '#ffffff' },
         },
         border: {
@@ -47,16 +47,15 @@ const Bracket = () => {
         roundHeader: { backgroundColor: '#f030c0', fontColor: '#ffffff' },
         connectorColor: '#707582',
         connectorColorHighlight: '#f030c0',
-        svgBackground: '#141414',
+        svgBackground: '#14141400',
     });
 
     return (
-        <section className='bracket' style={{ display: widthOfTheDiv > 0 ? 'block' : 'none' }} ref={divRef}>
-            {loading ? <div>Loading...</div> : (
-            bracketData.length === 0 ? <Empty/> : 
+        <section className='bracket' style={{ display: widthOfTheDiv > 0 ? 'block' : 'none', border: '1px solid #303030' }} ref={divRef}>
+            { matches.length === 0 ? <Empty/> : 
             <SingleEliminationBracket
                 className="singleElimination"
-                matches={bracketData}
+                matches={matches}
                 matchComponent={Match}
                 theme={WhiteTheme}
                 options={{
@@ -80,7 +79,7 @@ const Bracket = () => {
                     {children}
                 </SVGViewer>
                 )}
-            />)}
+            />}
         </section>
     );
 };

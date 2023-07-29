@@ -7,7 +7,7 @@ import useTimer from '../../../hooks/useTimer';
 
 const { Meta } = Card;
 
-const TournamentStage = ({ setRouteKey, tournament, purchased }) => {
+const TournamentStage = ({ compMode, setRouteKey, tournament, purchased }) => {
     const { step } = useTimer(tournament.dates);
     const [loadings, setLoadings] = useState([]);
     const [popoverVisible, setPopoverVisible] = useState(false);
@@ -87,12 +87,16 @@ const TournamentStage = ({ setRouteKey, tournament, purchased }) => {
                                             status: step > 1 ? 'finish': null,
                                         },
                                         {
-                                            title: step > 2 ? 'Lineup Started' : 'Lineup Starts',
+                                            title: step > 2 ? `${compMode === 'knockout' ? 'Bracket Locked' : 'Lineup Started'}` : `${compMode === 'knockout' ? 'Bracket Locks' : 'Lineup Starts'}`,
                                             description: purchased ? 
-                                                        <Popover content={content} title="Lobby Credentials" trigger="click" open={popoverVisible && loadingCompleted} onOpenChange={setPopoverVisible}>
-                                                            <Button type="dashed" size="small" loading={loadings[0]} className='mt-1' onClick={() => enterLobby(0)}>Join Lobby</Button>
-                                                        </Popover> : 
-                                                         `On ${moment(tournament.dates?.registrationEnd).format('lll')}`,
+                                                            compMode === 'knockout' ?
+                                                            <Popover content={content} title="Lobby Credentials" trigger="click" open={popoverVisible && loadingCompleted} onOpenChange={setPopoverVisible}>
+                                                                <Button type="dashed" size="small" loading={loadings[0]} className='mt-1' onClick={() => enterLobby(0)}>Join Lobby</Button>
+                                                            </Popover> : 
+                                                            <Popover content={content} title="Your Next Match Opponent" trigger="click" open={popoverVisible && loadingCompleted} onOpenChange={setPopoverVisible}>
+                                                                <Button type="dashed" size="small" loading={loadings[0]} className='mt-1' onClick={() => enterLobby(0)}>Find Match</Button>
+                                                            </Popover> :
+                                                            `On ${moment(tournament.dates?.registrationEnd).format('lll')}`,
                                             status: step > 2 ? 'finish': null,
                                         },
                                         {

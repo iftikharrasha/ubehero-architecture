@@ -307,8 +307,8 @@ const StageRegistration = ({ tId, previewURL, setPreviewURL, updatedTournament, 
                         </Tab>
                         <Tab eventKey="settings" title="3. Settings">
                             <h2>Settings</h2>
-                            <Form.Group className="mb-3" controlId="formBasicMode">
-                                <Form.Label>Game Mode</Form.Label>
+                            <Form.Group className="mb-3" controlId="formEntryMode">
+                                <Form.Label>Entry Mode</Form.Label>
                                 <Form.Control as="select" value={updatedTournament?.settings?.mode} 
                                 onChange={(e) =>
                                     setUpdatedTournament({
@@ -319,10 +319,27 @@ const StageRegistration = ({ tId, previewURL, setPreviewURL, updatedTournament, 
                                         },
                                     })
                                 }>
-                                    <option value="">Select mode</option>
-                                    <option value="solo">solo</option>
-                                    <option value="team">team</option>
-                                    <option value="open">open</option>
+                                    <option value="">Select entry mode</option>
+                                    <option value="solo">Solo</option>
+                                    <option value="team">Team</option>
+                                </Form.Control>
+                            </Form.Group>
+
+                            <Form.Group className="mb-3" controlId="formCompetitionMode">
+                                <Form.Label>Competition Mode</Form.Label>
+                                <Form.Control as="select" value={updatedTournament?.competitionMode?.mode} 
+                                onChange={(e) =>
+                                    setUpdatedTournament({
+                                        ...updatedTournament, 
+                                        settings: {
+                                            ...updatedTournament.settings,
+                                            competitionMode: e.target.value,
+                                        },
+                                    })
+                                }>
+                                    <option value="">Select game mode</option>
+                                    <option value="ladder">Ladder</option>
+                                    <option value="knockout">Knockout</option>
                                 </Form.Control>
                             </Form.Group>
 
@@ -343,12 +360,11 @@ const StageRegistration = ({ tId, previewURL, setPreviewURL, updatedTournament, 
                                     <option value="2">2</option>
                                     <option value="4">4</option>
                                     <option value="8">8</option>
-                                    <option value="12">12</option>
                                     <option value="16">16</option>
                                     <option value="32">32</option>
-                                    <option value="52">52</option>
                                     <option value="64">64</option>
                                     <option value="128">128</option>
+                                    <option value="256">256</option>
                                 </Form.Control>
                             </Form.Group>
 
@@ -365,15 +381,15 @@ const StageRegistration = ({ tId, previewURL, setPreviewURL, updatedTournament, 
                                     })
                                 }>
                                     <option value="">Has rounds?</option>
-                                    <option value="1">Yes</option>
                                     <option value="0">No</option>
+                                    <option value="1">Yes</option>
                                 </Form.Control>
                             </Form.Group>
 
                             {
                                 updatedTournament?.settings?.rounds == 1 && 
-                                <p>Bracket here!</p>
-                            }
+                                <p>This tournament will have bracket of {updatedTournament?.settings?.maxParticipitant} participants, playing {updatedTournament?.settings?.maxParticipitant - 1} single elimination matches each in round of {Math.log2(updatedTournament?.settings?.maxParticipitant)}!</p>
+                            } 
                         </Tab>
                         <Tab eventKey="pricing" title="4. Pricing">
                             <h2>Pricing</h2>

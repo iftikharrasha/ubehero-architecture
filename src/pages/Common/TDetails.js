@@ -6,8 +6,9 @@ import {  useParams } from 'react-router-dom';
 import { useLocation, useHistory  } from 'react-router-dom';
 import PageLayout from '../../components/PageLayout/PageLayout';
 import Leaderboard from '../../components/Tournaments/Leaderboards/Leaderboards';
-import { fetchTournamentDetails } from '../../redux/slices/tournamentSlice'
+import { fetchTournamentDetails } from '../../redux/slices/tournamentSlice';
 import { fetchLeaderboards } from '../../redux/slices/leaderboardSlice';
+import { fetchBrackets } from '../../redux/slices/bracketSlice';
 import Preloader from '../../components/PageLayout/Preloader';
 import Prizes from '../../components/Tournaments/Prizes/Prizes';
 import ChatRoom from '../../components/Tournaments/ChatRoom/ChatRoom';
@@ -42,6 +43,29 @@ const TournamentDetails = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
+        dispatch(fetchTournamentDetails({ id, versionTournament }));
+        if(compMode === 'knockout'){
+            dispatch(fetchBrackets({ id, versionBracket }));
+        }else{
+            dispatch(fetchLeaderboards({ id, versionLeaderboard }));
+        }
+    }, [])
+
+    const tournaments = useSelector((state) => state.tournaments.data)
+    const tournamentDetails = tournaments.find(t => t._id === id);
+    const versionTournament = tournamentDetails ? tournamentDetails.version : 0;
+
+    const leaderboards = useSelector((state) => state.leaderboards.data)
+    const leaderboardDetails = leaderboards[id];
+    const versionLeaderboard = leaderboardDetails ? leaderboardDetails.version : 0;
+
+    const brackets = useSelector((state) => state.brackets.data)
+    const bracketDetails = brackets[id];
+    const versionBracket = bracketDetails ? bracketDetails.version : 0;
+
+    const compMode = tournamentDetails?.settings?.competitionMode;
+    
+    useEffect(() => {
         if (location.pathname.endsWith('chatroom')) {
             setRouteKey('chatroom');
         } else if (location.pathname.endsWith('prizes')) {
@@ -50,8 +74,14 @@ const TournamentDetails = () => {
             setRouteKey('result');
         } else if (location.pathname.endsWith('checkout')) {
             setRouteKey('checkout');
+        } else if (location.pathname.endsWith('bracket')) {
+            setRouteKey('bracket');
         }else {
-            setRouteKey('leaderboards');
+            if(compMode === 'knockout') {
+                setRouteKey('bracket');
+            }else{
+                setRouteKey('leaderboards');
+            }
         }
     }, [location]);
 
@@ -61,6 +91,9 @@ const TournamentDetails = () => {
         switch (key) {
             case 'leaderboards':
                 history.push(`/tournament/details/${id}`);
+                break;
+            case 'bracket':
+                history.push(`/tournament/details/${id}/bracket`);
                 break;
             case 'prizes':
                 history.push(`/tournament/details/${id}/prizes`);
@@ -75,19 +108,6 @@ const TournamentDetails = () => {
                 break;
         }
     };
-
-    useEffect(() => {
-        dispatch(fetchTournamentDetails({ id, versionTournament }));
-        dispatch(fetchLeaderboards({ id, versionLeaderboard }));
-    }, [])
-
-    const tournaments = useSelector((state) => state.tournaments.data)
-    const tournamentDetails = tournaments.find(t => t._id === id);
-    const versionTournament = tournamentDetails ? tournamentDetails.version : 0;
-
-    const leaderboards = useSelector((state) => state.leaderboards.data)
-    const leaderboardDetails = leaderboards[id];
-    const versionLeaderboard = leaderboardDetails ? leaderboardDetails.version : 0;
 
     const [method, setMethod]  = useState('');
     const handlePaymentMethod = (e, m) => {
@@ -173,41 +193,6 @@ const TournamentDetails = () => {
       return () => clearInterval(interval);
     }, [socket]);
 
-    const [loadings, setLoadings] = useState([]);
-    const [popoverVisible, setPopoverVisible] = useState(false);
-    const [loadingCompleted, setLoadingCompleted] = useState(false);
-
-    const content = (
-        <div>
-          <p className='mb-0'>RoomID: 12213sdasd</p>
-          <p className='mb-0'>Password: fdasd#Q4</p>
-        </div>
-    );
-
-    const enterLoading = (index) => {
-        setLoadings((prevLoadings) => {
-          const newLoadings = [...prevLoadings];
-          newLoadings[index] = true;
-          return newLoadings;
-        });
-      
-        setTimeout(() => {
-          setLoadings((prevLoadings) => {
-            const newLoadings = [...prevLoadings];
-            newLoadings[index] = false;
-            return newLoadings;
-          });
-          setLoadingCompleted(true); // Set loading completion flag after 6 seconds
-        }, 3000);
-    };
-
-    //To reset the loading state and hide the popover when clicking outside
-    // const handleContainerClick = () => {
-    //     setPopoverVisible(false); // Hide the popover
-    //     setLoadings([]); // Reset the loading state
-    //     setLoadingCompleted(false); // Reset the loading completion flag
-    // };
-
     /* this is to handler the modal of tour */
     const [isModalOpen, setIsModalOpen] = useState(false);
     useEffect(() => {
@@ -283,7 +268,7 @@ const TournamentDetails = () => {
         <PageLayout>
 
             {
-                tournamentDetails && leaderboardDetails ? 
+                tournamentDetails ? 
                     routeKey === 'order' ?
                         <CheckoutForm 
                             method={method} 
@@ -308,22 +293,42 @@ const TournamentDetails = () => {
                             </Col>
                             <Col span={19} offset={1}>
                                 <TournamentStage 
+                                    compMode={compMode}
                                     setRouteKey={setRouteKey}
                                     tournament={tournamentDetails} 
                                     purchased={purchasedItems?.tournaments?.includes(id) ? true : false }
                                 />
 
                                 <Tabs activeKey={routeKey} onChange={handleTabChange}>
-                                    <TabPane
-                                        key="leaderboards"
-                                        tab={
-                                            <Row justify="left" align="middle" ref={ref2Leaderboard}>
-                                                <StockOutlined /> <span>Leaderboards</span>
-                                            </Row>
-                                        }
-                                    >
-                                        <Leaderboard leaderboards={leaderboardDetails.leaderboards}/>
-                                    </TabPane>
+                                    {
+                                        compMode === 'knockout' ? 
+                                        <TabPane
+                                            key="bracket"
+                                            tab={
+                                                <Row justify="left" align="middle">
+                                                    <TrophyOutlined /> <span>Bracket</span>
+                                                </Row>
+                                            }
+                                        >
+                                            {
+                                                !bracketDetails ? <Preloader /> :
+                                                <Bracket matches={bracketDetails.matches}/>
+                                            }
+                                        </TabPane>:
+                                        <TabPane
+                                            key="leaderboards"
+                                            tab={
+                                                <Row justify="left" align="middle" ref={ref2Leaderboard}>
+                                                    <StockOutlined /> <span>Leaderboards</span>
+                                                </Row>
+                                            }
+                                        >
+                                            {
+                                                !leaderboardDetails ? <Preloader /> :
+                                                <Leaderboard leaderboards={leaderboardDetails.leaderboards}/>
+                                            }
+                                        </TabPane> 
+                                    }
                                     <TabPane
                                         key="prizes"
                                         tab={
@@ -344,16 +349,6 @@ const TournamentDetails = () => {
                                     >
                                        <h4>Result for solo games</h4>
                                     </TabPane>
-                                    <TabPane
-                                        key="bracket"
-                                        tab={
-                                            <Row justify="left" align="middle">
-                                                <TrophyOutlined /> <span>Bracket</span>
-                                            </Row>
-                                        }
-                                    >
-                                        <Bracket/>
-                                    </TabPane>
                                     {
                                         purchasedItems?.tournaments?.includes(tournamentDetails._id) && (
                                             <TabPane
@@ -370,7 +365,7 @@ const TournamentDetails = () => {
                                                                 socket={socket}
                                                                 isConnected={isConnected}
                                                                 tournamentDetails={tournamentDetails} 
-                                                                leaderboards={leaderboardDetails.leaderboards}
+                                                                leaderboards={leaderboardDetails?.leaderboards}
                                                                 routeKey={routeKey}
                                                                 unreadCount={unreadCount}
                                                                 setUnreadCount={setUnreadCount}

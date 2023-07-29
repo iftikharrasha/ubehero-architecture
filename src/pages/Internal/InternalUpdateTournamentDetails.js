@@ -13,7 +13,7 @@ const InternalUpdateDraft = () => {
     const [updatedTournament, setUpdatedTournament] = useState({});
     const { tId } = useParams();
 
-    const { handleTournamentDraftUpdate, handleTournamentDraftDelete, errorMessage } = useTournament();
+    const { handleTournamentDraftUpdate, handleTournamentDraftDelete, handleApprovalUpdate, errorMessage } = useTournament();
 
     const handleRegDateChange = (date, field) => {
         setUpdatedTournament((prevTournament) => {
@@ -60,13 +60,18 @@ const InternalUpdateDraft = () => {
     };
   
     const handleTournamentUpdate = (e, role, status) => {
-      e.preventDefault();
-      handleTournamentDraftUpdate(updatedTournament, role, status);
+        e.preventDefault();
+        handleTournamentDraftUpdate(updatedTournament, role, status);
     };
   
     const handleTournamentDelete = (e, id, role) => {
-      e.preventDefault();
-      handleTournamentDraftDelete(id, role);
+        e.preventDefault();
+        handleTournamentDraftDelete(id, role);
+    };
+
+    const handleApproval = (e, role) => {
+        e.preventDefault();
+        handleApprovalUpdate(updatedTournament, role);
     };
 
     useEffect(() => {
@@ -178,7 +183,7 @@ const InternalUpdateDraft = () => {
                     errorMessage ? <p className="text-warning text-center">{errorMessage}</p> : null
                 }
 
-                <Button variant="success" type="submit" onClick={(e) => handleTournamentUpdate(e, 'internal', 'active')}>
+                <Button variant="success" type="submit" onClick={(e) => handleApproval(e, 'internal')}>
                     Approve
                 </Button>
                 <Button variant="primary" type="submit" className='ms-3' onClick={(e) => handleTournamentUpdate(e, 'internal', 'revision')}>

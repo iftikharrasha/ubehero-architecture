@@ -144,6 +144,35 @@ const useTournament = () => {
         }
     }
 
+    const handleApprovalUpdate = async (data, role) => {
+        let config = {}
+
+        if(profile.signed_in){
+            const token = localStorage.getItem('jwt');
+            config.headers = { "Authorization": "Bearer " + token, ...config.headers};
+        }
+
+        const draftItem = {
+            maxParticipitant: data.settings.maxParticipitant,
+            competitionMode: data.settings.competitionMode
+        }
+
+        try {
+            const response = await axios.post(`${process.env.REACT_APP_API_LINK}/api/v1/tournaments/approve/${data._id}`, draftItem, config);
+            
+            if(response.data.status === 200){
+                setErrorMessage(null);
+                const destination = `/${role}/${data._id}/tournaments`;
+                history.replace(destination);
+            }else{
+                setErrorMessage(response.data.error.message);
+            }
+            return response.data
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     const handleTournamentCredential = async (data) => {
         let config = {}
 
@@ -198,6 +227,7 @@ const useTournament = () => {
         handleTournamentPurchase,
         handleTournamentDraftCreate,
         handleTournamentDraftUpdate,
+        handleApprovalUpdate,
         handleTournamentCredential,
         handleTournamentDraftDelete,
     }

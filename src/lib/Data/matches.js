@@ -1872,71 +1872,89 @@
 //  7    null
 
 
-// export const matchesOf_8P_7M_3R = [
-//   {
-//       "id": 1,
-//       "nextMatchId": 5,
-//       "name": "Round 1 - Match 1",
-//       "tournamentRoundText": "1",
-//       "startTime": "2021-05-30T00:00:00.000Z",
-//       "state": "SCHEDULED",
-//       "participants": []
-//   },
-//   {
-//       "id": 2,
-//       "nextMatchId": 5,
-//       "name": "Round 1 - Match 2",
-//       "tournamentRoundText": "1",
-//       "startTime": "2021-05-30T00:00:00.000Z",
-//       "state": "SCHEDULED",
-//       "participants": []
-//   },
-//   {
-//       "id": 3,
-//       "nextMatchId": 6,
-//       "name": "Round 1 - Match 3",
-//       "tournamentRoundText": "1",
-//       "startTime": "2021-05-30T00:00:00.000Z",
-//       "state": "SCHEDULED",
-//       "participants": []
-//   },
-//   {
-//       "id": 4,
-//       "nextMatchId": 6,
-//       "name": "Round 1 - Match 4",
-//       "tournamentRoundText": "1",
-//       "startTime": "2021-05-30T00:00:00.000Z",
-//       "state": "SCHEDULED",
-//       "participants": []
-//   },
-//   {
-//       "id": 5,
-//       "nextMatchId": 7,
-//       "name": "Round 1 - Match 5",
-//       "tournamentRoundText": "2",
-//       "startTime": "2021-05-30",
-//       "state": "SCHEDULED",
-//       "participants": []
-//   },
-//   {
-//       "id": 6,
-//       "nextMatchId": 7,
-//       "name": "Round 1 - Match 6",
-//       "tournamentRoundText": "2",
-//       "startTime": "2021-05-30",
-//       "state": "SCHEDULED",
-//       "participants": []
-//   },
-//   {
-//       "id": 7,
-//       "nextMatchId": null,
-//       "name": "Final Match",
-//       "tournamentRoundText": "3",
-//       "startTime": "2021-05-30",
-//       "state": "SCHEDULED",
-//       "participants": []
-//   }
-// ]
+export const matchOf_64P_63_6R = [
+  {
+      "id": 1,
+      "nextMatchId": 5,
+      "name": "Round 1 - Match 1",
+      "tournamentRoundText": "1",
+      "startTime": "2021-05-30T00:00:00.000Z",
+      "state": "SCHEDULED",
+      "participants": [
+        {
+          "id": "42fecd89-dc83-4821-80d3-718acb50a30c",
+          "resultText": null,
+          "isWinner": false,
+          "status": null,
+          "name": "BLUEJAYS",
+          "picture": "teamlogos/client_team_default_logo"
+        },
+      ]
+  },
+  {
+      "id": 2,
+      "nextMatchId": 5,
+      "name": "Round 1 - Match 2",
+      "tournamentRoundText": "1",
+      "startTime": "2021-05-30T00:00:00.000Z",
+      "state": "SCHEDULED",
+      "participants": []
+  },
+  {
+      "id": 3,
+      "nextMatchId": 6,
+      "name": "Round 1 - Match 3",
+      "tournamentRoundText": "1",
+      "startTime": "2021-05-30T00:00:00.000Z",
+      "state": "SCHEDULED",
+      "participants": [
+        {
+          "id": "df01fe2c-18db-4190-9f9e-aa63364128fe",
+          "resultText": null,
+          "isWinner": false,
+          "status": null,
+          "name": "Bosphorus",
+          "picture": "teamlogos/r7zn4gr8eajivapvjyzd"
+        }
+      ]
+  },
+  {
+      "id": 4,
+      "nextMatchId": 6,
+      "name": "Round 1 - Match 4",
+      "tournamentRoundText": "1",
+      "startTime": "2021-05-30T00:00:00.000Z",
+      "state": "SCHEDULED",
+      "participants": []
+  },
+  {
+      "id": 5,
+      "nextMatchId": 7,
+      "name": "Round 1 - Match 5",
+      "tournamentRoundText": "2",
+      "startTime": "2021-05-30",
+      "state": "SCHEDULED",
+      "participants": []
+  },
+  {
+      "id": 6,
+      "nextMatchId": 7,
+      "name": "Round 1 - Match 6",
+      "tournamentRoundText": "2",
+      "startTime": "2021-05-30",
+      "state": "SCHEDULED",
+      "participants": []
+  },
+  {
+      "id": 7,
+      "nextMatchId": null,
+      "name": "Final Match",
+      "tournamentRoundText": "3",
+      "startTime": "2021-05-30",
+      "state": "SCHEDULED",
+      "participants": []
+  }
+]
 
 // export const matchOf_64P_63_6R = [
 //     {
@@ -3610,658 +3628,658 @@
 //     },
 //   ]
 
-export const matchOf_64P_63_6R = [ 
-    // p = 64
-    // rp = p;
-    // rounds = log2(p);
-    // Round j = 1 ---> rounds
-    // Match i = 1 ---> (rp/2) = 32 Matches
-    {
-        "id": 1,
-        "name": "Round 1 - Match 1",
-        "nextMatchId": 33,   // ((p/2) + 1)
-        "nextLooserMatchId": null,
-        "tournamentRoundText": "1",
-        "startTime": "2021-05-30",
-        "state": "SCORE_DONE",
-        "participants": []
-    },
-    {
-        "id": 2,
-        "name": "Round 1 - Match 2",
-        "nextMatchId": 33,   // ((p/2) + 1)
-        "nextLooserMatchId": null,
-        "tournamentRoundText": "1",
-        "startTime": "2021-05-30",
-        "state": "SCORE_DONE",
-        "participants": []
-    },
-    {
-        "id": 3,
-        "name": "Round 1 - Match 3",
-        "nextMatchId": 34,   // ((p/2) + 2)
-        "nextLooserMatchId": null,
-        "tournamentRoundText": "1",
-        "startTime": "2021-05-30",
-        "state": "SCORE_DONE",
-        "participants": []
-    },
-    {
-        "id": 4,
-        "name": "Round 1 - Match 4",
-        "nextMatchId": 34,  // ((p/2) + 2)
-        "nextLooserMatchId": null,
-        "tournamentRoundText": "1",
-        "startTime": "2021-05-30",
-        "state": "SCORE_DONE",
-        "participants": []
-    },
-    {
-        "id": 5,
-        "name": "Round 1 - Match 5",
-        "nextMatchId": 35,  // ((p/2) + 3)
-        "nextLooserMatchId": null,
-        "tournamentRoundText": "1",
-        "startTime": "2021-05-30",
-        "state": "SCORE_DONE",
-        "participants": []
-    },
-    {
-        "id": 6,
-        "name": "Round 1 - Match 6",
-        "nextMatchId": 35, // ((p/2) + 3)
-        "nextLooserMatchId": null,
-        "tournamentRoundText": "1",
-        "startTime": "2021-05-30",
-        "state": "SCORE_DONE",
-        "participants": []
-    },
-    {
-        "id": 7,
-        "name": "Round 1 - Match 7",
-        "nextMatchId": 36,   // ((p/2) + 4)
-        "nextLooserMatchId": null,
-        "tournamentRoundText": "1",
-        "startTime": "2021-05-30",
-        "state": "SCORE_DONE",
-        "participants": []
-    },
-    {
-        "id": 8,
-        "name": "Round 1 - Match 8",
-        "nextMatchId": 36,   // ((p/2) + 4)
-        "nextLooserMatchId": null,
-        "tournamentRoundText": "1",
-        "startTime": "2021-05-30",
-        "state": "SCORE_DONE",
-        "participants": []
-    },
-    {
-        "id": 9,
-        "name": "Round 1 - Match 9",
-        "nextMatchId": 37,   // ((p/2) + 5)
-        "nextLooserMatchId": null,
-        "tournamentRoundText": "1",
-        "startTime": "2021-05-30",
-        "state": "SCORE_DONE",
-        "participants": []
-    },
-    {
-        "id": 10,
-        "name": "Round 1 - Match 10",
-        "nextMatchId": 37,   // ((p/2) + 5)
-        "nextLooserMatchId": null,
-        "tournamentRoundText": "1",
-        "startTime": "2021-05-30",
-        "state": "SCORE_DONE",
-        "participants": []
-    },
-    {
-        "id": 11,
-        "name": "Round 1 - Match 11",
-        "nextMatchId": 38,   // ((p/2) + 6)
-        "nextLooserMatchId": null,
-        "tournamentRoundText": "1",
-        "startTime": "2021-05-30",
-        "state": "SCORE_DONE",
-        "participants": []
-    },
-    {
-        "id": 12,
-        "name": "Round 1 - Match 12",
-        "nextMatchId": 38,   // ((p/2) + 6)
-        "nextLooserMatchId": null,
-        "tournamentRoundText": "1",
-        "startTime": "2021-05-30",
-        "state": "SCORE_DONE",
-        "participants": []
-    },
-    {
-        "id": 13,
-        "name": "Round 1 - Match 13",
-        "nextMatchId": 39,   // ((p/2) + 7)
-        "nextLooserMatchId": null,
-        "tournamentRoundText": "1",
-        "startTime": "2021-05-30",
-        "state": "SCORE_DONE",
-        "participants": []
-    },
-    {
-        "id": 14,
-        "name": "Round 1 - Match 14",
-        "nextMatchId": 39,  // ((p/2) + 7)
-        "nextLooserMatchId": null,
-        "tournamentRoundText": "1",
-        "startTime": "2021-05-30",
-        "state": "SCORE_DONE",
-        "participants": []
-    },
-    {
-        "id": 15,
-        "name": "Round 1 - Match 15",
-        "nextMatchId": 40,  // ((p/2) + 8)
-        "nextLooserMatchId": null,
-        "tournamentRoundText": "1",
-        "startTime": "2021-05-30",
-        "state": "SCORE_DONE",
-        "participants": []
-    },
-    {
-        "id": 16,
-        "name": "Round 1 - Match 16",
-        "nextMatchId": 40,  // ((p/2) + 8)
-        "nextLooserMatchId": null,
-        "tournamentRoundText": "1",
-        "startTime": "2021-05-30",
-        "state": "SCORE_DONE",
-        "participants": []
-    },
-    {
-        "id": 17,
-        "name": "Round 1 - Match 17",
-        "nextMatchId": 41,  // ((p/2) + 9)
-        "nextLooserMatchId": null,
-        "tournamentRoundText": "1",
-        "startTime": "2021-05-30",
-        "state": "SCORE_DONE",
-        "participants": []
-    },
-    {
-        "id": 18,
-        "name": "Round 1 - Match 18",
-        "nextMatchId": 41,  // ((p/2) + 9)
-        "nextLooserMatchId": null,
-        "tournamentRoundText": "1",
-        "startTime": "2021-05-30",
-        "state": "SCORE_DONE",
-        "participants": []
-    },
-    {
-        "id": 19,
-        "name": "Round 1 - Match 19",
-        "nextMatchId": 42,  // ((p/2) + 10)
-        "nextLooserMatchId": null,
-        "tournamentRoundText": "1",
-        "startTime": "2021-05-30",
-        "state": "SCORE_DONE",
-        "participants": []
-    },
-    {
-        "id": 20,
-        "name": "Round 1 - Match 20",
-        "nextMatchId": 42,  // ((p/2) + 10)
-        "nextLooserMatchId": null,
-        "tournamentRoundText": "1",
-        "startTime": "2021-05-30",
-        "state": "SCORE_DONE",
-        "participants": []
-    },
-    {
-        "id": 21,
-        "name": "Round 1 - Match 21",
-        "nextMatchId": 43,  // ((p/2) + 11)
-        "nextLooserMatchId": null,
-        "tournamentRoundText": "1",
-        "startTime": "2021-05-30",
-        "state": "SCORE_DONE",
-        "participants": []
-    },
-    {
-        "id": 22,
-        "name": "Round 1 - Match 22",
-        "nextMatchId": 43,  // ((p/2) + 11)
-        "nextLooserMatchId": null,
-        "tournamentRoundText": "1",
-        "startTime": "2021-05-30",
-        "state": "SCORE_DONE",
-        "participants": []
-    },
-    {
-        "id": 23,
-        "name": "Round 1 - Match 23",
-        "nextMatchId": 44,  // ((p/2) + 12)
-        "nextLooserMatchId": null,
-        "tournamentRoundText": "1",
-        "startTime": "2021-05-30",
-        "state": "SCORE_DONE",
-        "participants": []
-    },
-    {
-        "id": 24,
-        "name": "Round 1 - Match 24",
-        "nextMatchId": 44,  // ((p/2) + 12)
-        "nextLooserMatchId": null,
-        "tournamentRoundText": "1",
-        "startTime": "2021-05-30",
-        "state": "SCORE_DONE",
-        "participants": []
-    },
-    {
-        "id": 25,
-        "name": "Round 1 - Match 25",
-        "nextMatchId": 45,  // ((p/2) + 13)
-        "nextLooserMatchId": null,
-        "tournamentRoundText": "1",
-        "startTime": "2021-05-30",
-        "state": "SCORE_DONE",
-        "participants": []
-    },
-    {
-        "id": 26,
-        "name": "Round 1 - Match 26",
-        "nextMatchId": 45,  // ((p/2) + 13)
-        "nextLooserMatchId": null,
-        "tournamentRoundText": "1",
-        "startTime": "2021-05-30",
-        "state": "DONE",
-        "participants": []
-    },
-    {
-        "id": 27,
-        "name": "Round 1 - Match 27",
-        "nextMatchId": 46,  // ((p/2) + 14)
-        "nextLooserMatchId": null,
-        "tournamentRoundText": "1",
-        "startTime": "2021-05-30",
-        "state": "SCORE_DONE",
-        "participants": []
-    },
-    {
-        "id": 28,
-        "name": "Round 1 - Match 28",
-        "nextMatchId": 46,  // ((p/2) + 14)
-        "nextLooserMatchId": null,
-        "tournamentRoundText": "1",
-        "startTime": "2021-05-30",
-        "state": "SCORE_DONE",
-        "participants": []
-    },
-    {
-        "id": 29,
-        "name": "Round 1 - Match 29",
-        "nextMatchId": 47,  // ((p/2) + 15)
-        "nextLooserMatchId": null,
-        "tournamentRoundText": "1",
-        "startTime": "2021-05-30",
-        "state": "SCORE_DONE",
-        "participants": []
-    },
-    {
-        "id": 30,
-        "name": "Round 1 - Match 30",
-        "nextMatchId": 47,  // ((p/2) + 15)
-        "nextLooserMatchId": null,
-        "tournamentRoundText": "1",
-        "startTime": "2021-05-30",
-        "state": "SCORE_DONE",
-        "participants": []
-    },
-    {
-        "id": 31,
-        "name": "Round 1 - Match 31",
-        "nextMatchId": 48,  // ((p/2) + 16)
-        "nextLooserMatchId": null,
-        "tournamentRoundText": "1",
-        "startTime": "2021-05-30",
-        "state": "SCORE_DONE",
-        "participants": []
-    },
-    {
-        "id": 32,
-        "name": "Round 1 - Match 32",
-        "nextMatchId": 48,  // ((p/2) + 16)
-        "nextLooserMatchId": null,
-        "tournamentRoundText": "1",
-        "startTime": "2021-05-30",
-        "state": "SCORE_DONE",
-        "participants": []
-    },
-    // rp = (rp/2) = 32
-    // Round j = 2
-    // Match i = 1 ---> (rp/2) = 16 Matches
-    {
-      "id": 33,
-      "name": "Round 2 - Match 1",
-      "nextMatchId": 49,  // ((p/2) + 17)
-      "nextLooserMatchId": null,
-      "tournamentRoundText": "2",
-      "startTime": "2021-05-30",
-      "state": "DONE",
-      "participants": []
-    },
-    {
-      "id": 34,
-      "name": "Round 2 - Match 2",
-      "nextMatchId": 49,  // ((p/2) + 17)
-      "nextLooserMatchId": null,
-      "tournamentRoundText": "2",
-      "startTime": "2021-05-30",
-      "state": "SCORE_DONE",
-      "participants": []
-    },
-    {
-      "id": 35,
-      "name": "Round 2 - Match 3",
-      "nextMatchId": 50,  // ((p/2) + 18)
-      "nextLooserMatchId": null,
-      "tournamentRoundText": "2",
-      "startTime": "2021-05-30",
-      "state": "SCORE_DONE",
-      "participants": []
-    },
-    {
-      "id": 36,
-      "name": "Round 2 - Match 4",
-      "nextMatchId": 50,  // ((p/2) + 18)
-      "nextLooserMatchId": null,
-      "tournamentRoundText": "2",
-      "startTime": "2021-05-30",
-      "state": "SCORE_DONE",
-      "participants": []
-    },
-    {
-      "id": 37,
-      "name": "Round 2 - Match 5",
-      "nextMatchId": 51,  // ((p/2) + 19)
-      "nextLooserMatchId": null,
-      "tournamentRoundText": "2",
-      "startTime": "2021-05-30",
-      "state": "SCORE_DONE",
-      "participants": []
-    },
-    {
-      "id": 38,
-      "name": "Round 2 - Match 6",
-      "nextMatchId": 51,  // ((p/2) + 19)
-      "nextLooserMatchId": null,
-      "tournamentRoundText": "2",
-      "startTime": "2021-05-30",
-      "state": "SCORE_DONE",
-      "participants": []
-    },
-    {
-      "id": 39,
-      "name": "Round 2 - Match 7",
-      "nextMatchId": 52,  // ((p/2) + 20)
-      "nextLooserMatchId": null,
-      "tournamentRoundText": "2",
-      "startTime": "2021-05-30",
-      "state": "SCORE_DONE",
-      "participants": []
-    },
-    {
-      "id": 40,
-      "name": "Round 2 - Match 8",
-      "nextMatchId": 52,  // ((p/2) + 20)
-      "nextLooserMatchId": null,
-      "tournamentRoundText": "2",
-      "startTime": "2021-05-30",
-      "state": "SCORE_DONE",
-      "participants": []
-    },
-    {
-      "id": 41,
-      "name": "Round 2 - Match 9",
-      "nextMatchId": 53,  // ((p/2) + 21)
-      "nextLooserMatchId": null,
-      "tournamentRoundText": "2",
-      "startTime": "2021-05-30",
-      "state": "SCORE_DONE",
-      "participants": []
-    },
-    {
-      "id": 42,
-      "name": "Round 2 - Match 10",
-      "nextMatchId": 53,  // ((p/2) + 21)
-      "nextLooserMatchId": null,
-      "tournamentRoundText": "2",
-      "startTime": "2021-05-30",
-      "state": "SCORE_DONE",
-      "participants": []
-    },
-    {
-      "id": 43,
-      "name": "Round 2 - Match 11",
-      "nextMatchId": 54,  // ((p/2) + 22)
-      "nextLooserMatchId": null,
-      "tournamentRoundText": "2",
-      "startTime": "2021-05-30",
-      "state": "SCORE_DONE",
-      "participants": []
-    },
-    {
-      "id": 44,
-      "name": "Round 2 - Match 12",
-      "nextMatchId": 54,  // ((p/2) + 22)
-      "nextLooserMatchId": null,
-      "tournamentRoundText": "2",
-      "startTime": "2021-05-30",
-      "state": "SCORE_DONE",
-      "participants": []
-    },
-    {
-      "id": 45,
-      "name": "Round 2 - Match 13",
-      "nextMatchId": 55,  // ((p/2) + 23)
-      "nextLooserMatchId": null,
-      "tournamentRoundText": "2",
-      "startTime": "2021-05-30",
-      "state": "SCORE_DONE",
-      "participants": []
-    },
-    {
-      "id": 46,
-      "name": "Round 2 - Match 14",
-      "nextMatchId": 55,  // ((p/2) + 23)
-      "nextLooserMatchId": null,
-      "tournamentRoundText": "2",
-      "startTime": "2021-05-30",
-      "state": "SCORE_DONE",
-      "participants": []
-    },
-    {
-      "id": 47,
-      "name": "Round 2 - Match 15",
-      "nextMatchId": 56,  // ((p/2) + 24)
-      "nextLooserMatchId": null,
-      "tournamentRoundText": "2",
-      "startTime": "2021-05-30",
-      "state": "SCORE_DONE",
-      "participants": []
-    },
-    {
-      "id": 48,
-      "name": "Round 2 - Match 16",
-      "nextMatchId": 56,  // ((p/2) + 24)
-      "nextLooserMatchId": null,
-      "tournamentRoundText": "2",
-      "startTime": "2021-05-30",
-      "state": "SCORE_DONE",
-      "participants": []
-    },
-    // rp = (rp/2) = 16
-    // Round j = 3
-    // Match i = 1 ---> (rp/2) = 8 Matches
-    {
-      "id": 49,
-      "name": "Round 3 - Match 1",
-      "nextMatchId": 57,  // ((p/2) + 25)
-      "nextLooserMatchId": null,
-      "tournamentRoundText": "3",
-      "startTime": "2021-05-30",
-      "state": "DONE",
-      "participants": []
-    },
-    {
-      "id": 50,
-      "name": "Round 3 - Match 2",
-      "nextMatchId": 57,  // ((p/2) + 25)
-      "nextLooserMatchId": null,
-      "tournamentRoundText": "3",
-      "startTime": "2021-05-30",
-      "state": "SCORE_DONE",
-      "participants": []
-    },
-    {
-      "id": 51,
-      "name": "Round 3 - Match 3",
-      "nextMatchId": 58,  // ((p/2) + 26)
-      "nextLooserMatchId": null,
-      "tournamentRoundText": "3",
-      "startTime": "2021-05-30",
-      "state": "SCORE_DONE",
-      "participants": []
-    },
-    {
-      "id": 52,
-      "name": "Round 3 - Match 4",
-      "nextMatchId": 58,  // ((p/2) + 26)
-      "nextLooserMatchId": null,
-      "tournamentRoundText": "3",
-      "startTime": "2021-05-30",
-      "state": "SCORE_DONE",
-      "participants": []
-    },
-    {
-      "id": 53,
-      "name": "Round 3 - Match 5",
-      "nextMatchId": 59,  // ((p/2) + 27)
-      "nextLooserMatchId": null,
-      "tournamentRoundText": "3",
-      "startTime": "2021-05-30",
-      "state": "SCORE_DONE",
-      "participants": []
-    },
-    {
-      "id": 54,
-      "name": "Round 3 - Match 6",
-      "nextMatchId": 59,  // ((p/2) + 27)
-      "nextLooserMatchId": null,
-      "tournamentRoundText": "3",
-      "startTime": "2021-05-30",
-      "state": "SCORE_DONE",
-      "participants": []
-    },
-    {
-      "id": 55,
-      "name": "Round 3 - Match 7",
-      "nextMatchId": 60,  // ((p/2) + 28)
-      "nextLooserMatchId": null,
-      "tournamentRoundText": "3",
-      "startTime": "2021-05-30",
-      "state": "SCORE_DONE",
-      "participants": []
-    },
-    {
-      "id": 56,
-      "name": "Round 3 - Match 8",
-      "nextMatchId": 60,  // ((p/2) + 28)
-      "nextLooserMatchId": null,
-      "tournamentRoundText": "3",
-      "startTime": "2021-05-30",
-      "state": "SCORE_DONE",
-      "participants": []
-    },
-    // rp = (rp/2) = 8
-    // Round j = 4
-    // Match i = 1 ---> (rp/2) = 4 Matches
-    {
-      "id": 57,
-      "name": "Round 4 - Match 1",
-      "nextMatchId": 61,  // ((p/2) + 29)
-      "nextLooserMatchId": null,
-      "tournamentRoundText": "4",
-      "startTime": "2021-05-30",
-      "state": "DONE",
-      "participants": []
-    },
-    {
-      "id": 58,
-      "name": "Round 4 - Match 2",
-      "nextMatchId": 61,  // ((p/2) + 29)
-      "nextLooserMatchId": null,
-      "tournamentRoundText": "4",
-      "startTime": "2021-05-30",
-      "state": "SCORE_DONE",
-      "participants": []
-    },
-    {
-      "id": 59,
-      "name": "Round 4 - Match 3",
-      "nextMatchId": 62,  // ((p/2) + 30)
-      "nextLooserMatchId": null,
-      "tournamentRoundText": "4",
-      "startTime": "2021-05-30",
-      "state": "SCORE_DONE",
-      "participants": []
-    },
-    {
-      "id": 60,
-      "name": "Round 4 - Match 4",
-      "nextMatchId": 62,  // ((p/2) + 30)
-      "nextLooserMatchId": null,
-      "tournamentRoundText": "4",
-      "startTime": "2021-05-30",
-      "state": "SCORE_DONE",
-      "participants": []
-    },
-    // rp = (rp/2) = 4
-    // Round j = 5
-    // Match i = 1 ---> (rp/2) = 2 Matches
-    {
-      "id": 61,
-      "name": "Semi Final - Match 1",
-      "nextMatchId": 63,  // ((p/2) + 31)
-      "nextLooserMatchId": null,
-      "tournamentRoundText": "5",
-      "startTime": "2021-05-30",
-      "state": "SCHEDULED",
-      "participants": []
-    },
-    {
-      "id": 62,
-      "name": "Semi Final - Match 2",
-      "nextMatchId": 63,  // ((p/2) + 31)
-      "nextLooserMatchId": null,
-      "tournamentRoundText": "5",
-      "startTime": "2021-05-30",
-      "state": "SCORE_DONE",
-      "participants": []
-    },
-    // rp = (rp/2) = 2
-    // Round j = 6
-    // Match i = 1 ---> (rp/2) = 1 Match
-    {
-      "id": 63,
-      "name": "Final - Match",
-      "nextMatchId": null,
-      "nextLooserMatchId": null,
-      "tournamentRoundText": "6",
-      "startTime": "2021-05-30",
-      "state": "DONE",
-      "participants": []
-    },
-  ]
+// export const matchOf_64P_63_6R = [ 
+//     // p = 64
+//     // rp = p;
+//     // rounds = log2(p);
+//     // Round j = 1 ---> rounds
+//     // Match i = 1 ---> (rp/2) = 32 Matches
+//     {
+//         "id": 1,
+//         "name": "Round 1 - Match 1",
+//         "nextMatchId": 33,   // ((p/2) + 1)
+//         "nextLooserMatchId": null,
+//         "tournamentRoundText": "1",
+//         "startTime": "2021-05-30",
+//         "state": "SCORE_DONE",
+//         "participants": []
+//     },
+//     {
+//         "id": 2,
+//         "name": "Round 1 - Match 2",
+//         "nextMatchId": 33,   // ((p/2) + 1)
+//         "nextLooserMatchId": null,
+//         "tournamentRoundText": "1",
+//         "startTime": "2021-05-30",
+//         "state": "SCORE_DONE",
+//         "participants": []
+//     },
+//     {
+//         "id": 3,
+//         "name": "Round 1 - Match 3",
+//         "nextMatchId": 34,   // ((p/2) + 2)
+//         "nextLooserMatchId": null,
+//         "tournamentRoundText": "1",
+//         "startTime": "2021-05-30",
+//         "state": "SCORE_DONE",
+//         "participants": []
+//     },
+//     {
+//         "id": 4,
+//         "name": "Round 1 - Match 4",
+//         "nextMatchId": 34,  // ((p/2) + 2)
+//         "nextLooserMatchId": null,
+//         "tournamentRoundText": "1",
+//         "startTime": "2021-05-30",
+//         "state": "SCORE_DONE",
+//         "participants": []
+//     },
+//     {
+//         "id": 5,
+//         "name": "Round 1 - Match 5",
+//         "nextMatchId": 35,  // ((p/2) + 3)
+//         "nextLooserMatchId": null,
+//         "tournamentRoundText": "1",
+//         "startTime": "2021-05-30",
+//         "state": "SCORE_DONE",
+//         "participants": []
+//     },
+//     {
+//         "id": 6,
+//         "name": "Round 1 - Match 6",
+//         "nextMatchId": 35, // ((p/2) + 3)
+//         "nextLooserMatchId": null,
+//         "tournamentRoundText": "1",
+//         "startTime": "2021-05-30",
+//         "state": "SCORE_DONE",
+//         "participants": []
+//     },
+//     {
+//         "id": 7,
+//         "name": "Round 1 - Match 7",
+//         "nextMatchId": 36,   // ((p/2) + 4)
+//         "nextLooserMatchId": null,
+//         "tournamentRoundText": "1",
+//         "startTime": "2021-05-30",
+//         "state": "SCORE_DONE",
+//         "participants": []
+//     },
+//     {
+//         "id": 8,
+//         "name": "Round 1 - Match 8",
+//         "nextMatchId": 36,   // ((p/2) + 4)
+//         "nextLooserMatchId": null,
+//         "tournamentRoundText": "1",
+//         "startTime": "2021-05-30",
+//         "state": "SCORE_DONE",
+//         "participants": []
+//     },
+//     {
+//         "id": 9,
+//         "name": "Round 1 - Match 9",
+//         "nextMatchId": 37,   // ((p/2) + 5)
+//         "nextLooserMatchId": null,
+//         "tournamentRoundText": "1",
+//         "startTime": "2021-05-30",
+//         "state": "SCORE_DONE",
+//         "participants": []
+//     },
+//     {
+//         "id": 10,
+//         "name": "Round 1 - Match 10",
+//         "nextMatchId": 37,   // ((p/2) + 5)
+//         "nextLooserMatchId": null,
+//         "tournamentRoundText": "1",
+//         "startTime": "2021-05-30",
+//         "state": "SCORE_DONE",
+//         "participants": []
+//     },
+//     {
+//         "id": 11,
+//         "name": "Round 1 - Match 11",
+//         "nextMatchId": 38,   // ((p/2) + 6)
+//         "nextLooserMatchId": null,
+//         "tournamentRoundText": "1",
+//         "startTime": "2021-05-30",
+//         "state": "SCORE_DONE",
+//         "participants": []
+//     },
+//     {
+//         "id": 12,
+//         "name": "Round 1 - Match 12",
+//         "nextMatchId": 38,   // ((p/2) + 6)
+//         "nextLooserMatchId": null,
+//         "tournamentRoundText": "1",
+//         "startTime": "2021-05-30",
+//         "state": "SCORE_DONE",
+//         "participants": []
+//     },
+//     {
+//         "id": 13,
+//         "name": "Round 1 - Match 13",
+//         "nextMatchId": 39,   // ((p/2) + 7)
+//         "nextLooserMatchId": null,
+//         "tournamentRoundText": "1",
+//         "startTime": "2021-05-30",
+//         "state": "SCORE_DONE",
+//         "participants": []
+//     },
+//     {
+//         "id": 14,
+//         "name": "Round 1 - Match 14",
+//         "nextMatchId": 39,  // ((p/2) + 7)
+//         "nextLooserMatchId": null,
+//         "tournamentRoundText": "1",
+//         "startTime": "2021-05-30",
+//         "state": "SCORE_DONE",
+//         "participants": []
+//     },
+//     {
+//         "id": 15,
+//         "name": "Round 1 - Match 15",
+//         "nextMatchId": 40,  // ((p/2) + 8)
+//         "nextLooserMatchId": null,
+//         "tournamentRoundText": "1",
+//         "startTime": "2021-05-30",
+//         "state": "SCORE_DONE",
+//         "participants": []
+//     },
+//     {
+//         "id": 16,
+//         "name": "Round 1 - Match 16",
+//         "nextMatchId": 40,  // ((p/2) + 8)
+//         "nextLooserMatchId": null,
+//         "tournamentRoundText": "1",
+//         "startTime": "2021-05-30",
+//         "state": "SCORE_DONE",
+//         "participants": []
+//     },
+//     {
+//         "id": 17,
+//         "name": "Round 1 - Match 17",
+//         "nextMatchId": 41,  // ((p/2) + 9)
+//         "nextLooserMatchId": null,
+//         "tournamentRoundText": "1",
+//         "startTime": "2021-05-30",
+//         "state": "SCORE_DONE",
+//         "participants": []
+//     },
+//     {
+//         "id": 18,
+//         "name": "Round 1 - Match 18",
+//         "nextMatchId": 41,  // ((p/2) + 9)
+//         "nextLooserMatchId": null,
+//         "tournamentRoundText": "1",
+//         "startTime": "2021-05-30",
+//         "state": "SCORE_DONE",
+//         "participants": []
+//     },
+//     {
+//         "id": 19,
+//         "name": "Round 1 - Match 19",
+//         "nextMatchId": 42,  // ((p/2) + 10)
+//         "nextLooserMatchId": null,
+//         "tournamentRoundText": "1",
+//         "startTime": "2021-05-30",
+//         "state": "SCORE_DONE",
+//         "participants": []
+//     },
+//     {
+//         "id": 20,
+//         "name": "Round 1 - Match 20",
+//         "nextMatchId": 42,  // ((p/2) + 10)
+//         "nextLooserMatchId": null,
+//         "tournamentRoundText": "1",
+//         "startTime": "2021-05-30",
+//         "state": "SCORE_DONE",
+//         "participants": []
+//     },
+//     {
+//         "id": 21,
+//         "name": "Round 1 - Match 21",
+//         "nextMatchId": 43,  // ((p/2) + 11)
+//         "nextLooserMatchId": null,
+//         "tournamentRoundText": "1",
+//         "startTime": "2021-05-30",
+//         "state": "SCORE_DONE",
+//         "participants": []
+//     },
+//     {
+//         "id": 22,
+//         "name": "Round 1 - Match 22",
+//         "nextMatchId": 43,  // ((p/2) + 11)
+//         "nextLooserMatchId": null,
+//         "tournamentRoundText": "1",
+//         "startTime": "2021-05-30",
+//         "state": "SCORE_DONE",
+//         "participants": []
+//     },
+//     {
+//         "id": 23,
+//         "name": "Round 1 - Match 23",
+//         "nextMatchId": 44,  // ((p/2) + 12)
+//         "nextLooserMatchId": null,
+//         "tournamentRoundText": "1",
+//         "startTime": "2021-05-30",
+//         "state": "SCORE_DONE",
+//         "participants": []
+//     },
+//     {
+//         "id": 24,
+//         "name": "Round 1 - Match 24",
+//         "nextMatchId": 44,  // ((p/2) + 12)
+//         "nextLooserMatchId": null,
+//         "tournamentRoundText": "1",
+//         "startTime": "2021-05-30",
+//         "state": "SCORE_DONE",
+//         "participants": []
+//     },
+//     {
+//         "id": 25,
+//         "name": "Round 1 - Match 25",
+//         "nextMatchId": 45,  // ((p/2) + 13)
+//         "nextLooserMatchId": null,
+//         "tournamentRoundText": "1",
+//         "startTime": "2021-05-30",
+//         "state": "SCORE_DONE",
+//         "participants": []
+//     },
+//     {
+//         "id": 26,
+//         "name": "Round 1 - Match 26",
+//         "nextMatchId": 45,  // ((p/2) + 13)
+//         "nextLooserMatchId": null,
+//         "tournamentRoundText": "1",
+//         "startTime": "2021-05-30",
+//         "state": "DONE",
+//         "participants": []
+//     },
+//     {
+//         "id": 27,
+//         "name": "Round 1 - Match 27",
+//         "nextMatchId": 46,  // ((p/2) + 14)
+//         "nextLooserMatchId": null,
+//         "tournamentRoundText": "1",
+//         "startTime": "2021-05-30",
+//         "state": "SCORE_DONE",
+//         "participants": []
+//     },
+//     {
+//         "id": 28,
+//         "name": "Round 1 - Match 28",
+//         "nextMatchId": 46,  // ((p/2) + 14)
+//         "nextLooserMatchId": null,
+//         "tournamentRoundText": "1",
+//         "startTime": "2021-05-30",
+//         "state": "SCORE_DONE",
+//         "participants": []
+//     },
+//     {
+//         "id": 29,
+//         "name": "Round 1 - Match 29",
+//         "nextMatchId": 47,  // ((p/2) + 15)
+//         "nextLooserMatchId": null,
+//         "tournamentRoundText": "1",
+//         "startTime": "2021-05-30",
+//         "state": "SCORE_DONE",
+//         "participants": []
+//     },
+//     {
+//         "id": 30,
+//         "name": "Round 1 - Match 30",
+//         "nextMatchId": 47,  // ((p/2) + 15)
+//         "nextLooserMatchId": null,
+//         "tournamentRoundText": "1",
+//         "startTime": "2021-05-30",
+//         "state": "SCORE_DONE",
+//         "participants": []
+//     },
+//     {
+//         "id": 31,
+//         "name": "Round 1 - Match 31",
+//         "nextMatchId": 48,  // ((p/2) + 16)
+//         "nextLooserMatchId": null,
+//         "tournamentRoundText": "1",
+//         "startTime": "2021-05-30",
+//         "state": "SCORE_DONE",
+//         "participants": []
+//     },
+//     {
+//         "id": 32,
+//         "name": "Round 1 - Match 32",
+//         "nextMatchId": 48,  // ((p/2) + 16)
+//         "nextLooserMatchId": null,
+//         "tournamentRoundText": "1",
+//         "startTime": "2021-05-30",
+//         "state": "SCORE_DONE",
+//         "participants": []
+//     },
+//     // rp = (rp/2) = 32
+//     // Round j = 2
+//     // Match i = 1 ---> (rp/2) = 16 Matches
+//     {
+//       "id": 33,
+//       "name": "Round 2 - Match 1",
+//       "nextMatchId": 49,  // ((p/2) + 17)
+//       "nextLooserMatchId": null,
+//       "tournamentRoundText": "2",
+//       "startTime": "2021-05-30",
+//       "state": "DONE",
+//       "participants": []
+//     },
+//     {
+//       "id": 34,
+//       "name": "Round 2 - Match 2",
+//       "nextMatchId": 49,  // ((p/2) + 17)
+//       "nextLooserMatchId": null,
+//       "tournamentRoundText": "2",
+//       "startTime": "2021-05-30",
+//       "state": "SCORE_DONE",
+//       "participants": []
+//     },
+//     {
+//       "id": 35,
+//       "name": "Round 2 - Match 3",
+//       "nextMatchId": 50,  // ((p/2) + 18)
+//       "nextLooserMatchId": null,
+//       "tournamentRoundText": "2",
+//       "startTime": "2021-05-30",
+//       "state": "SCORE_DONE",
+//       "participants": []
+//     },
+//     {
+//       "id": 36,
+//       "name": "Round 2 - Match 4",
+//       "nextMatchId": 50,  // ((p/2) + 18)
+//       "nextLooserMatchId": null,
+//       "tournamentRoundText": "2",
+//       "startTime": "2021-05-30",
+//       "state": "SCORE_DONE",
+//       "participants": []
+//     },
+//     {
+//       "id": 37,
+//       "name": "Round 2 - Match 5",
+//       "nextMatchId": 51,  // ((p/2) + 19)
+//       "nextLooserMatchId": null,
+//       "tournamentRoundText": "2",
+//       "startTime": "2021-05-30",
+//       "state": "SCORE_DONE",
+//       "participants": []
+//     },
+//     {
+//       "id": 38,
+//       "name": "Round 2 - Match 6",
+//       "nextMatchId": 51,  // ((p/2) + 19)
+//       "nextLooserMatchId": null,
+//       "tournamentRoundText": "2",
+//       "startTime": "2021-05-30",
+//       "state": "SCORE_DONE",
+//       "participants": []
+//     },
+//     {
+//       "id": 39,
+//       "name": "Round 2 - Match 7",
+//       "nextMatchId": 52,  // ((p/2) + 20)
+//       "nextLooserMatchId": null,
+//       "tournamentRoundText": "2",
+//       "startTime": "2021-05-30",
+//       "state": "SCORE_DONE",
+//       "participants": []
+//     },
+//     {
+//       "id": 40,
+//       "name": "Round 2 - Match 8",
+//       "nextMatchId": 52,  // ((p/2) + 20)
+//       "nextLooserMatchId": null,
+//       "tournamentRoundText": "2",
+//       "startTime": "2021-05-30",
+//       "state": "SCORE_DONE",
+//       "participants": []
+//     },
+//     {
+//       "id": 41,
+//       "name": "Round 2 - Match 9",
+//       "nextMatchId": 53,  // ((p/2) + 21)
+//       "nextLooserMatchId": null,
+//       "tournamentRoundText": "2",
+//       "startTime": "2021-05-30",
+//       "state": "SCORE_DONE",
+//       "participants": []
+//     },
+//     {
+//       "id": 42,
+//       "name": "Round 2 - Match 10",
+//       "nextMatchId": 53,  // ((p/2) + 21)
+//       "nextLooserMatchId": null,
+//       "tournamentRoundText": "2",
+//       "startTime": "2021-05-30",
+//       "state": "SCORE_DONE",
+//       "participants": []
+//     },
+//     {
+//       "id": 43,
+//       "name": "Round 2 - Match 11",
+//       "nextMatchId": 54,  // ((p/2) + 22)
+//       "nextLooserMatchId": null,
+//       "tournamentRoundText": "2",
+//       "startTime": "2021-05-30",
+//       "state": "SCORE_DONE",
+//       "participants": []
+//     },
+//     {
+//       "id": 44,
+//       "name": "Round 2 - Match 12",
+//       "nextMatchId": 54,  // ((p/2) + 22)
+//       "nextLooserMatchId": null,
+//       "tournamentRoundText": "2",
+//       "startTime": "2021-05-30",
+//       "state": "SCORE_DONE",
+//       "participants": []
+//     },
+//     {
+//       "id": 45,
+//       "name": "Round 2 - Match 13",
+//       "nextMatchId": 55,  // ((p/2) + 23)
+//       "nextLooserMatchId": null,
+//       "tournamentRoundText": "2",
+//       "startTime": "2021-05-30",
+//       "state": "SCORE_DONE",
+//       "participants": []
+//     },
+//     {
+//       "id": 46,
+//       "name": "Round 2 - Match 14",
+//       "nextMatchId": 55,  // ((p/2) + 23)
+//       "nextLooserMatchId": null,
+//       "tournamentRoundText": "2",
+//       "startTime": "2021-05-30",
+//       "state": "SCORE_DONE",
+//       "participants": []
+//     },
+//     {
+//       "id": 47,
+//       "name": "Round 2 - Match 15",
+//       "nextMatchId": 56,  // ((p/2) + 24)
+//       "nextLooserMatchId": null,
+//       "tournamentRoundText": "2",
+//       "startTime": "2021-05-30",
+//       "state": "SCORE_DONE",
+//       "participants": []
+//     },
+//     {
+//       "id": 48,
+//       "name": "Round 2 - Match 16",
+//       "nextMatchId": 56,  // ((p/2) + 24)
+//       "nextLooserMatchId": null,
+//       "tournamentRoundText": "2",
+//       "startTime": "2021-05-30",
+//       "state": "SCORE_DONE",
+//       "participants": []
+//     },
+//     // rp = (rp/2) = 16
+//     // Round j = 3
+//     // Match i = 1 ---> (rp/2) = 8 Matches
+//     {
+//       "id": 49,
+//       "name": "Round 3 - Match 1",
+//       "nextMatchId": 57,  // ((p/2) + 25)
+//       "nextLooserMatchId": null,
+//       "tournamentRoundText": "3",
+//       "startTime": "2021-05-30",
+//       "state": "DONE",
+//       "participants": []
+//     },
+//     {
+//       "id": 50,
+//       "name": "Round 3 - Match 2",
+//       "nextMatchId": 57,  // ((p/2) + 25)
+//       "nextLooserMatchId": null,
+//       "tournamentRoundText": "3",
+//       "startTime": "2021-05-30",
+//       "state": "SCORE_DONE",
+//       "participants": []
+//     },
+//     {
+//       "id": 51,
+//       "name": "Round 3 - Match 3",
+//       "nextMatchId": 58,  // ((p/2) + 26)
+//       "nextLooserMatchId": null,
+//       "tournamentRoundText": "3",
+//       "startTime": "2021-05-30",
+//       "state": "SCORE_DONE",
+//       "participants": []
+//     },
+//     {
+//       "id": 52,
+//       "name": "Round 3 - Match 4",
+//       "nextMatchId": 58,  // ((p/2) + 26)
+//       "nextLooserMatchId": null,
+//       "tournamentRoundText": "3",
+//       "startTime": "2021-05-30",
+//       "state": "SCORE_DONE",
+//       "participants": []
+//     },
+//     {
+//       "id": 53,
+//       "name": "Round 3 - Match 5",
+//       "nextMatchId": 59,  // ((p/2) + 27)
+//       "nextLooserMatchId": null,
+//       "tournamentRoundText": "3",
+//       "startTime": "2021-05-30",
+//       "state": "SCORE_DONE",
+//       "participants": []
+//     },
+//     {
+//       "id": 54,
+//       "name": "Round 3 - Match 6",
+//       "nextMatchId": 59,  // ((p/2) + 27)
+//       "nextLooserMatchId": null,
+//       "tournamentRoundText": "3",
+//       "startTime": "2021-05-30",
+//       "state": "SCORE_DONE",
+//       "participants": []
+//     },
+//     {
+//       "id": 55,
+//       "name": "Round 3 - Match 7",
+//       "nextMatchId": 60,  // ((p/2) + 28)
+//       "nextLooserMatchId": null,
+//       "tournamentRoundText": "3",
+//       "startTime": "2021-05-30",
+//       "state": "SCORE_DONE",
+//       "participants": []
+//     },
+//     {
+//       "id": 56,
+//       "name": "Round 3 - Match 8",
+//       "nextMatchId": 60,  // ((p/2) + 28)
+//       "nextLooserMatchId": null,
+//       "tournamentRoundText": "3",
+//       "startTime": "2021-05-30",
+//       "state": "SCORE_DONE",
+//       "participants": []
+//     },
+//     // rp = (rp/2) = 8
+//     // Round j = 4
+//     // Match i = 1 ---> (rp/2) = 4 Matches
+//     {
+//       "id": 57,
+//       "name": "Round 4 - Match 1",
+//       "nextMatchId": 61,  // ((p/2) + 29)
+//       "nextLooserMatchId": null,
+//       "tournamentRoundText": "4",
+//       "startTime": "2021-05-30",
+//       "state": "DONE",
+//       "participants": []
+//     },
+//     {
+//       "id": 58,
+//       "name": "Round 4 - Match 2",
+//       "nextMatchId": 61,  // ((p/2) + 29)
+//       "nextLooserMatchId": null,
+//       "tournamentRoundText": "4",
+//       "startTime": "2021-05-30",
+//       "state": "SCORE_DONE",
+//       "participants": []
+//     },
+//     {
+//       "id": 59,
+//       "name": "Round 4 - Match 3",
+//       "nextMatchId": 62,  // ((p/2) + 30)
+//       "nextLooserMatchId": null,
+//       "tournamentRoundText": "4",
+//       "startTime": "2021-05-30",
+//       "state": "SCORE_DONE",
+//       "participants": []
+//     },
+//     {
+//       "id": 60,
+//       "name": "Round 4 - Match 4",
+//       "nextMatchId": 62,  // ((p/2) + 30)
+//       "nextLooserMatchId": null,
+//       "tournamentRoundText": "4",
+//       "startTime": "2021-05-30",
+//       "state": "SCORE_DONE",
+//       "participants": []
+//     },
+//     // rp = (rp/2) = 4
+//     // Round j = 5
+//     // Match i = 1 ---> (rp/2) = 2 Matches
+//     {
+//       "id": 61,
+//       "name": "Semi Final - Match 1",
+//       "nextMatchId": 63,  // ((p/2) + 31)
+//       "nextLooserMatchId": null,
+//       "tournamentRoundText": "5",
+//       "startTime": "2021-05-30",
+//       "state": "SCHEDULED",
+//       "participants": []
+//     },
+//     {
+//       "id": 62,
+//       "name": "Semi Final - Match 2",
+//       "nextMatchId": 63,  // ((p/2) + 31)
+//       "nextLooserMatchId": null,
+//       "tournamentRoundText": "5",
+//       "startTime": "2021-05-30",
+//       "state": "SCORE_DONE",
+//       "participants": []
+//     },
+//     // rp = (rp/2) = 2
+//     // Round j = 6
+//     // Match i = 1 ---> (rp/2) = 1 Match
+//     {
+//       "id": 63,
+//       "name": "Final - Match",
+//       "nextMatchId": null,
+//       "nextLooserMatchId": null,
+//       "tournamentRoundText": "6",
+//       "startTime": "2021-05-30",
+//       "state": "DONE",
+//       "participants": []
+//     },
+//   ]
 
 //single-elimination bracket
 //1. participants = n;
