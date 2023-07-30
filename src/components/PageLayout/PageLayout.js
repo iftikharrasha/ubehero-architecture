@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import Sidebar from './Sidebar';
+// import Sidebar from './Sidebar';
 
 const PageLayout = ({ children }) => {
   const verified = useSelector(state => state.profile.data?.emailVerified);
@@ -26,10 +26,8 @@ const PageLayout = ({ children }) => {
           </div>
       }
       
-      <div className="row">
-        {/* <Sidebar /> */}
-        <div className="col-md-12 my-2">{children}</div>
-      </div>
+      {/* <Sidebar /> */}
+      {children}
     </div>
   )
 }

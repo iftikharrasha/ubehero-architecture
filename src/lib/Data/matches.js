@@ -1956,6 +1956,360 @@ export const matchOf_64P_63_6R = [
   }
 ]
 
+export const newARound = [
+  {
+      "id": 1,
+      "name": "Round 1 - Match 1",
+      "nextMatchId": 17,
+      "nextLooserMatchId": null,
+      "tournamentRoundText": "1",
+      "startTime": "2023-07-29T12:58:00.000Z",
+      "state": "SCHEDULED",
+      "participants": [],
+      "_id": "64c4f0d375fb702c129e16c9"
+  },
+  {
+      "id": 2,
+      "name": "Round 1 - Match 2",
+      "nextMatchId": 17,
+      "nextLooserMatchId": null,
+      "tournamentRoundText": "1",
+      "startTime": "2023-07-29T14:58:00.000Z",
+      "state": "SCHEDULED",
+      "participants": [],
+      "_id": "64c4f0d375fb702c129e16ca"
+  },
+  {
+      "id": 3,
+      "name": "Round 1 - Match 3",
+      "nextMatchId": 18,
+      "nextLooserMatchId": null,
+      "tournamentRoundText": "1",
+      "startTime": "2023-07-29T16:58:00.000Z",
+      "state": "SCHEDULED",
+      "participants": [],
+      "_id": "64c4f0d375fb702c129e16cb"
+  },
+  {
+      "id": 4,
+      "name": "Round 1 - Match 4",
+      "nextMatchId": 18,
+      "nextLooserMatchId": null,
+      "tournamentRoundText": "1",
+      "startTime": "2023-07-29T18:58:00.000Z",
+      "state": "SCHEDULED",
+      "participants": [],
+      "_id": "64c4f0d375fb702c129e16cc"
+  },
+  {
+      "id": 5,
+      "name": "Round 1 - Match 5",
+      "nextMatchId": 19,
+      "nextLooserMatchId": null,
+      "tournamentRoundText": "1",
+      "startTime": "2023-07-29T20:58:00.000Z",
+      "state": "SCHEDULED",
+      "participants": [],
+      "_id": "64c4f0d375fb702c129e16cd"
+  },
+  {
+      "id": 6,
+      "name": "Round 1 - Match 6",
+      "nextMatchId": 19,
+      "nextLooserMatchId": null,
+      "tournamentRoundText": "1",
+      "startTime": "2023-07-29T22:58:00.000Z",
+      "state": "SCHEDULED",
+      "participants": [
+          {
+              "id": "64a1a645456154eedc12a505",
+              "resultText": null,
+              "isWinner": false,
+              "status": null,
+              "name": "Rashasad",
+              "picture": "https://i.ibb.co/5FFYTs7/avatar.jpg",
+              "_id": "64c68958f6376204376d3b01"
+          }
+      ],
+      "_id": "64c4f0d375fb702c129e16ce"
+  },
+  {
+      "id": 7,
+      "name": "Round 1 - Match 7",
+      "nextMatchId": 20,
+      "nextLooserMatchId": null,
+      "tournamentRoundText": "1",
+      "startTime": "2023-07-30T00:58:00.000Z",
+      "state": "SCHEDULED",
+      "participants": [],
+      "_id": "64c4f0d375fb702c129e16cf"
+  },
+  {
+      "id": 8,
+      "name": "Round 1 - Match 8",
+      "nextMatchId": 20,
+      "nextLooserMatchId": null,
+      "tournamentRoundText": "1",
+      "startTime": "2023-07-30T02:58:00.000Z",
+      "state": "SCHEDULED",
+      "participants": [],
+      "_id": "64c4f0d375fb702c129e16d0"
+  },
+  {
+      "id": 9,
+      "name": "Round 1 - Match 9",
+      "nextMatchId": 21,
+      "nextLooserMatchId": null,
+      "tournamentRoundText": "1",
+      "startTime": "2023-07-30T04:58:00.000Z",
+      "state": "SCHEDULED",
+      "participants": [],
+      "_id": "64c4f0d375fb702c129e16d1"
+  },
+  {
+      "id": 10,
+      "name": "Round 1 - Match 10",
+      "nextMatchId": 21,
+      "nextLooserMatchId": null,
+      "tournamentRoundText": "1",
+      "startTime": "2023-07-30T06:58:00.000Z",
+      "state": "SCHEDULED",
+      "participants": [],
+      "_id": "64c4f0d375fb702c129e16d2"
+  },
+  {
+      "id": 11,
+      "name": "Round 1 - Match 11",
+      "nextMatchId": 22,
+      "nextLooserMatchId": null,
+      "tournamentRoundText": "1",
+      "startTime": "2023-07-30T08:58:00.000Z",
+      "state": "SCHEDULED",
+      "participants": [],
+      "_id": "64c4f0d375fb702c129e16d3"
+  },
+  {
+      "id": 12,
+      "name": "Round 1 - Match 12",
+      "nextMatchId": 22,
+      "nextLooserMatchId": null,
+      "tournamentRoundText": "1",
+      "startTime": "2023-07-30T10:58:00.000Z",
+      "state": "SCHEDULED",
+      "participants": [],
+      "_id": "64c4f0d375fb702c129e16d4"
+  },
+  {
+      "id": 13,
+      "name": "Round 1 - Match 13",
+      "nextMatchId": 23,
+      "nextLooserMatchId": null,
+      "tournamentRoundText": "1",
+      "startTime": "2023-07-30T12:58:00.000Z",
+      "state": "SCHEDULED",
+      "participants": [],
+      "_id": "64c4f0d375fb702c129e16d5"
+  },
+  {
+      "id": 14,
+      "name": "Round 1 - Match 14",
+      "nextMatchId": 23,
+      "nextLooserMatchId": null,
+      "tournamentRoundText": "1",
+      "startTime": "2023-07-30T14:58:00.000Z",
+      "state": "SCHEDULED",
+      "participants": [],
+      "_id": "64c4f0d375fb702c129e16d6"
+  },
+  {
+      "id": 15,
+      "name": "Round 1 - Match 15",
+      "nextMatchId": 24,
+      "nextLooserMatchId": null,
+      "tournamentRoundText": "1",
+      "startTime": "2023-07-30T16:58:00.000Z",
+      "state": "SCHEDULED",
+      "participants": [],
+      "_id": "64c4f0d375fb702c129e16d7"
+  },
+  {
+      "id": 16,
+      "name": "Round 1 - Match 16",
+      "nextMatchId": 24,
+      "nextLooserMatchId": null,
+      "tournamentRoundText": "1",
+      "startTime": "2023-07-30T18:58:00.000Z",
+      "state": "SCHEDULED",
+      "participants": [],
+      "_id": "64c4f0d375fb702c129e16d8"
+  },
+  {
+      "id": 17,
+      "name": "Round 2 - Match 1",
+      "nextMatchId": 25,
+      "nextLooserMatchId": null,
+      "tournamentRoundText": "2",
+      "startTime": "2023-07-30T20:58:00.000Z",
+      "state": "SCHEDULED",
+      "participants": [],
+      "_id": "64c4f0d375fb702c129e16d9"
+  },
+  {
+      "id": 18,
+      "name": "Round 2 - Match 2",
+      "nextMatchId": 25,
+      "nextLooserMatchId": null,
+      "tournamentRoundText": "2",
+      "startTime": "2023-07-30T22:58:00.000Z",
+      "state": "SCHEDULED",
+      "participants": [],
+      "_id": "64c4f0d375fb702c129e16da"
+  },
+  {
+      "id": 19,
+      "name": "Round 2 - Match 3",
+      "nextMatchId": 26,
+      "nextLooserMatchId": null,
+      "tournamentRoundText": "2",
+      "startTime": "2023-07-31T00:58:00.000Z",
+      "state": "SCHEDULED",
+      "participants": [],
+      "_id": "64c4f0d375fb702c129e16db"
+  },
+  {
+      "id": 20,
+      "name": "Round 2 - Match 4",
+      "nextMatchId": 26,
+      "nextLooserMatchId": null,
+      "tournamentRoundText": "2",
+      "startTime": "2023-07-31T02:58:00.000Z",
+      "state": "SCHEDULED",
+      "participants": [],
+      "_id": "64c4f0d375fb702c129e16dc"
+  },
+  {
+      "id": 21,
+      "name": "Round 2 - Match 5",
+      "nextMatchId": 27,
+      "nextLooserMatchId": null,
+      "tournamentRoundText": "2",
+      "startTime": "2023-07-31T04:58:00.000Z",
+      "state": "SCHEDULED",
+      "participants": [],
+      "_id": "64c4f0d375fb702c129e16dd"
+  },
+  {
+      "id": 22,
+      "name": "Round 2 - Match 6",
+      "nextMatchId": 27,
+      "nextLooserMatchId": null,
+      "tournamentRoundText": "2",
+      "startTime": "2023-07-31T06:58:00.000Z",
+      "state": "SCHEDULED",
+      "participants": [],
+      "_id": "64c4f0d375fb702c129e16de"
+  },
+  {
+      "id": 23,
+      "name": "Round 2 - Match 7",
+      "nextMatchId": 28,
+      "nextLooserMatchId": null,
+      "tournamentRoundText": "2",
+      "startTime": "2023-07-31T08:58:00.000Z",
+      "state": "SCHEDULED",
+      "participants": [],
+      "_id": "64c4f0d375fb702c129e16df"
+  },
+  {
+      "id": 24,
+      "name": "Round 2 - Match 8",
+      "nextMatchId": 28,
+      "nextLooserMatchId": null,
+      "tournamentRoundText": "2",
+      "startTime": "2023-07-31T10:58:00.000Z",
+      "state": "SCHEDULED",
+      "participants": [],
+      "_id": "64c4f0d375fb702c129e16e0"
+  },
+  {
+      "id": 25,
+      "name": "Round 3 - Match 1",
+      "nextMatchId": 29,
+      "nextLooserMatchId": null,
+      "tournamentRoundText": "3",
+      "startTime": "2023-07-31T12:58:00.000Z",
+      "state": "SCHEDULED",
+      "participants": [],
+      "_id": "64c4f0d375fb702c129e16e1"
+  },
+  {
+      "id": 26,
+      "name": "Round 3 - Match 2",
+      "nextMatchId": 29,
+      "nextLooserMatchId": null,
+      "tournamentRoundText": "3",
+      "startTime": "2023-07-31T14:58:00.000Z",
+      "state": "SCHEDULED",
+      "participants": [],
+      "_id": "64c4f0d375fb702c129e16e2"
+  },
+  {
+      "id": 27,
+      "name": "Round 3 - Match 3",
+      "nextMatchId": 30,
+      "nextLooserMatchId": null,
+      "tournamentRoundText": "3",
+      "startTime": "2023-07-31T16:58:00.000Z",
+      "state": "SCHEDULED",
+      "participants": [],
+      "_id": "64c4f0d375fb702c129e16e3"
+  },
+  {
+      "id": 28,
+      "name": "Round 3 - Match 4",
+      "nextMatchId": 30,
+      "nextLooserMatchId": null,
+      "tournamentRoundText": "3",
+      "startTime": "2023-07-31T18:58:00.000Z",
+      "state": "SCHEDULED",
+      "participants": [],
+      "_id": "64c4f0d375fb702c129e16e4"
+  },
+  {
+      "id": 29,
+      "name": "Round 4 - Match 1",
+      "nextMatchId": 31,
+      "nextLooserMatchId": null,
+      "tournamentRoundText": "4",
+      "startTime": "2023-07-31T20:58:00.000Z",
+      "state": "SCHEDULED",
+      "participants": [],
+      "_id": "64c4f0d375fb702c129e16e5"
+  },
+  {
+      "id": 30,
+      "name": "Round 4 - Match 2",
+      "nextMatchId": 31,
+      "nextLooserMatchId": null,
+      "tournamentRoundText": "4",
+      "startTime": "2023-07-31T22:58:00.000Z",
+      "state": "SCHEDULED",
+      "participants": [],
+      "_id": "64c4f0d375fb702c129e16e6"
+  },
+  {
+      "id": 31,
+      "name": "Final Match",
+      "nextMatchId": null,
+      "nextLooserMatchId": null,
+      "tournamentRoundText": "5",
+      "startTime": "2023-08-01T00:58:00.000Z",
+      "state": "SCHEDULED",
+      "participants": [],
+      "_id": "64c4f0d375fb702c129e16e7"
+  }
+]
+
 // export const matchOf_64P_63_6R = [
 //     {
 //         "id": 1,

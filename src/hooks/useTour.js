@@ -11,7 +11,7 @@ const useTour = () => {
         if (!isStored) {
             tourStorage[page] = true;
         }
-        sessionStorage.setItem('tour', JSON.stringify(tourStorage));
+        localStorage.setItem('tour', JSON.stringify(tourStorage));
         return isStored;
     }
 
@@ -19,7 +19,7 @@ const useTour = () => {
         const tourStorage = getTourStorage();
         if (page in tourStorage) {
             delete tourStorage[page];
-            sessionStorage.setItem('tour', JSON.stringify(tourStorage));
+            localStorage.setItem('tour', JSON.stringify(tourStorage));
         }
     }
 
@@ -35,7 +35,7 @@ const useTour = () => {
         let tourStorage = {};
 
         //get the shopping cart from local storage
-        const storedTour = sessionStorage.getItem('tour');
+        const storedTour = localStorage.getItem('tour');
         if (storedTour) {
             tourStorage = JSON.parse(storedTour);
         }
@@ -43,7 +43,7 @@ const useTour = () => {
     }
 
     const deleteShoppingCart = () => {
-        sessionStorage.removeItem('tour');
+        localStorage.removeItem('tour');
     }
 
     return {

@@ -152,13 +152,8 @@ const useTournament = () => {
             config.headers = { "Authorization": "Bearer " + token, ...config.headers};
         }
 
-        const draftItem = {
-            maxParticipitant: data.settings.maxParticipitant,
-            competitionMode: data.settings.competitionMode
-        }
-
         try {
-            const response = await axios.post(`${process.env.REACT_APP_API_LINK}/api/v1/tournaments/approve/${data._id}`, draftItem, config);
+            const response = await axios.patch(`${process.env.REACT_APP_API_LINK}/api/v1/tournaments/approve/${data._id}`, data, config);
             
             if(response.data.status === 200){
                 setErrorMessage(null);

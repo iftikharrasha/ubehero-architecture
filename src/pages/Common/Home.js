@@ -52,6 +52,8 @@ const Home = () => {
                     !roomsJoined.some(room => room._id === tournament._id)
                 );
                 setNotJoinedRooms(notJoinedTournaments)
+            }else{
+                setNotJoinedRooms(tournaments)
             }
         }else{
             setNotJoinedRooms(tournaments)

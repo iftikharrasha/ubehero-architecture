@@ -76,7 +76,10 @@ const TournamentSide = ({ref1TSummery1, ref1TSummery2, ref1TSummery3, isLoggedIn
                             title={<h4>WIN 50$</h4>}
                         />
                         <div>
-                            <IconText icon={LikeOutlined} text={<p className='card-text'>Mode: {settings.mode}</p>} key="list-vertical-like-o" />
+                            <IconText icon={LikeOutlined} text={<p className='card-text'>Entry Mode: {settings.mode}</p>} key="list-vertical-like-o" />
+                        </div>
+                        <div>
+                            <IconText icon={LikeOutlined} text={<p className='card-text'>Competition Mode: {settings.competitionMode}</p>} key="list-vertical-like-o" />
                         </div>
                         <div>
                             <IconText icon={StarOutlined} text={<p className='card-text'>Joined: {leaderboards.length}/{tournament.settings?.maxParticipitant}</p>} key="list-vertical-star-o" />

@@ -44,10 +44,9 @@ const TournamentDetails = () => {
 
     useEffect(() => {
         dispatch(fetchTournamentDetails({ id, versionTournament }));
+        dispatch(fetchLeaderboards({ id, versionLeaderboard }));
         if(compMode === 'knockout'){
             dispatch(fetchBrackets({ id, versionBracket }));
-        }else{
-            dispatch(fetchLeaderboards({ id, versionLeaderboard }));
         }
     }, [])
 
@@ -77,11 +76,7 @@ const TournamentDetails = () => {
         } else if (location.pathname.endsWith('bracket')) {
             setRouteKey('bracket');
         }else {
-            if(compMode === 'knockout') {
-                setRouteKey('bracket');
-            }else{
-                setRouteKey('leaderboards');
-            }
+            setRouteKey('leaderboards');
         }
     }, [location]);
 
@@ -300,8 +295,21 @@ const TournamentDetails = () => {
                                 />
 
                                 <Tabs activeKey={routeKey} onChange={handleTabChange}>
+                                    <TabPane
+                                        key="leaderboards"
+                                        tab={
+                                            <Row justify="left" align="middle" ref={ref2Leaderboard}>
+                                                <StockOutlined /> <span>Leaderboards</span>
+                                            </Row>
+                                        }
+                                    >
+                                        {
+                                            !leaderboardDetails ? <Preloader /> :
+                                            <Leaderboard leaderboards={leaderboardDetails.leaderboards}/>
+                                        }
+                                    </TabPane> 
                                     {
-                                        compMode === 'knockout' ? 
+                                        compMode === 'knockout' && 
                                         <TabPane
                                             key="bracket"
                                             tab={
@@ -314,20 +322,7 @@ const TournamentDetails = () => {
                                                 !bracketDetails ? <Preloader /> :
                                                 <Bracket matches={bracketDetails.matches}/>
                                             }
-                                        </TabPane>:
-                                        <TabPane
-                                            key="leaderboards"
-                                            tab={
-                                                <Row justify="left" align="middle" ref={ref2Leaderboard}>
-                                                    <StockOutlined /> <span>Leaderboards</span>
-                                                </Row>
-                                            }
-                                        >
-                                            {
-                                                !leaderboardDetails ? <Preloader /> :
-                                                <Leaderboard leaderboards={leaderboardDetails.leaderboards}/>
-                                            }
-                                        </TabPane> 
+                                        </TabPane>
                                     }
                                     <TabPane
                                         key="prizes"
@@ -389,11 +384,12 @@ const TournamentDetails = () => {
                                         >
             
                                             {
+                                                leaderboardDetails &&
                                                 socket ? <ChatRoom 
                                                             socket={socket}
                                                             isConnected={isConnected}
                                                             tournamentDetails={tournamentDetails} 
-                                                            leaderboards={leaderboardDetails.leaderboards}
+                                                            leaderboards={leaderboardDetails?.leaderboards}
                                                             routeKey={routeKey}
                                                             unreadCount={unreadCount}
                                                             setUnreadCount={setUnreadCount}

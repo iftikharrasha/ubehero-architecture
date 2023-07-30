@@ -1,13 +1,19 @@
 import React, { useLayoutEffect, useRef, useState } from 'react';
 import { SingleEliminationBracket, Match, SVGViewer, createTheme } from '@g-loot/react-tournament-brackets';
 import useWindowSize from '../../../hooks/useWindowSize';
-import { Empty } from 'antd';
-// import { matchOf_64P_63_6R } from '../../../lib/Data/matches';
+import { Button, Empty } from 'antd';
+// import { newARound } from '../../../lib/Data/matches';
 // import useBracket from '../../../hooks/useBracket';
 
 const Bracket = ({ matches }) => {
+   const matcheParsed = JSON.parse(JSON.stringify(matches))
     const { windowWidth } = useWindowSize();
-    // const { loading, bracketData } = useBracket();
+    // const { loading, bracketData, shuffledEntry } = useBracket();
+
+    // const entry = (e) =>  {
+    //   e.preventDefault();
+    //   shuffledEntry(bracketData);
+    // }
 
     const [widthOfTheDiv, setWidthOfTheDiv] = useState(windowWidth);
 
@@ -51,11 +57,12 @@ const Bracket = ({ matches }) => {
     });
 
     return (
-        <section className='bracket' style={{ display: widthOfTheDiv > 0 ? 'block' : 'none', border: '1px solid #303030' }} ref={divRef}>
-            { matches.length === 0 ? <Empty/> : 
+        <section className='bracket' style={{ display: widthOfTheDiv > 0 ? 'block' : 'none', border: '1px solid #303030', padding: '0.5rem', overflow: 'hidden' }} ref={divRef}>
+            {/* <Button type="primary" onClick={(e) => entry(e)}>Add Participant +</Button> */}
+            { matcheParsed.length === 0 ? <Empty/> : 
             <SingleEliminationBracket
                 className="singleElimination"
-                matches={matches}
+                matches={matcheParsed}
                 matchComponent={Match}
                 theme={WhiteTheme}
                 options={{

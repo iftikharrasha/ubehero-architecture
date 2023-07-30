@@ -115,6 +115,7 @@ const InternalUpdateDraft = () => {
                         <option value="freefire">freefire</option>
                         <option value="warzone">warzone</option>
                         <option value="csgo">csgo</option>
+                        <option value="fifa">fifa</option>
                     </Form.Control>
                 </Form.Group>
 

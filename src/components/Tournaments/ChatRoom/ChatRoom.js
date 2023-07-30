@@ -62,7 +62,10 @@ const ChatRoom = ({socket, isConnected, tournamentDetails, leaderboards, routeKe
             </div>
             <div className="col-lg-4">
                 <Card>
-                    <UserList socket={socket} leaderboards={leaderboards}/>
+                    {
+                        leaderboards && 
+                        <UserList socket={socket} leaderboards={leaderboards}/>
+                    }
                 </Card>
             </div>
         </div>
