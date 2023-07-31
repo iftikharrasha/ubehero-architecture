@@ -8,6 +8,7 @@ import { useHistory } from "react-router-dom";
 const useTournament = () => {
     const dispatch = useDispatch();
     const [errorMessage, setErrorMessage] = useState(null);
+    const [regDone, setRegDone] = useState(false);
     const profile = useSelector(state => state.profile);
     const history = useHistory();
 
@@ -56,9 +57,11 @@ const useTournament = () => {
                 socketN.emit("send_notification", notificationData);
 
                 setErrorMessage(null);
+                setRegDone(true);
                 dispatch(setPurchasedItem(data._id));
                 const destination = `/tournament/details/${data._id}/chatroom`;
                 history.replace(destination);
+                window.location.reload();
             }else{
                 setErrorMessage(response.data.error.message);
             }
@@ -217,6 +220,7 @@ const useTournament = () => {
     }
 
     return {
+        regDone,
         errorMessage,
         setErrorMessage,
         handleTournamentPurchase,

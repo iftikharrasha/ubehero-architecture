@@ -1,9 +1,12 @@
 import React, { useLayoutEffect, useRef, useState } from 'react';
 import { SingleEliminationBracket, Match, SVGViewer, createTheme } from '@g-loot/react-tournament-brackets';
 import useWindowSize from '../../../hooks/useWindowSize';
-import { Button, Empty } from 'antd';
+import { Button, Card, Col, Empty, Row, Space, Tag, Typography } from 'antd';
+import moment from 'moment';
 // import { newARound } from '../../../lib/Data/matches';
 // import useBracket from '../../../hooks/useBracket';
+
+const { Paragraph } = Typography;
 
 const Bracket = ({ matches }) => {
    const matcheParsed = JSON.parse(JSON.stringify(matches))
@@ -16,6 +19,7 @@ const Bracket = ({ matches }) => {
     // }
 
     const [widthOfTheDiv, setWidthOfTheDiv] = useState(windowWidth);
+    const [clickedMatch, setClickedMatch] = useState({});
 
     const divRef = useRef(null);
     useLayoutEffect(() => {
@@ -52,9 +56,14 @@ const Bracket = ({ matches }) => {
         },
         roundHeader: { backgroundColor: '#f030c0', fontColor: '#ffffff' },
         connectorColor: '#707582',
-        connectorColorHighlight: '#f030c0',
+        connectorColorHighlight: '#49aa19',
         svgBackground: '#14141400',
     });
+
+    const handleMatchClick = (match) => {
+      setClickedMatch(match);
+      console.log(match);
+    };
 
     return (
         <section className='bracket' style={{ display: widthOfTheDiv > 0 ? 'block' : 'none', border: '1px solid #303030', padding: '0.5rem', overflow: 'hidden' }} ref={divRef}>
@@ -63,7 +72,6 @@ const Bracket = ({ matches }) => {
             <SingleEliminationBracket
                 className="singleElimination"
                 matches={matcheParsed}
-                matchComponent={Match}
                 theme={WhiteTheme}
                 options={{
                   style: {
@@ -76,15 +84,105 @@ const Bracket = ({ matches }) => {
                   },
                 }}
                 svgWrapper={({ children, ...props }) => (
-                <SVGViewer 
-                    width={widthOfTheDiv} 
-                    height={600} 
-                    background={WhiteTheme.svgBackground}
-                    SVGBackground={WhiteTheme.svgBackground}
-                    {...props}
-                >
-                    {children}
+                  <SVGViewer 
+                      width={widthOfTheDiv} 
+                      height={600} 
+                      background={WhiteTheme.svgBackground}
+                      SVGBackground={WhiteTheme.svgBackground}
+                      {...props}
+                  >
+                      {children}
                 </SVGViewer>
+                )}
+                // matchComponent={Match}
+                matchComponent={({
+                  match,
+                  onMatchClick,
+                  onPartyClick,
+                  onMouseLeave,
+                  onMouseEnter,
+                  topParty,
+                  bottomParty,
+                  topWon,
+                  bottomWon,
+                  topHovered,
+                  bottomHovered,
+                  topText,
+                  bottomText,
+                  teamNameFallback,
+                  resultFallback,
+                  connectorColor,
+                  computedStyles,
+                }) => (
+                  <div style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'space-around',
+                      color: '#000',
+                      width: '100%',
+                      height: '100%',
+                    }}
+                    className='bracket'
+                  >
+                    <Paragraph><Tag color="cyan" bordered={false}>{moment(topText).format('lll')}</Tag></Paragraph>
+
+                    <div
+                      onClick={() => handleMatchClick(topParty.name)}
+                      onMouseEnter={() => onMouseEnter(topParty.id)}
+                      style={{ display: 'flex' }}
+                      className='bracketTop'
+                    >
+                      <div className='item'>
+                        <Card bordered style={{ width: 300 }} className={!topHovered ? null : topWon ? 'winHover' : null}>
+                          <Row>
+                            <Col span={20}>
+                              <div className={topParty.name === 'TBD' ? 'participantEmpty' : 'participantName'}>{topParty.name || teamNameFallback}</div>
+                            </Col>
+                            <Col span={4}>
+                              <div className="bracketResult">
+                                {
+                                  !topParty.resultText ? null : 
+                                    topWon ? 
+                                      <Tag color="success">{topParty.resultText}</Tag> : 
+                                      <Tag color="warning">{topParty.resultText}</Tag>
+                                }
+                              </div>
+                            </Col>
+                          </Row>
+                        </Card>
+                      </div>
+                    </div>
+
+                    <div style={{ height: '2px', width: '100%', background: '#ffffff25' }}/>
+                    
+                    <div
+                      onMouseEnter={() => onMouseEnter(bottomParty.id)}
+                      style={{ display: 'flex' }}
+                      className='bracketBot'
+                    >
+                      <div className='item'>
+                        <Card bordered style={{ width: 300 }} className={!bottomHovered ? null : bottomWon ? 'winHover' : null}>
+                          <Row>
+                            <Col span={20}>
+                              <div className={bottomParty.name === 'TBD' ? 'participantEmpty' : 'participantName'}>{bottomParty.name || teamNameFallback}</div>
+                            </Col>
+                            <Col span={4}>
+                              <div className="bracketResult">
+                                {
+                                  !bottomParty.resultText ? null : 
+                                    bottomWon ? 
+                                    <Tag color="success">{bottomParty.resultText}</Tag> : 
+                                    <Tag color="warning">{bottomParty.resultText}</Tag>
+                                }
+                              </div>
+                            </Col>
+                          </Row>
+                        </Card>
+                      </div>
+                    </div>
+
+                    <Paragraph><Tag color="volcano" bordered={false}>{bottomText}</Tag></Paragraph>
+                  </div>
                 )}
             />}
         </section>

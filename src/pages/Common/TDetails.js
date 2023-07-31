@@ -24,6 +24,7 @@ import useTimer from '../../hooks/useTimer';
 import TournamentStage from '../../components/Common/TournamentStage/TournamentStage';
 import useAuth from '../../hooks/useAuth';
 import Bracket from '../../components/Tournaments/Bracket/Bracket';
+import useTournament from '../../hooks/useTournament';
 
 const { TabPane } = Tabs;
 
@@ -31,6 +32,7 @@ let initialSocketId = null;
 
 const TournamentDetails = () => { 
     const { checkInTourStorage, addTourToStorage } = useTour();
+    const { regDone } = useTournament();
     const { loggedInUser } = useAuth();
     const isLoggedIn = useSelector(state => state.profile.signed_in);
     const purchasedItems = useSelector(state => state.profile?.data?.purchasedItems);
@@ -41,14 +43,6 @@ const TournamentDetails = () => {
     const history = useHistory();
 
     const dispatch = useDispatch();
-
-    useEffect(() => {
-        dispatch(fetchTournamentDetails({ id, versionTournament }));
-        dispatch(fetchLeaderboards({ id, versionLeaderboard }));
-        if(compMode === 'knockout'){
-            dispatch(fetchBrackets({ id, versionBracket }));
-        }
-    }, [])
 
     const tournaments = useSelector((state) => state.tournaments.data)
     const tournamentDetails = tournaments.find(t => t._id === id);
@@ -63,6 +57,14 @@ const TournamentDetails = () => {
     const versionBracket = bracketDetails ? bracketDetails.version : 0;
 
     const compMode = tournamentDetails?.settings?.competitionMode;
+
+    useEffect(() => {
+        dispatch(fetchTournamentDetails({ id, versionTournament }));
+        dispatch(fetchLeaderboards({ id, versionLeaderboard }));
+        if(compMode === 'knockout'){
+            dispatch(fetchBrackets({ id, versionBracket }));
+        }
+    }, [])
     
     useEffect(() => {
         if (location.pathname.endsWith('chatroom')) {

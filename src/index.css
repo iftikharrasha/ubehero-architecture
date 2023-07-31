@@ -1038,5 +1038,39 @@ a:hover{
   max-width: 12.5rem !important;
 }
 
-.bracket{
+.bracket .ant-typography{
+  margin-bottom: 0;
+  text-align: center;
+}
+
+.bracket .ant-tag{
+  text-align: center;
+}
+
+.bracket .ant-card-body{
+  cursor: pointer;
+}
+
+.bracket .bracketTop .ant-card-body, .bracket .bracketBot .ant-card-body {
+  padding: 6px 12px;
+}
+
+.bracket .bracketTop .participantEmpty, .bracket .bracketBot .participantEmpty {
+  opacity: 0.35;
+}
+
+.bracket .bracketTop .participantName, .bracket .bracketBot .participantName {
+  opacity: 1;
+}
+
+.bracket .bracketTop .bracketResult {
+  text-align: center;
+}
+
+.bracket .bracketTop .winHover, .bracket .bracketBot .winHover {
+  border: 1px solid #49aa19;
+}
+
+.bracket .bracketTop .lostHover, .bracket .bracketBot .lostHover {
+  border: 1px solid #d4380d;
 }

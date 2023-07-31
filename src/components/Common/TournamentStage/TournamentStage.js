@@ -87,16 +87,18 @@ const TournamentStage = ({ compMode, setRouteKey, tournament, purchased }) => {
                                             status: step > 1 ? 'finish': null,
                                         },
                                         {
-                                            title: step > 2 ? `${compMode === 'knockout' ? 'Bracket Locked' : 'Lineup Started'}` : `${compMode === 'knockout' ? 'Bracket Locks' : 'Lineup Starts'}`,
-                                            description: purchased ? 
-                                                            compMode === 'knockout' ?
-                                                            <Popover content={content} title="Lobby Credentials" trigger="click" open={popoverVisible && loadingCompleted} onOpenChange={setPopoverVisible}>
-                                                                <Button type="dashed" size="small" loading={loadings[0]} className='mt-1' onClick={() => enterLobby(0)}>Join Lobby</Button>
-                                                            </Popover> : 
-                                                            <Popover content={content} title="Your Next Match Opponent" trigger="click" open={popoverVisible && loadingCompleted} onOpenChange={setPopoverVisible}>
-                                                                <Button type="dashed" size="small" loading={loadings[0]} className='mt-1' onClick={() => enterLobby(0)}>Find Match</Button>
-                                                            </Popover> :
-                                                            `On ${moment(tournament.dates?.registrationEnd).format('lll')}`,
+                                            title: step > 2 ? compMode === 'knockout' ? 'Bracket Locked' : 'Lineup Started' 
+                                                    : compMode === 'knockout' ? 'Bracket Locks' : 'Lineup Starts',
+                                            description: step < 2 ? `On ${moment(tournament.dates?.registrationEnd).format('lll')}` :
+                                                            step >= 2 && purchased  ? 
+                                                                compMode === 'knockout' ?
+                                                                    <Popover content={content} title="Lobby Credentials" trigger="click" open={popoverVisible && loadingCompleted} onOpenChange={setPopoverVisible}>
+                                                                        <Button type="dashed" size="small" loading={loadings[0]} className='mt-1' onClick={() => enterLobby(0)}>Find Match</Button>
+                                                                    </Popover> : 
+                                                                    <Popover content={content} title="Your Next Match Opponent" trigger="click" open={popoverVisible && loadingCompleted} onOpenChange={setPopoverVisible}>
+                                                                        <Button type="dashed" size="small" loading={loadings[0]} className='mt-1' onClick={() => enterLobby(0)}>Join Lobby</Button>
+                                                                    </Popover> : 
+                                                        `On ${moment(tournament.dates?.registrationEnd).format('lll')}`,
                                             status: step > 2 ? 'finish': null,
                                         },
                                         {

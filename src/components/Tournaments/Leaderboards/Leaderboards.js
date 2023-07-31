@@ -159,7 +159,7 @@ const Leaderboards = ({leaderboards}) => {
         scroll={{ x: true }}
         style={{ boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)' }}
         pagination={{
-          pageSize: 4,
+          pageSize: 6,
           hideOnSinglePage: true,
         }}
       />

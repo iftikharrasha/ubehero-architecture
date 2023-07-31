@@ -2023,10 +2023,19 @@ export const newARound = [
       "participants": [
           {
               "id": "64a1a645456154eedc12a505",
-              "resultText": null,
-              "isWinner": false,
+              "resultText": 'WON',
+              "isWinner": true,
               "status": null,
               "name": "Rashasad",
+              "picture": "https://i.ibb.co/5FFYTs7/avatar.jpg",
+              "_id": "64c68958f6376204376d3b01"
+          },
+          {
+              "id": "64a1a6454561eed23c12a505",
+              "resultText": 'LOST',
+              "isWinner": false,
+              "status": null,
+              "name": "Ahmed",
               "picture": "https://i.ibb.co/5FFYTs7/avatar.jpg",
               "_id": "64c68958f6376204376d3b01"
           }
@@ -2173,7 +2182,17 @@ export const newARound = [
       "tournamentRoundText": "2",
       "startTime": "2023-07-31T00:58:00.000Z",
       "state": "SCHEDULED",
-      "participants": [],
+      "participants": [
+        {
+            "id": "64a1a645456154eedc12a505",
+            "resultText": 'WON',
+            "isWinner": true,
+            "status": null,
+            "name": "Rashasad",
+            "picture": "https://i.ibb.co/5FFYTs7/avatar.jpg",
+            "_id": "64c68958f6376204376d3b01"
+        }
+      ],
       "_id": "64c4f0d375fb702c129e16db"
   },
   {
@@ -2250,7 +2269,17 @@ export const newARound = [
       "tournamentRoundText": "3",
       "startTime": "2023-07-31T14:58:00.000Z",
       "state": "SCHEDULED",
-      "participants": [],
+      "participants": [
+        {
+            "id": "64a1a645456154eedc12a505",
+            "resultText": 'WON',
+            "isWinner": true,
+            "status": null,
+            "name": "Rashasad",
+            "picture": "https://i.ibb.co/5FFYTs7/avatar.jpg",
+            "_id": "64c68958f6376204376d3b01"
+        }
+      ],
       "_id": "64c4f0d375fb702c129e16e2"
   },
   {
@@ -2283,7 +2312,17 @@ export const newARound = [
       "tournamentRoundText": "4",
       "startTime": "2023-07-31T20:58:00.000Z",
       "state": "SCHEDULED",
-      "participants": [],
+      "participants": [
+        {
+            "id": "64a1a645456154eedc12a505",
+            "resultText": 'WON',
+            "isWinner": true,
+            "status": null,
+            "name": "Rashasad",
+            "picture": "https://i.ibb.co/5FFYTs7/avatar.jpg",
+            "_id": "64c68958f6376204376d3b01"
+        }
+      ],
       "_id": "64c4f0d375fb702c129e16e5"
   },
   {
@@ -2305,7 +2344,17 @@ export const newARound = [
       "tournamentRoundText": "5",
       "startTime": "2023-08-01T00:58:00.000Z",
       "state": "SCHEDULED",
-      "participants": [],
+      "participants": [
+        {
+            "id": "64a1a645456154eedc12a505",
+            "resultText": null,
+            "isWinner": false,
+            "status": null,
+            "name": "Rashasad",
+            "picture": "https://i.ibb.co/5FFYTs7/avatar.jpg",
+            "_id": "64c68958f6376204376d3b01"
+        }
+      ],
       "_id": "64c4f0d375fb702c129e16e7"
   }
 ]

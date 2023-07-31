@@ -23,7 +23,7 @@ const TournamentSide = ({ref1TSummery1, ref1TSummery2, ref1TSummery3, isLoggedIn
         case 1:
             sideStep = (
                 <div ref={ref1TSummery2} style={{ paddingTop: '20px' }}>
-                    <Paragraph className="mb-0">Registration Time Left</Paragraph>
+                    <Paragraph className="mb-0">Registration Time Passed</Paragraph>
                     <Progress percent={timeLeftPercent} steps={12} showInfo={true}/> 
                 </div>
             );
