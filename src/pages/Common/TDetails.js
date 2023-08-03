@@ -17,14 +17,12 @@ import CheckoutLayout from '../../components/Common/Checkout/CheckoutLayout';
 
 import { Tabs, Row, Modal, Tour, Col } from 'antd';
 import { StockOutlined, TrophyOutlined, MessageOutlined } from '@ant-design/icons';
-
 import TournamentSide from '../../components/Tournaments/TournamentSide';
 import useTour from '../../hooks/useTour';
 import useTimer from '../../hooks/useTimer';
 import TournamentStage from '../../components/Common/TournamentStage/TournamentStage';
 import useAuth from '../../hooks/useAuth';
 import Bracket from '../../components/Tournaments/Bracket/Bracket';
-import useTournament from '../../hooks/useTournament';
 
 const { TabPane } = Tabs;
 
@@ -32,7 +30,6 @@ let initialSocketId = null;
 
 const TournamentDetails = () => { 
     const { checkInTourStorage, addTourToStorage } = useTour();
-    const { regDone } = useTournament();
     const { loggedInUser } = useAuth();
     const isLoggedIn = useSelector(state => state.profile.signed_in);
     const purchasedItems = useSelector(state => state.profile?.data?.purchasedItems);
@@ -65,6 +62,13 @@ const TournamentDetails = () => {
             dispatch(fetchBrackets({ id, versionBracket }));
         }
     }, [])
+
+    // useEffect(() => {
+    //     if(compMode === 'knockout'){
+    //         setCurrentMatch(bracketDetails?.matches[tournamentDetails?.settings?.currentMatchId-1])
+    //         setFinalMatch(bracketDetails?.matches[tournamentDetails?.settings?.maxParticipitant-2])
+    //     }
+    // }, [])
     
     useEffect(() => {
         if (location.pathname.endsWith('chatroom')) {
@@ -291,6 +295,8 @@ const TournamentDetails = () => {
                             <Col span={19} offset={1}>
                                 <TournamentStage 
                                     compMode={compMode}
+                                    currentMatch={bracketDetails?.matches[tournamentDetails?.settings?.currentMatchId-1]}
+                                    finalMatch={bracketDetails?.matches[tournamentDetails?.settings?.maxParticipitant-2]}
                                     setRouteKey={setRouteKey}
                                     tournament={tournamentDetails} 
                                     purchased={purchasedItems?.tournaments?.includes(id) ? true : false }

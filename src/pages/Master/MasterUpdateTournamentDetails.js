@@ -28,7 +28,17 @@ const MasterUpdateDraft = () => {
             {
                 Object.keys(updatedTournament).length > 0 && 
                     <div className="container mb-4">
-                        <TournamentStage tournament={updatedTournament}/>
+                        <TournamentStage 
+                            tournament={updatedTournament}
+                        />
+                        {/* <TournamentStage 
+                            compMode={compMode}
+                            currentMatch={bracketDetails?.matches[tournamentDetails?.settings?.currentMatchId-1]}
+                            finalMatch={bracketDetails?.matches[tournamentDetails?.settings?.maxParticipitant-2]}
+                            setRouteKey={setRouteKey}
+                            tournament={tournamentDetails} 
+                            purchased={purchasedItems?.tournaments?.includes(id) ? true : false }
+                        /> */}
 
                         <StageDeclare
                             tId={tId}

@@ -1038,6 +1038,24 @@ a:hover{
   max-width: 12.5rem !important;
 }
 
+.bracketTop{
+  display: flex;
+}
+
+.bracket{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  color: #000;
+  width: 100%;
+  height: 100%;
+}
+
+.bracket .item{
+  width: 300px;
+}
+
+
 .bracket .ant-typography{
   margin-bottom: 0;
   text-align: center;
@@ -1049,6 +1067,10 @@ a:hover{
 
 .bracket .ant-card-body{
   cursor: pointer;
+}
+
+.bracket .bracketTop, .bracket .bracketBot{
+  display: flex;
 }
 
 .bracket .bracketTop .ant-card-body, .bracket .bracketBot .ant-card-body {

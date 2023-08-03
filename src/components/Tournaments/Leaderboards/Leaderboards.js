@@ -61,7 +61,7 @@ const Leaderboards = ({leaderboards}) => {
             />
             <div className="ms-3">
               <p className="fw-bold mb-1">{record.userName}</p>
-              <p className="text-muted mb-0">Country: {record.country}</p>
+              <p className="mb-0">Country: {record.country}</p>
             </div>
           </div>
         </Popover>

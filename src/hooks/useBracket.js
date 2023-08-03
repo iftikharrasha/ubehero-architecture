@@ -79,7 +79,6 @@ const useBracket = () => {
       return availableMatches.length > 0 ? availableMatches[Math.floor(Math.random() * availableMatches.length)] : null;
     };
     
-    
     useEffect(() => {
       const fetchData = async () => {
         const bracket = patternGernerate(4);

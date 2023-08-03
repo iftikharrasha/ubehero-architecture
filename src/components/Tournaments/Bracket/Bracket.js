@@ -1,25 +1,23 @@
-import React, { useLayoutEffect, useRef, useState } from 'react';
+import React, { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { SingleEliminationBracket, Match, SVGViewer, createTheme } from '@g-loot/react-tournament-brackets';
 import useWindowSize from '../../../hooks/useWindowSize';
-import { Button, Card, Col, Empty, Row, Space, Tag, Typography } from 'antd';
+import { Button, Card, Col, Empty, Row, Tag, Typography } from 'antd';
 import moment from 'moment';
 // import { newARound } from '../../../lib/Data/matches';
 // import useBracket from '../../../hooks/useBracket';
 
 const { Paragraph } = Typography;
 
-const Bracket = ({ matches }) => {
-   const matcheParsed = JSON.parse(JSON.stringify(matches))
+const Bracket = ({ matches }) => {  
+    // Memoize the parsed matches array to avoid re-parsing on each render
+    const matcheParsed = useMemo(() => JSON.parse(JSON.stringify(matches)), [matches]);
     const { windowWidth } = useWindowSize();
-    // const { loading, bracketData, shuffledEntry } = useBracket();
+    const [clickedMatch, setClickedMatch] = useState({});
+    console.log(clickedMatch);
 
-    // const entry = (e) =>  {
-    //   e.preventDefault();
-    //   shuffledEntry(bracketData);
-    // }
+    // const { loading, bracketData } = useBracket();
 
     const [widthOfTheDiv, setWidthOfTheDiv] = useState(windowWidth);
-    const [clickedMatch, setClickedMatch] = useState({});
 
     const divRef = useRef(null);
     useLayoutEffect(() => {
@@ -62,7 +60,6 @@ const Bracket = ({ matches }) => {
 
     const handleMatchClick = (match) => {
       setClickedMatch(match);
-      console.log(match);
     };
 
     return (
@@ -94,96 +91,86 @@ const Bracket = ({ matches }) => {
                       {children}
                 </SVGViewer>
                 )}
-                // matchComponent={Match}
-                matchComponent={({
-                  match,
-                  onMatchClick,
-                  onPartyClick,
-                  onMouseLeave,
-                  onMouseEnter,
-                  topParty,
-                  bottomParty,
-                  topWon,
-                  bottomWon,
-                  topHovered,
-                  bottomHovered,
-                  topText,
-                  bottomText,
-                  teamNameFallback,
-                  resultFallback,
-                  connectorColor,
-                  computedStyles,
-                }) => (
-                  <div style={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      justifyContent: 'space-around',
-                      color: '#000',
-                      width: '100%',
-                      height: '100%',
-                    }}
-                    className='bracket'
-                  >
-                    <Paragraph><Tag color="cyan" bordered={false}>{moment(topText).format('lll')}</Tag></Paragraph>
+                matchComponent={Match}
+                // matchComponent={({
+                //   match,
+                //   onMatchClick,
+                //   onPartyClick,
+                //   onMouseLeave,
+                //   onMouseEnter,
+                //   topParty,
+                //   bottomParty,
+                //   topWon,
+                //   bottomWon,
+                //   topHovered,
+                //   bottomHovered,
+                //   topText,
+                //   bottomText,
+                //   teamNameFallback,
+                //   resultFallback,
+                //   connectorColor,
+                //   computedStyles,
+                // }) => (
+                //   <div className='bracket'
+                //   >
+                //     <Paragraph><Tag color="cyan" bordered={false}>{moment(topText).format('lll')}</Tag></Paragraph>
 
-                    <div
-                      onClick={() => handleMatchClick(topParty.name)}
-                      onMouseEnter={() => onMouseEnter(topParty.id)}
-                      style={{ display: 'flex' }}
-                      className='bracketTop'
-                    >
-                      <div className='item'>
-                        <Card bordered style={{ width: 300 }} className={!topHovered ? null : topWon ? 'winHover' : null}>
-                          <Row>
-                            <Col span={20}>
-                              <div className={topParty.name === 'TBD' ? 'participantEmpty' : 'participantName'}>{topParty.name || teamNameFallback}</div>
-                            </Col>
-                            <Col span={4}>
-                              <div className="bracketResult">
-                                {
-                                  !topParty.resultText ? null : 
-                                    topWon ? 
-                                      <Tag color="success">{topParty.resultText}</Tag> : 
-                                      <Tag color="warning">{topParty.resultText}</Tag>
-                                }
-                              </div>
-                            </Col>
-                          </Row>
-                        </Card>
-                      </div>
-                    </div>
+                //     <div
+                //       onClick={() => handleMatchClick(match)}
+                //       onMouseEnter={() => onMouseEnter(topParty.id)}
+                //       className='bracketTop'
+                //     >
+                //       <div className='item'>
+                //         <Card bordered style={{ width: 300 }} className={!topHovered ? null : topWon ? 'winHover' : null}>
+                //           <Row>
+                //             <Col span={20}>
+                //               <div className={topParty.name === 'TBD' ? 'participantEmpty' : 'participantName'}>{topParty.name || teamNameFallback}</div>
+                //             </Col>
+                //             <Col span={4}>
+                //               <div className="bracketResult">
+                //                 {
+                //                   !topParty.resultText ? null : 
+                //                     topWon ? 
+                //                       <Tag color="success">{topParty.resultText}</Tag> : 
+                //                       <Tag color="warning">{topParty.resultText}</Tag>
+                //                 }
+                //               </div>
+                //             </Col>
+                //           </Row>
+                //         </Card>
+                //       </div>
+                //     </div>
 
-                    <div style={{ height: '2px', width: '100%', background: '#ffffff25' }}/>
+                //     <div style={{ height: '2px', width: '100%', background: '#ffffff25' }}/>
                     
-                    <div
-                      onMouseEnter={() => onMouseEnter(bottomParty.id)}
-                      style={{ display: 'flex' }}
-                      className='bracketBot'
-                    >
-                      <div className='item'>
-                        <Card bordered style={{ width: 300 }} className={!bottomHovered ? null : bottomWon ? 'winHover' : null}>
-                          <Row>
-                            <Col span={20}>
-                              <div className={bottomParty.name === 'TBD' ? 'participantEmpty' : 'participantName'}>{bottomParty.name || teamNameFallback}</div>
-                            </Col>
-                            <Col span={4}>
-                              <div className="bracketResult">
-                                {
-                                  !bottomParty.resultText ? null : 
-                                    bottomWon ? 
-                                    <Tag color="success">{bottomParty.resultText}</Tag> : 
-                                    <Tag color="warning">{bottomParty.resultText}</Tag>
-                                }
-                              </div>
-                            </Col>
-                          </Row>
-                        </Card>
-                      </div>
-                    </div>
+                //     <div
+                //       onMouseEnter={() => onMouseEnter(bottomParty.id)}
+                //       className='bracketBot'
+                //     >
+                //       <div className='item'>
+                //         <Card bordered style={{ width: 300 }} className={!bottomHovered ? null : bottomWon ? 'winHover' : null}>
+                //           <Row>
+                //             <Col span={20}>
+                //               <div className={bottomParty.name === 'TBD' ? 'participantEmpty' : 'participantName'}>{bottomParty.name || teamNameFallback}</div>
+                //             </Col>
+                //             <Col span={4}>
+                //               <div className="bracketResult">
+                //                 {
+                //                   !bottomParty.resultText ? null : 
+                //                     bottomWon ? 
+                //                     <Tag color="success">{bottomParty.resultText}</Tag> : 
+                //                     <Tag color="warning">{bottomParty.resultText}</Tag>
+                //                 }
+                //               </div>
+                //             </Col>
+                //           </Row>
+                //         </Card>
+                //       </div>
+                //     </div>
 
-                    <Paragraph><Tag color="volcano" bordered={false}>{bottomText}</Tag></Paragraph>
-                  </div>
-                )}
+                //     <Paragraph><Tag color="volcano" bordered={false}>{bottomText}</Tag></Paragraph>
+                //   </div>
+                // )}
             />}
         </section>
     );
