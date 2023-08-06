@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import Dropdown from 'react-bootstrap/Dropdown';
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import { changeRegion } from "../../redux/slices/staticSlice";
 import { useHistory } from "react-router-dom";
@@ -18,6 +18,8 @@ const Header = ({socketN, isConnected, userId}) => {
   const history = useHistory();
   const { loggedInUser, handlelogOut } = useAuth();
   const { handleSwitchProfile, actingAs } = useProfile();
+  const isSignedIn = useSelector(state => state.profile.signed_in);
+  const role = useSelector(state => state.profile.role);
     
   return (
     <div className={`py-1 border-bottom header ${actingAs}`}>
@@ -26,7 +28,7 @@ const Header = ({socketN, isConnected, userId}) => {
           <img src={ubehero} className='img-fluid' alt="ubehero" />
         </Link>
         {
-        loggedInUser.isSignedIn ? (
+          isSignedIn ? (
           <>
             <div className='d-flex align-items-center'>
               {
@@ -59,7 +61,7 @@ const Header = ({socketN, isConnected, userId}) => {
               </button>
               
               {
-                loggedInUser.permissions.includes("admin") ? 
+                role === "admin" ? 
                 <div className="d-flex ms-5">
                   <DropdownButton id="dropdown-basic-button" title="Switch To" variant="dark">
                     <Dropdown.Item onClick={(e) => handleSwitchProfile(e, "user")}>
@@ -74,7 +76,7 @@ const Header = ({socketN, isConnected, userId}) => {
                   </DropdownButton>
                 </div>
                 :
-                loggedInUser.permissions.includes("master") ? 
+                role === "master" ? 
                 <div className="d-flex ms-5">
                   <DropdownButton id="dropdown-basic-button" title="Switch To" variant="dark">
                     <Dropdown.Item onClick={(e) => handleSwitchProfile(e, "user")}>

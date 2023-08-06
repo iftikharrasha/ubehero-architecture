@@ -6,19 +6,19 @@ import Giftcard from '../../Wallet/Topup/Giftcard';
 const CheckoutLayout = ({ remark, routeKey, item, handleOrder, handlePaymentMethod, method, setMethod}) => {
     return (
         <div className="checkout row">
-            <div className="col-md-6">
-            {
-                remark === 'reg' ? 
-                <Tournaments 
-                    remark={remark}
-                    routeKey={routeKey} 
-                    tournament={item}
-                /> : 
-                remark === 'topup' ? 
-                <Giftcard gift={item}/> : null
-            }
+            <div className="col-md-4">
+                {
+                    remark === 'reg' ? 
+                    <Tournaments 
+                        remark={remark}
+                        routeKey={routeKey} 
+                        tournament={item}
+                    /> : 
+                    remark === 'topup' ? 
+                    <Giftcard gift={item}/> : null
+                }
             </div>
-            <div className="col-md-6">
+            <div className="col-md-6 offset-md-2">
             {
                 remark === 'reg' ? 
                 <Checkout 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Card, Button, Progress, Typography, Tag, Row, Space, Avatar, List } from 'antd';
-import { MessageOutlined, CoffeeOutlined, LikeOutlined, StarOutlined, TrophyOutlined } from '@ant-design/icons';
+import { MessageOutlined, CoffeeOutlined, LikeOutlined, StarOutlined, TrophyOutlined, SyncOutlined } from '@ant-design/icons';
 import useAuth from '../../hooks/useAuth';
 
 const { Meta } = Card;
@@ -17,22 +17,55 @@ const IconText = ({ icon, text }) => (
 const TournamentSide = ({ref1TSummery1, ref1TSummery2, ref1TSummery3, isLoggedIn, routeKey, tournament, purchasedItems, handleCancel, handleCheckout, step, buttonStatus, timeLeftPercent}) => {
     const { _id, leaderboards, settings, tournamentName } = tournament;
     const { loggedInUser } = useAuth();
+    const purchased = purchasedItems?.tournaments?.includes(_id);
 
-    let sideStep; //dynamic component
+    let sideStep;
     switch (step) {
         case 1:
             sideStep = (
-                <div ref={ref1TSummery2} style={{ paddingTop: '20px' }}>
-                    <Paragraph className="mb-0">Registration Time Passed</Paragraph>
-                    <Progress percent={timeLeftPercent} steps={12} showInfo={true}/> 
-                </div>
+                <>
+                    {
+                        !isLoggedIn ? 
+                        <>
+                            <div ref={ref1TSummery2} style={{ paddingTop: '20px'}}>
+                                <Tag className="p-2" color="cyan" style={{ width: '100%' }}>Registration Time Progressed: <br />
+                                    <Progress percent={timeLeftPercent} steps={17} showInfo={true} strokeColor="#f030c0" style={{ width: '100%' }}/> 
+                                </Tag>
+                            </div>
+                            <Link to={`/login`} ref={ref1TSummery3}>
+                                <Button type="primary" size="small" className="mt-3">
+                                    {buttonStatus}
+                                </Button>  
+                            </Link> 
+                        </>:
+                        purchased ? 
+                            <Tag color="success" ref={ref1TSummery3} className="mt-3">Already Joined</Tag> :
+                            routeKey === 'checkout' ? 
+                            <Button danger size="medium" className="mt-3 joinButton" onClick={handleCancel} ref={ref1TSummery3}>
+                                CANCEL
+                            </Button> : 
+                            buttonStatus !== 'Join Now' ? 
+                            <Tag color="volcano" ref={ref1TSummery3} className="mt-3">{buttonStatus}</Tag> :
+                            <>
+                                <div ref={ref1TSummery2} style={{ paddingTop: '20px'}}>
+                                    <Tag className="p-2" color="cyan" style={{ width: '100%' }}>Registration Time Progressed: <br />
+                                        <Progress percent={timeLeftPercent} steps={17} showInfo={true} strokeColor="#f030c0" style={{ width: '100%' }}/> 
+                                    </Tag>
+                                </div>
+                                <Button type="primary" size="medium" className="mt-3 joinButton" onClick={handleCheckout}>
+                                    {buttonStatus}
+                                </Button>  
+                            </>
+                    }
+                </>
             );
         break;
 
         case 2:
             sideStep = (
                 <div ref={ref1TSummery2} style={{ paddingTop: '20px' }}>
-                    <Paragraph className="mb-0">Join the game Loby!</Paragraph>
+                    <Tag color="cyan" icon={<SyncOutlined spin />} style={{ fontSize: '16px' }}>Live</Tag>
+                    <Paragraph style={{ fontSize: '16px', display: 'inline' }}>Preparation Started!</Paragraph>
                 </div>
             );
         break;
@@ -40,7 +73,8 @@ const TournamentSide = ({ref1TSummery1, ref1TSummery2, ref1TSummery3, isLoggedIn
         case 3:
             sideStep = (
                 <div ref={ref1TSummery2} style={{ paddingTop: '20px' }}>
-                    <Paragraph className="mb-0">Tournament Started!</Paragraph>
+                    <Tag color="cyan" icon={<SyncOutlined spin />} style={{ fontSize: '16px' }}>Live</Tag>
+                    <Paragraph style={{ fontSize: '16px', display: 'inline' }}>Battle Started!</Paragraph>
                 </div>
             );
         break;
@@ -48,7 +82,7 @@ const TournamentSide = ({ref1TSummery1, ref1TSummery2, ref1TSummery3, isLoggedIn
         case 4:
             sideStep = (
                 <div ref={ref1TSummery2} style={{ paddingTop: '20px' }}>
-                    <Paragraph className="mb-0">Tournament Finished!</Paragraph>
+                    <Tag color="volcano" style={{ fontSize: '16px' }}>Tournament Finished!</Tag>
                 </div>
             );
         break;
@@ -56,7 +90,7 @@ const TournamentSide = ({ref1TSummery1, ref1TSummery2, ref1TSummery3, isLoggedIn
         default:
             sideStep = (
                 <div ref={ref1TSummery2} style={{ paddingTop: '20px' }}>
-                    <Paragraph className="mb-0">Tournament Upcoming!</Paragraph>
+                    <Tag color="magenta" style={{ fontSize: '16px' }}>Tournament Upcoming!</Tag>
                 </div>
             );;
     
@@ -66,50 +100,25 @@ const TournamentSide = ({ref1TSummery1, ref1TSummery2, ref1TSummery3, isLoggedIn
         <div className="list-group sticky-top">
             <Card bordered style={{ boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)' }} ref={ref1TSummery1}
             cover={<img alt="example" src={tournament.tournamentThumbnail} />}>
-                <List
-                    itemLayout="vertical"
-                    size="large" 
-                >
+                <List itemLayout="vertical" size="large">
                     <List.Item style={{ padding: '0' }}>
                         <List.Item.Meta
                             avatar={<TrophyOutlined style={{ fontSize: '30px' }} />}
                             title={<h4>WIN 50$</h4>}
                         />
-                        <div>
+                        <div style={{ fontSize: '16px' }} >
                             <IconText icon={LikeOutlined} text={<p className='card-text'>Entry Mode: {settings.mode}</p>} key="list-vertical-like-o" />
                         </div>
-                        <div>
+                        <div style={{ fontSize: '16px' }}>
                             <IconText icon={LikeOutlined} text={<p className='card-text'>Competition Mode: {settings.competitionMode}</p>} key="list-vertical-like-o" />
                         </div>
-                        <div>
+                        <div style={{ fontSize: '16px' }}>
                             <IconText icon={StarOutlined} text={<p className='card-text'>Joined: {leaderboards.length}/{tournament.settings?.maxParticipitant}</p>} key="list-vertical-star-o" />
                         </div>
                     </List.Item>
                 </List>
                 
                 {sideStep}
-
-                <div>
-                    {
-                        !isLoggedIn ? 
-                        <Link to={`/login`} ref={ref1TSummery3}>
-                            <Button type="primary" size="small" className="mt-3">
-                                {buttonStatus}
-                            </Button>  
-                        </Link> :
-                        purchasedItems.tournaments?.includes(_id) ? 
-                            <Tag color="success" ref={ref1TSummery3} className="mt-3">JOINED</Tag> :
-                                routeKey === 'checkout' ? 
-                                <Button type="primary" size="small" className="mt-3" onClick={handleCancel} ref={ref1TSummery3}>
-                                    CANCEL
-                                </Button> : 
-                                    buttonStatus !== 'Join Now' ? 
-                                    <Tag color="volcano" ref={ref1TSummery3} className="mt-3">{buttonStatus}</Tag> :
-                                    <Button type="primary" size="small" className="mt-3" onClick={handleCheckout} ref={ref1TSummery3}>
-                                        {buttonStatus}
-                                    </Button>
-                    }
-                </div>
             </Card>
             
             
@@ -118,8 +127,8 @@ const TournamentSide = ({ref1TSummery1, ref1TSummery2, ref1TSummery3, isLoggedIn
                     boxShadow: 'none',
                     marginTop: '20px',
                 }}
-                className="popCard"
-                bordered={false}
+                className="popCard mt-5"
+                bordered
                 actions={tournament.masterProfile?.key === loggedInUser.id ? null : [
                     <Row justify="center" align="middle">
                         <Button icon={<MessageOutlined  style={{ marginBottom: "6px" }}/>} style={{ fontSize: '12px' }}>CHAT</Button>

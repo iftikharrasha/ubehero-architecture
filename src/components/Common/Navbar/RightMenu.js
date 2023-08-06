@@ -9,17 +9,20 @@ import Notification from "../Notification/Notification";
 import InboxThread from "../InboxThread/InboxThread";
 import useProfile from "../../../hooks/useProfile";
 import WishList from "../../Profile/WishList";
+import { useSelector } from "react-redux";
 
 const RightMenu = ({ socketN, isConnected, userId, mode }) => {
     const history = useHistory();
     const { loggedInUser, handlelogOut } = useAuth();
     const { handleSwitchProfile, actingAs } = useProfile();
+    const isSignedIn = useSelector(state => state.profile.signed_in);
+    const role = useSelector(state => state.profile.role);
 
     return (
             <Row justify="center" align="middle">
                 <Space wrap>
                     {
-                        loggedInUser.isSignedIn ? (
+                        isSignedIn ? (
                         <>
                             {
                                 socketN ? 
@@ -54,7 +57,7 @@ const RightMenu = ({ socketN, isConnected, userId, mode }) => {
                                         </Link>
                                     </Menu.Item>
                                     {
-                                        loggedInUser.permissions.includes("admin") ? 
+                                        role === "admin" ? 
                                         <Menu.SubMenu key="switch" title="Switch Profile">
                                             <Menu.Item key="user" onClick={(e) => handleSwitchProfile(e, "user")}>
                                                 Gamer Profile
@@ -67,7 +70,7 @@ const RightMenu = ({ socketN, isConnected, userId, mode }) => {
                                             </Menu.Item>
                                         </Menu.SubMenu>
                                         :
-                                        loggedInUser.permissions.includes("master") ? 
+                                        role === "master" ? 
                                         <Menu.SubMenu key="switch" title="Switch Profile">
                                             <Menu.Item key="user" onClick={(e) => handleSwitchProfile(e, "user")}>
                                                 Gamer Profile

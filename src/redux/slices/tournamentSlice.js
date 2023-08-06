@@ -28,6 +28,57 @@ export const fetchTournaments = createAsyncThunk(
     }
 )
 
+// export const fetchTournaments = createAsyncThunk(
+//     'tournament/fetchTournaments',
+//     async ({versionTournaments, status, masterProfile}, {getState}) => {
+//         if(!versionTournaments){
+//             versionTournaments = 0;
+//         }
+        
+//         const isLoggedIn = getState().profile.signed_in;
+//         const role = getState().profile.role;
+//         const _id = getState().profile.data._id
+        
+//         let config = {}
+//         const query = {};
+//         let response = [];
+
+//         if(role === "admin"){
+//             response = await fetch(`${process.env.REACT_APP_API_LINK}/api/v1/tournaments/by?version=${versionTournaments}`, config)
+//         }else if(role === "master"){
+//             response = await fetch(`${process.env.REACT_APP_API_LINK}/api/v1/tournaments/by?version=${versionTournaments}&masterProfile=${_id}`, config)
+//         }else{
+//             response = await fetch(`${process.env.REACT_APP_API_LINK}/api/v1/tournaments/by?version=${versionTournaments}&status=active`, config)
+//         }
+
+//         if (versionTournaments) {
+//             query.version = versionTournaments;
+//         }
+
+//         if (status) {
+//             query.status = status;
+//         }
+    
+//         if (masterProfile) {
+//             query.masterProfile = masterProfile;
+//         }
+
+//         if(isLoggedIn){
+//             const token = localStorage.getItem('jwt');
+//             config.headers = { "Authorization": "Bearer " + token, ...config.headers};
+//         }
+
+//         if(response.status === 200){
+//             const data = await response.json();
+//             if(data.status === 304) {
+//                 return getState().tournaments.data;
+//             }else{
+//                 return data;
+//             }
+//         }
+//     }
+// )
+
 export const fetchTournamentDetails = createAsyncThunk(
     'tournament/fetchTournamentDetails',
     async ({ id, versionTournament }, { getState }) => {

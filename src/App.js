@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import AuthProvider from './Contexts/AuthProvider/AuthProvider'
-import Header from './components/PageLayout/Header';
+// import Header from './components/PageLayout/Header';
 import { useSelector } from 'react-redux';
 import useNotyf from './hooks/useNotyf';
 import InboxPopUp from './components/Common/InboxPopUp/InboxPopUp';

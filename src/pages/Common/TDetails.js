@@ -15,7 +15,7 @@ import ChatRoom from '../../components/Tournaments/ChatRoom/ChatRoom';
 import CheckoutForm from '../../components/Tournaments/Checkout/CheckoutForm';
 import CheckoutLayout from '../../components/Common/Checkout/CheckoutLayout';
 
-import { Tabs, Row, Modal, Tour, Col } from 'antd';
+import { Tabs, Row, Modal, Tour, Col, Card } from 'antd';
 import { StockOutlined, TrophyOutlined, MessageOutlined } from '@ant-design/icons';
 import TournamentSide from '../../components/Tournaments/TournamentSide';
 import useTour from '../../hooks/useTour';
@@ -62,13 +62,6 @@ const TournamentDetails = () => {
             dispatch(fetchBrackets({ id, versionBracket }));
         }
     }, [])
-
-    // useEffect(() => {
-    //     if(compMode === 'knockout'){
-    //         setCurrentMatch(bracketDetails?.matches[tournamentDetails?.settings?.currentMatchId-1])
-    //         setFinalMatch(bracketDetails?.matches[tournamentDetails?.settings?.maxParticipitant-2])
-    //     }
-    // }, [])
     
     useEffect(() => {
         if (location.pathname.endsWith('chatroom')) {
@@ -267,170 +260,178 @@ const TournamentDetails = () => {
 
     return (
         <PageLayout>
+            <div className="tournamentDetails">
+                <div className='tournamentBg'>
+                    <img src={tournamentDetails.tournamentCover} alt="cover" />
+                </div>
+                <div className='tournamentInfo'>
+                    {
+                        tournamentDetails ? 
+                            routeKey === 'order' ?
+                                <CheckoutForm 
+                                    method={method} 
+                                    tournament={tournamentDetails}
+                                />  : 
+                                <Row>
+                                    <Col span={5}>
+                                        <TournamentSide 
+                                            ref1TSummery1={ref1TSummery1}
+                                            ref1TSummery2={ref1TSummery2}
+                                            ref1TSummery3={ref1TSummery3}
+                                            isLoggedIn={isLoggedIn}
+                                            routeKey={routeKey}
+                                            tournament={tournamentDetails} 
+                                            purchasedItems={purchasedItems}
+                                            handleCancel={handleCancel}
+                                            handleCheckout={handleCheckout}
+                                            step={step}
+                                            buttonStatus={buttonStatus}
+                                            timeLeftPercent={timeLeftPercent}
+                                        />
+                                    </Col>
+                                    <Col span={18} offset={1}>
+                                        <TournamentStage 
+                                            compMode={compMode}
+                                            currentMatch={bracketDetails?.matches[tournamentDetails?.settings?.currentMatchId-1]}
+                                            finalMatch={bracketDetails?.matches[tournamentDetails?.settings?.maxParticipitant-2]}
+                                            setRouteKey={setRouteKey}
+                                            tournament={tournamentDetails} 
+                                            purchased={purchasedItems?.tournaments?.includes(id) ? true : false }
+                                        />
 
-            {
-                tournamentDetails ? 
-                    routeKey === 'order' ?
-                        <CheckoutForm 
-                            method={method} 
-                            tournament={tournamentDetails}
-                        />  : 
-                        <Row>
-                            <Col span={4}>
-                                <TournamentSide 
-                                    ref1TSummery1={ref1TSummery1}
-                                    ref1TSummery2={ref1TSummery2}
-                                    ref1TSummery3={ref1TSummery3}
-                                    isLoggedIn={isLoggedIn}
-                                    routeKey={routeKey}
-                                    tournament={tournamentDetails} 
-                                    purchasedItems={purchasedItems}
-                                    handleCancel={handleCancel}
-                                    handleCheckout={handleCheckout}
-                                    step={step}
-                                    buttonStatus={buttonStatus}
-                                    timeLeftPercent={timeLeftPercent}
-                                />
-                            </Col>
-                            <Col span={19} offset={1}>
-                                <TournamentStage 
-                                    compMode={compMode}
-                                    currentMatch={bracketDetails?.matches[tournamentDetails?.settings?.currentMatchId-1]}
-                                    finalMatch={bracketDetails?.matches[tournamentDetails?.settings?.maxParticipitant-2]}
-                                    setRouteKey={setRouteKey}
-                                    tournament={tournamentDetails} 
-                                    purchased={purchasedItems?.tournaments?.includes(id) ? true : false }
-                                />
-
-                                <Tabs activeKey={routeKey} onChange={handleTabChange}>
-                                    <TabPane
-                                        key="leaderboards"
-                                        tab={
-                                            <Row justify="left" align="middle" ref={ref2Leaderboard}>
-                                                <StockOutlined /> <span>Leaderboards</span>
-                                            </Row>
-                                        }
-                                    >
-                                        {
-                                            !leaderboardDetails ? <Preloader /> :
-                                            <Leaderboard leaderboards={leaderboardDetails.leaderboards}/>
-                                        }
-                                    </TabPane> 
-                                    {
-                                        compMode === 'knockout' && 
-                                        <TabPane
-                                            key="bracket"
-                                            tab={
-                                                <Row justify="left" align="middle">
-                                                    <TrophyOutlined /> <span>Bracket</span>
-                                                </Row>
-                                            }
-                                        >
-                                            {
-                                                !bracketDetails ? <Preloader /> :
-                                                <Bracket matches={bracketDetails.matches}/>
-                                            }
-                                        </TabPane>
-                                    }
-                                    <TabPane
-                                        key="prizes"
-                                        tab={
-                                            <Row justify="left" align="middle" ref={ref2Prize}>
-                                                <TrophyOutlined /> <span>Prizes</span>
-                                            </Row>
-                                        }
-                                    >
-                                        <Prizes prizes={tournamentDetails.prizes}/>
-                                    </TabPane>
-                                    <TabPane
-                                        key="result"
-                                        tab={
-                                            <Row justify="left" align="middle">
-                                                <TrophyOutlined /> <span>Result</span>
-                                            </Row>
-                                        }
-                                    >
-                                       <h4>Result for solo games</h4>
-                                    </TabPane>
-                                    {
-                                        purchasedItems?.tournaments?.includes(tournamentDetails._id) && (
-                                            <TabPane
-                                                key="chatroom"
-                                                tab={
-                                                    <Row justify="left" align="middle">
-                                                        <MessageOutlined /> <span>{`ChatRoom (${unreadCount})`}</span>
-                                                    </Row>
-                                                }
-                                            >
-                
+                                        <Card className="tabCard">
+                                            <Tabs activeKey={routeKey} onChange={handleTabChange}>
+                                                <TabPane
+                                                    key="leaderboards"
+                                                    tab={
+                                                        <Row justify="left" align="middle" ref={ref2Leaderboard}>
+                                                            <StockOutlined /> <span>Leaderboards</span>
+                                                        </Row>
+                                                    }
+                                                >
+                                                    {
+                                                        !leaderboardDetails ? <Preloader /> :
+                                                        <Leaderboard leaderboards={leaderboardDetails.leaderboards}/>
+                                                    }
+                                                </TabPane> 
                                                 {
-                                                    socket ? <ChatRoom 
-                                                                socket={socket}
-                                                                isConnected={isConnected}
-                                                                tournamentDetails={tournamentDetails} 
-                                                                leaderboards={leaderboardDetails?.leaderboards}
-                                                                routeKey={routeKey}
-                                                                unreadCount={unreadCount}
-                                                                setUnreadCount={setUnreadCount}
-                                                            />
-                                                    : <Preloader/>
+                                                    compMode === 'knockout' && 
+                                                    <TabPane
+                                                        key="bracket"
+                                                        tab={
+                                                            <Row justify="left" align="middle">
+                                                                <TrophyOutlined /> <span>Bracket</span>
+                                                            </Row>
+                                                        }
+                                                    >
+                                                        {
+                                                            !bracketDetails ? <Preloader /> :
+                                                            <Bracket matches={bracketDetails.matches}/>
+                                                        }
+                                                    </TabPane>
                                                 }
-                                                
-                                            </TabPane>
-                                        )
-                                    }
+                                                <TabPane
+                                                    key="prizes"
+                                                    tab={
+                                                        <Row justify="left" align="middle" ref={ref2Prize}>
+                                                            <TrophyOutlined /> <span>Prizes</span>
+                                                        </Row>
+                                                    }
+                                                >
+                                                    <Prizes prizes={tournamentDetails.prizes}/>
+                                                </TabPane>
+                                                <TabPane
+                                                    key="result"
+                                                    tab={
+                                                        <Row justify="left" align="middle">
+                                                            <TrophyOutlined /> <span>Result</span>
+                                                        </Row>
+                                                    }
+                                                >
+                                                <h4>Result for solo games</h4>
+                                                </TabPane>
+                                                {
+                                                    purchasedItems?.tournaments?.includes(tournamentDetails._id) && (
+                                                        <TabPane
+                                                            key="chatroom"
+                                                            tab={
+                                                                <Row justify="left" align="middle">
+                                                                    <MessageOutlined /> <span>{`ChatRoom (${unreadCount})`}</span>
+                                                                </Row>
+                                                            }
+                                                        >
+                            
+                                                            {
+                                                                socket ? <ChatRoom 
+                                                                            socket={socket}
+                                                                            isConnected={isConnected}
+                                                                            tournamentDetails={tournamentDetails} 
+                                                                            leaderboards={leaderboardDetails?.leaderboards}
+                                                                            routeKey={routeKey}
+                                                                            unreadCount={unreadCount}
+                                                                            setUnreadCount={setUnreadCount}
+                                                                        />
+                                                                : <Preloader/>
+                                                            }
+                                                            
+                                                        </TabPane>
+                                                    )
+                                                }
 
-                                    {
-                                        tournamentDetails.masterProfile._id === loggedInUser.id && 
-                                        <TabPane
-                                            key="chatroom"
-                                            tab={
-                                                <Row justify="left" align="middle">
-                                                    <MessageOutlined /> <span>{`ChatRoom (${unreadCount})`}</span>
-                                                </Row>
-                                            }
-                                        >
-            
-                                            {
-                                                leaderboardDetails &&
-                                                socket ? <ChatRoom 
-                                                            socket={socket}
-                                                            isConnected={isConnected}
-                                                            tournamentDetails={tournamentDetails} 
-                                                            leaderboards={leaderboardDetails?.leaderboards}
-                                                            routeKey={routeKey}
-                                                            unreadCount={unreadCount}
-                                                            setUnreadCount={setUnreadCount}
-                                                        />
-                                                : <Preloader/>
-                                            }
+                                                {
+                                                    tournamentDetails.masterProfile._id === loggedInUser.id && 
+                                                    <TabPane
+                                                        key="chatroom"
+                                                        tab={
+                                                            <Row justify="left" align="middle">
+                                                                <MessageOutlined /> <span>{`ChatRoom (${unreadCount})`}</span>
+                                                            </Row>
+                                                        }
+                                                    >
+                        
+                                                        {
+                                                            leaderboardDetails &&
+                                                            socket ? <ChatRoom 
+                                                                        socket={socket}
+                                                                        isConnected={isConnected}
+                                                                        tournamentDetails={tournamentDetails} 
+                                                                        leaderboards={leaderboardDetails?.leaderboards}
+                                                                        routeKey={routeKey}
+                                                                        unreadCount={unreadCount}
+                                                                        setUnreadCount={setUnreadCount}
+                                                                    />
+                                                            : <Preloader/>
+                                                        }
+                                                        
+                                                    </TabPane>
+                                                }
+                                            </Tabs>
                                             
-                                        </TabPane>
-                                    }
-                                </Tabs>
-                                
-                                {/* this is the tab for checkout when clicked the checkout button */}
-                                {routeKey === 'checkout' ? (
-                                    <CheckoutLayout 
-                                        remark='reg'
-                                        routeKey={routeKey} 
-                                        item={tournamentDetails} 
-                                        handleOrder={handleOrder} 
-                                        handlePaymentMethod={handlePaymentMethod} 
-                                        method={method} 
-                                        setMethod={setMethod}
-                                    />
-                                ) : null}
-                            </Col>
-                        </Row>
-                    : <Preloader />
-                }
+                                            {/* this is the tab for checkout when clicked the checkout button */}
+                                            {routeKey === 'checkout' ? (
+                                                <CheckoutLayout 
+                                                    remark='reg'
+                                                    routeKey={routeKey} 
+                                                    item={tournamentDetails} 
+                                                    handleOrder={handleOrder} 
+                                                    handlePaymentMethod={handlePaymentMethod} 
+                                                    method={method} 
+                                                    setMethod={setMethod}
+                                                />
+                                            ) : null}
+                                        </Card>
+                                    </Col>
+                                </Row>
+                            : <Preloader />
+                        }
 
-                <Modal title="Take a tour | Tournament Page" open={isModalOpen} onOk={handleTakeTour} onCancel={() => setIsModalOpen(false)}>
-                    <p>New to our tournament page? Kindly take a tour to make things easy for you! See how it works.</p>
-                </Modal>
+                        <Modal title="Take a tour | Tournament Page" open={isModalOpen} onOk={handleTakeTour} onCancel={() => setIsModalOpen(false)}>
+                            <p>New to our tournament page? Kindly take a tour to make things easy for you! See how it works.</p>
+                        </Modal>
 
-                <Tour  open={tourOpen} onClose={() => setTourOpen(false)} steps={steps} zIndex={1001} type="primary"/>
+                        <Tour  open={tourOpen} onClose={() => setTourOpen(false)} steps={steps} zIndex={1001} type="primary"/>
+                </div>
+            </div>
         </PageLayout>
     );
 };

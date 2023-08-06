@@ -41,7 +41,7 @@ const Home = () => {
     useEffect(() => {
         if(purchasedItems){
             const myRooms = tournaments.filter(tournament => purchasedItems.some(itemId => tournament._id === itemId));
-            setRoomsJoined(myRooms)
+            setRoomsJoined(myRooms);
         }
     }, [purchasedItems, tournaments]);
     

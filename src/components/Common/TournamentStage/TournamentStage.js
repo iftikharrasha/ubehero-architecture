@@ -66,7 +66,7 @@ const TournamentStage = ({ compMode, currentMatch, finalMatch, setRouteKey, tour
     };
 
     return (
-        <div className='mb-3'>
+        <div className='mb-4'>
             <Card >
                 <Meta
                     title={
@@ -82,7 +82,7 @@ const TournamentStage = ({ compMode, currentMatch, finalMatch, setRouteKey, tour
                         <div>
                             <Row justify="center" align="middle">
                                 <Steps
-                                    // percent={60}
+                                    // percent={10}
                                     current={step - 1}
                                     size="small"
                                     items={compMode === 'knockout' ? 
@@ -103,7 +103,7 @@ const TournamentStage = ({ compMode, currentMatch, finalMatch, setRouteKey, tour
                                         },
                                         {
                                             title: currentMatch?.name,
-                                            description: `${moment(currentMatch?.startTime).format('lll')}`,
+                                            description: step === 3 ? 'Battle Started' : `${moment(currentMatch?.startTime).format('lll')}`,
                                             status: step > 3 ? 'finish': null,
                                         },
                                         {
@@ -123,8 +123,9 @@ const TournamentStage = ({ compMode, currentMatch, finalMatch, setRouteKey, tour
                                             status: step > 1 ? 'finish': null,
                                         },
                                         {
-                                            title: step > 2 ? 'Lineup Started' : 'Lineup Starts',
-                                            description: step >= 2 && purchased  ? 
+                                            title: step > 2 ? 'Preparation Ended' : 'Preparation Starts',
+                                            description: step < 2 ? `${moment(tournament.dates?.registrationEnd).format('lll')}` : 
+                                                        step === 2 && purchased ? 
                                                             <Popover content={content} title="Your Next Match Opponent" trigger="click" open={popoverVisible && loadingCompleted} onOpenChange={setPopoverVisible}>
                                                                 <Button type="dashed" size="small" loading={loadings[0]} className='mt-1' onClick={() => enterLobby(0)}>Join Lobby</Button>
                                                             </Popover> : 
@@ -133,7 +134,7 @@ const TournamentStage = ({ compMode, currentMatch, finalMatch, setRouteKey, tour
                                         },
                                         {
                                             title: step > 3 ? 'Battle Started' : 'Battle Starts',
-                                            description: `${moment(tournament.dates?.tournamentStart).format('lll')}`,
+                                            description: step === 3 ? 'Battle Started' : `${moment(tournament.dates?.tournamentStart).format('lll')}`,
                                             status: step > 3 ? 'finish': null,
                                         },
                                         {

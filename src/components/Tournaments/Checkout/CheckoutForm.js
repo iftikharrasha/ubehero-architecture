@@ -1,5 +1,6 @@
 import React from 'react';
 import useTournament from '../../../hooks/useTournament';
+import { Card } from 'antd';
 
 const CheckoutForm = ({method, tournament}) => {
     const { _id, tournamentName, tournamentThumbnail, settings } = tournament;
@@ -9,12 +10,20 @@ const CheckoutForm = ({method, tournament}) => {
         handleTournamentPurchase(tournament, method);
     };
 
+    const onFinish = (values) => {
+      console.log('Success:', values);
+    };
+    
+    const onFinishFailed = (errorInfo) => {
+      console.log('Failed:', errorInfo);
+    };
+
     return (
         <section className="order-form">
             <div className="container pt-4">
                 <div className="row">
                     <div className="col-md-6">
-                        <div className="border border-1">
+                        <Card>
                             <div className='m-4'>
                                 <h5 className="text-uppercase">Order Details</h5>
 
@@ -53,11 +62,11 @@ const CheckoutForm = ({method, tournament}) => {
                                     <span className="font-weight-bold theme-color">{settings.mode}</span>
                                 </div>  
                             </div> 
-                        </div>
+                        </Card>
 
                     </div>
                     <div className="col-md-6">
-                        <div className="border border-1">
+                        <Card>
                             <div className="row mx-4 mt-4">
                                 <div className="col-12">
                                     <label className="order-form-label">Name</label>
@@ -78,25 +87,25 @@ const CheckoutForm = ({method, tournament}) => {
                                 </div>
                                 <div className="col-sm-6 mt-2 pe-sm-2">
                                     <div className="form-outline">
-                                        <label className="form-label" for="form5">Card Number</label>
+                                        <label className="order-form-label" for="form5">Card Number</label>
                                         <input type="text" id="form7" className="form-control order-form-input border" />
                                     </div>
                                 </div>
                                 <div className="col-sm-6 mt-2 ps-sm-0">
                                     <div className="form-outline">
-                                        <label className="form-label" for="form8">CVC</label>
+                                        <label className="order-form-label" for="form8">CVC</label>
                                         <input type="text" id="form8" className="form-control order-form-input border" />
                                     </div>
                                 </div>
                                 <div className="col-sm-6 mt-2 pe-sm-2">
                                     <div className="form-outline">
-                                        <label className="form-label" for="form9">Expiry Date</label>
+                                        <label className="order-form-label" for="form9">Expiry Date</label>
                                         <input type="text" id="form9" className="form-control order-form-input border" />
                                     </div>
                                 </div>
                                 <div className="col-sm-6 mt-2 ps-sm-0">
                                     <div className="form-outline">
-                                        <label className="form-label" for="form10">Postal / Zip Code</label>
+                                        <label className="order-form-label" for="form10">Postal / Zip Code</label>
                                         <input type="text" id="form10" className="form-control order-form-input border" />
                                     </div>
                                 </div>
@@ -116,7 +125,7 @@ const CheckoutForm = ({method, tournament}) => {
                                     <button type="button" id="btnSubmit" className="btn btn-primary d-block mx-auto btn-submit" onClick={tournamentRegistration}>Submit</button>
                                 </div>
                             </div>
-                        </div>
+                        </Card>
                     </div>
                 </div>
             </div>

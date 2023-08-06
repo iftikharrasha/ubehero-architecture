@@ -4,20 +4,20 @@ import { Link } from "react-router-dom";
 import { addToWishList, removeFromWishList } from "../../redux/slices/tournamentSlice";
 
 import { Card, Button, Progress, Row, Typography, message, Popconfirm, Tag, Badge } from 'antd';
-import { UsergroupAddOutlined, PlusCircleOutlined, MinusCircleOutlined, TrophyOutlined } from '@ant-design/icons';
+import { UsergroupAddOutlined, PlusCircleOutlined, MinusCircleOutlined, TrophyOutlined, SyncOutlined, CheckCircleOutlined } from '@ant-design/icons';
 import useTimer from "../../hooks/useTimer";
 
 const { Paragraph } = Typography;
 const { Meta } = Card;
 
-const Tournaments = ({remark, route, handleCancel, tournament, detailsPage, handleCheckout}) => {
-  const { _id, tournamentName, tournamentThumbnail, settings, leaderboards, category, version, purchased } = tournament;
+const Tournaments = ({remark, tournament}) => {
+  const { _id, tournamentName, tournamentThumbnail, settings, leaderboards, category, version } = tournament;
   const { wishList } = useSelector((state) => state.tournaments);
   const isLoggedIn = useSelector(state => state.profile.signed_in);
   const purchasedItems = useSelector(state => state.profile?.data?.purchasedItems);
   const isWishListed = wishList.find((t) => t._id === tournament._id);
 
-  const { buttonStatus, timeLeftPercent } = useTimer(tournament.dates);
+  const { step, buttonStatus, timeLeftPercent } = useTimer(tournament.dates);
 
   const dispatch = useDispatch();
   
@@ -31,19 +31,22 @@ const Tournaments = ({remark, route, handleCancel, tournament, detailsPage, hand
         style={{position: 'relative'}}
       >
       <Badge.Ribbon text={category} color="#f030c0">
-        <Card hoverable style={{
+        <Card style={{
               width: '100%',
               minWidth: '23rem',
             }}
             cover={
-              <img
-                alt="example"
-                src={tournamentThumbnail} 
-                style={{
-                  minHeight: '14rem',
-                  maxHeight: '14rem',
-                }}
-              />
+              <Link to={`/tournament/details/${_id}`}>
+                <img
+                  alt="example"
+                  src={tournamentThumbnail} 
+                  style={{
+                    minHeight: '14rem',
+                    maxHeight: '14rem',
+                    width: '100%',
+                  }}
+                />
+              </Link>
             }
             actions={[
               <Row justify="center" align="middle">
@@ -68,45 +71,59 @@ const Tournaments = ({remark, route, handleCancel, tournament, detailsPage, hand
             />
             <Row justify="space-between" align="middle" className="mt-2">
                 <Meta
-                  // avatar={
-                  //   <Avatar src="https://png.pngtree.com/png-vector/20190114/ourmid/pngtree-vector-video-game-icon-png-image_313030.jpg" />
-                  // }
+                  avatar={
+                    <TrophyOutlined  style={{ fontSize: '24px' }} />
+                  }
                   description={
                     <Row justify="left" align="middle" className="mt-1">
-                      <TrophyOutlined  style={{ fontSize: '24px' }} /> <span className="ps-1">Prize ${settings?.joiningFee}.00</span>
+                      <span>Prize ${settings?.joiningFee*settings?.maxParticipitant}.00</span>
                     </Row>
                   }
                 />
-                <div>
-                  <Paragraph className="mb-0">Time Left</Paragraph>
-                  <Progress percent={timeLeftPercent} steps={15} size="small" showInfo={false}/> 
-                </div>
+                {
+                  step === 1 ? 
+                  <div>
+                    <Paragraph className="mb-0">Time Left</Paragraph>
+                    <Progress percent={timeLeftPercent} steps={15} size="small" showInfo={false} strokeColor="#f030c0"/> 
+                  </div> : 
+                  step === 4 ? 
+                  <Tag color="volcano" icon={<CheckCircleOutlined/>} style={{ fontSize: '14px' }} className="mt-3">{buttonStatus}</Tag> :
+                  <Tag color="cyan" icon={<SyncOutlined spin />} style={{ fontSize: '14px' }} className="mt-3">{buttonStatus}</Tag>
+                }
             </Row>
             
             {
+              //remark = reg means no button need to show
               remark ? null :
-              !isLoggedIn ? <Link to={`/tournament/details/${_id}`}>
-                                <Button type="primary" size="small" className="mt-3">
-                                  {buttonStatus}
-                                </Button>
-                            </Link> :
+              !isLoggedIn ? 
+                    step === 1 ? 
+                    <Link to={`/tournament/details/${_id}`}>
+                        <Button type="primary" size="small" className="mt-3">
+                          {buttonStatus} ${settings?.joiningFee}
+                        </Button>
+                    </Link>  : 
+                    <Link to={`/tournament/details/${_id}`}>
+                        <Button size="small" className="mt-3">
+                          View Details
+                        </Button>
+                    </Link> :
                 purchasedItems.tournaments?.includes(_id) ? 
                   <Link to={`/tournament/details/${_id}`}>
-                      <Tag color="success" size="small" className="mt-3">
-                          JOINED
+                      <Tag size="small" className="mt-3" style={{ fontSize: '14px' }}>
+                          Slot Booked
                       </Tag>
                   </Link> :
-                  detailsPage ? 
-                        route === 'checkout' ?  <Button type="primary" size="small" className="mt-3" onClick={handleCancel}>
-                                                    CANCEL
-                                                </Button>
-                        : <Button type="primary" size="small" className="mt-3" onClick={handleCheckout}>
-                              {buttonStatus}
-                          </Button> : <Link to={`/tournament/details/${_id}`}>
-                                        <Button type="primary" size="small" className="mt-3">
-                                        {buttonStatus}
-                                        </Button>
-                                      </Link>
+                    step === 1 ? 
+                    <Link to={`/tournament/details/${_id}`}>
+                      <Button type="primary" size="small" className="mt-3">
+                        {buttonStatus}
+                      </Button>
+                    </Link> : 
+                    <Link to={`/tournament/details/${_id}`}>
+                        <Button size="small" className="mt-3">
+                          View Details
+                        </Button>
+                    </Link>
             }
         </Card>
       </Badge.Ribbon>

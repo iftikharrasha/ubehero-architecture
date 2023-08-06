@@ -33,6 +33,7 @@ const profileSlice = createSlice({
         version: 0,
         signed_in: false,
         actingAs: "user",
+        role: "user",
         status: 'idle',
     },
     reducers: {
@@ -48,6 +49,9 @@ const profileSlice = createSlice({
         },
         setRoute: (state, action) => {
             state.actingAs = action.payload || state.actingAs;
+        },
+        setRole: (state, action) => {
+            state.role = action.payload || state.role;
         },
         setPurchasedItem: (state, action) => {
             let payloadArray = [action.payload];
@@ -73,5 +77,5 @@ const profileSlice = createSlice({
     },
 });
 
-export const { setLogIn, setLogOut, setRoute, setPurchasedItem } = profileSlice.actions;
+export const { setLogIn, setLogOut, setRoute, setRole, setPurchasedItem } = profileSlice.actions;
 export default profileSlice.reducer;
