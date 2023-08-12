@@ -83,7 +83,7 @@ const Bracket = ({ matches }) => {
                 svgWrapper={({ children, ...props }) => (
                   <SVGViewer 
                       width={widthOfTheDiv} 
-                      height={600} 
+                      height={500} 
                       background={WhiteTheme.svgBackground}
                       SVGBackground={WhiteTheme.svgBackground}
                       {...props}

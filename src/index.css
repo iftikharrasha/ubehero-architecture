@@ -337,7 +337,7 @@ a:hover{
   font-size: 1rem;
   line-height: 1.25rem;
   position: absolute;
-  bottom: 50px;
+  bottom: 75px;
   /* right: 50%; */
   -webkit-transform: translate(50%, 0);
           transform: translate(50%, 0);
@@ -356,7 +356,7 @@ a:hover{
   width: 0.75rem;
   height: 0.75rem;
   margin-right: 0.3125rem;
-  background-color: #44444450;
+  background-color: #7e7d7d50;
 }
 
 .typing .tidot:nth-child(1) {
@@ -1145,4 +1145,14 @@ a:hover{
   right: 0;
   text-align: center;
   bottom: -1.25rem;
+}
+
+.liveStream iframe{
+  width: 100%;
+  height: 30rem;
+}
+
+.ant-steps-item-title{
+  font-size: 16px !important;
+  font-weight: 400;
 }

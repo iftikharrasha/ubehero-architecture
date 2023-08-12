@@ -1,16 +1,11 @@
 import React from 'react';
-import useTimer from '../../../hooks/useTimer';
 import StageRegistration from './StageRegistration';
 import StageCredentials from './StageCredentials';
 import StageResult from './StageResult';
 import { Button, Result, Timeline } from 'antd';
 
-const StageDeclare = ({ tId, previewURL, setPreviewURL, updatedTournament, setUpdatedTournament }) => {
-    const { step } = useTimer(updatedTournament.dates);
-    // let step = 1;
+const StageDeclare = ({ step, tId, previewURL, setPreviewURL, updatedTournament, setUpdatedTournament, compMode, currentMatch }) => {
     let content; 
-    console.log('step', step)
-
     switch (step) {
         case 0:
         case 1:
@@ -29,8 +24,9 @@ const StageDeclare = ({ tId, previewURL, setPreviewURL, updatedTournament, setUp
             content = (
                 <StageCredentials
                     tId={tId}
-                    updatedTournament={updatedTournament}
-                    setUpdatedTournament={setUpdatedTournament}   
+                    compMode={compMode}
+                    currentMatch={currentMatch}
+                    updatedTournament={updatedTournament} 
                 />
             );
         break;
@@ -76,19 +72,19 @@ const StageDeclare = ({ tId, previewURL, setPreviewURL, updatedTournament, setUp
                 items={[
                 {
                     color: step === 1 || step === 0 ? "red" : step > 1 ? "green" : "gray",
-                    children: step === 1 || step === 0 ? content : "Registration Phase",
+                    children: step === 1 || step === 0 ? content : "Phase 1: Registration Time",
                 },
                 {
                     color: step === 2 ? "red" : step > 2 ? "green" : "gray",
-                    children: step === 2 ? content : "Lineup Phase",
+                    children: step === 2 ? content : "Phase 2: Preparation Time",
                 },
                 {
                     color: step === 3 ? "red" : step > 3 ? "green" : "gray",
-                    children: step === 3 ? content : "Tournament Start Phase",
+                    children: step === 3 ? content : "Phase 3: Battle Time",
                 },
                 {
                     color: step === 4 ? "green" : "gray",
-                    children: step === 4 ? content : "Result Uploading Phase",
+                    children: step === 4 ? content : "Phase 4: Result Time",
                 },
                 ]}
             />

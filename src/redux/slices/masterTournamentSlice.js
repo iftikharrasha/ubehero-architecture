@@ -20,13 +20,38 @@ export const fetchMastersTournaments = createAsyncThunk(
         if(response.status === 200){
             const data = await response.json();
             if(data.status === 304) {
-                return getState().masterTournament.data;
+                return getState().masterTournaments.data;
             }else{
                 return data;
             }
         }
     }
-)
+);
+
+export const fetchMastersTournamentDetails = createAsyncThunk(
+    'masterTournament/fetchMastersTournamentDetails',
+    async ({ tId, versionTournament }, { getState }) => {
+        if(!versionTournament || getState().masterTournaments.data.length === 0){
+            versionTournament = 0;
+        }
+
+        const response = await fetch(`${process.env.REACT_APP_API_LINK}/api/v1/tournaments/${tId}?version=${versionTournament}`);
+        const data = await response.json();
+
+        if(data.status === 304) {
+            const tournament = getState().masterTournaments.data.find(t => t._id === tId);
+            const details = {
+                "success": true,
+                "status": 304,
+                "version": tournament.version,
+                "data": tournament,
+            }
+            return details;
+        } else{
+            return data;
+        }
+    }
+);
 
 const masterTournamentSlice = createSlice({
     name: 'masterTournament',
@@ -47,6 +72,16 @@ const masterTournamentSlice = createSlice({
         builder.addCase(fetchMastersTournaments.fulfilled, (state, action) => {
             state.data = action.payload.data || state.data;
             state.version = action.payload.version || state.version;
+            state.status = 'success';
+        })
+        builder.addCase(fetchMastersTournamentDetails.fulfilled, (state, action) => {
+            const index = state.data.findIndex(t => t._id === action.meta.arg.tId)
+            if(index === -1){
+                state.data[0] = action.payload.data || state.data;
+            }else{
+                state.data[index] = action.payload.data || state.data;
+            }
+            // state.version = action.payload.version || state.version;
             state.status = 'success';
         })
     },

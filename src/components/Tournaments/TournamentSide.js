@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Card, Button, Progress, Typography, Tag, Row, Space, Avatar, List } from 'antd';
-import { MessageOutlined, CoffeeOutlined, LikeOutlined, StarOutlined, TrophyOutlined, SyncOutlined } from '@ant-design/icons';
+import { MessageOutlined, CoffeeOutlined, LikeOutlined, StarOutlined, TrophyOutlined, SyncOutlined, UserOutlined, UsergroupAddOutlined, ProjectOutlined, PartitionOutlined } from '@ant-design/icons';
 import useAuth from '../../hooks/useAuth';
 
 const { Meta } = Card;
@@ -14,8 +14,8 @@ const IconText = ({ icon, text }) => (
     </Space>
   );
 
-const TournamentSide = ({ref1TSummery1, ref1TSummery2, ref1TSummery3, isLoggedIn, routeKey, tournament, purchasedItems, handleCancel, handleCheckout, step, buttonStatus, timeLeftPercent}) => {
-    const { _id, leaderboards, settings, tournamentName } = tournament;
+const TournamentSide = ({ref1TSummery1, ref1TSummery2, ref1TSummery3, isLoggedIn, routeKey, tournament, totalJoined, purchasedItems, handleCancel, handleCheckout, step, buttonStatus, timeLeftPercent}) => {
+    const { _id, settings, tournamentName } = tournament;
     const { loggedInUser } = useAuth();
     const purchased = purchasedItems?.tournaments?.includes(_id);
 
@@ -39,7 +39,7 @@ const TournamentSide = ({ref1TSummery1, ref1TSummery2, ref1TSummery3, isLoggedIn
                             </Link> 
                         </>:
                         purchased ? 
-                            <Tag color="success" ref={ref1TSummery3} className="mt-3">Already Joined</Tag> :
+                            <Tag color="success" ref={ref1TSummery3} className="mt-3">Slot Booked</Tag> :
                             routeKey === 'checkout' ? 
                             <Button danger size="medium" className="mt-3 joinButton" onClick={handleCancel} ref={ref1TSummery3}>
                                 CANCEL
@@ -107,13 +107,13 @@ const TournamentSide = ({ref1TSummery1, ref1TSummery2, ref1TSummery3, isLoggedIn
                             title={<h4>WIN 50$</h4>}
                         />
                         <div style={{ fontSize: '16px' }} >
-                            <IconText icon={LikeOutlined} text={<p className='card-text'>Entry Mode: {settings.mode}</p>} key="list-vertical-like-o" />
+                            <IconText icon={settings.mode === 'solo' ? UserOutlined : UsergroupAddOutlined} text={<p className='card-text'>Entry Mode: {settings.mode}</p>} key="list-vertical-like-o" />
                         </div>
                         <div style={{ fontSize: '16px' }}>
-                            <IconText icon={LikeOutlined} text={<p className='card-text'>Competition Mode: {settings.competitionMode}</p>} key="list-vertical-like-o" />
+                            <IconText icon={settings.competitionMode === 'ladder' ? ProjectOutlined : PartitionOutlined} text={<p className='card-text'>Competition Mode: {settings.competitionMode}</p>} key="list-vertical-like-o" />
                         </div>
                         <div style={{ fontSize: '16px' }}>
-                            <IconText icon={StarOutlined} text={<p className='card-text'>Joined: {leaderboards.length}/{tournament.settings?.maxParticipitant}</p>} key="list-vertical-star-o" />
+                            <IconText icon={StarOutlined} text={<p className='card-text'>Joined: {totalJoined}/{tournament.settings?.maxParticipitant}</p>} key="list-vertical-star-o" />
                         </div>
                     </List.Item>
                 </List>

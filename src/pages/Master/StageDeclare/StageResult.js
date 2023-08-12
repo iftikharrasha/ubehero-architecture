@@ -177,7 +177,7 @@ const StageResult = ({ tId, updatedTournament, setUpdatedTournament }) => {
     return (
         <>
             <h5>
-                Phase 3: Upload the result for<strong> {updatedTournament.tournamentName}</strong>
+                Phase 3: Battle Time | Submit the result of<strong> {updatedTournament.tournamentName}</strong>
             </h5>
                     
             <Form className="w-100 px-5 pb-4">

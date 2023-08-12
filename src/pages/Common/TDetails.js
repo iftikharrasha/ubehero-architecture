@@ -16,7 +16,7 @@ import CheckoutForm from '../../components/Tournaments/Checkout/CheckoutForm';
 import CheckoutLayout from '../../components/Common/Checkout/CheckoutLayout';
 
 import { Tabs, Row, Modal, Tour, Col, Card } from 'antd';
-import { StockOutlined, TrophyOutlined, MessageOutlined } from '@ant-design/icons';
+import { TrophyOutlined, MessageOutlined, CrownOutlined, PartitionOutlined, ProjectOutlined } from '@ant-design/icons';
 import TournamentSide from '../../components/Tournaments/TournamentSide';
 import useTour from '../../hooks/useTour';
 import useTimer from '../../hooks/useTimer';
@@ -281,6 +281,7 @@ const TournamentDetails = () => {
                                             isLoggedIn={isLoggedIn}
                                             routeKey={routeKey}
                                             tournament={tournamentDetails} 
+                                            totalJoined={leaderboardDetails?.leaderboards?.length}
                                             purchasedItems={purchasedItems}
                                             handleCancel={handleCancel}
                                             handleCheckout={handleCheckout}
@@ -305,7 +306,7 @@ const TournamentDetails = () => {
                                                     key="leaderboards"
                                                     tab={
                                                         <Row justify="left" align="middle" ref={ref2Leaderboard}>
-                                                            <StockOutlined /> <span>Leaderboards</span>
+                                                            <ProjectOutlined  style={{ fontSize: '16px', transform: 'rotate(180deg)' }} /> <span>Leaderboards</span>
                                                         </Row>
                                                     }
                                                 >
@@ -320,7 +321,7 @@ const TournamentDetails = () => {
                                                         key="bracket"
                                                         tab={
                                                             <Row justify="left" align="middle">
-                                                                <TrophyOutlined /> <span>Bracket</span>
+                                                                <PartitionOutlined style={{ fontSize: '16px', transform: 'rotate(180deg)' }} /> <span>Bracket</span>
                                                             </Row>
                                                         }
                                                     >
@@ -334,7 +335,7 @@ const TournamentDetails = () => {
                                                     key="prizes"
                                                     tab={
                                                         <Row justify="left" align="middle" ref={ref2Prize}>
-                                                            <TrophyOutlined /> <span>Prizes</span>
+                                                            <TrophyOutlined style={{ fontSize: '16px' }}/> <span>Prizes</span>
                                                         </Row>
                                                     }
                                                 >
@@ -344,7 +345,7 @@ const TournamentDetails = () => {
                                                     key="result"
                                                     tab={
                                                         <Row justify="left" align="middle">
-                                                            <TrophyOutlined /> <span>Result</span>
+                                                            <CrownOutlined style={{ fontSize: '16px' }}/> <span>Result</span>
                                                         </Row>
                                                     }
                                                 >

@@ -1,6 +1,6 @@
 import React from 'react';
 import useTournament from '../../../hooks/useTournament';
-import { Card } from 'antd';
+import { Button, Card } from 'antd';
 
 const CheckoutForm = ({method, tournament}) => {
     const { _id, tournamentName, tournamentThumbnail, settings } = tournament;
@@ -121,8 +121,10 @@ const CheckoutForm = ({method, tournament}) => {
                             </div>
 
                             <div className="row my-4">
-                                <div className="col-12">
-                                    <button type="button" id="btnSubmit" className="btn btn-primary d-block mx-auto btn-submit" onClick={tournamentRegistration}>Submit</button>
+                                <div className="col-12 d-flex justify-content-center">
+                                    <Button type="primary" size="medium" className="mt-3" onClick={tournamentRegistration}>
+                                        Submit
+                                    </Button> 
                                 </div>
                             </div>
                         </Card>

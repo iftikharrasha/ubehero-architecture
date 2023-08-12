@@ -17,6 +17,7 @@ const { TabPane } = Tabs;
 const Home = () => {
     const dispatch = useDispatch();
     const versionTournaments = useSelector(state => state.tournaments.version);
+    const savedItems = useSelector((state) => state.tournaments.wishList);
     const versionLanding = useSelector(state => state.statics.version);
     const country = useSelector(state => state.statics.country);
     const isLoggedIn = useSelector(state => state.profile.signed_in);
@@ -187,14 +188,26 @@ const Home = () => {
                     />
                 </TabPane> : null}
                 <TabPane
-                    key="started"
+                    key="saved"
                     tab={
                         <Row justify="left" align="middle">
                             <ThunderboltOutlined style={{ fontSize: '1rem' }}/> <span style={{ fontSize: '1rem' }}>SAVED</span>
                         </Row>
                     }
                 >
-                    <Empty/>
+                    {
+                        savedItems.length > 0 ? (
+                            savedItems.map((tournament, index) => (
+                                <Col xs={24} sm={12} md={8} lg={12} xl={6} key={index}>
+                                    <Tournaments routeKey={tournament._id} tournament={tournament} details={false} />
+                                </Col>
+                            ))
+                        ) : (
+                        <div style={{width: '100%'}}>
+                            <Empty />
+                        </div>
+                        )
+                    }
                 </TabPane>
                 <TabPane
                     key="archived"

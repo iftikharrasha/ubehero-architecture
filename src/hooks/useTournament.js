@@ -171,7 +171,7 @@ const useTournament = () => {
         }
     }
 
-    const handleTournamentCredential = async (data) => {
+    const handleTournamentCredential = async (id, data) => {
         let config = {}
 
         if(profile.signed_in){
@@ -180,11 +180,11 @@ const useTournament = () => {
         }
 
         try {
-            const response = await axios.patch(`${process.env.REACT_APP_API_LINK}/api/v1/tournaments/${data._id}`, data, config);
+            const response = await axios.patch(`${process.env.REACT_APP_API_LINK}/api/v1/tournaments/credentials/${id}`, data, config);
             
             if(response.data.status === 200){
                 setErrorMessage(null);
-                const destination = `/master/${data._id}/tournaments`;
+                const destination = `/master/${id}/tournaments`;
                 history.replace(destination);
             }else{
                 setErrorMessage(response.data.error.message);

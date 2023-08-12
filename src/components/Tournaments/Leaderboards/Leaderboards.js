@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import { Table, Input, Space, Button, Popover, Tag } from 'antd';
-import { SearchOutlined } from '@ant-design/icons';
+import { SearchOutlined, CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import UserPopup from "../../Common/UserPopup/UserPopup";
 
 const Leaderboards = ({leaderboards}) => {
@@ -60,7 +60,7 @@ const Leaderboards = ({leaderboards}) => {
               className="rounded-circle"
             />
             <div className="ms-3">
-              <p className="fw-bold mb-1">{record.userName}</p>
+              <p className="fw-bold mb-1">{record.userName} {record.emailVerified ? <CheckCircleOutlined /> : <CloseCircleOutlined />}</p>
               <p className="mb-0">Country: {record.country}</p>
             </div>
           </div>
@@ -119,11 +119,11 @@ const Leaderboards = ({leaderboards}) => {
       ellipsis: true,
     },
     {
-      title: 'Status',
-      dataIndex: 'status',
-      key: 'status',
+      title: 'Rank',
+      dataIndex: 'rank',
+      key: 'rank',
       render: (text, record) => (
-        <Tag color="success">Verified</Tag>
+        <Tag color="default">TBD</Tag>
       ),
     },
   ];
@@ -159,7 +159,7 @@ const Leaderboards = ({leaderboards}) => {
         scroll={{ x: true }}
         style={{ boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)' }}
         pagination={{
-          pageSize: 6,
+          pageSize: 5,
           hideOnSinglePage: true,
         }}
       />

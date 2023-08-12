@@ -34,11 +34,11 @@ const MasterTournamentsTable = () => {
                             <th scope="col">No.</th>
                             <th scope="col">Tournament Name</th>
                             <th scope="col">Category</th>
+                            <th scope="col">Mode</th>
                             <th scope="col">Registration Start</th>
                             <th scope="col">Joining Fee</th>
                             <th scope="col">Max Participants</th>
                             <th scope="col">Joined</th>
-                            <th scope="col">Created By</th>
                             <th scope="col">Status</th>
                             <th scope="col">Action</th>
                             </tr>
@@ -58,6 +58,9 @@ const MasterTournamentsTable = () => {
                                                     <i className="fas fa-tag me-1 text-secondary"></i><span>{tournament.category}</span>
                                                 </td>
                                                 <td>
+                                                    <i className="fas fa-trophy me-1"></i><span>{tournament.settings?.competitionMode}</span>
+                                                </td>
+                                                <td>
                                                     <i className="fas fa-clock me-1 text-secondary"></i><span>{moment(tournament.dates?.registrationStart).fromNow()}</span>
                                                 </td>
                                                 <td>
@@ -70,9 +73,6 @@ const MasterTournamentsTable = () => {
                                                     <span className="text-danger">
                                                     <i className="fas fa-chart-line me-1"></i><span>{tournament.leaderboards?.length}</span>
                                                     </span>
-                                                </td>
-                                                <td>
-                                                    <i className="fas fa-user me-1"></i><span>{tournament.masterProfile?.userName}</span>
                                                 </td>
                                                 <td>
                                                 {

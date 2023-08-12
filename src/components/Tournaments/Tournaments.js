@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { addToWishList, removeFromWishList } from "../../redux/slices/tournamentSlice";
 
 import { Card, Button, Progress, Row, Typography, message, Popconfirm, Tag, Badge } from 'antd';
-import { UsergroupAddOutlined, PlusCircleOutlined, MinusCircleOutlined, TrophyOutlined, SyncOutlined, CheckCircleOutlined } from '@ant-design/icons';
+import { UsergroupAddOutlined, PlusCircleOutlined, MinusCircleOutlined, TrophyOutlined, SyncOutlined, CheckCircleOutlined, PartitionOutlined, ProjectOutlined } from '@ant-design/icons';
 import useTimer from "../../hooks/useTimer";
 
 const { Paragraph } = Typography;
@@ -50,10 +50,13 @@ const Tournaments = ({remark, tournament}) => {
             }
             actions={[
               <Row justify="center" align="middle">
-                <UsergroupAddOutlined  style={{ fontSize: '18px' }} /> <span className="ps-1" style={{ fontSize: '14px' }}>{leaderboards.length}/{settings?.maxParticipitant}</span>
+                <UsergroupAddOutlined  style={{ fontSize: '18px' }} /> <span className="ps-1" style={{ fontSize: '14px' }}>{leaderboards?.length}/{settings?.maxParticipitant}</span>
               </Row>,
               <Row justify="center" align="middle">
-                <UsergroupAddOutlined  style={{ fontSize: '18px' }} /> <span className="ps-1" style={{ fontSize: '14px' }}>{settings?.competitionMode}</span>
+                {settings?.competitionMode === 'ladder' ? 
+                <ProjectOutlined style={{ fontSize: '18px', transform: 'rotate(180deg)' }} /> :
+                <PartitionOutlined  style={{ fontSize: '18px', transform: 'rotate(180deg)' }} />}
+                <span className="ps-1" style={{ fontSize: '14px' }}>{settings?.competitionMode}</span>
               </Row>,
               isWishListed ? 
               <MinusCircleOutlined style={{ fontSize: '18px' }} onClick={() => dispatch(removeFromWishList(tournament._id))} /> :
@@ -116,7 +119,7 @@ const Tournaments = ({remark, tournament}) => {
                     step === 1 ? 
                     <Link to={`/tournament/details/${_id}`}>
                       <Button type="primary" size="small" className="mt-3">
-                        {buttonStatus}
+                        {buttonStatus} ${settings?.joiningFee}
                       </Button>
                     </Link> : 
                     <Link to={`/tournament/details/${_id}`}>

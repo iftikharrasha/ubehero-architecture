@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import moment from "moment";
 import axios from 'axios';
-import { Row, Steps, Image, Popover, Card, Button } from 'antd';
+import { Row, Steps, Image, Popover, Card, Button, Tag } from 'antd';
 import { useHistory  } from 'react-router-dom';
 import useTimer from '../../../hooks/useTimer';
 
@@ -13,7 +13,6 @@ const TournamentStage = ({ compMode, currentMatch, finalMatch, setRouteKey, tour
     const [popoverVisible, setPopoverVisible] = useState(false);
     const [loadingCompleted, setLoadingCompleted] = useState(false);
     const [credentials, setCredentials] = useState({});
-    console.log(currentMatch, finalMatch)
 
     const content = (
         Object.keys(credentials).length > 0 ?
@@ -92,18 +91,31 @@ const TournamentStage = ({ compMode, currentMatch, finalMatch, setRouteKey, tour
                                             description: step > 1 ? `${moment(tournament.dates?.registrationEnd).format('lll')}` : `Till ${moment(tournament.dates?.registrationEnd).format('lll')}`,
                                             status: step > 1 ? 'finish': null,
                                         },
+                                        // {
+                                        //     title: step > 1 ? 'Bracket Locked' : 'Bracket Locks',
+                                        //     description: step >= 2 && purchased  ? 
+                                        //                 <Button type="dashed" size="small" loading={loadings[0]} className='mt-1' onClick={handleBracket}>
+                                        //                     View Bracket
+                                        //                 </Button> : 
+                                        //                 `${moment(tournament.dates?.registrationEnd).format('lll')}`,
+                                        //     status: step > 2 ? 'finish': null,
+                                        // },
                                         {
-                                            title: step > 1 ? 'Bracket Locked' : 'Bracket Locks',
-                                            description: step >= 2 && purchased  ? 
-                                                        <Button type="dashed" size="small" loading={loadings[0]} className='mt-1' onClick={handleBracket}>
-                                                            View Bracket
-                                                        </Button> : 
+                                            title: step > 2 ? 'Preparation Ended' : 'Preparation Starts',
+                                            description: step < 2 ? `${moment(tournament.dates?.registrationEnd).format('lll')}` : 
+                                                        step === 2 && purchased ? 
+                                                            <>
+                                                                <Tag color="success" style={{marginTop: '2px'}}>Live</Tag>
+                                                                <Popover content={content} title={`Lobby: ${currentMatch?.name}`} trigger="click" open={popoverVisible && loadingCompleted} onOpenChange={setPopoverVisible}>
+                                                                    <Button type="dashed" size="small" loading={loadings[0]} className='mt-1' onClick={() => enterLobby(0)}>Join Lobby</Button>
+                                                                </Popover>
+                                                            </> : 
                                                         `${moment(tournament.dates?.registrationEnd).format('lll')}`,
                                             status: step > 2 ? 'finish': null,
                                         },
                                         {
                                             title: currentMatch?.name,
-                                            description: step === 3 ? 'Battle Started' : `${moment(currentMatch?.startTime).format('lll')}`,
+                                            description: step === 3 ? <Tag color="success" style={{marginTop: '2px'}}>Live</Tag> : `${moment(currentMatch?.startTime).format('lll')}`,
                                             status: step > 3 ? 'finish': null,
                                         },
                                         {
@@ -133,8 +145,8 @@ const TournamentStage = ({ compMode, currentMatch, finalMatch, setRouteKey, tour
                                             status: step > 2 ? 'finish': null,
                                         },
                                         {
-                                            title: step > 3 ? 'Battle Started' : 'Battle Starts',
-                                            description: step === 3 ? 'Battle Started' : `${moment(tournament.dates?.tournamentStart).format('lll')}`,
+                                            title: step >= 3 ? 'Battle Started' : 'Battle Starts',
+                                            description: step === 3 ? <Tag color="success" style={{marginTop: '2px'}}>Live</Tag> : `${moment(tournament.dates?.tournamentStart).format('lll')}`,
                                             status: step > 3 ? 'finish': null,
                                         },
                                         {

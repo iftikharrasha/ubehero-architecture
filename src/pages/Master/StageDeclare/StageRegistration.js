@@ -8,6 +8,7 @@ import Tabs from 'react-bootstrap/Tabs';
 import axios from "axios";
 import FileUploadPopUp from "../../../components/Common/FileUploadPopUp/FileUploadPopUp";
 import { Button, Divider, Result, Space } from "antd";
+import { Link } from "react-router-dom";
 
 const StageRegistration = ({ tId, previewURL, setPreviewURL, updatedTournament, setUpdatedTournament }) => {
     const [selectedFile, setSelectedFile] = useState(null);
@@ -159,7 +160,7 @@ const StageRegistration = ({ tId, previewURL, setPreviewURL, updatedTournament, 
             updatedTournament.status === 'active' ? 
             <>
                 <h5>
-                    Registration Phase
+                    Phase 1: <strong>Registration Time</strong>
                 </h5>
 
                 <Result 
@@ -167,10 +168,12 @@ const StageRegistration = ({ tId, previewURL, setPreviewURL, updatedTournament, 
                     title="Tournament is Live!"
                     subTitle="Registration phase is going on, kindly standby for phase 2"
                     extra={[
-                        <Button type="primary" key="console">
-                            Dashboard
+                        <Button type="primary" key="master">
+                            <Link to={`/master/${updatedTournament.masterProfile._id}`}>Dashboard</Link>
                         </Button>,
-                        <Button key="buy">Join Room</Button>,
+                        <Button key="chatroom">
+                            <Link to={`/tournament/details/${updatedTournament._id}/chatroom`}>Join Room</Link>
+                        </Button>,
                     ]}
                 />
             </> :

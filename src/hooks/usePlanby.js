@@ -12,6 +12,7 @@ export function usePlanby() {
   const [channels, setChannels] = useState([]);
   const [epg, setEpg] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [nowPlaying, setNowPlaying] = useState(false);
 
   const channelsData = useMemo(() => channels, [channels]);
   const epgData = useMemo(() => epg, [epg]);
@@ -49,5 +50,5 @@ export function usePlanby() {
     handleFetchResources();
   }, [handleFetchResources]);
 
-  return { getEpgProps, getLayoutProps, isLoading };
+  return { getEpgProps, getLayoutProps, isLoading, nowPlaying, setNowPlaying };
 }
