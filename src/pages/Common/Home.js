@@ -136,7 +136,7 @@ const Home = () => {
                         {visibleTournaments.length > 0 ? (
                             visibleTournaments.map((tournament, index) => (
                                 <Col xs={24} sm={12} md={8} lg={12} xl={6} key={index}>
-                                    <Tournaments routeKey={tournament._id} tournament={tournament} details={false} />
+                                    <Tournaments routeKey={tournament._id} tournament={tournament} details={false} totalJoined={tournament?.leaderboards?.length}/>
                                 </Col>
                             ))
                             ) : (
@@ -169,7 +169,7 @@ const Home = () => {
                             visibleJoinedRooms.length > 0 ? (
                                 visibleJoinedRooms.map((tournament, index) => (
                                     <Col xs={24} sm={12} md={8} lg={12} xl={6} key={index}>
-                                        <Tournaments routeKey={tournament._id} tournament={tournament} details={false} />
+                                        <Tournaments routeKey={tournament._id} tournament={tournament} details={false} totalJoined={tournament?.leaderboards?.length}/>
                                     </Col>
                                 ))
                             ) : (
@@ -199,7 +199,7 @@ const Home = () => {
                         savedItems.length > 0 ? (
                             savedItems.map((tournament, index) => (
                                 <Col xs={24} sm={12} md={8} lg={12} xl={6} key={index}>
-                                    <Tournaments routeKey={tournament._id} tournament={tournament} details={false} />
+                                    <Tournaments routeKey={tournament._id} tournament={tournament} details={false} totalJoined={tournament?.leaderboards?.length}/>
                                 </Col>
                             ))
                         ) : (

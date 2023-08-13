@@ -20,7 +20,6 @@ const MasterUpdateDraft = () => {
 
     const compMode = tournamentDetails?.settings?.competitionMode;
     const { step } = useTimer(tournamentDetails?.dates);
-    console.log("step", step)
 
     useEffect(() => {
         dispatch(fetchMastersTournamentDetails({ tId, versionTournament }));

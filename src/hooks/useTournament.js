@@ -195,6 +195,30 @@ const useTournament = () => {
         }
     }
 
+    const handleTournamentResult = async (id, data) => {
+        let config = {}
+
+        if(profile.signed_in){
+            const token = localStorage.getItem('jwt');
+            config.headers = { "Authorization": "Bearer " + token, ...config.headers};
+        }
+
+        try {
+            const response = await axios.patch(`${process.env.REACT_APP_API_LINK}/api/v1/tournaments/result/${id}`, data, config);
+            
+            if(response.data.status === 200){
+                setErrorMessage(null);
+                const destination = `/master/${id}/tournaments`;
+                history.replace(destination);
+            }else{
+                setErrorMessage(response.data.error.message);
+            }
+            return response.data
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     const handleTournamentDraftDelete = async (id, role) => {
         let config = {}
 
@@ -228,6 +252,7 @@ const useTournament = () => {
         handleTournamentDraftUpdate,
         handleApprovalUpdate,
         handleTournamentCredential,
+        handleTournamentResult,
         handleTournamentDraftDelete,
     }
 }

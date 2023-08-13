@@ -25,6 +25,8 @@ const TournamentSide = ({ref1TSummery1, ref1TSummery2, ref1TSummery3, isLoggedIn
             sideStep = (
                 <>
                     {
+                        totalJoined === tournament?.settings?.maxParticipitant ? 
+                        <Tag color="warning" ref={ref1TSummery3} className="mt-3">Max Participants Reached!</Tag> :
                         !isLoggedIn ? 
                         <>
                             <div ref={ref1TSummery2} style={{ paddingTop: '20px'}}>
@@ -113,7 +115,7 @@ const TournamentSide = ({ref1TSummery1, ref1TSummery2, ref1TSummery3, isLoggedIn
                             <IconText icon={settings.competitionMode === 'ladder' ? ProjectOutlined : PartitionOutlined} text={<p className='card-text'>Competition Mode: {settings.competitionMode}</p>} key="list-vertical-like-o" />
                         </div>
                         <div style={{ fontSize: '16px' }}>
-                            <IconText icon={StarOutlined} text={<p className='card-text'>Joined: {totalJoined}/{tournament.settings?.maxParticipitant}</p>} key="list-vertical-star-o" />
+                            <IconText icon={StarOutlined} text={<p className='card-text'>Joined: {totalJoined}/{tournament?.settings?.maxParticipitant}</p>} key="list-vertical-star-o" />
                         </div>
                     </List.Item>
                 </List>

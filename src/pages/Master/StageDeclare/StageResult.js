@@ -3,18 +3,85 @@ import Form from 'react-bootstrap/Form';
 import useTournament from '../../../hooks/useTournament';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
-import { Avatar, Button, Card, Divider, Image, List, Space, Table, Tag, Transfer } from "antd";
+import { Avatar, Button, Card, Divider, Image, List, Modal, Select, Space, Table, Tag, Transfer } from "antd";
 import { EditOutlined, EllipsisOutlined, SettingOutlined } from '@ant-design/icons';
 import difference from 'lodash/difference';
+import CurrentMatch from "./CurrentMatch";
+import { Link } from "react-router-dom";
 
 const { Meta } = Card;
 
-const StageResult = ({ tId, updatedTournament, setUpdatedTournament }) => {
-    const { handleTournamentDraftUpdate, errorMessage } = useTournament();
+const StageResult = ({ tId, updatedTournament, setUpdatedTournament, currentMatch }) => {
+    // console.log("currentMatch", currentMatch)
+    const { handleTournamentDraftUpdate, handleTournamentResult, errorMessage } = useTournament();
+
+    const [open, setOpen] = useState(false);
+    const [confirmLoading, setConfirmLoading] = useState(false);
+    const [modalText, setModalText] = useState('Results are sensitive, make sure you have valid informations.');
+
+    const [winnerSelected, setWinnerSelected] = useState(null);
+    // const [loserSelected, setLoserSelected] = useState(null);
+    
+    const onSelect = (value) => {
+        const selectedParticipant = currentMatch.participants.find(
+          (participant) => participant.name === value
+        );
+        if (selectedParticipant) {
+            setWinnerSelected(selectedParticipant)
+        }
+
+        // const unSelectedParticipant = currentMatch.participants.find(
+        //     (participant) => participant.name !== value
+        // );
+        // if (unSelectedParticipant) {
+        //     setLoserSelected(unSelectedParticipant)
+        // }
+    };
+
+    const onSearch = (value) => {
+        console.log('search:', value);
+    };
+    
+    const showModal = () => {
+      setOpen(true);
+    };
+
+    const handleCancel = () => {
+        setOpen(false);
+    };
   
     const handleTournamentUpdate = (e, role, status) => {
       e.preventDefault();
       handleTournamentDraftUpdate(updatedTournament, role, status);
+    };
+
+    const handleResultPublish = () => {
+        setModalText('Publishing please wait...');
+        setConfirmLoading(true);
+
+        if(winnerSelected){
+            handleTournamentResult(tId, winnerSelected);
+        }else{
+            handleCancel();
+        }
+
+        // if(winnerSelected){
+        //     const updatedWinner = {
+        //         ...winnerSelected,
+        //         isWinner: true,
+        //         resultText: 'WON',
+        //         status: 'PLAYED'
+        //     };
+
+        //     const updatedLoser = {
+        //         ...loserSelected,
+        //         resultText: 'LOST',
+        //         status: 'PLAYED'
+        //     };
+        //     console.log("updatedWinner updatedLoser", updatedWinner, updatedLoser)
+        // }
+
+        // handleTournamentResult(tId, credentials);
     };
 
     const [routeKey, setRouteKey] = useState('claims');
@@ -107,17 +174,13 @@ const StageResult = ({ tId, updatedTournament, setUpdatedTournament }) => {
             }}
         </Transfer>
     );
-    
-    const mockTags = ['ameture', 'rockie', 'pro'];
 
-    const mockData = Array.from({
-            length: 20,
-        }).map((_, i) => ({
-            key: i.toString(),
-            title: `gamer ${i + 1}`,
-            description: `description of gamer ${i + 1}`,
-            disabled: false,
-            tag: mockTags[i % 3],
+    const mockData = updatedTournament.leaderboards.map((player, i) => ({
+            key: player._id,
+            title: player.userName,
+            gender: player.gender,
+            disabled: player.emailVerified,
+            tag: player.status,
         })
     );
 
@@ -132,8 +195,8 @@ const StageResult = ({ tId, updatedTournament, setUpdatedTournament }) => {
             render: (level) => <Tag>{level}</Tag>,
         },
         {
-            dataIndex: 'description',
-            title: 'Description',
+            dataIndex: 'gender',
+            title: 'Gender',
         },
     ];
 
@@ -148,8 +211,8 @@ const StageResult = ({ tId, updatedTournament, setUpdatedTournament }) => {
             render: (level) => <Tag>{level}</Tag>,
         },
         {
-            dataIndex: 'description',
-            title: 'Description',
+            dataIndex: 'gender',
+            title: 'Gender',
         },
     ];
 
@@ -163,9 +226,9 @@ const StageResult = ({ tId, updatedTournament, setUpdatedTournament }) => {
             const newRightTableData = [...rightTableData];
             moveKeys.forEach((key) => {
             const movedItem = mockData.find((item) => item.key === key);
-            if (movedItem) {
-                newRightTableData.push(movedItem);
-            }
+                if (movedItem) {
+                    newRightTableData.push(movedItem);
+                }
             });
             setRightTableData(newRightTableData);
         } else if (direction === "left") {
@@ -176,18 +239,75 @@ const StageResult = ({ tId, updatedTournament, setUpdatedTournament }) => {
 
     return (
         <>
-            <h5>
-                Phase 3: Battle Time | Submit the result of<strong> {updatedTournament.tournamentName}</strong>
-            </h5>
-                    
+            <h5>Phase 3: Battle Time</h5>
+                   
             <Form className="w-100 px-5 pb-4">
                 <Divider orientation="right">
                     <Space>
-                        <Button type="primary" onClick={(e) => handleTournamentUpdate(e, 'master', 'draft')}>
-                            Save Draft
+                        <Link to={`/tournament/details/${updatedTournament._id}`}>
+                            <Button type="default">
+                                Visit Tournament
+                            </Button>
+                        </Link>
+                        <Button type="primary" onClick={showModal}>
+                            Publish
                         </Button>
-                        <Button type="primary" onClick={(e) => handleTournamentUpdate(e, 'master', 'pending')}>
-                            Submit
+                    </Space>
+                </Divider>
+
+                {
+                    currentMatch &&
+                    <>
+                        <CurrentMatch currentMatch={currentMatch}/>
+                        
+                        <div className="d-flex justify-content-center flex-column align-items-center">
+                            <h5>Pick the winner of this match</h5>
+                            <Select
+                            size="medium"
+                            showSearch
+                            placeholder="Select a player"
+                            optionFilterProp="children"
+                            onChange={onSelect}
+                            onSearch={onSearch}
+                            filterOption={(input, option) =>
+                                (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                            }
+                            options={
+                                currentMatch.participants.map((participant) => ({
+                                    value: participant.name,
+                                    label: participant.name,
+                                }))}
+                            />
+                        </div>
+
+                        
+                    </>
+                }
+
+                {/* <div>
+                    <h2>Result</h2>
+                    <p>Submit the result of<strong> {updatedTournament.tournamentName}</strong></p>
+                </div> */}
+                {
+                    errorMessage ? <p className="text-warning text-center">{errorMessage}</p> : null
+                }
+        
+                <Modal
+                    title="Are you sure you want to publish the result?"
+                    open={open}
+                    onOk={handleResultPublish}
+                    confirmLoading={confirmLoading}
+                    onCancel={handleCancel}
+                >
+                    <p>{modalText}</p>
+                </Modal>
+            </Form> 
+
+            {/* <div className="w-100 px-5 pb-4">
+                <Divider orientation="right">
+                    <Space>
+                        <Button type="primary" onClick={showModal}>
+                            Publish
                         </Button>
                     </Space>
                 </Divider>
@@ -256,6 +376,16 @@ const StageResult = ({ tId, updatedTournament, setUpdatedTournament }) => {
                 {
                     errorMessage ? <p className="text-warning text-center">{errorMessage}</p> : null
                 }
+        
+                <Modal
+                    title="Are you sure you want to publish the result?"
+                    open={open}
+                    onOk={handleResultPublish}
+                    confirmLoading={confirmLoading}
+                    onCancel={handleCancel}
+                >
+                    <p>{modalText}</p>
+                </Modal>
 
                 <Space>
                     <Button onClick={handlePrev}>
@@ -265,14 +395,7 @@ const StageResult = ({ tId, updatedTournament, setUpdatedTournament }) => {
                         Next
                     </Button>
                 </Space>
-
-                {/* <Button variant="success" type="submit" onClick={(e) => handleTournamentUpdate(e, 'master', 'pending')} className='ms-3'>
-                    Submit
-                </Button>
-                <Button variant="primary" type="submit" onClick={(e) => handleTournamentUpdate(e, 'master', 'draft')} className='ms-3'>
-                    Save Draft
-                </Button> */}
-            </Form>
+            </div> */}
         </>
     );
 };

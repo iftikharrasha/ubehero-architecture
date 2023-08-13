@@ -257,6 +257,7 @@ const TournamentDetails = () => {
     /* */
 
     const { step, buttonStatus, timeLeftPercent } = useTimer(tournamentDetails.dates);
+    console.log("tournamentDetails", tournamentDetails)
 
     return (
         <PageLayout>

@@ -107,7 +107,9 @@ const TournamentStage = ({ compMode, currentMatch, finalMatch, setRouteKey, tour
                                                             <>
                                                                 <Tag color="success" style={{marginTop: '2px'}}>Live</Tag>
                                                                 <Popover content={content} title={`Lobby: ${currentMatch?.name}`} trigger="click" open={popoverVisible && loadingCompleted} onOpenChange={setPopoverVisible}>
-                                                                    <Button type="dashed" size="small" loading={loadings[0]} className='mt-1' onClick={() => enterLobby(0)}>Join Lobby</Button>
+                                                                    <Button type="dashed" size="small" loading={loadings[0]} className='mt-1' onClick={() => enterLobby(0)}>
+                                                                        {tournament.credentials?.roomId || tournament.credentials.roomPassword ? 'Join Lobby' : 'Announcement'}
+                                                                    </Button>
                                                                 </Popover>
                                                             </> : 
                                                         `${moment(tournament.dates?.registrationEnd).format('lll')}`,
@@ -138,9 +140,12 @@ const TournamentStage = ({ compMode, currentMatch, finalMatch, setRouteKey, tour
                                             title: step > 2 ? 'Preparation Ended' : 'Preparation Starts',
                                             description: step < 2 ? `${moment(tournament.dates?.registrationEnd).format('lll')}` : 
                                                         step === 2 && purchased ? 
+                                                        <>
+                                                            <Tag color="success" style={{marginTop: '2px'}}>Live</Tag>
                                                             <Popover content={content} title="Your Next Match Opponent" trigger="click" open={popoverVisible && loadingCompleted} onOpenChange={setPopoverVisible}>
                                                                 <Button type="dashed" size="small" loading={loadings[0]} className='mt-1' onClick={() => enterLobby(0)}>Join Lobby</Button>
-                                                            </Popover> : 
+                                                            </Popover> 
+                                                        </>: 
                                                         `${moment(tournament.dates?.registrationEnd).format('lll')}`,
                                             status: step > 2 ? 'finish': null,
                                         },

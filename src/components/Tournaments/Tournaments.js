@@ -4,13 +4,13 @@ import { Link } from "react-router-dom";
 import { addToWishList, removeFromWishList } from "../../redux/slices/tournamentSlice";
 
 import { Card, Button, Progress, Row, Typography, message, Popconfirm, Tag, Badge } from 'antd';
-import { UsergroupAddOutlined, PlusCircleOutlined, MinusCircleOutlined, TrophyOutlined, SyncOutlined, CheckCircleOutlined, PartitionOutlined, ProjectOutlined } from '@ant-design/icons';
+import { UsergroupAddOutlined, PlusCircleOutlined, MinusCircleOutlined, TrophyOutlined, SyncOutlined, ThunderboltOutlined, FieldTimeOutlined, PartitionOutlined, ProjectOutlined } from '@ant-design/icons';
 import useTimer from "../../hooks/useTimer";
 
 const { Paragraph } = Typography;
 const { Meta } = Card;
 
-const Tournaments = ({remark, tournament}) => {
+const Tournaments = ({remark, tournament, totalJoined}) => {
   const { _id, tournamentName, tournamentThumbnail, settings, leaderboards, category, version } = tournament;
   const { wishList } = useSelector((state) => state.tournaments);
   const isLoggedIn = useSelector(state => state.profile.signed_in);
@@ -85,12 +85,14 @@ const Tournaments = ({remark, tournament}) => {
                 />
                 {
                   step === 1 ? 
+                  totalJoined === settings?.maxParticipitant ? 
+                  <Tag color="warning" className="mt-3" icon={<ThunderboltOutlined />} style={{ fontSize: '14px' }}>Full House</Tag> :
                   <div>
                     <Paragraph className="mb-0">Time Left</Paragraph>
                     <Progress percent={timeLeftPercent} steps={15} size="small" showInfo={false} strokeColor="#f030c0"/> 
                   </div> : 
                   step === 4 ? 
-                  <Tag color="volcano" icon={<CheckCircleOutlined/>} style={{ fontSize: '14px' }} className="mt-3">{buttonStatus}</Tag> :
+                  <Tag color="volcano" icon={<FieldTimeOutlined />} style={{ fontSize: '14px' }} className="mt-3">{buttonStatus}</Tag> :
                   <Tag color="cyan" icon={<SyncOutlined spin />} style={{ fontSize: '14px' }} className="mt-3">{buttonStatus}</Tag>
                 }
             </Row>
@@ -98,6 +100,13 @@ const Tournaments = ({remark, tournament}) => {
             {
               //remark = reg means no button need to show
               remark ? null :
+              totalJoined === settings?.maxParticipitant ? 
+              <Link to={`/tournament/details/${_id}`}>
+                  <Button size="small" className="mt-3">
+                    View Details
+                  </Button>
+              </Link>
+              :
               !isLoggedIn ? 
                     step === 1 ? 
                     <Link to={`/tournament/details/${_id}`}>

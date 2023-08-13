@@ -4,6 +4,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import useTournament from '../../../hooks/useTournament';
 import { Button, Divider, Modal, Result, Space } from "antd";
 import { Link } from "react-router-dom";
+import CurrentMatch from "./CurrentMatch";
 
 const StageCredentials = ({ tId, compMode, currentMatch, updatedTournament }) => {
     const { handleTournamentCredential, errorMessage } = useTournament();
@@ -16,8 +17,6 @@ const StageCredentials = ({ tId, compMode, currentMatch, updatedTournament }) =>
         roomPassword: compMode === 'knockout' ? currentMatch?.credentials?.roomPassword : updatedTournament?.credentials?.roomPassword
     });
 
-    console.log("currentMatch", credentials)
-
     const [modalText, setModalText] = useState('Credentials are sensitive, make sure you have valid credentials.');
     
     const showModal = () => {
@@ -27,10 +26,6 @@ const StageCredentials = ({ tId, compMode, currentMatch, updatedTournament }) =>
     const handlePublish = () => {
         setModalText('Publishing please wait...');
         setConfirmLoading(true);
-        // updatedTournament = {
-        //     ...updatedTournament,
-        //     credentials: credentials,
-        // };
 
         handleTournamentCredential(tId, credentials);
         //   setTimeout(() => {
@@ -51,8 +46,13 @@ const StageCredentials = ({ tId, compMode, currentMatch, updatedTournament }) =>
             content = (
                 <>
                     <h5>
-                        Phase 2: <strong>Preparation Time {compMode === 'knockout' ? `| ${currentMatch?.name}` : null}</strong>
+                        Phase 2: <strong>Preparation Time</strong>
                     </h5>
+
+                    {
+                        currentMatch &&
+                        <CurrentMatch currentMatch={currentMatch}/>
+                    }
         
                     {
                         currentMatch?.credentials?.roomId || currentMatch?.credentials?.roomPassword ?
@@ -71,6 +71,11 @@ const StageCredentials = ({ tId, compMode, currentMatch, updatedTournament }) =>
                         /> :
                         <Form className="w-100 px-5 pb-4">
                             <Divider orientation="right">
+                                <Link to={`/tournament/details/${updatedTournament._id}`}>
+                                    <Button type="default">
+                                        Visit Tournament
+                                    </Button>
+                                </Link>
                                 <Space>
                                     <Button type="primary" onClick={showModal}>
                                         Publish

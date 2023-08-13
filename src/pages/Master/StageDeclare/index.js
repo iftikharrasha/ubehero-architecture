@@ -36,6 +36,7 @@ const StageDeclare = ({ step, tId, previewURL, setPreviewURL, updatedTournament,
                 <StageResult
                     tId={tId}
                     updatedTournament={updatedTournament}
+                    currentMatch={currentMatch}
                     setUpdatedTournament={setUpdatedTournament}   
                 />
             );
