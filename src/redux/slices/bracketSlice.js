@@ -20,7 +20,6 @@ export const fetchBrackets = createAsyncThunk(
     }
 );
 
-
 const bracketdSlice = createSlice({
     name: 'bracket',
     initialState: {

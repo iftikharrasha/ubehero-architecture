@@ -19,6 +19,7 @@ const GamerRouter = () => {
         <Route exact path="/Live" component={Live} />
         <Route exact path="/tournament/details/:id" render={() => <TDetails/>}  />
         <Route path="/tournament/details/:id/bracket" render={() => <TDetails tabKey={'bracket'}/>} />
+        <Route path="/tournament/details/:id/matches" render={() => <TDetails tabKey={'matches'}/>} />
         <Route path="/tournament/details/:id/chatroom" render={() => <TDetails tabKey={'chatroom'}/>} />
         <Route path="/tournament/details/:id/prizes" render={() => <TDetails tabKey={'prizes'} />}/>
         <Route path="/tournament/details/:id/result" render={() => <TDetails tabKey={'result'} />}/>

@@ -83,6 +83,8 @@ const useTournament = () => {
             tournamentName: data.tournamentName,
             category: data.category,
             masterProfile: profile.data._id,
+            region: data.region,
+            platforms: data.platforms,
             dates: {
                 registrationStart: data.date
             }

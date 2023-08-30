@@ -121,7 +121,7 @@ const TournamentStage = ({ compMode, currentMatch, finalMatch, setRouteKey, tour
                                             status: step > 3 ? 'finish': null,
                                         },
                                         {
-                                            title: finalMatch?.name,
+                                            title: tournament?.settings?.currentMatchId === tournament?.settings?.matches ? 'Battle Ends' : finalMatch?.name,
                                             description: step === 4 ? 
                                                         <Button type="dashed" size="small" className='mt-1' onClick={handleResult}>
                                                             View Result
@@ -142,7 +142,7 @@ const TournamentStage = ({ compMode, currentMatch, finalMatch, setRouteKey, tour
                                                         step === 2 && purchased ? 
                                                         <>
                                                             <Tag color="success" style={{marginTop: '2px'}}>Live</Tag>
-                                                            <Popover content={content} title="Your Next Match Opponent" trigger="click" open={popoverVisible && loadingCompleted} onOpenChange={setPopoverVisible}>
+                                                            <Popover content={content} title="Lobby Credentials:" trigger="click" open={popoverVisible && loadingCompleted} onOpenChange={setPopoverVisible}>
                                                                 <Button type="dashed" size="small" loading={loadings[0]} className='mt-1' onClick={() => enterLobby(0)}>Join Lobby</Button>
                                                             </Popover> 
                                                         </>: 

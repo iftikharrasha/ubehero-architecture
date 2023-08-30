@@ -106,7 +106,7 @@ const TournamentSide = ({ref1TSummery1, ref1TSummery2, ref1TSummery3, isLoggedIn
                     <List.Item style={{ padding: '0' }}>
                         <List.Item.Meta
                             avatar={<TrophyOutlined style={{ fontSize: '30px' }} />}
-                            title={<h4>WIN 50$</h4>}
+                            title={<h4>50$ PRIZE POOL</h4>}
                         />
                         <div style={{ fontSize: '16px' }} >
                             <IconText icon={settings.mode === 'solo' ? UserOutlined : UsergroupAddOutlined} text={<p className='card-text'>Entry Mode: {settings.mode}</p>} key="list-vertical-like-o" />
@@ -131,7 +131,7 @@ const TournamentSide = ({ref1TSummery1, ref1TSummery2, ref1TSummery3, isLoggedIn
                 }}
                 className="popCard mt-5"
                 bordered
-                actions={tournament.masterProfile?.key === loggedInUser.id ? null : [
+                actions={!isLoggedIn ? null : tournament.masterProfile?._id === loggedInUser.id ? null : [
                     <Row justify="center" align="middle">
                         <Button icon={<MessageOutlined  style={{ marginBottom: "6px" }}/>} style={{ fontSize: '12px' }}>CHAT</Button>
                     </Row>,
@@ -145,24 +145,6 @@ const TournamentSide = ({ref1TSummery1, ref1TSummery2, ref1TSummery3, isLoggedIn
                     title={tournament.masterProfile.userName}
                     description={`Master of the tournament`}
                 />
-                {/* <Row gutter={[16, 16]} className="pt-3">
-                    <Col span={12}>
-                        <Card bordered={false} className="popBody">
-                            <Row justify="center" align="middle" style={{flexDirection: 'column'}}>
-                            <Paragraph className="mb-0">Country</Paragraph>
-                            <Paragraph className="mb-0">BD</Paragraph>
-                            </Row>
-                        </Card>
-                    </Col>
-                    <Col span={12}>
-                        <Card bordered={false} className="popBody">
-                            <Row justify="center" align="middle" style={{flexDirection: 'column'}}>
-                            <Paragraph className="mb-0">Follower</Paragraph>
-                            <Paragraph className="mb-0">{tournament.masterProfile.noOfFollowers}</Paragraph>
-                            </Row>
-                        </Card>
-                    </Col>
-                </Row> */}
             </Card>
         </div>
     );

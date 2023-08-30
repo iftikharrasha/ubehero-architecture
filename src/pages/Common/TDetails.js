@@ -15,14 +15,17 @@ import ChatRoom from '../../components/Tournaments/ChatRoom/ChatRoom';
 import CheckoutForm from '../../components/Tournaments/Checkout/CheckoutForm';
 import CheckoutLayout from '../../components/Common/Checkout/CheckoutLayout';
 
-import { Tabs, Row, Modal, Tour, Col, Card } from 'antd';
-import { TrophyOutlined, MessageOutlined, CrownOutlined, PartitionOutlined, ProjectOutlined } from '@ant-design/icons';
+import { Tabs, Row, Modal, Tour, Col, Card, Empty } from 'antd';
+import { TrophyOutlined, MessageOutlined, CrownOutlined, PartitionOutlined, ProjectOutlined, OrderedListOutlined } from '@ant-design/icons';
 import TournamentSide from '../../components/Tournaments/TournamentSide';
 import useTour from '../../hooks/useTour';
 import useTimer from '../../hooks/useTimer';
 import TournamentStage from '../../components/Common/TournamentStage/TournamentStage';
 import useAuth from '../../hooks/useAuth';
 import Bracket from '../../components/Tournaments/Bracket/Bracket';
+import axios from 'axios';
+import Matches from '../../components/Tournaments/Matches/Matches';
+import Results from '../../components/Tournaments/Results/Results';
 
 const { TabPane } = Tabs;
 
@@ -74,7 +77,9 @@ const TournamentDetails = () => {
             setRouteKey('checkout');
         } else if (location.pathname.endsWith('bracket')) {
             setRouteKey('bracket');
-        }else {
+        } else if (location.pathname.endsWith('matches')) {
+            setRouteKey('matches');
+        } else {
             setRouteKey('leaderboards');
         }
     }, [location]);
@@ -88,6 +93,9 @@ const TournamentDetails = () => {
                 break;
             case 'bracket':
                 history.push(`/tournament/details/${id}/bracket`);
+                break;
+            case 'matches':
+                history.push(`/tournament/details/${id}/matches`);
                 break;
             case 'prizes':
                 history.push(`/tournament/details/${id}/prizes`);
@@ -257,7 +265,29 @@ const TournamentDetails = () => {
     /* */
 
     const { step, buttonStatus, timeLeftPercent } = useTimer(tournamentDetails.dates);
-    console.log("tournamentDetails", tournamentDetails)
+
+    const [results, setResults] = useState({});
+    // console.log("results", results)
+
+    useEffect(() => {
+        const seeResults = async () => {
+            try {
+                let config = {};
+                const token = localStorage.getItem('jwt');
+                config.headers = { "Authorization": "Bearer " + token, ...config.headers };
+            
+                const response = await axios.get(`${process.env.REACT_APP_API_LINK}/api/v1/tournaments/result/${tournamentDetails._id}`, config);
+            
+                // Assuming response.data contains the results
+                setResults(response.data.data);
+            } catch (error) {
+                // Handle the error appropriately (e.g., show error message, reset loading state)
+                console.log("Error occurred while fetching results:", error);
+            }
+        };
+
+        seeResults();
+    }, []);
 
     return (
         <PageLayout>
@@ -318,6 +348,7 @@ const TournamentDetails = () => {
                                                 </TabPane> 
                                                 {
                                                     compMode === 'knockout' && 
+                                                    <>
                                                     <TabPane
                                                         key="bracket"
                                                         tab={
@@ -331,6 +362,24 @@ const TournamentDetails = () => {
                                                             <Bracket matches={bracketDetails.matches}/>
                                                         }
                                                     </TabPane>
+                                                    <TabPane
+                                                        key="matches"
+                                                        tab={
+                                                            <Row justify="left" align="middle">
+                                                                <OrderedListOutlined style={{ fontSize: '16px' }} /> <span>Matches</span>
+                                                            </Row>
+                                                        }
+                                                    >
+                                                        {
+                                                            !bracketDetails ? <Preloader /> :
+                                                            <Matches
+                                                                nowRunning={bracketDetails?.matches[tournamentDetails?.settings?.currentMatchId-1]}
+                                                                finalOne={bracketDetails?.matches[tournamentDetails?.settings?.maxParticipitant-2]}
+                                                                matches={bracketDetails.matches}
+                                                            />
+                                                        }
+                                                    </TabPane>
+                                                    </>
                                                 }
                                                 <TabPane
                                                     key="prizes"
@@ -350,7 +399,12 @@ const TournamentDetails = () => {
                                                         </Row>
                                                     }
                                                 >
-                                                <h4>Result for solo games</h4>
+                    
+                                                {
+                                                    results.length > 0 ? 
+                                                    <Results results={results}/> : <Empty />
+                                                }
+
                                                 </TabPane>
                                                 {
                                                     purchasedItems?.tournaments?.includes(tournamentDetails._id) && (

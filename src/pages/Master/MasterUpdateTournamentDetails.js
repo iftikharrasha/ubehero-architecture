@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
-import "react-datepicker/dist/react-datepicker.css";
 import TournamentStage from "../../components/Common/TournamentStage/TournamentStage";
 import StageDeclare from "./StageDeclare";
 import { fetchMastersTournamentDetails } from "../../redux/slices/masterTournamentSlice";
 import useTimer from "../../hooks/useTimer";
+import "react-datepicker/dist/react-datepicker.css";
 
 const MasterUpdateDraft = () => {
     const { tId } = useParams();
@@ -37,9 +37,6 @@ const MasterUpdateDraft = () => {
             {
                 Object.keys(tournamentDetails).length > 0 && 
                     <div className="container mb-4">
-                        {/* <TournamentStage 
-                            tournament={tournamentDetails}
-                        /> */}
                         <TournamentStage 
                             compMode={compMode}
                             currentMatch={tournamentDetails?.bracket[0]?.matches[tournamentDetails?.settings?.currentMatchId-1]}

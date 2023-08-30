@@ -55,8 +55,11 @@ const InternalCreateDraft = () => {
                         <option value="pubg">pubg</option>
                         <option value="freefire">freefire</option>
                         <option value="warzone">warzone</option>
-                        <option value="csgo">csgo</option>
                         <option value="fifa">fifa</option>
+                        <option value="rocket league">rocket league</option>
+                        <option value="clash of clans">clash of clans</option>
+                        <option value="clash royale">clash royale</option>
+                        {/* <option value="csgo">csgo</option> */}
                     </Form.Control>
                 </Form.Group>
 

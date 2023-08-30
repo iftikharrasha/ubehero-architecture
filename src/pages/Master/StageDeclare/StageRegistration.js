@@ -7,8 +7,10 @@ import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import axios from "axios";
 import FileUploadPopUp from "../../../components/Common/FileUploadPopUp/FileUploadPopUp";
-import { Button, Divider, Result, Space } from "antd";
+import { Button, Divider, Result, Space, Checkbox } from "antd";
 import { Link } from "react-router-dom";
+
+const CheckboxGroup = Checkbox.Group;
 
 const StageRegistration = ({ tId, previewURL, setPreviewURL, updatedTournament, setUpdatedTournament }) => {
     const [selectedFile, setSelectedFile] = useState(null);
@@ -64,9 +66,9 @@ const StageRegistration = ({ tId, previewURL, setPreviewURL, updatedTournament, 
       handleTournamentDraftUpdate(updatedTournament, role, status);
     };
 
-    const [routeKey, setRouteKey] = useState('overview');
+    const [routeKey, setRouteKey] = useState('basic');
     const tabList = [
-        { eventKey: 'overview', title: 'Overview' },
+        { eventKey: 'basic', title: 'Basic' },
         { eventKey: 'dates', title: 'Dates' },
         { eventKey: 'settings', title: 'Settings' },
         { eventKey: 'pricing', title: 'Pricing' },
@@ -154,6 +156,20 @@ const StageRegistration = ({ tId, previewURL, setPreviewURL, updatedTournament, 
         }
     };
 
+    const platformOptions = [
+        { label: 'PSN', value: 'psn', disabled: updatedTournament.platforms.includes('mobile') || updatedTournament.platforms.includes('nintendo') },
+        { label: 'XBOX', value: 'xbox', disabled: updatedTournament.platforms.includes('mobile') || updatedTournament.platforms.includes('nintendo') },
+        { label: 'PC', value: 'pc', disabled: updatedTournament.platforms.includes('mobile') || updatedTournament.platforms.includes('nintendo') },
+        { label: 'Mobile', value: 'mobile', disabled: updatedTournament.platforms.includes('psn') || updatedTournament.platforms.includes('xbox') || updatedTournament.platforms.includes('pc') || updatedTournament.platforms.includes('nintendo') },
+        { label: 'Nintendo', value: 'nintendo', disabled: updatedTournament.platforms.includes('psn') || updatedTournament.platforms.includes('xbox') || updatedTournament.platforms.includes('pc') || updatedTournament.platforms.includes('mobile') },
+    ];
+    const onChange = (checkedValues) => {
+        setUpdatedTournament({
+          ...updatedTournament,
+          platforms: checkedValues,
+        });
+    };
+
     return (
         <>
         {
@@ -214,8 +230,8 @@ const StageRegistration = ({ tId, previewURL, setPreviewURL, updatedTournament, 
                         //     }
                         // }}
                     >
-                        <Tab eventKey="overview" title="1. Overview">
-                            <h2>Overview</h2>
+                        <Tab eventKey="basic" title="1. Basic">
+                            <h2>Basic</h2>
                             <Form.Group className="mb-3" controlId="formBasicName">
                                 <Form.Label>Tournament Name</Form.Label>
                                 <Form.Control type="name" placeholder="Enter Name" 
@@ -228,8 +244,8 @@ const StageRegistration = ({ tId, previewURL, setPreviewURL, updatedTournament, 
                                 }/>
                             </Form.Group>
 
-                            <Form.Group className="mb-3" controlId="formBasicGender">
-                                <Form.Label>category</Form.Label>
+                            <Form.Group className="mb-3" controlId="formBasicCategory">
+                                <Form.Label>Game Category</Form.Label>
                                 <Form.Control as="select" 
                                 value={updatedTournament.category} 
                                 onChange={(e) =>
@@ -242,8 +258,41 @@ const StageRegistration = ({ tId, previewURL, setPreviewURL, updatedTournament, 
                                     <option value="pubg">pubg</option>
                                     <option value="freefire">freefire</option>
                                     <option value="warzone">warzone</option>
-                                    <option value="csgo">csgo</option>
                                     <option value="fifa">fifa</option>
+                                    <option value="rocket league">rocket league</option>
+                                    <option value="clash of clans">clash of clans</option>
+                                    <option value="clash royale">clash royale</option>
+                                    {/* <option value="csgo">csgo</option> */}
+                                </Form.Control>
+                            </Form.Group>
+
+                            <Form.Group className="mb-3" controlId="formBasicPlatform">
+                                <Form.Label>Tournament Platforms</Form.Label>
+                                <div>
+                                    <CheckboxGroup options={platformOptions} value={updatedTournament.platforms} onChange={onChange} />
+                                </div>
+                            </Form.Group>
+
+                            <Form.Group className="mb-3" controlId="formBasicRegion">
+                                <Form.Label>Tournament Region</Form.Label>
+                                <Form.Control as="select" 
+                                value={updatedTournament.region} 
+                                onChange={(e) =>
+                                    setUpdatedTournament({
+                                        ...updatedTournament, 
+                                        region: e.target.value,
+                                    })
+                                }>
+                                    <option value="">Select region</option>
+                                    <option value="africa">africa</option>
+                                    <option value="asia">asia</option>
+                                    <option value="middle east">middle east</option>
+                                    <option value="europe">europe</option>
+                                    <option value="central america">central america</option>
+                                    <option value="north america">north america</option>
+                                    <option value="south america">south america</option>
+                                    <option value="oceania">oceania</option>
+                                    <option value="global">global</option>
                                 </Form.Control>
                             </Form.Group>
                         </Tab>

@@ -11,6 +11,7 @@ import useWindowSize from '../../hooks/useWindowSize';
 import { Col, Empty, Pagination, Row, Tabs } from 'antd';
 import { ThunderboltOutlined, TrophyOutlined, AimOutlined, HourglassOutlined } from '@ant-design/icons';
 import { useLocation, useHistory } from 'react-router-dom';
+import axios from 'axios';
 
 const { TabPane } = Tabs;
 

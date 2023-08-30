@@ -60,8 +60,9 @@ const Leaderboards = ({leaderboards}) => {
               className="rounded-circle"
             />
             <div className="ms-3">
-              <p className="fw-bold mb-1">{record.userName} {record.emailVerified ? <CheckCircleOutlined /> : <CloseCircleOutlined />}</p>
-              <p className="mb-0">Country: {record.country}</p>
+              <p className="fw-bold mb-0">{record.userName} {record.emailVerified ? <CheckCircleOutlined /> : <CloseCircleOutlined />}</p>
+              {/* <p className="mb-0">Country: {record.country}</p> */}
+              <p className="mb-0">Kɩŋʛsɭʌƴɘʀ</p>
             </div>
           </div>
         </Popover>
@@ -85,7 +86,7 @@ const Leaderboards = ({leaderboards}) => {
       ellipsis: true,
       render: (text, record) => (
         <div>
-          <p className="text-muted mb-0">Level {record.currentLevel}</p>
+          <p className="mb-0">Level {record.currentLevel}</p>
           <p className="fw-normal mb-1">{record.levelTitle}</p>
         </div>
       ),

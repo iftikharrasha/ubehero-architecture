@@ -40,9 +40,8 @@ const StageCredentials = ({ tId, compMode, currentMatch, updatedTournament }) =>
 
 
     let content; 
-    let mode = compMode === 'knockout' ? 1 : 2;
-    switch (mode) {
-        case 1:
+    switch (compMode) {
+        case 'knockout':
             content = (
                 <>
                     <h5>
@@ -128,7 +127,7 @@ const StageCredentials = ({ tId, compMode, currentMatch, updatedTournament }) =>
             );
         break;
 
-        case 2:
+        case 'ladder':
             content = (
                 <>
                     <h5>

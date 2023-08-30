@@ -608,6 +608,10 @@ a:hover{
   background-color: #db1435;
 }
 
+.react-datepicker-wrapper{
+  width: 100%;
+}
+
 .react-datepicker__input-container input{
   width: 100%;
   display: block;
@@ -1171,15 +1175,19 @@ a:hover{
 }
 
 .match-details-header {
-  background: rgba(152, 65, 255, 1);
+  border:1px solid rgba(152, 65, 255, 1);
   width: 100%;
   border-radius: 2px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   position: relative;
-  padding: 20px 120px;
+  padding: 12px 120px;
   margin: 0 auto;
+}
+
+.match-details-header  .ant-card-body{
+  width: 100%;
 }
 
 .match-details-header img {
@@ -1189,7 +1197,7 @@ a:hover{
   transform: translateY(-50%);
   width: 100px;
   border-radius: 50%;
-  border: 2px solid rgba(255, 255, 255, 1);
+  border: 2px solid rgba(152, 65, 255, 1);
   height: auto;
 }
 
@@ -1199,9 +1207,8 @@ a:hover{
 }
 
 .page-banner-inner h3 {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
-  color: white;
   text-transform: uppercase;
   line-height: 1;
   letter-spacing: 0;
@@ -1222,6 +1229,11 @@ a:hover{
   z-index: 1;
 }
 
+.match-details-header span {
+  font-weight: 300;
+}
+
+
 .match-details-header h3.left-team {
   text-align: right;
   padding-right: 70px;
@@ -1229,7 +1241,7 @@ a:hover{
 }
 
 .match-details-header .vs {
-  background: #f90cff;
+  background: #6c757d;
   clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
   display: flex;
   align-items: center;
@@ -1241,14 +1253,13 @@ a:hover{
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  box-shadow: 0px 5px 10px 0px rgb(0 0 0 / 30%);
+  box-shadow: 0px 5px 10px 0px rgba(152, 65, 255, 1);
 }
 
 .match-details-header .vs h2 {
   margin: 0;
-  font-size: 60px;
+  font-size: 50px;
   font-weight: 600;
-  color: white;
 }
 
 .match-details-info{
@@ -1257,7 +1268,7 @@ a:hover{
 }
 
 .match-details-info h2{
-  background: #f90cff;
+  background: #6c757d;
   clip-path: polygon(2% 0, 98% 0, 100% 50%, 98% 100%, 2% 100%, 0% 50%);
   display: inline-block;
   position: absolute;
@@ -1265,9 +1276,68 @@ a:hover{
   top: -50px;
   transform: translateX(-50%);
   z-index: 10;
-  font-size: 24px;
+  font-size: 16px;
   margin: 0;
   padding: 15px 40px 12px;
   line-height: 1;
-  color: #fff;
+}
+
+.match-details-info h2 span{
+  font-weight: 300;
+  font-size: 16px;
+  text-transform: uppercase;
+}
+
+.ladderResult{
+  margin-top: 12rem;
+}
+
+.ladderResult .vs img{
+  position: relative;
+  left: auto;
+  top: 5px;
+  transform: initial;
+  width: 60px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 1);
+  height: auto;
+}
+
+.ladderResult .crown, .ladderResult .winner{
+  position: absolute;
+  left: 50%;
+  top: -228px;
+  transform: translateX(-50%);
+  font-size: 4rem;
+  color: goldenrod;
+}
+
+.ladderResult .winner{
+  width: 100px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 1);
+  height: auto;
+  left: 50%;
+  top: -170px;
+  z-index: 12;
+}
+
+.ladderResult .match-details-header {
+  border-radius: 2px;
+  padding: 10px 80px;
+}
+
+.ladderResult .match-details-info h2 {
+  top: -75px;
+  text-align: center;
+}
+
+
+
+.matches{
+  width: 100%;
+  height: 550px;
+  border: 1px solid rgb(48, 48, 48);
+  padding: 0.5rem;
+  overflow-y: scroll;
 }

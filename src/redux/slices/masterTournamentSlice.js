@@ -40,6 +40,7 @@ export const fetchMastersTournamentDetails = createAsyncThunk(
 
         if(data.status === 304) {
             const tournament = getState().masterTournaments.data.find(t => t._id === tId);
+            // console.log(tournament);
             const details = {
                 "success": true,
                 "status": 304,
