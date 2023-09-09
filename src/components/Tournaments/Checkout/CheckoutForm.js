@@ -39,18 +39,18 @@ const CheckoutForm = ({method, tournament}) => {
 
                                 <div className="d-flex justify-content-between">
                                     <small>Total</small>
-                                    <small>$105.00</small>
+                                    <small>$0</small>
                                 </div>
 
 
                                 <div className="d-flex justify-content-between">
                                     <small>Vat</small>
-                                    <small>2%</small>
+                                    <small>0%</small>
                                 </div>
 
                                 <div className="d-flex justify-content-between mt-3">
                                     <span className="font-weight-bold">Grand Total</span>
-                                    <span className="font-weight-bold theme-color">$125.00</span>
+                                    <span className="font-weight-bold theme-color">$0</span>
                                 </div> 
                                 <div className="d-flex justify-content-between">
                                     <span className="font-weight-bold">Payment Method</span>

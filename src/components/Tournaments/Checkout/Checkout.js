@@ -21,18 +21,18 @@ const Checkout = ({handleOrder, handlePaymentMethod, method, setMethod, itemName
 
             <div className="d-flex justify-content-between">
                 <Paragraph>Total</Paragraph>
-                <Paragraph>$105.00</Paragraph>
+                <Paragraph>$0</Paragraph>
             </div>
 
 
             <div className="d-flex justify-content-between">
                 <Paragraph>Vat</Paragraph>
-                <Paragraph>2%</Paragraph>
+                <Paragraph>0%</Paragraph>
             </div>
             
             <div className="d-flex justify-content-between">
                 <Paragraph>Grand Total</Paragraph>
-                <Paragraph>$125.00</Paragraph>
+                <Paragraph>$0</Paragraph>
             </div>  
 
             {

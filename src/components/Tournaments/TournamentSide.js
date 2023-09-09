@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Card, Button, Progress, Typography, Tag, Row, Space, Avatar, List } from 'antd';
-import { MessageOutlined, CoffeeOutlined, LikeOutlined, StarOutlined, TrophyOutlined, SyncOutlined, UserOutlined, UsergroupAddOutlined, ProjectOutlined, PartitionOutlined } from '@ant-design/icons';
+import { MessageOutlined, CoffeeOutlined, StarOutlined, TrophyOutlined, SyncOutlined, UserOutlined, UsergroupAddOutlined, ProjectOutlined, PartitionOutlined, FlagOutlined, ApiOutlined } from '@ant-design/icons';
 import useAuth from '../../hooks/useAuth';
 
 const { Meta } = Card;
@@ -15,7 +15,7 @@ const IconText = ({ icon, text }) => (
   );
 
 const TournamentSide = ({ref1TSummery1, ref1TSummery2, ref1TSummery3, isLoggedIn, routeKey, tournament, totalJoined, purchasedItems, handleCancel, handleCheckout, step, buttonStatus, timeLeftPercent}) => {
-    const { _id, settings, tournamentName } = tournament;
+    const { _id, settings, tournamentName, platforms } = tournament;
     const { loggedInUser } = useAuth();
     const purchased = purchasedItems?.tournaments?.includes(_id);
 
@@ -113,6 +113,16 @@ const TournamentSide = ({ref1TSummery1, ref1TSummery2, ref1TSummery3, isLoggedIn
                         </div>
                         <div style={{ fontSize: '16px' }}>
                             <IconText icon={settings.competitionMode === 'ladder' ? ProjectOutlined : PartitionOutlined} text={<p className='card-text'>Competition Mode: {settings.competitionMode}</p>} key="list-vertical-like-o" />
+                        </div>
+                        <div style={{ fontSize: '16px' }}>
+                            <IconText icon={FlagOutlined} text={<p className='card-text'>Region: {tournament.region}</p>} key="list-vertical-star-o" />
+                        </div>
+                        <div style={{ fontSize: '16px' }}>
+                            <IconText icon={ApiOutlined} text={<p className='card-text'>Platform:
+                            {platforms.map((platform, index) => (
+                              <span key={index}>&nbsp; {platform}</span>
+                            ))}
+                            </p>} key="list-vertical-star-o" />
                         </div>
                         <div style={{ fontSize: '16px' }}>
                             <IconText icon={StarOutlined} text={<p className='card-text'>Joined: {totalJoined}/{tournament?.settings?.maxParticipitant}</p>} key="list-vertical-star-o" />
