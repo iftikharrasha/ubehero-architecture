@@ -2,21 +2,21 @@ import React from 'react';
 import useTournament from '../../../hooks/useTournament';
 import { Button, Card } from 'antd';
 
-const CheckoutForm = ({method, tournament}) => {
+const CheckoutForm = ({method, tournament, connectedAccount}) => {
     const { _id, tournamentName, tournamentThumbnail, settings } = tournament;
     const { handleTournamentPurchase } = useTournament();
 
     const tournamentRegistration = () => {
-        handleTournamentPurchase(tournament, method);
+        handleTournamentPurchase(tournament, connectedAccount, method);
     };
 
-    const onFinish = (values) => {
-      console.log('Success:', values);
-    };
+    // const onFinish = (values) => {
+    //   console.log('Success:', values);
+    // };
     
-    const onFinishFailed = (errorInfo) => {
-      console.log('Failed:', errorInfo);
-    };
+    // const onFinishFailed = (errorInfo) => {
+    //   console.log('Failed:', errorInfo);
+    // };
 
     return (
         <section className="order-form">
@@ -34,11 +34,11 @@ const CheckoutForm = ({method, tournament}) => {
 
                                 <div className="d-flex justify-content-between">
                                     <span className="font-weight-bold">Total Items:</span>
-                                    <span className="text-muted">1</span>
+                                    <span>1</span>
                                 </div>
 
                                 <div className="d-flex justify-content-between">
-                                    <small>Total</small>
+                                    <small>Price</small>
                                     <small>$0</small>
                                 </div>
 
@@ -47,20 +47,28 @@ const CheckoutForm = ({method, tournament}) => {
                                     <small>Vat</small>
                                     <small>0%</small>
                                 </div>
+                
+                                <div className="d-flex justify-content-between mt-3">
+                                    <span className="font-weight-bold">Entry Mode</span>
+                                    <span className="font-weight-bold theme-color">{settings.mode}</span>
+                                </div> 
+                                <div className="d-flex justify-content-between">
+                                    <span className="font-weight-bold">Competition Mode</span>
+                                    <span className="font-weight-bold theme-color">{settings.competitionMode}</span>
+                                </div> 
+                                <div className="d-flex justify-content-between">
+                                    <span className="font-weight-bold">Payment Method</span>
+                                    <span className="font-weight-bold theme-color">{method}</span>
+                                </div>  
+                                <div className="d-flex justify-content-between">
+                                    <span className="font-weight-bold">Fee Type</span>
+                                    <span className="font-weight-bold theme-color">{settings.feeType}</span>
+                                </div>  
 
                                 <div className="d-flex justify-content-between mt-3">
                                     <span className="font-weight-bold">Grand Total</span>
                                     <span className="font-weight-bold theme-color">$0</span>
                                 </div> 
-                                <div className="d-flex justify-content-between">
-                                    <span className="font-weight-bold">Payment Method</span>
-                                    <span className="font-weight-bold theme-color">{method}</span>
-                                </div> 
-                
-                                <div className="d-flex justify-content-between mt-3">
-                                    <span className="font-weight-bold">Mode</span>
-                                    <span className="font-weight-bold theme-color">{settings.mode}</span>
-                                </div>  
                             </div> 
                         </Card>
 

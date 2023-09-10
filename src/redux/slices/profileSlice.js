@@ -57,6 +57,15 @@ const profileSlice = createSlice({
             let payloadArray = [action.payload];
             state.data.purchasedItems.tournaments = payloadArray;
         },
+        addGameAccount: (state, action) => {
+            state.data.gameAccounts.push(action.payload);
+            // const index = state.data.gameAccounts.findIndex(t => t._id === action.payload._id)
+            // if(index === -1){
+            //     state.data.gameAccounts[0] = action.payload;
+            // }else{
+            //     state.data.gameAccounts.push(action.payload);
+            // }
+        },
     },
     extraReducers: (builder) => {
         // Add reducers for additional action types here, and handle loading state as needed
@@ -77,5 +86,5 @@ const profileSlice = createSlice({
     },
 });
 
-export const { setLogIn, setLogOut, setRoute, setRole, setPurchasedItem } = profileSlice.actions;
+export const { setLogIn, setLogOut, setRoute, setRole, setPurchasedItem, addGameAccount } = profileSlice.actions;
 export default profileSlice.reducer;

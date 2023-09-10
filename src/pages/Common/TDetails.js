@@ -37,6 +37,7 @@ const TournamentDetails = () => {
     const isLoggedIn = useSelector(state => state.profile.signed_in);
     const purchasedItems = useSelector(state => state.profile?.data?.purchasedItems);
     const [routeKey, setRouteKey] = useState('leaderboards');
+    const [connectedAccount, setConnectedAccount] = useState(null);
     const { id } = useParams();
 
     const location = useLocation();
@@ -302,6 +303,7 @@ const TournamentDetails = () => {
                                 <CheckoutForm 
                                     method={method} 
                                     tournament={tournamentDetails}
+                                    connectedAccount={connectedAccount}
                                 />  : 
                                 <Row>
                                     <Col span={5}>
@@ -473,6 +475,8 @@ const TournamentDetails = () => {
                                                     handlePaymentMethod={handlePaymentMethod} 
                                                     method={method} 
                                                     setMethod={setMethod}
+                                                    connectedAccount={connectedAccount}
+                                                    setConnectedAccount={setConnectedAccount}
                                                 />
                                             ) : null}
                                         </Card>

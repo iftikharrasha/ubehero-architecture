@@ -16,7 +16,7 @@ const useTournament = () => {
     const jwt = localStorage.getItem("jwt");
     const { socketN } = useNotyf(profile.data, jwt);
 
-    const handleTournamentPurchase = async (data, method) => {
+    const handleTournamentPurchase = async (data, gameId, method) => {
         let config = {}
 
         if(profile.signed_in){
@@ -35,7 +35,8 @@ const useTournament = () => {
             route: "u2a",
             activity: "expense",
             description: data.tournamentName,
-            tId: data._id
+            tId: data._id,
+            gameId: gameId
         }
 
         try {

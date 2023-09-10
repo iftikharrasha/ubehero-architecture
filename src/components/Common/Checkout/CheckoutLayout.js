@@ -3,82 +3,44 @@ import Checkout from '../../Tournaments/Checkout/Checkout';
 import Giftcard from '../../Wallet/Topup/Giftcard';
 import GameAccount from '../../Profile/GameAccount';
 import { CheckCircleOutlined, InfoCircleOutlined } from '@ant-design/icons';
-import { Button, Card, Timeline, Empty, Modal, Col, Row, Space, Form, Input, Select } from 'antd';
-import Tournaments from '../../Tournaments/Tournaments';
+import { Button, Card, Timeline, Empty, Modal, Col, Row, Form } from 'antd';
 import { useSelector } from 'react-redux';
 import AddGameAccount from '../../Profile/AddGameAccount';
 import useProfile from '../../../hooks/useProfile';
 
-// const allAccounts = [
-//     {
-//         gameLogo: 'https://www.pockettactics.com/wp-content/sites/pockettactics/2022/12/rocket-league-logo-1.jpg',
-//         accountLogo: 'https://rocketleague.media.zestyio.com/icon_switch_w.png',
-//         playerIgn: 'myrocketnintendo',
-//         playerId: '234213343K',
-//         platform: 'nintendo',
-//         tag: 'epic'
-//     },
-//     {
-//         gameLogo: 'https://www.pockettactics.com/wp-content/sites/pockettactics/2022/12/rocket-league-logo-1.jpg',
-//         accountLogo: 'https://rocketleague.media.zestyio.com/icon_playstation_w.png',
-//         playerIgn: 'myrocketpsn',
-//         playerId: '234261343K',
-//         platform: 'psn',
-//         tag: 'epic'
-//     },
-//     {
-//         gameLogo: 'https://www.pockettactics.com/wp-content/sites/pockettactics/2022/12/rocket-league-logo-1.jpg',
-//         accountLogo: 'https://rocketleague.media.zestyio.com/icon_xbox_w.png',
-//         playerIgn: 'myrocketxbox',
-//         playerId: '234213143K',
-//         platform: 'xbox',
-//         tag: 'epic'
-//     },
-//     {
-//         gameLogo: 'https://www.pockettactics.com/wp-content/sites/pockettactics/2022/12/rocket-league-logo-1.jpg',
-//         accountLogo: 'https://rocketleague.media.zestyio.com/rl_web_icon_pc.png',
-//         playerIgn: 'myrocketpc',
-//         playerId: '234213433K',
-//         platform: 'pc',
-//         tag: 'epic'
-//     }
-// ];
-
-const CheckoutLayout = ({ remark, routeKey, item, handleOrder, handlePaymentMethod, method, setMethod }) => {
+const CheckoutLayout = ({ remark, routeKey, item, handleOrder, handlePaymentMethod, method, setMethod, connectedAccount, setConnectedAccount }) => {
     const [open, setOpen] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
     const [isFieldsFilled, setIsFieldsFilled] = useState(false);
-    const [connectedAccount, setConnectedAccount] = useState(null);  //1. auto filter if connectedAccount already exists based on single platform
-    const [clickedItem, setClickedItem] = useState(null);
     const allAccounts = useSelector((state) => state.profile.data.gameAccounts);
-    const [allPlatformAccounts, setAllPlatformAccounts] = useState(allAccounts);
+    const [validPlatformAccounts, setValidPlatformAccounts] = useState([]);
+    const [clickedItem, setClickedItem] = useState(null);
     const uId = useSelector((state) => state.profile.data._id);
     const { handleGameAccountAdd } = useProfile();
-    // console.log(item.platforms)
-    // console.log(item.category)
-    // console.log(allPlatformAccounts)
 
     const [form] = Form.useForm();
 
     //this is to help auto connect game account
     useEffect(() => {
-      const singlePlatform = allAccounts.filter((account) =>
-          item.platforms.includes(account.platform)
-      );
-      if(item.platforms.length === 1) {
-        setConnectedAccount(singlePlatform[0])
+      //this is to filter out and remain only valid accounts for this tournament
+      const filteredAccounts = allAccounts.filter((account) => {
+        return item.platforms.includes(account.platform) && account.category === item.category;
+      });
+      if(filteredAccounts.length === 1) {
+        setConnectedAccount(filteredAccounts[0])
       }else{
-        setAllPlatformAccounts(singlePlatform)
+        setValidPlatformAccounts(filteredAccounts)
       }
     }, [])
 
     const handleOk = () => {
       setConfirmLoading(true);
       
-      
       if(clickedItem){ //choosing item
         setTimeout(() => {
           setConnectedAccount(clickedItem)
+          setOpen(false);
+          setConfirmLoading(false);
         }, 2000);
       }else{ //new entry item
         const formData = form.getFieldsValue();
@@ -92,10 +54,10 @@ const CheckoutLayout = ({ remark, routeKey, item, handleOrder, handlePaymentMeth
         const result = handleGameAccountAdd(addedPlatform);
         if(result){
           setConnectedAccount(addedPlatform)
+          setOpen(false);
+          setConfirmLoading(false);
         }
       }
-      setOpen(false);
-      setConfirmLoading(false);
     };
 
     const handleClickAccount = (clickedAccount) => {
@@ -157,7 +119,7 @@ const CheckoutLayout = ({ remark, routeKey, item, handleOrder, handlePaymentMeth
                       mode="left"
                       items={[
                         {
-                          children: `Your ${item.category} account connected`,
+                          children: `Your ${connectedAccount.platform} ${connectedAccount.category} account has been connected`,
                           color: 'green',
                           dot: (
                             <CheckCircleOutlined
@@ -181,11 +143,6 @@ const CheckoutLayout = ({ remark, routeKey, item, handleOrder, handlePaymentMeth
                         // },
                       ]}
                     />
-                    // <Tournaments 
-                    //     remark={remark}
-                    //     routeKey={routeKey} 
-                    //     tournament={item}
-                    // /> 
                     : 
                     remark === 'topup' ? 
                     <Giftcard gift={item}/> : null
@@ -230,9 +187,9 @@ const CheckoutLayout = ({ remark, routeKey, item, handleOrder, handlePaymentMeth
             >
               <Row gutter={[16, 16]}>
                 {
-                  allAccounts.length === 0 ? 
-                  <AddGameAccount item={item} form={form} setIsFieldsFilled={setIsFieldsFilled}/>:
-                  allPlatformAccounts.map((account, index) => (
+                  validPlatformAccounts.length === 0 ? 
+                  <AddGameAccount item={item} form={form} setIsFieldsFilled={setIsFieldsFilled}/> :
+                  validPlatformAccounts.map((account, index) => (
                     <Col span={8} key={index}>
                       <div onClick={() => handleClickAccount(account)} className={`${!clickedItem ? null : clickedItem.playerId === account.playerId ? 'border' : null}`}>
                         <GameAccount account={account} cover={false}/>

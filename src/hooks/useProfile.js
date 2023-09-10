@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from 'axios';
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { setLogIn, setRoute } from "../redux/slices/profileSlice";
+import { setLogIn, setRoute, addGameAccount } from "../redux/slices/profileSlice";
 import useNotyf from "./useNotyf";
 
 const useProfile = () => {
@@ -43,22 +43,23 @@ const useProfile = () => {
             const response = await axios.post(`${process.env.REACT_APP_API_LINK}/api/v1/account/gameaccount/${data.uId}`, data, config);
             
             if(response.data.status === 200){
-                const notificationData = {
-                    type: "gameaccount_creation",
-                    subject: "You’ve created this game account",
-                    subjectPhoto:response.data.data.accountLogo,
-                    invokedByName: response.data.data.playerIgn,
-                    invokedById: "645b60abe95cd95bcfad6894",
-                    receivedByName: profile.data.userName,
-                    receivedById: profile.data._id,  //this user will receive notification
-                    route: `profile/${profile.data._id}`
-                }
+                // const notificationData = {
+                //     type: "gameaccount_creation",
+                //     subject: "You’ve created this game account",
+                //     subjectPhoto:response.data.data.accountLogo,
+                //     invokedByName: response.data.data.playerIgn,
+                //     invokedById: "645b60abe95cd95bcfad6894",
+                //     receivedByName: profile.data.userName,
+                //     receivedById: profile.data._id,  //this user will receive notification
+                //     route: `profile/${profile.data._id}`
+                // }
 
-                // Send message to server
-                socketN.emit("send_notification", notificationData);
+                // // Send message to server
+                // socketN.emit("send_notification", notificationData);
                 setErrorMessage(null);
 
                 //also add to redux user profile
+                dispatch(addGameAccount(response.data.data));
             }else{
                 setErrorMessage(response.data.error.message);
             }

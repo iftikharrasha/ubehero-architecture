@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Card, Button, Progress, Typography, Tag, Row, Space, Avatar, List } from 'antd';
+import { Card, Button, Progress, Typography, Tag, Row, Space, Avatar, List, Breadcrumb } from 'antd';
 import { MessageOutlined, CoffeeOutlined, StarOutlined, TrophyOutlined, SyncOutlined, UserOutlined, UsergroupAddOutlined, ProjectOutlined, PartitionOutlined, FlagOutlined, ApiOutlined } from '@ant-design/icons';
 import useAuth from '../../hooks/useAuth';
 
@@ -118,14 +118,24 @@ const TournamentSide = ({ref1TSummery1, ref1TSummery2, ref1TSummery3, isLoggedIn
                             <IconText icon={FlagOutlined} text={<p className='card-text'>Region: {tournament.region}</p>} key="list-vertical-star-o" />
                         </div>
                         <div style={{ fontSize: '16px' }}>
-                            <IconText icon={ApiOutlined} text={<p className='card-text'>Platform:
-                            {platforms.map((platform, index) => (
-                              <span key={index}>&nbsp; {platform}</span>
-                            ))}
-                            </p>} key="list-vertical-star-o" />
+                            <IconText icon={StarOutlined} text={<p className='card-text'>Joined: {totalJoined}/{tournament?.settings?.maxParticipitant}</p>} key="list-vertical-star-o" />
                         </div>
                         <div style={{ fontSize: '16px' }}>
-                            <IconText icon={StarOutlined} text={<p className='card-text'>Joined: {totalJoined}/{tournament?.settings?.maxParticipitant}</p>} key="list-vertical-star-o" />
+                            <IconText icon={ApiOutlined} 
+                            key="list-vertical-star-o"  
+                            text={
+                            <p className='card-text'>
+                                <span>
+                                    <Breadcrumb>Platforms:&nbsp;&nbsp;
+                                        {platforms.map((item, index) => (
+                                            <Breadcrumb.Item key={item.key}>{item}</Breadcrumb.Item>
+                                        ))}
+                                    </Breadcrumb>
+                                </span>
+                                {/* {platforms.map((platform, index) => (
+                                <span key={index}>&nbsp; {platform}</span>
+                                ))} */}
+                            </p>}/>
                         </div>
                     </List.Item>
                 </List>
