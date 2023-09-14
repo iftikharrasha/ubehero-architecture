@@ -11,7 +11,7 @@ import { setDarkMode } from "../../../redux/slices/mySiteSettingsSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { changeRegion } from "../../../redux/slices/staticSlice";
 
-const Navbar = ({socketN, isConnected, userId}) => {
+const Navbar = ({socketN, isConnected, profile}) => {
   const dispatch = useDispatch();
   const isDarkMode = useSelector(state => state.mySiteSettings.darkMode);
   const countrySelected = useSelector(state => state.statics.country);
@@ -85,9 +85,9 @@ const Navbar = ({socketN, isConnected, userId}) => {
             </Button>
             <div className="rightMenu">
               <RightMenu
+                profile={profile}
                 socketN={socketN} 
                 isConnected={isConnected}
-                userId={userId} 
                 mode={"horizontal"}
               />
             </div>
@@ -106,9 +106,9 @@ const Navbar = ({socketN, isConnected, userId}) => {
             >
               <LeftMenu mode={"inline"} />
               <RightMenu 
+                profile={profile}
                 socketN={socketN} 
                 isConnected={isConnected}
-                userId={userId} 
                 mode={"inline"}
               />
             </Drawer>

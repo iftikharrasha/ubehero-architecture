@@ -9,20 +9,18 @@ import Notification from "../Notification/Notification";
 import InboxThread from "../InboxThread/InboxThread";
 import useProfile from "../../../hooks/useProfile";
 import WishList from "../../Profile/WishList";
-import { useSelector } from "react-redux";
 
-const RightMenu = ({ socketN, isConnected, userId, mode }) => {
+const RightMenu = ({ profile, socketN, isConnected, mode }) => {
     const history = useHistory();
-    const { loggedInUser, handlelogOut } = useAuth();
-    const { handleSwitchProfile, actingAs } = useProfile();
-    const isSignedIn = useSelector(state => state.profile.signed_in);
-    const role = useSelector(state => state.profile.role);
+    const { handlelogOut } = useAuth();
+    const { handleSwitchProfile } = useProfile();
+    const role = profile.role;
 
     return (
             <Row justify="center" align="middle">
                 <Space wrap>
                     {
-                        isSignedIn ? (
+                        profile?.signed_in ? (
                         <>
                             {
                                 socketN ? 
@@ -30,7 +28,7 @@ const RightMenu = ({ socketN, isConnected, userId, mode }) => {
                                     <Notification 
                                         socketN={socketN} 
                                         isConnected={isConnected}
-                                        userId={userId}
+                                        userId={profile?.data?._id}
                                     /> 
                                     <InboxThread 
                                         socketN={socketN} 
@@ -38,7 +36,7 @@ const RightMenu = ({ socketN, isConnected, userId, mode }) => {
                                 </> : null
                             }
 
-                            <WalletPopUp userId={userId}/>
+                            <WalletPopUp userId={profile?.data?._id}/>
 
                             <WishList/>
 
@@ -46,14 +44,14 @@ const RightMenu = ({ socketN, isConnected, userId, mode }) => {
                                 <Menu.SubMenu
                                     title={
                                     <>
-                                        {loggedInUser.photo ? <Avatar src={loggedInUser.photo}/> : <Avatar icon={<UserOutlined />} />}
+                                        {profile?.data?.photo ? <Avatar src={profile?.data?.photo}/> : <Avatar icon={<UserOutlined />} />}
                                         <span className="username">John Doe</span>
                                     </>
                                     }
                                 >
                                     <Menu.Item key="profile">
-                                        <Link to={`/profile/${loggedInUser.id}`}>
-                                            <UserOutlined /> {loggedInUser.name}
+                                        <Link to={`/profile/${profile?.data?._id}`}>
+                                            <UserOutlined /> {profile?.data?.userName}
                                         </Link>
                                     </Menu.Item>
                                     {
@@ -82,7 +80,7 @@ const RightMenu = ({ socketN, isConnected, userId, mode }) => {
                                         :  null
                                     }
                                     <Menu.Item key="settings">
-                                        <Link to={`/profile/${loggedInUser.id}/settings`}>
+                                        <Link to={`/profile/${profile?.data?._id}/settings`}>
                                             <SettingOutlined /> Settings
                                         </Link>
                                     </Menu.Item>

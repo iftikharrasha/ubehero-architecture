@@ -8,16 +8,15 @@ import { Card } from 'antd';
 
 const ChatRoom = ({socket, isConnected, tournamentDetails, leaderboards, routeKey, unreadCount, setUnreadCount}) => {
     const { _id, tournamentName, masterProfile } = tournamentDetails;
-    const { loggedInUser } = useAuth();
-    const user = useSelector((state) => state.profile.data)
+    const profile = useSelector((state) => state.profile)
 
     useEffect(() => {
         if (socket) {
             const roomId = _id;
-            const userId = loggedInUser.id;
-            const senderName = loggedInUser.name;
-            const senderPhoto = loggedInUser.photo;
-            const stats = user.stats;
+            const userId = profile?.data?._id;
+            const senderName = profile?.data?.userName;
+            const senderPhoto = profile?.data?.photo;
+            const stats = profile?.data?.stats;
 
             // Get master's username and photo from tournamentDetails
             const { userName, photo } = masterProfile;
@@ -47,7 +46,7 @@ const ChatRoom = ({socket, isConnected, tournamentDetails, leaderboards, routeKe
                     <MessagePanel 
                         socket={socket} 
                         tournamentDetails={tournamentDetails} 
-                        loggedInUser={loggedInUser}
+                        profile={profile}
                         routeKey={routeKey}
                         unreadCount={unreadCount}
                         setUnreadCount={setUnreadCount}/>
@@ -56,7 +55,7 @@ const ChatRoom = ({socket, isConnected, tournamentDetails, leaderboards, routeKe
                         isConnected={isConnected}
                         roomId={_id} 
                         room={tournamentName} 
-                        loggedInUser={loggedInUser}
+                        profile={profile}
                     />
                 </Card>
             </div>

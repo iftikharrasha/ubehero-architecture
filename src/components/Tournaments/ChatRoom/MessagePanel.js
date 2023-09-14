@@ -6,7 +6,7 @@ import bot from '../../../sounds/bot.mp3';
 import typing from '../../../sounds/typing.mp3';
 import { Card } from 'antd';
 
-const MessagePanel = ({socket, tournamentDetails, loggedInUser, routeKey, unreadCound, setUnreadCount}) => {
+const MessagePanel = ({socket, tournamentDetails, profile, routeKey, unreadCound, setUnreadCount}) => {
     const [messagesRecieved, setMessagesReceived] = useState([]);
     const [sound, setSound] = useState(null);
 
@@ -25,7 +25,7 @@ const MessagePanel = ({socket, tournamentDetails, loggedInUser, routeKey, unread
                 },
             ]);
 
-            if(data.senderName.toLowerCase() !== loggedInUser.name){
+            if(data.senderName.toLowerCase() !== profile?.data?.userName){
                 if(data.sound === "bot"){
                     setSound(bot)
                     const newMessageSound = document.getElementById("newMessageSound");
@@ -83,11 +83,11 @@ const MessagePanel = ({socket, tournamentDetails, loggedInUser, routeKey, unread
                 <ul className="m-b-0">
                     {
                         messagesRecieved.map((item, index) => (
-                            <li className={item.senderName.toLowerCase() === loggedInUser.name ? "text-right" : "text-left"} key={index}>
+                            <li className={item.senderName.toLowerCase() === profile?.data?.userName ? "text-right" : "text-left"} key={index}>
                                 <div className="message-data">
                                     <img src={item.senderPhoto} alt="avatar"/> {item.senderName} 
                                     {
-                                        item.senderName.toLowerCase() === loggedInUser.name ? null : 
+                                        item.senderName.toLowerCase() === profile?.data?.userName ? null : 
                                             item.senderPermissions ? 
                                                 item.senderPermissions.includes("master") ? " (MASTER)" :
                                                             null
@@ -95,7 +95,7 @@ const MessagePanel = ({socket, tournamentDetails, loggedInUser, routeKey, unread
                                     }
                                 </div>
                                 <div className={
-                                        item.senderName.toLowerCase() === loggedInUser.name ? "message my-message" : 
+                                        item.senderName.toLowerCase() === profile?.data?.userName ? "message my-message" : 
                                                     item.senderPermissions ? 
                                                         item.senderPermissions.includes("master") ? "message other-message master" :
                                                                     "message other-message"

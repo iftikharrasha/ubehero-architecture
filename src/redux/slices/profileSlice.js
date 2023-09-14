@@ -1,4 +1,48 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import axios from 'axios';
+
+export const fetchIpInfo = createAsyncThunk(
+    'profile/fetchIpInfo', 
+    async ({version}, {getState}) => {
+    // if(!version){
+    //     version = 0;
+    // }
+    try {
+        const ipResponse = await axios.get('https://api64.ipify.org?format=json');
+        const ipAddress = ipResponse.data.ip;
+        
+        const apiUrl = `https://ipinfo.io/${ipAddress}/json?token=${process.env.REACT_APP_IPINFO_TOKEN}`;
+    
+        // Make an HTTP GET request to the ipinfo.io API using axios
+        const response = await axios.get(apiUrl);
+
+        if(response.data.privacy.vpn){
+            console.log("isVpn", response.data.privacy.vpn);
+            return {
+                intel: getState().profile.intel,
+                vpn: response.data.privacy.vpn,
+            };
+        }else{
+            console.log("isVpn", response.data.privacy.vpn);
+            const data = {
+                intel: {
+                    ip: response.data.ip,
+                    coordinates: response.data.loc,
+                    city: response.data.city,
+                    region: response.data.region,
+                    country: response.data.country,
+                    timezone: response.data.timezone,
+                    vpn: response.data.privacy.vpn,
+                },
+                vpn: response.data.privacy.vpn,
+            }
+        
+            return data;
+        }
+      } catch (error) {
+        throw error;
+      }
+  });
 
 export const fetchProfileDetails = createAsyncThunk(
     'profile/fetchProfileDetails',
@@ -35,6 +79,8 @@ const profileSlice = createSlice({
         actingAs: "user",
         role: "user",
         status: 'idle',
+        vpn: false,
+        intel: null,
     },
     reducers: {
         setLogIn: (state, action) => {
@@ -74,6 +120,11 @@ const profileSlice = createSlice({
             state.version = action.payload.version || state.version;
             state.signed_in = true;
             state.status = 'success';
+        })
+        builder.addCase(fetchIpInfo.fulfilled, (state, action) => {
+          state.status = 'success';
+          state.intel = action.payload.intel;
+          state.vpn = action.payload.vpn;
         })
 
         // builder.addCase(fetchTournaments.pending, (state) => {

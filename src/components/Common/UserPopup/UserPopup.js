@@ -3,7 +3,6 @@ import moment from 'moment';
 import { useContext } from 'react';
 import { useSelector } from 'react-redux';
 import InboxContext from '../../../Contexts/InboxContext/InboxContext';
-import useAuth from '../../../hooks/useAuth';
 import useNotyf from '../../../hooks/useNotyf';
 import { Button, Avatar, Card,  Row, Col, Typography } from 'antd';
 import { MessageOutlined } from '@ant-design/icons';
@@ -12,43 +11,41 @@ const { Meta } = Card;
 const { Paragraph } = Typography;
 
 const UserPopup = ({popupUser}) => {
-    const { loggedInUser } = useAuth();
-    const user = useSelector((state) => state.profile.data)
+    const profile = useSelector((state) => state.profile)
     const jwt = localStorage.getItem("jwt");
-    const isLoggedIn = useSelector(state => state.profile.signed_in);
 
-    const { socketN } = useNotyf(user, jwt);
+    const { socketN } = useNotyf(profile.data, jwt);
     
     const sendFriendRequestNotyf = () => {
-        const data = {
+        const notificationData = {
             type: "friend_request",
             subject: "Sent you a friend request",
-            subjectPhoto: loggedInUser.photo,
-            invokedByName: loggedInUser.name,
-            invokedById: loggedInUser.id,
+            subjectPhoto: profile?.data?.photo,
+            invokedByName: profile?.data?.userName,
+            invokedById: profile?.data?._id,
             receivedByName: popupUser.userName,
             receivedById: popupUser.key, 
-            route: `profile/${loggedInUser.id}`
+            route: `profile/${profile?.data?._id}`
         }
 
         // Send message to server
-        socketN.emit("send_notification", data);
+        socketN.emit("send_notification", notificationData);
     };
 
     const sendFollowRequestNotyf = () => {
-        const data = {
+        const notificationData = {
             type: "follow_request",
             subject: "Started following you",
-            subjectPhoto: loggedInUser.photo,
-            invokedByName: loggedInUser.name,
-            invokedById: loggedInUser.id,
+            subjectPhoto: profile?.data?.photo,
+            invokedByName: profile?.data?.userName,
+            invokedById: profile?.data?._id,
             receivedByName: popupUser.userName,
             receivedById: popupUser.key, 
-            route: `profile/${loggedInUser.id}`
+            route: `profile/${profile?.data?._id}`
         }
 
         // Send message to server
-        socketN.emit("send_notification", data);
+        socketN.emit("send_notification", notificationData);
     };
     
     const { setShowInbox, setPopUser } = useContext(InboxContext);
@@ -66,7 +63,7 @@ const UserPopup = ({popupUser}) => {
             }}
             className="popCard"
             bordered={false}
-            actions={!isLoggedIn ? null : popupUser?.key === loggedInUser.id ? null : [
+            actions={!profile.signed_in ? null : popupUser?.key === profile?.data?._id ? null : [
                 <Row justify="center" align="middle">
                     {/* <MessageOutlined style={{ fontSize: '16px' }} />
                     <span className="ps-1" style={{ fontSize: '12px' }}>CHAT</span> */}

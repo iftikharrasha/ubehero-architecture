@@ -38,6 +38,7 @@ const useTournament = () => {
             tId: data._id,
             gameId: gameId
         }
+        console.log(gameId, purchaseItem);
 
         try {
             const response = await axios.post(`${process.env.REACT_APP_API_LINK}/api/v1/tournaments/registration/${data._id}`, purchaseItem, config);
@@ -96,7 +97,7 @@ const useTournament = () => {
             
             if(response.data.status === 200){
                 const notificationData = {
-                    type: "tournament_creation",
+                    type: "tournament_draft_creation",
                     subject: "You’ve created this tournament draft",
                     subjectPhoto:"https://i.ibb.co/5FFYTs7/avatar.jpg",
                     invokedByName: data.tournamentName,

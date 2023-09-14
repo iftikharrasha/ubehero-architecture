@@ -5,9 +5,10 @@ import { Button, Card } from 'antd';
 const CheckoutForm = ({method, tournament, connectedAccount}) => {
     const { _id, tournamentName, tournamentThumbnail, settings } = tournament;
     const { handleTournamentPurchase } = useTournament();
+    console.log(connectedAccount)
 
     const tournamentRegistration = () => {
-        handleTournamentPurchase(tournament, connectedAccount, method);
+        handleTournamentPurchase(tournament, connectedAccount._id, method);
     };
 
     // const onFinish = (values) => {

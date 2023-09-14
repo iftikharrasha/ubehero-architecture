@@ -14,9 +14,8 @@ const IconText = ({ icon, text }) => (
     </Space>
   );
 
-const TournamentSide = ({ref1TSummery1, ref1TSummery2, ref1TSummery3, isLoggedIn, routeKey, tournament, totalJoined, purchasedItems, handleCancel, handleCheckout, step, buttonStatus, timeLeftPercent}) => {
+const TournamentSide = ({ref1TSummery1, ref1TSummery2, ref1TSummery3, isLoggedIn, userId, routeKey, tournament, totalJoined, purchasedItems, handleCancel, handleCheckout, step, buttonStatus, timeLeftPercent}) => {
     const { _id, settings, tournamentName, platforms } = tournament;
-    const { loggedInUser } = useAuth();
     const purchased = purchasedItems?.tournaments?.includes(_id);
 
     let sideStep;
@@ -132,9 +131,6 @@ const TournamentSide = ({ref1TSummery1, ref1TSummery2, ref1TSummery3, isLoggedIn
                                         ))}
                                     </Breadcrumb>
                                 </span>
-                                {/* {platforms.map((platform, index) => (
-                                <span key={index}>&nbsp; {platform}</span>
-                                ))} */}
                             </p>}/>
                         </div>
                     </List.Item>
@@ -151,7 +147,7 @@ const TournamentSide = ({ref1TSummery1, ref1TSummery2, ref1TSummery3, isLoggedIn
                 }}
                 className="popCard mt-5"
                 bordered
-                actions={!isLoggedIn ? null : tournament.masterProfile?._id === loggedInUser.id ? null : [
+                actions={!isLoggedIn ? null : tournament.masterProfile?._id === userId ? null : [
                     <Row justify="center" align="middle">
                         <Button icon={<MessageOutlined  style={{ marginBottom: "6px" }}/>} style={{ fontSize: '12px' }}>CHAT</Button>
                     </Row>,

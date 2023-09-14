@@ -14,18 +14,17 @@ import Prizes from '../../components/Tournaments/Prizes/Prizes';
 import ChatRoom from '../../components/Tournaments/ChatRoom/ChatRoom';
 import CheckoutForm from '../../components/Tournaments/Checkout/CheckoutForm';
 import CheckoutLayout from '../../components/Common/Checkout/CheckoutLayout';
-
-import { Tabs, Row, Modal, Tour, Col, Card, Empty } from 'antd';
-import { TrophyOutlined, MessageOutlined, CrownOutlined, PartitionOutlined, ProjectOutlined, OrderedListOutlined } from '@ant-design/icons';
-import TournamentSide from '../../components/Tournaments/TournamentSide';
 import useTour from '../../hooks/useTour';
 import useTimer from '../../hooks/useTimer';
 import TournamentStage from '../../components/Common/TournamentStage/TournamentStage';
-import useAuth from '../../hooks/useAuth';
 import Bracket from '../../components/Tournaments/Bracket/Bracket';
 import axios from 'axios';
 import Matches from '../../components/Tournaments/Matches/Matches';
 import Results from '../../components/Tournaments/Results/Results';
+
+import { Tabs, Row, Modal, Tour, Col, Card, Empty } from 'antd';
+import { TrophyOutlined, MessageOutlined, CrownOutlined, PartitionOutlined, ProjectOutlined, OrderedListOutlined } from '@ant-design/icons';
+import TournamentSide from '../../components/Tournaments/TournamentSide';
 
 const { TabPane } = Tabs;
 
@@ -33,9 +32,10 @@ let initialSocketId = null;
 
 const TournamentDetails = () => { 
     const { checkInTourStorage, addTourToStorage } = useTour();
-    const { loggedInUser } = useAuth();
-    const isLoggedIn = useSelector(state => state.profile.signed_in);
-    const purchasedItems = useSelector(state => state.profile?.data?.purchasedItems);
+    const profile = useSelector(state => state.profile);
+    const isLoggedIn = profile?.signed_in;
+    const purchasedItems = profile?.data?.purchasedItems;
+    const userId = profile?.data?._id;
     const [routeKey, setRouteKey] = useState('leaderboards');
     const [connectedAccount, setConnectedAccount] = useState(null);
     const { id } = useParams();
@@ -312,6 +312,7 @@ const TournamentDetails = () => {
                                             ref1TSummery2={ref1TSummery2}
                                             ref1TSummery3={ref1TSummery3}
                                             isLoggedIn={isLoggedIn}
+                                            userId={userId}
                                             routeKey={routeKey}
                                             tournament={tournamentDetails} 
                                             totalJoined={leaderboardDetails?.leaderboards?.length}
@@ -437,7 +438,7 @@ const TournamentDetails = () => {
                                                 }
 
                                                 {
-                                                    tournamentDetails.masterProfile._id === loggedInUser.id && 
+                                                    tournamentDetails.masterProfile._id === profile?.data?._id && 
                                                     <TabPane
                                                         key="chatroom"
                                                         tab={

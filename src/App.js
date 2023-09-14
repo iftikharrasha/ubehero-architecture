@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import AuthProvider from './Contexts/AuthProvider/AuthProvider'
-// import Header from './components/PageLayout/Header';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import useNotyf from './hooks/useNotyf';
 import InboxPopUp from './components/Common/InboxPopUp/InboxPopUp';
 import InboxContext from './Contexts/InboxContext/InboxContext';
@@ -13,10 +12,13 @@ import InternalControlls from './components/PageLayout/InternalControlls';
 import MasterControlls from './components/PageLayout/MasterControlls';
 import Navbar from './components/Common/Navbar/Navbar';
 import { ConfigProvider, Layout, theme } from "antd";
+import { fetchIpInfo } from './redux/slices/profileSlice';
+import { Modal } from 'antd';
 
 const { defaultAlgorithm, darkAlgorithm } = theme;
 
 function App() {
+  const dispatch = useDispatch();
   const isDarkMode = useSelector(state => state.mySiteSettings.darkMode);
   const [showInbox, setShowInbox] = useState(false);
   const [popUser, setPopUser] = useState({});
@@ -25,10 +27,27 @@ function App() {
     setShowInbox(!showInbox);
   };
 
-  const user = useSelector((state) => state.profile.data)
+  const profile = useSelector((state) => state.profile);
+  const isVpn = profile.vpn;
+  console.log("isVpn", isVpn);
+
   const jwt = localStorage.getItem("jwt");
-  const { socketN, isConnected } = useNotyf(user, jwt);
-  
+  const { socketN, isConnected } = useNotyf(profile.data, jwt);
+
+  useEffect(() => {
+    dispatch(fetchIpInfo(profile.version));
+  },[dispatch])
+
+  const [vpn, setVpn] = useState(isVpn);
+
+  const handleModalOk = () => {
+    window.location.reload();
+  };
+
+  const handleModalCancel = () => {
+    setVpn(false);
+  };
+
   return (
       <ConfigProvider
         theme={{
@@ -44,16 +63,10 @@ function App() {
           <AuthProvider>
             <InboxContext.Provider value={{ showInbox, setShowInbox, popUser, setPopUser }}>
               <Router>
-                {/* <Header 
-                  socketN={socketN} 
-                  isConnected={isConnected}
-                  userId={user?._id}
-                /> */}
-
                 <Navbar
                   socketN={socketN} 
                   isConnected={isConnected}
-                  userId={user?._id}
+                  profile={profile}
                 />
 
                 <Route path="/internal">
@@ -80,6 +93,21 @@ function App() {
               </Router>
             </InboxContext.Provider>
           </AuthProvider>
+
+          {
+            vpn && 
+            <Modal
+              title="CHEATER WARNING!"
+              open={vpn}
+              onOk={handleModalOk} // Add this callback for the "Refresh" button
+              onCancel={handleModalCancel}
+              width="1000px"
+              okText="Refresh"
+            >
+              <p>Please turn off your vpn, and refresh the page. 
+                This is your final warning!</p>
+            </Modal>
+          }
         </Layout>
       </ConfigProvider>
   )

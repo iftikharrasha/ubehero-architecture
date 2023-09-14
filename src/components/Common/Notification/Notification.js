@@ -1,13 +1,12 @@
-import moment from 'moment';
 import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import useAuth from '../../../hooks/useAuth';
 import { Badge, List, Popover, Skeleton, Button } from 'antd';
 import { BellOutlined } from '@ant-design/icons';
+import { useSelector } from 'react-redux';
 
 const Notification = ({socketN, isConnected, userId}) => {
   const [notyfReceived, setNotyfReceived] = useState([]);
-  const { loggedInUser } = useAuth();
+  const profile = useSelector(state => state.profile);
 
   useEffect(() => {
       if (socketN) {
@@ -98,19 +97,19 @@ const Notification = ({socketN, isConnected, userId}) => {
   const handleFriendRequest = (e, item) => {
     e.preventDefault();
 
-    const data = {
+    const notificationData = {
           type: "friend_request_accept",
           subject: "Accepted your friend request",
-          subjectPhoto: loggedInUser.photo,
-          invokedByName: loggedInUser.name,
-          invokedById: loggedInUser.id,
+          subjectPhoto: profile?.data?.photo,
+          invokedByName: profile?.data?.userName,
+          invokedById: profile?.data?._id,
           receivedByName: item.invokedByName,
           receivedById: item.invokedById, 
-          route: `profile/${loggedInUser.id}`
+          route: `profile/${profile?.data?._id}`
     }
 
     //Send message to server
-    socketN.emit("send_notification", data);
+    socketN.emit("send_notification", notificationData);
 
     const updatadData = {
       type: "friend_request_accept", 
@@ -138,19 +137,19 @@ const Notification = ({socketN, isConnected, userId}) => {
   const handleFollowRequest = (e, item) => {
     e.preventDefault();
 
-    const data = {
+    const notificationData = {
           type: "follow_request_accept",
           subject: "Following you back",
-          subjectPhoto: loggedInUser.photo,
-          invokedByName: loggedInUser.name,
-          invokedById: loggedInUser.id,
+          subjectPhoto: profile?.data?.photo,
+          invokedByName: profile?.data?.userName,
+          invokedById: profile?.data?._id,
           receivedByName: item.invokedByName,
           receivedById: item.invokedById, 
-          route: `profile/${loggedInUser.id}`
+          route: `profile/${profile?.data?._id}`
     }
 
     //Send message to server
-    socketN.emit("send_notification", data);
+    socketN.emit("send_notification", notificationData);
 
     const updatadData = {
       type: "follow_request_accept", 

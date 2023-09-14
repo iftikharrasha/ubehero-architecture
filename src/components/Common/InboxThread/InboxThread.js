@@ -307,14 +307,6 @@ const InboxThread = ({socketN}) => {
                     dataSource={roomsReceived}
                     renderItem={(item) => (
                       <List.Item
-                        actions={
-                          isLoadingMore1 ? null :
-                            [
-                              <Button block size='small'>
-                                <Link to={`/tournament/details/${item._id}/chatroom`}>Enter Room</Link>
-                              </Button>
-                            ] 
-                        }
                       >
                         <Skeleton avatar title={false} loading={item.loading} active>
                           <List.Item.Meta
@@ -324,7 +316,11 @@ const InboxThread = ({socketN}) => {
                                 </Badge>
                             }
                             title={item.tournamentName}
-                            description={moment(item.dates?.registrationStart).fromNow()}
+                            description={
+                              <Button  size='small'>
+                                <Link to={`/tournament/details/${item._id}/chatroom`}>Enter Room</Link>
+                              </Button>
+                            }
                           />
                         </Skeleton>
                       </List.Item>

@@ -1,51 +1,48 @@
-import moment from 'moment';
 import React from 'react';
 import { useContext } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import InboxContext from '../../../Contexts/InboxContext/InboxContext';
-import useAuth from '../../../hooks/useAuth';
 import useNotyf from '../../../hooks/useNotyf';
 
 const PopupModal = ({show, handleClose, popupUser}) => {
     console.log(popupUser)
-    const { loggedInUser } = useAuth();
-    const user = useSelector((state) => state.profile.data)
+    const profile = useSelector((state) => state.profile)
     const jwt = localStorage.getItem("jwt");
 
-    const { socketN } = useNotyf(user, jwt);
+    const { socketN } = useNotyf(profile.data, jwt);
     
     const sendFriendRequestNotyf = () => {
-        const data = {
+        const notificationData = {
             type: "friend_request",
             subject: "Sent you a friend request",
-            subjectPhoto: loggedInUser.photo,
-            invokedByName: loggedInUser.name,
-            invokedById: loggedInUser.id,
+            subjectPhoto: profile?.data?.photo,
+            invokedByName: profile?.data?.userName,
+            invokedById: profile?.data?._id,
             receivedByName: popupUser.userName,
             receivedById: popupUser.key, 
-            route: `profile/${loggedInUser.id}`
+            route: `profile/${profile?.data?._id}`
         }
 
         // Send message to server
-        socketN.emit("send_notification", data);
+        socketN.emit("send_notification", notificationData);
     };
 
     const sendFollowRequestNotyf = () => {
-        const data = {
+        const notificationData = {
             type: "follow_request",
             subject: "Started following you",
-            subjectPhoto: loggedInUser.photo,
-            invokedByName: loggedInUser.name,
-            invokedById: loggedInUser.id,
+            subjectPhoto: profile?.data?.photo,
+            invokedByName: profile?.data?.userName,
+            invokedById: profile?.data?._id,
             receivedByName: popupUser.userName,
             receivedById: popupUser.key, 
-            route: `profile/${loggedInUser.id}`
+            route: `profile/${profile?.data?._id}`
         }
 
         // Send message to server
-        socketN.emit("send_notification", data);
+        socketN.emit("send_notification", notificationData);
     };
     
     const { setShowInbox, setPopUser } = useContext(InboxContext);
@@ -74,7 +71,7 @@ const PopupModal = ({show, handleClose, popupUser}) => {
                                 <div className="flex-grow-1 ms-3">
                                     <h5 className="mb-1">{popupUser?.userName}
                                     {
-                                        popupUser?.key === loggedInUser.id ? null :
+                                        popupUser?.key === profile?.data?._id ? null :
                                         <span className='ms-2'>| <i className="fas fa-message text-danger cursor-pointer ms-2" onClick={handleInboxPop}></i></span>
                                     }
                                      
@@ -96,7 +93,7 @@ const PopupModal = ({show, handleClose, popupUser}) => {
                                     </div>
 
                                     {
-                                        popupUser?.key === loggedInUser.id ? 
+                                        popupUser?.key === profile?.data?._id ? 
                                         <div className="d-flex pt-1">
                                             <button type="button" className="btn btn-primary flex-grow-1"><Link to={`/profile/${popupUser?.key}`} className="text-white">My Profile</Link></button>
                                         </div> :

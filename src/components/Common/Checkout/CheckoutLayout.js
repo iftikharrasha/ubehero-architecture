@@ -12,7 +12,7 @@ const CheckoutLayout = ({ remark, routeKey, item, handleOrder, handlePaymentMeth
     const [open, setOpen] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
     const [isFieldsFilled, setIsFieldsFilled] = useState(false);
-    const allAccounts = useSelector((state) => state.profile.data.gameAccounts);
+    const allAccounts = useSelector((state) => state.profile.data.gameAccounts ? state.profile.data.gameAccounts : []);
     const [validPlatformAccounts, setValidPlatformAccounts] = useState([]);
     const [clickedItem, setClickedItem] = useState(null);
     const uId = useSelector((state) => state.profile.data._id);
@@ -52,8 +52,8 @@ const CheckoutLayout = ({ remark, routeKey, item, handleOrder, handlePaymentMeth
         }
 
         const result = handleGameAccountAdd(addedPlatform);
-        if(result){
-          setConnectedAccount(addedPlatform)
+        if(result.success){
+          setConnectedAccount(result.data)
           setOpen(false);
           setConfirmLoading(false);
         }

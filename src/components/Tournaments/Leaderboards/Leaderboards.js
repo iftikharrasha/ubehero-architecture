@@ -62,7 +62,15 @@ const Leaderboards = ({leaderboards}) => {
             <div className="ms-3">
               <p className="fw-bold mb-0">{record.userName} {record.emailVerified ? <CheckCircleOutlined /> : <CloseCircleOutlined />}</p>
               {/* <p className="mb-0">Country: {record.country}</p> */}
-              <p className="mb-0">Kɩŋʛsɭʌƴɘʀ</p>
+              <p className="mb-0">
+                <img
+                  src={record.accountLogo}
+                  alt="account-pic"
+                  style={{ width: '18px', height: '18px', marginRight: '5px' }}
+                  className="rounded-circle"
+                />
+                {record.playerIgn}
+            </p>
             </div>
           </div>
         </Popover>
@@ -130,19 +138,21 @@ const Leaderboards = ({leaderboards}) => {
   ];
 
   const data = leaderboards.map((item, index) => ({
-    key: item._id,
+    key: item.gamer?._id,
     index: index + 1,
-    userName: item.userName,
-    photo: item.photo,
+    userName: item.gamer?.userName,
+    photo: item.gamer?.photo,
     country: "BD",
-    joined: item.createdAt,
-    totalGamePlayed: item.stats?.totalGamePlayed,
-    wins: item.stats?.totalWins,
-    xp: item.stats?.totalXp,
-    levelTitle: item.stats?.levelTitle,
-    currentLevel: item.stats?.currentLevel,
-    noOfFollowers: item.requests?.followers.length,
-    noOfFollowings: item.requests?.followings.length,
+    joined: item.gamer?.createdAt,
+    totalGamePlayed: item.gamer?.stats?.totalGamePlayed,
+    wins: item.gamer?.stats?.totalWins,
+    xp: item.gamer?.stats?.totalXp,
+    levelTitle: item.gamer?.stats?.levelTitle,
+    currentLevel: item.gamer?.stats?.currentLevel,
+    noOfFollowers: item.gamer?.requests?.followers.length,
+    noOfFollowings: item.gamer?.requests?.followings.length,
+    playerIgn: item.gameAccount?.playerIgn,
+    accountLogo: item.gameAccount?.accountLogo,
   }));
 
   const onChange = (pagination, filters, sorter, extra) => {

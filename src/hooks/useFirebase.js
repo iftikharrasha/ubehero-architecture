@@ -7,7 +7,7 @@ import { setInternalLogOut } from "../redux/slices/internalTournamentSlice";
 
 const useFirebase = () => {
     const dispatch = useDispatch();
-    const [loggedInUser, setLoggedInUser] = useState({});
+    const [loggedInUser, setLoggedInUser] = useState({}); //now no use of this state through the project
     const [errorMessage, setErrorMessage] = useState(null);
     const isLoggedIn = useSelector(state => state.profile.signed_in);
 

@@ -4,17 +4,17 @@ import { CloudUploadOutlined } from '@ant-design/icons';
 
 const { Search } = Input;
 
-const SendBox = ({socket, isConnected, roomId, room, loggedInUser}) => {
+const SendBox = ({socket, isConnected, roomId, room, profile}) => {
     const [message, setMessage] = useState("");
     const [isTyping, setIsTyping] = useState(false);
     const [isEnterPressed, setIsEnterPressed] = useState(false);
 
     const sendMessage = () => {
         if (message !== "") {
-          const senderName = loggedInUser.name;
-          const senderId = loggedInUser.id;
-          const senderPhoto = loggedInUser.photo;
-          const senderPermissions = loggedInUser.permissions;
+          const senderName = profile?.data?.userName;
+          const senderId = profile?.data?._id;
+          const senderPhoto = profile?.data?.photo;
+          const senderPermissions = profile?.data?.permissions;
 
           const data = {
             roomId: roomId,
@@ -47,7 +47,7 @@ const SendBox = ({socket, isConnected, roomId, room, loggedInUser}) => {
         setIsEnterPressed(true);
       } else {
         if (!isTyping) {
-          socket.emit("typing", { roomId: roomId, userName: loggedInUser.name });
+          socket.emit("typing", { roomId: roomId, userName: profile?.data?.userName });
         }
       }
     };

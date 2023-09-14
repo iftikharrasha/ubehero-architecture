@@ -32,6 +32,7 @@ const useProfile = () => {
     }
 
     const handleGameAccountAdd = async (data) => {
+        console.log(data)
         let config = {}
 
         if(profile.signed_in){
@@ -43,27 +44,28 @@ const useProfile = () => {
             const response = await axios.post(`${process.env.REACT_APP_API_LINK}/api/v1/account/gameaccount/${data.uId}`, data, config);
             
             if(response.data.status === 200){
-                // const notificationData = {
-                //     type: "gameaccount_creation",
-                //     subject: "You’ve created this game account",
-                //     subjectPhoto:response.data.data.accountLogo,
-                //     invokedByName: response.data.data.playerIgn,
-                //     invokedById: "645b60abe95cd95bcfad6894",
-                //     receivedByName: profile.data.userName,
-                //     receivedById: profile.data._id,  //this user will receive notification
-                //     route: `profile/${profile.data._id}`
-                // }
+                const notificationData = {
+                    type: "gameaccount_creation",
+                    subject: "You’ve created this game account",
+                    subjectPhoto:response.data.data.accountLogo,
+                    invokedByName: response.data.data.playerIgn,
+                    invokedById: "645b60abe95cd95bcfad6894",
+                    receivedByName: profile.data.userName,
+                    receivedById: profile.data._id,  //this user will receive notification
+                    route: `profile/${profile.data._id}`
+                }
 
-                // // Send message to server
-                // socketN.emit("send_notification", notificationData);
+                // Send message to server
+                socketN.emit("send_notification", notificationData);
                 setErrorMessage(null);
+                console.log(response.data.data)
 
                 //also add to redux user profile
                 dispatch(addGameAccount(response.data.data));
             }else{
                 setErrorMessage(response.data.error.message);
             }
-            return response.data.success
+            return response.data
         } catch (error) {
             console.log(error);
         }

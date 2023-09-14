@@ -9,6 +9,7 @@ const { TabPane } = Tabs;
 
 const UserList = ({socket, leaderboards}) => {
     const [roomUsers, setRoomUsers] = useState([]);
+    console.log(roomUsers)
     
     //for popup
     const [popupUser, setPopupUser] = useState(null);
@@ -82,12 +83,12 @@ const UserList = ({socket, leaderboards}) => {
                     <ul className="list-unstyled chat-list mb-0">
                         {
                             leaderboards.map((participant, index) => (
-                                <li className="clearfix active mb-1" key={index} onClick={(e) => handleShow(participant)}>
+                                <li className="clearfix active mb-1" key={index} onClick={(e) => handleShow(participant.gamer)}>
                                     <Card>
-                                        <span className="avatarUser"><img src={participant.photo} alt="avatar"/></span>
+                                        <span className="avatarUser"><img src={participant.gamer.photo} alt="avatar"/></span>
                                         <div className="about">
-                                            <div className="name"><i className={`fa fa-circle ${isUserOnline(participant) ? 'online' : 'offline'}`}></i> {participant.userName}</div>
-                                            <div className="status">{`${isUserOnline(participant) ? 'Online' : 'offline'}`}</div>                                            
+                                            <div className="name"><i className={`fa fa-circle ${isUserOnline(participant.gamer) ? 'online' : 'offline'}`}></i> {participant.gamer.userName}</div>
+                                            <div className="status">{`${isUserOnline(participant.gamer) ? 'Online' : 'offline'}`}</div>                                            
                                         </div>
                                     </Card>
                                 </li>
