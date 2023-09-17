@@ -26,6 +26,7 @@ const Profile = () => {
     const version = userDetails ? userDetails.version : 0;
 
     const [routeKey, setRouteKey] = useState('mystats');
+    const [settingsRouteKey, setSettingsRouteKey] = useState('personal');
 
     const myTeams = useSelector((state) => state.myTeams.data)
     const versionTeams = useSelector((state) => state.myTeams.version)
@@ -49,7 +50,14 @@ const Profile = () => {
             setRouteKey('teams');
         } else if (location.pathname.endsWith('settings')) {
             setRouteKey('settings');
-        } else {
+            setSettingsRouteKey('personal');
+        } else if (location.pathname.endsWith('personal')) {
+          setRouteKey('settings');
+          setSettingsRouteKey('personal');
+        } else if (location.pathname.endsWith('gameaccounts')) {
+          setRouteKey('settings');
+          setSettingsRouteKey('gameaccounts');
+        }else {
             setRouteKey('mystats');
         }
     }, [location]);
@@ -64,6 +72,12 @@ const Profile = () => {
           break;
         case 'settings':
           history.push(`/profile/${id}/settings`);
+          break;
+        case 'personal':
+          history.push(`/profile/${id}/personal`);
+          break;
+        case 'gameaccounts':
+          history.push(`/profile/${id}/gameaccounts`);
           break;
         default:
           break;
@@ -178,6 +192,7 @@ const Profile = () => {
                                 ref2Teams={ref2Teams} 
                                 ref2Settings={ref2Settings}
                                 routeKey={routeKey} 
+                                settingsRouteKey={settingsRouteKey}
                                 handleTabChange={handleTabChange}
                                 profile={userDetails}
                                 myTeams={myTeams}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import moment from 'moment';
 import { useContext } from 'react';
 import { useSelector } from 'react-redux';
@@ -6,6 +6,7 @@ import InboxContext from '../../../Contexts/InboxContext/InboxContext';
 import useNotyf from '../../../hooks/useNotyf';
 import { Button, Avatar, Card,  Row, Col, Typography } from 'antd';
 import { MessageOutlined } from '@ant-design/icons';
+import useProfile from '../../../hooks/useProfile';
 
 const { Meta } = Card;
 const { Paragraph } = Typography;
@@ -13,23 +14,25 @@ const { Paragraph } = Typography;
 const UserPopup = ({popupUser}) => {
     const profile = useSelector((state) => state.profile)
     const jwt = localStorage.getItem("jwt");
+    const { handleFriendRequest } = useProfile();
+    const [confirmLoading, setConfirmLoading] = useState(false);
 
     const { socketN } = useNotyf(profile.data, jwt);
     
-    const sendFriendRequestNotyf = () => {
-        const notificationData = {
-            type: "friend_request",
-            subject: "Sent you a friend request",
-            subjectPhoto: profile?.data?.photo,
-            invokedByName: profile?.data?.userName,
-            invokedById: profile?.data?._id,
-            receivedByName: popupUser.userName,
-            receivedById: popupUser.key, 
-            route: `profile/${profile?.data?._id}`
+    const sendFriendRequest = async () => {
+        setConfirmLoading(true);
+        const data = {
+            type: 'friend_request_send',
+            from: profile?.data?._id,
+            to: popupUser.key
         }
+        console.log(data);
 
-        // Send message to server
-        socketN.emit("send_notification", notificationData);
+        const result = await handleFriendRequest(data, popupUser);
+        console.log(result);
+        if(result.success){
+            setConfirmLoading(false);
+        }
     };
 
     const sendFollowRequestNotyf = () => {
@@ -38,7 +41,7 @@ const UserPopup = ({popupUser}) => {
             subject: "Started following you",
             subjectPhoto: profile?.data?.photo,
             invokedByName: profile?.data?.userName,
-            invokedById: profile?.data?._id,
+            invokedById: profile?.data?._id, 
             receivedByName: popupUser.userName,
             receivedById: popupUser.key, 
             route: `profile/${profile?.data?._id}`
@@ -77,7 +80,7 @@ const UserPopup = ({popupUser}) => {
                 <Row justify="center" align="middle">
                     {/* <CoffeeOutlined key="ellipsis" style={{ fontSize: '16px' }}/>,
                     <span className="ps-1" style={{ fontSize: '12px' }}>ADD</span> */}
-                    <Button type="primary" onClick={sendFriendRequestNotyf}>ADD</Button>
+                    <Button type="primary" onClick={sendFriendRequest} loading={confirmLoading}>ADD</Button>
                 </Row>
             ]}
             >

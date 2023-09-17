@@ -33,7 +33,7 @@ const CheckoutLayout = ({ remark, routeKey, item, handleOrder, handlePaymentMeth
       }
     }, [])
 
-    const handleOk = () => {
+    const handleOk = async () => {
       setConfirmLoading(true);
       
       if(clickedItem){ //choosing item
@@ -51,7 +51,7 @@ const CheckoutLayout = ({ remark, routeKey, item, handleOrder, handlePaymentMeth
           tag: item.settings.accountTag
         }
 
-        const result = handleGameAccountAdd(addedPlatform);
+        const result = await handleGameAccountAdd(addedPlatform);
         if(result.success){
           setConnectedAccount(result.data)
           setOpen(false);

@@ -52,19 +52,57 @@ const useProfile = () => {
                     invokedById: "645b60abe95cd95bcfad6894",
                     receivedByName: profile.data.userName,
                     receivedById: profile.data._id,  //this user will receive notification
-                    route: `profile/${profile.data._id}`
+                    route: `profile/${profile.data._id}/gameaccounts`
                 }
 
                 // Send message to server
                 socketN.emit("send_notification", notificationData);
                 setErrorMessage(null);
-                console.log(response.data.data)
 
                 //also add to redux user profile
                 dispatch(addGameAccount(response.data.data));
             }else{
                 setErrorMessage(response.data.error.message);
             }
+            return response.data
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const handleFriendRequest = async (data, popupUser) => {
+        let config = {}
+
+        if(profile.signed_in){
+            const token = localStorage.getItem('jwt');
+            config.headers = { "Authorization": "Bearer " + token, ...config.headers};
+        }
+
+        try {
+            const response = await axios.post(`${process.env.REACT_APP_API_LINK}/api/v1/account/friend/${data.from}`, data, config);
+            
+            if(response.data.status === 200){
+                const notificationData = {
+                    type: "friend_request_send",
+                    subject: "Sent you a friend request",
+                    subjectPhoto: profile?.data?.photo,
+                    invokedByName: profile?.data?.userName,
+                    invokedById: profile?.data?._id,
+                    receivedByName: popupUser.userName,
+                    receivedById: popupUser.key, 
+                    route: `profile/${profile?.data?._id}`
+                }
+        
+                // Send message to server
+                socketN.emit("send_notification", notificationData);
+                setErrorMessage(null);
+
+                //also add to redux user profile
+                // dispatch(addGameAccount(response.data.data));
+            }else{
+                setErrorMessage(response.data.error.message);
+            }
+            console.log(response.data);
             return response.data
         } catch (error) {
             console.log(error);
@@ -102,6 +140,7 @@ const useProfile = () => {
         handleSwitchProfile,
         handleProfileDraftUpdate,
         handleGameAccountAdd,
+        handleFriendRequest,
     }
 }
 

@@ -29,6 +29,7 @@ function App() {
 
   const profile = useSelector((state) => state.profile);
   const isVpn = profile.vpn;
+  // const isVpn = true;
   console.log("isVpn", isVpn);
 
   const jwt = localStorage.getItem("jwt");

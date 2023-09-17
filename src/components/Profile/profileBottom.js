@@ -7,7 +7,7 @@ import Settings from './Settings';
 
 const { TabPane } = Tabs;
 
-const profileBottom = ({ref2GamingStats, ref2Teams, ref2Settings, routeKey, handleTabChange, profile, myTeams}) => {
+const profileBottom = ({ref2GamingStats, ref2Teams, ref2Settings, routeKey, settingsRouteKey, handleTabChange, profile, myTeams}) => {
     return (
         <Tabs activeKey={routeKey} onChange={handleTabChange}>
             <TabPane
@@ -38,7 +38,7 @@ const profileBottom = ({ref2GamingStats, ref2Teams, ref2Settings, routeKey, hand
                     </Row>
                 }
             >
-                <Settings profile={profile} />
+                <Settings profile={profile} routeKey={routeKey} settingsRouteKey={settingsRouteKey} handleTabChange={handleTabChange}/>
             </TabPane>
         </Tabs>
     );
