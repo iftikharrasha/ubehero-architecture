@@ -1,12 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Badge, List, Popover, Skeleton, Button } from 'antd';
-import { BellOutlined } from '@ant-design/icons';
-import { useSelector } from 'react-redux';
+import { BellOutlined, CheckCircleOutlined, LoadingOutlined } from '@ant-design/icons';
+import { useDispatch, useSelector } from 'react-redux';
+import useProfile from '../../../hooks/useProfile';
+import { addToPendingFriendList, addToMutualFriendList } from "../../../redux/slices/profileSlice";
 
 const Notification = ({socketN, isConnected, userId}) => {
   const [notyfReceived, setNotyfReceived] = useState([]);
   const profile = useSelector(state => state.profile);
+  const [confirmLoading, setConfirmLoading] = useState(false);
+  const { handleFriendRequestHook } = useProfile();
+  const dispatch = useDispatch();
 
   useEffect(() => {
       if (socketN) {
@@ -33,6 +38,15 @@ const Notification = ({socketN, isConnected, userId}) => {
   useEffect(() => {
     if(socketN){
         socketN.on('receive_notification', (data) => {
+          //check if user got a friend request notfication
+          if(data.type === 'friend_request_send'){
+            dispatch(addToPendingFriendList(data.invokedById));
+          }
+          
+          if(data.type === 'friend_request_accept'){
+            dispatch(addToMutualFriendList(data.invokedById));
+          }
+
           setNotyfReceived((state) => [
               ...state,
               {
@@ -59,6 +73,17 @@ const Notification = ({socketN, isConnected, userId}) => {
   // Runs whenever a socket event is received from the server
   useEffect(() => {
     socketN.on("last_10_notifications", (last10Notifications) => {
+      // Check if it's a friend request notification
+      last10Notifications.forEach((data) => {
+        if(data.type === 'friend_request_send') {
+          dispatch(addToPendingFriendList(data.invokedById));
+        }
+          
+        if(data.type === 'friend_request_accept'){
+          dispatch(addToMutualFriendList(data.invokedById));
+        }
+      });
+
       setNotyfReceived((state) => [...last10Notifications, ...state]);
     });
 
@@ -67,7 +92,6 @@ const Notification = ({socketN, isConnected, userId}) => {
 
   const handleRead = (e, item) => {
     e.preventDefault();
-
     socketN.emit("update_notification", item._id, item);
 
     // Update the state locally
@@ -94,44 +118,42 @@ const Notification = ({socketN, isConnected, userId}) => {
     });
   }
      
-  const handleFriendRequest = (e, item) => {
+  const handleFriendRequest = async (e, item, type) => {
     e.preventDefault();
+    setConfirmLoading(true);
 
-    const notificationData = {
-          type: "friend_request_accept",
-          subject: "Accepted your friend request",
-          subjectPhoto: profile?.data?.photo,
-          invokedByName: profile?.data?.userName,
-          invokedById: profile?.data?._id,
-          receivedByName: item.invokedByName,
-          receivedById: item.invokedById, 
-          route: `profile/${profile?.data?._id}`
-    }
+    // const data = {
+    //     type: type,
+    //     from: profile?.data?._id,
+    //     to: item.invokedById
+    // }
 
-    //Send message to server
-    socketN.emit("send_notification", notificationData);
+    // const result = await handleFriendRequestHook(data, item);
 
-    const updatadData = {
-      type: "friend_request_accept", 
-      subject: `You're now friend with ${item.invokedByName}`, 
-      invokedByName: "Request Accepted"
-    }
+    // if(result.success){
+    //     setConfirmLoading(false);
+    //     const updatadData = {
+    //       type: "friend_request_accept", 
+    //       subject: `Is your friend now`, 
+    //       invokedByName: item.invokedByName
+    //     }
+        
+    //     // Update the database on server
+    //     socketN.emit("update_notification", item._id, updatadData);
     
-    // Update the database on server
-    socketN.emit("update_notification", item._id, updatadData);
-
-    // Update the state locally
-    setNotyfReceived((notifications) => {
-      const updatedNotifications = notifications.map((notification) => {
-        if (notification._id === item._id) {
-          return  { ...notification, 
-                    ...updatadData
-                  };
-        }
-        return notification;
-      });
-      return updatedNotifications;
-    });
+    //     // Update the state locally
+    //     setNotyfReceived((notifications) => {
+    //       const updatedNotifications = notifications.map((notification) => {
+    //         if (notification._id === item._id) {
+    //           return  { ...notification, 
+    //                     ...updatadData
+    //                   };
+    //         }
+    //         return notification;
+    //       });
+    //       return updatedNotifications;
+    //     });
+    // }
   };
 
   const handleFollowRequest = (e, item) => {
@@ -175,10 +197,10 @@ const Notification = ({socketN, isConnected, userId}) => {
   };
 
   const [initLoading, setInitLoading] = useState(true);
+  const itemLimit = 5; // Number of items to display initially
   const [data, setData] = useState([]);
   const [isLoadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
-  const itemLimit = 5; // Number of items to display initially
   const containerRef = useRef(null);
 
   useEffect(() => {
@@ -245,9 +267,11 @@ const Notification = ({socketN, isConnected, userId}) => {
           <List.Item
             actions={
               isLoadingMore ? null :
-                item.type === 'friend_request' || item.type === 'team_invite' ?  
+                item.type === 'friend_request_send' || item.type === 'team_invite' ?  
+                confirmLoading ? [<LoadingOutlined/>] :
                 [
-                  <i className="fas fa-check check me-3" onClick={(e) => {e.stopPropagation(); handleFriendRequest(e, item)}}></i>,
+                  // <CheckCircleOutlined/>,
+                  <i className="fas fa-check check me-3" onClick={(e) => {e.stopPropagation(); handleFriendRequest(e, item, 'friend_request_accept')}}></i>,
                   <i className="fas fa-close close" onClick={(e) => {e.stopPropagation(); handleDelete(e, item._id)}}></i>,
                 ] : 
                 item.type === 'follow_request' ? 

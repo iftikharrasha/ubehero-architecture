@@ -105,12 +105,49 @@ const profileSlice = createSlice({
         },
         addGameAccount: (state, action) => {
             state.data.gameAccounts.push(action.payload);
-            // const index = state.data.gameAccounts.findIndex(t => t._id === action.payload._id)
-            // if(index === -1){
-            //     state.data.gameAccounts[0] = action.payload;
-            // }else{
-            //     state.data.gameAccounts.push(action.payload);
-            // }
+        },
+        addIntoFriendQueue: (state, action) => {
+            const { from, to, type } = action.payload;
+      
+            switch (type) {
+                case 'friend_request_send':
+                    if (!state.data.requests.friend.sent.includes(to)) {
+                        state.data.requests.friend.sent.push(to);
+                    }
+                    break;
+                case 'friend_request_accept':
+                    state.data.requests.friend.pending = state.data.requests.friend.pending.filter(id => id !== to);
+                    if (!state.data.requests.friend.mutuals.includes(to)) {
+                        state.data.requests.friend.mutuals.push(to);
+                    }
+                    break;
+                case 'friend_request_reject':
+                    state.data.requests.friend.pending = state.data.requests.friend.pending.filter(id => id !== to);
+                    break;
+                case 'friend_request_unfriend':
+                    state.data.requests.friend.mutuals = state.data.requests.friend.mutuals.filter(id => id !== to);
+                    break;
+                default:
+                    // Handle unknown types or do nothing
+                    break;
+            }
+        },
+        addToPendingFriendList: (state, action) => {
+            const id = action.payload;
+  
+            // Check if the ID is not already in the pending array
+            if (!state.data.requests.friend.pending.includes(id)) {
+                state.data.requests.friend.pending.push(id);
+            }
+        },
+        addToMutualFriendList: (state, action) => {
+            const from = action.payload;
+  
+            state.data.requests.friend.pending = state.data.requests.friend.pending.filter(id => id !== from);
+            // Check if the ID is not already in the pending array
+            if (!state.data.requests.friend.mutuals.includes(from)) {
+                state.data.requests.friend.mutuals.push(from);
+            }
         },
     },
     extraReducers: (builder) => {
@@ -137,5 +174,5 @@ const profileSlice = createSlice({
     },
 });
 
-export const { setLogIn, setLogOut, setRoute, setRole, setPurchasedItem, addGameAccount } = profileSlice.actions;
+export const { setLogIn, setLogOut, setRoute, setRole, setPurchasedItem, addGameAccount, addIntoFriendQueue, addToPendingFriendList, addToMutualFriendList } = profileSlice.actions;
 export default profileSlice.reducer;

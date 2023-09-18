@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Card, Button, Progress, Typography, Tag, Row, Space, Avatar, List, Breadcrumb } from 'antd';
-import { MessageOutlined, CoffeeOutlined, StarOutlined, TrophyOutlined, SyncOutlined, UserOutlined, UsergroupAddOutlined, ProjectOutlined, PartitionOutlined, FlagOutlined, ApiOutlined } from '@ant-design/icons';
+import { MessageOutlined, CoffeeOutlined, StarOutlined, TrophyOutlined, SyncOutlined, UserOutlined, UsergroupAddOutlined, ProjectOutlined, PartitionOutlined, FlagOutlined, ApiOutlined, CrownOutlined } from '@ant-design/icons';
 import useAuth from '../../hooks/useAuth';
 
 const { Meta } = Card;
@@ -107,17 +107,8 @@ const TournamentSide = ({ref1TSummery1, ref1TSummery2, ref1TSummery3, isLoggedIn
                             avatar={<TrophyOutlined style={{ fontSize: '30px' }} />}
                             title={<h4>50$ PRIZE POOL</h4>}
                         />
-                        <div style={{ fontSize: '16px' }} >
-                            <IconText icon={settings.mode === 'solo' ? UserOutlined : UsergroupAddOutlined} text={<p className='card-text'>Entry Mode: {settings.mode}</p>} key="list-vertical-like-o" />
-                        </div>
                         <div style={{ fontSize: '16px' }}>
                             <IconText icon={settings.competitionMode === 'ladder' ? ProjectOutlined : PartitionOutlined} text={<p className='card-text'>Competition Mode: {settings.competitionMode}</p>} key="list-vertical-like-o" />
-                        </div>
-                        <div style={{ fontSize: '16px' }}>
-                            <IconText icon={FlagOutlined} text={<p className='card-text'>Region: {tournament.region}</p>} key="list-vertical-star-o" />
-                        </div>
-                        <div style={{ fontSize: '16px' }}>
-                            <IconText icon={StarOutlined} text={<p className='card-text'>Joined: {totalJoined}/{tournament?.settings?.maxParticipitant}</p>} key="list-vertical-star-o" />
                         </div>
                         <div style={{ fontSize: '16px' }}>
                             <IconText icon={ApiOutlined} 
@@ -125,13 +116,22 @@ const TournamentSide = ({ref1TSummery1, ref1TSummery2, ref1TSummery3, isLoggedIn
                             text={
                             <p className='card-text'>
                                 <span>
-                                    <Breadcrumb>Platforms:&nbsp;&nbsp;
+                                    <Breadcrumb style={{ color: 'white', fontSize: '16px' }}>Platforms:&nbsp;&nbsp;
                                         {platforms.map((item, index) => (
                                             <Breadcrumb.Item key={item.key}>{item}</Breadcrumb.Item>
                                         ))}
                                     </Breadcrumb>
                                 </span>
                             </p>}/>
+                        </div>
+                        <div style={{ fontSize: '16px' }} >
+                            <IconText icon={settings.mode === 'solo' ? UserOutlined : UsergroupAddOutlined} text={<p className='card-text'>Entry Mode: {settings.mode}</p>} key="list-vertical-like-o" />
+                        </div>
+                        <div style={{ fontSize: '16px' }}>
+                            <IconText icon={FlagOutlined} text={<p className='card-text'>Region: {tournament.region}</p>} key="list-vertical-star-o" />
+                        </div>
+                        <div style={{ fontSize: '16px' }}>
+                            <IconText icon={StarOutlined} text={<p className='card-text'>Joined: {totalJoined}/{tournament?.settings?.maxParticipitant}</p>} key="list-vertical-star-o" />
                         </div>
                     </List.Item>
                 </List>
@@ -158,7 +158,7 @@ const TournamentSide = ({ref1TSummery1, ref1TSummery2, ref1TSummery3, isLoggedIn
                 >
                 <Meta
                     avatar={<Avatar src={tournament.masterProfile.photo} />}
-                    title={tournament.masterProfile.userName}
+                    title={<h6><CrownOutlined style={{ fontSize: '16px', color: 'gold' }}/> {tournament.masterProfile.userName}</h6>}
                     description={`Master of the tournament`}
                 />
             </Card>

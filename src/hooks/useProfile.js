@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from 'axios';
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { setLogIn, setRoute, addGameAccount } from "../redux/slices/profileSlice";
+import { setLogIn, setRoute, addGameAccount, addIntoFriendQueue } from "../redux/slices/profileSlice";
 import useNotyf from "./useNotyf";
 
 const useProfile = () => {
@@ -32,7 +32,6 @@ const useProfile = () => {
     }
 
     const handleGameAccountAdd = async (data) => {
-        console.log(data)
         let config = {}
 
         if(profile.signed_in){
@@ -70,7 +69,7 @@ const useProfile = () => {
         }
     }
 
-    const handleFriendRequest = async (data, popupUser) => {
+    const handleFriendRequestHook = async (data, receiver) => {
         let config = {}
 
         if(profile.signed_in){
@@ -82,27 +81,45 @@ const useProfile = () => {
             const response = await axios.post(`${process.env.REACT_APP_API_LINK}/api/v1/account/friend/${data.from}`, data, config);
             
             if(response.data.status === 200){
-                const notificationData = {
-                    type: "friend_request_send",
-                    subject: "Sent you a friend request",
-                    subjectPhoto: profile?.data?.photo,
-                    invokedByName: profile?.data?.userName,
-                    invokedById: profile?.data?._id,
-                    receivedByName: popupUser.userName,
-                    receivedById: popupUser.key, 
-                    route: `profile/${profile?.data?._id}`
+                let notificationData = null;
+                switch (data.type) {
+                    case 'friend_request_send':
+                        notificationData = {
+                            type: data.type,
+                            subject: "Sent you a friend request",
+                            subjectPhoto: profile?.data?.photo,
+                            invokedByName: profile?.data?.userName,
+                            invokedById: profile?.data?._id,
+                            receivedByName: receiver.userName,
+                            receivedById: receiver.key, 
+                            route: `profile/${profile?.data?._id}`
+                        }
+                        // Send message to server
+                        socketN.emit("send_notification", notificationData);
+                        break;
+                    case 'friend_request_accept':
+                        notificationData = {
+                            type: data.type,
+                            subject: "Accepted your friend request",
+                            subjectPhoto: profile?.data?.photo,
+                            invokedByName: profile?.data?.userName,
+                            invokedById: profile?.data?._id,
+                            receivedByName: receiver.invokedByName,
+                            receivedById: receiver.invokedById, 
+                            route: `profile/${profile?.data?._id}`
+                        }
+                        // Send message to server
+                        socketN.emit("send_notification", notificationData);
+                        break;
+                    default:
+                        // Handle unknown types or do nothing
+                        break;
                 }
-        
-                // Send message to server
-                socketN.emit("send_notification", notificationData);
                 setErrorMessage(null);
-
-                //also add to redux user profile
-                // dispatch(addGameAccount(response.data.data));
+                dispatch(addIntoFriendQueue(response.data.data));
             }else{
                 setErrorMessage(response.data.error.message);
             }
-            console.log(response.data);
             return response.data
         } catch (error) {
             console.log(error);
@@ -140,7 +157,7 @@ const useProfile = () => {
         handleSwitchProfile,
         handleProfileDraftUpdate,
         handleGameAccountAdd,
-        handleFriendRequest,
+        handleFriendRequestHook,
     }
 }
 

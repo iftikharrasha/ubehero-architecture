@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import { Table, Input, Space, Button, Popover, Tag } from 'antd';
-import { SearchOutlined, CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
+import { SearchOutlined } from '@ant-design/icons';
 import UserPopup from "../../Common/UserPopup/UserPopup";
 
 const Leaderboards = ({leaderboards}) => {
@@ -60,7 +60,7 @@ const Leaderboards = ({leaderboards}) => {
               className="rounded-circle"
             />
             <div className="ms-3">
-              <p className="fw-bold mb-0">{record.userName} {record.emailVerified ? <CheckCircleOutlined /> : <CloseCircleOutlined />}</p>
+              <p className="fw-bold mb-0">{record.userName}</p>
               {/* <p className="mb-0">Country: {record.country}</p> */}
               <p className="mb-0">
                 <img
@@ -149,8 +149,8 @@ const Leaderboards = ({leaderboards}) => {
     xp: item.gamer?.stats?.totalXp,
     levelTitle: item.gamer?.stats?.levelTitle,
     currentLevel: item.gamer?.stats?.currentLevel,
-    noOfFollowers: item.gamer?.requests?.followers.length,
-    noOfFollowings: item.gamer?.requests?.followings.length,
+    noOfFollowers: item.gamer?.requests?.follow?.follower?.length,
+    noOfFriends: item.gamer?.requests?.friend?.mutuals?.length,
     playerIgn: item.gameAccount?.playerIgn,
     accountLogo: item.gameAccount?.accountLogo,
   }));

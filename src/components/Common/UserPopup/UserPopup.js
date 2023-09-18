@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import InboxContext from '../../../Contexts/InboxContext/InboxContext';
 import useNotyf from '../../../hooks/useNotyf';
 import { Button, Avatar, Card,  Row, Col, Typography } from 'antd';
-import { MessageOutlined } from '@ant-design/icons';
+import { MessageOutlined, PlusCircleOutlined, CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import useProfile from '../../../hooks/useProfile';
 
 const { Meta } = Card;
@@ -13,22 +13,25 @@ const { Paragraph } = Typography;
 
 const UserPopup = ({popupUser}) => {
     const profile = useSelector((state) => state.profile)
+    const requests = profile.data.requests;
     const jwt = localStorage.getItem("jwt");
-    const { handleFriendRequest } = useProfile();
+    const { handleFriendRequestHook } = useProfile();
     const [confirmLoading, setConfirmLoading] = useState(false);
+    console.log('requests', requests?.friend?.mutuals.includes(popupUser.key))
+    // console.log('requests', requests?.friend?.mutuals.includes(popupUser.key))
+    // console.log('requests', requests?.friend?.mutuals.includes(popupUser.key))
 
     const { socketN } = useNotyf(profile.data, jwt);
     
-    const sendFriendRequest = async () => {
+    const handleFriendRequest = async (type) => {
         setConfirmLoading(true);
         const data = {
-            type: 'friend_request_send',
+            type: type,
             from: profile?.data?._id,
             to: popupUser.key
         }
-        console.log(data);
 
-        const result = await handleFriendRequest(data, popupUser);
+        const result = await handleFriendRequestHook(data, popupUser);
         console.log(result);
         if(result.success){
             setConfirmLoading(false);
@@ -70,23 +73,29 @@ const UserPopup = ({popupUser}) => {
                 <Row justify="center" align="middle">
                     {/* <MessageOutlined style={{ fontSize: '16px' }} />
                     <span className="ps-1" style={{ fontSize: '12px' }}>CHAT</span> */}
-                    <Button icon={<MessageOutlined  style={{ marginBottom: "6px" }}/>} style={{ fontSize: '12px' }} onClick={handleInboxPop}>CHAT</Button>
+                    <Button icon={<MessageOutlined  style={{ marginBottom: "6px" }}/>} style={{ fontSize: '12px' }} onClick={handleInboxPop} size='small'>CHAT</Button>
                 </Row>,
                 <Row justify="center" align="middle">
                     {/* <EditOutlined key="edit"  style={{ fontSize: '16px' }}/>
                     <span className="ps-1" style={{ fontSize: '12px' }}>FOLLOW</span> */}
-                    <Button type="primary" onClick={sendFollowRequestNotyf}>FOLLOW</Button>
+                    <Button type="primary" onClick={sendFollowRequestNotyf} size='small' style={{ fontSize: '12px' }}>FOLLOW</Button>
                 </Row>,
                 <Row justify="center" align="middle">
-                    {/* <CoffeeOutlined key="ellipsis" style={{ fontSize: '16px' }}/>,
-                    <span className="ps-1" style={{ fontSize: '12px' }}>ADD</span> */}
-                    <Button type="primary" onClick={sendFriendRequest} loading={confirmLoading}>ADD</Button>
+                    {
+                        requests && requests?.friend?.mutuals.includes(popupUser.key) ?
+                        <Button size='small' style={{ fontSize: '12px' }} disabled>FRIEND</Button> : 
+                        requests && requests?.friend?.sent.includes(popupUser.key) ?
+                        <Button size='small' style={{ fontSize: '12px' }} disabled>PENDING</Button> :
+                        requests && requests?.friend?.pending.includes(popupUser.key) ? 
+                        <Button icon={<PlusCircleOutlined  style={{ marginBottom: "6px" }}/>} type="primary" size='small' style={{ fontSize: '12px' }} onClick={() => handleFriendRequest('friend_request_accept')} loading={confirmLoading}>ACCEPT</Button> :
+                        <Button icon={<PlusCircleOutlined  style={{ marginBottom: "6px" }}/>} type="primary" onClick={() => handleFriendRequest('friend_request_send')} loading={confirmLoading} size='small' style={{ fontSize: '12px' }}>ADD</Button>
+                    }
                 </Row>
             ]}
             >
             <Meta
                 avatar={<Avatar src={popupUser.photo} />}
-                title={popupUser.userName}
+                title={<h6>{popupUser.userName} {popupUser.emailVerified ? <CloseCircleOutlined /> : <CheckCircleOutlined style={{ color: '#52c41a', fontSize: '12px' }}/>}</h6>}
                 description={`Joined ${moment(popupUser.joined).format('ll')}`}
             />
             <Row gutter={[16, 16]} className="pt-3">
@@ -102,7 +111,7 @@ const UserPopup = ({popupUser}) => {
                 <Card bordered={false} className="popBody">
                     <Row justify="center" align="middle" style={{flexDirection: 'column'}}>
                     <Paragraph className="mb-0">Follower</Paragraph>
-                    <Paragraph className="mb-0">{popupUser.noOfFollowers}</Paragraph>
+                    <Paragraph className="mb-0">{popupUser.noOfFollowers ? popupUser.noOfFollowers : 0}</Paragraph>
                     </Row>
                 </Card>
                 </Col>
@@ -110,7 +119,7 @@ const UserPopup = ({popupUser}) => {
                 <Card bordered={false} className="popBody">
                     <Row justify="center" align="middle" style={{flexDirection: 'column'}}>
                     <Paragraph className="mb-0">Friends</Paragraph>
-                    <Paragraph className="mb-0">{popupUser.noOfFollowings}</Paragraph>
+                    <Paragraph className="mb-0">{popupUser.noOfFriends ? popupUser.noOfFriends : 0}</Paragraph>
                     </Row>
                 </Card>
                 </Col>
