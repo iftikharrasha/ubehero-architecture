@@ -65,7 +65,7 @@ const TournamentStage = ({ compMode, currentMatch, finalMatch, setRouteKey, tour
     };
 
     return (
-        <div className='mb-4'>
+        <div className='mb-4 tournamentStage'>
             <Card >
                 <Meta
                     title={

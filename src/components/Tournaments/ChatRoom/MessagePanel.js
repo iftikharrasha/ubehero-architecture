@@ -4,13 +4,15 @@ import { useRef } from 'react';
 import msg from '../../../sounds/msg.mp3';
 import bot from '../../../sounds/bot.mp3';
 import typing from '../../../sounds/typing.mp3';
-import { Card } from 'antd';
+import { Card, Steps } from 'antd';
+import useTimer from '../../../hooks/useTimer';
 
-const MessagePanel = ({socket, tournamentDetails, profile, routeKey, unreadCound, setUnreadCount}) => {
+const MessagePanel = ({socket, tournament, profile, routeKey, unreadCound, setUnreadCount}) => {
+    const { step } = useTimer(tournament.dates);
     const [messagesRecieved, setMessagesReceived] = useState([]);
     const [sound, setSound] = useState(null);
 
-    const { _id, tournamentName, tournamentThumbnail } = tournamentDetails;
+    const { _id, tournamentName, tournamentThumbnail } = tournament;
 
      // Runs whenever a socket event is recieved from the server
     useEffect(() => {
@@ -80,37 +82,61 @@ const MessagePanel = ({socket, tournamentDetails, profile, routeKey, unreadCound
     return (
         <div className="chat">
             <div className="chat-history" ref={messagesColumnRef}>
-                <ul className="m-b-0">
-                    {
-                        messagesRecieved.map((item, index) => (
-                            <li className={item.senderName.toLowerCase() === profile?.data?.userName ? "text-right" : "text-left"} key={index}>
-                                <div className="message-data">
-                                    <img src={item.senderPhoto} alt="avatar"/> {item.senderName} 
-                                    {
-                                        item.senderName.toLowerCase() === profile?.data?.userName ? null : 
-                                            item.senderPermissions ? 
-                                                item.senderPermissions.includes("master") ? " (MASTER)" :
-                                                            null
-                                            : null
-                                    }
-                                </div>
-                                <div className={
-                                        item.senderName.toLowerCase() === profile?.data?.userName ? "message my-message" : 
+                <Steps
+                    progressDot
+                    current={step - 1}
+                    direction="vertical"
+                    items={[
+                        {
+                            title: step > 1 ? 'Registration Closed': 'Registration Open' ,
+                            status: step > 1 ? 'finish': null,
+                            // description: step > 1 ? `${moment(tournament.dates?.registrationEnd).format('lll')}` : `Till ${moment(tournament.dates?.registrationEnd).format('lll')}`,
+                        },
+                        {
+                            title: 'Preparation Started',
+                            description: 
+                            <ul className="m-b-0">
+                            {
+                                messagesRecieved.map((item, index) => (
+                                    <li className={item.senderName.toLowerCase() === profile?.data?.userName ? "text-right" : "text-left"} key={index}>
+                                        <div className="message-data">
+                                            <img src={item.senderPhoto} alt="avatar"/> {item.senderName} 
+                                            {
+                                                item.senderName.toLowerCase() === profile?.data?.userName ? null : 
                                                     item.senderPermissions ? 
-                                                        item.senderPermissions.includes("master") ? "message other-message master" :
-                                                                    "message other-message"
-                                        : "message other-message bot"
-                                }
-                                >
-                                    <Card>
-                                        <p>{item.message}</p>
-                                        <span>{moment(item.createdAt).fromNow()}</span>
-                                    </Card>
-                                </div>                                    
-                            </li>
-                        ))
-                    }
-                </ul>
+                                                        item.senderPermissions.includes("master") ? " (MASTER)" :
+                                                                    null
+                                                    : null
+                                            }
+                                        </div>
+                                        <div className={
+                                                item.senderName.toLowerCase() === profile?.data?.userName ? "message my-message" : 
+                                                            item.senderPermissions ? 
+                                                                item.senderPermissions.includes("master") ? "message other-message master" :
+                                                                            "message other-message"
+                                                : "message other-message bot"
+                                        }
+                                        >
+                                            <Card>
+                                                <p>{item.message}</p>
+                                                <span>{moment(item.createdAt).fromNow()}</span>
+                                            </Card>
+                                        </div>                                    
+                                    </li>
+                                ))
+                            }
+                            </ul>,
+                        },
+                        {
+                            title: 'Battle Started',
+                            // description: 'This is a description. This is a description.',
+                        },
+                        {
+                            title: 'Tournament Ended',
+                            // description: 'This is a description.',
+                        },
+                    ]}
+                />
             </div>
             <audio id="newMessageSound" src={sound} type="audio/mpeg"></audio>
         </div>

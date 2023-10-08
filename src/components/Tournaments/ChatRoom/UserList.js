@@ -2,26 +2,26 @@ import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 // import Tab from 'react-bootstrap/Tab';
 // import Tabs from 'react-bootstrap/Tabs';
-import PopupModal from '../../Common/PopupModal/PopupModal';
-import { Card, Row, Tabs } from 'antd';
+// import PopupModal from '../../Common/PopupModal/PopupModal';
+import { Card, Popover, Row, Tabs } from 'antd';
+import UserPopup from '../../Common/UserPopup/UserPopup';
 
 const { TabPane } = Tabs;
 
 const UserList = ({socket, leaderboards}) => {
     const [roomUsers, setRoomUsers] = useState([]);
-    console.log(roomUsers)
     
     //for popup
-    const [popupUser, setPopupUser] = useState(null);
-    const [show, setShow] = useState(false);
-    const handleClose = () => {
-        setPopupUser(null)
-        setShow(false)
-    };
-    const handleShow = (user) => {
-        setPopupUser(user)
-        setShow(true)
-    };
+    // const [popupUser, setPopupUser] = useState(null);
+    // const [show, setShow] = useState(false);
+    // const handleClose = () => {
+    //     setPopupUser(null)
+    //     setShow(false)
+    // };
+    // const handleShow = (user) => {
+    //     setPopupUser(user)
+    //     setShow(true)
+    // };
 
     useEffect(() => {
         socket.on("chatroom_users", (data) => {
@@ -48,23 +48,18 @@ const UserList = ({socket, leaderboards}) => {
             >
                 <div id="plist" className="people-list px-1">
                     <ul className="list-unstyled chat-list mb-0">
-                        {/* <li className="clearfix active mb-1">
-                            <img src="https://img.freepik.com/free-vector/cute-cat-gaming-cartoon_138676-2969.jpg" alt="avatar"/>
-                            <div className="about">
-                                <div className="name"><i className="fa fa-circle online"></i> ChatBot</div>
-                                <div className="status">Joined a few seconds ago </div>                                            
-                            </div>
-                        </li> */}
                         {
                             roomUsers.map((participant, index) => (
-                                <li className="clearfix active mb-1" key={index} onClick={(e) => handleShow(participant)}>
-                                    <Card>
-                                        <span className="avatarUser"><img src={participant.photo} alt="avatar"/></span>
-                                        <div className="about">
-                                            <div className="name"><i className="fa fa-circle online"></i> {participant.userName}</div>
-                                            <div className="status">Joined {moment(participant.createdAt).fromNow()} </div>                                            
-                                        </div>
-                                    </Card>
+                                <li className="clearfix active mb-1" key={index}>
+                                    <Popover placement="topLeft" content={<UserPopup popupUser={participant}/>}>
+                                        <Card>
+                                            <span className="avatarUser"><img src={participant.photo} alt="avatar"/></span>
+                                            <div className="about">
+                                                <div className="name"><i className="fa fa-circle online"></i> {participant.userName}</div>
+                                                <div className="status">Joined {moment(participant.createdAt).fromNow()} </div>                                            
+                                            </div>
+                                        </Card>
+                                    </Popover>
                                 </li>
                             ))
                         }
@@ -83,14 +78,16 @@ const UserList = ({socket, leaderboards}) => {
                     <ul className="list-unstyled chat-list mb-0">
                         {
                             leaderboards.map((participant, index) => (
-                                <li className="clearfix active mb-1" key={index} onClick={(e) => handleShow(participant.gamer)}>
-                                    <Card>
-                                        <span className="avatarUser"><img src={participant.gamer.photo} alt="avatar"/></span>
-                                        <div className="about">
-                                            <div className="name"><i className={`fa fa-circle ${isUserOnline(participant.gamer) ? 'online' : 'offline'}`}></i> {participant.gamer.userName}</div>
-                                            <div className="status">{`${isUserOnline(participant.gamer) ? 'Online' : 'offline'}`}</div>                                            
-                                        </div>
-                                    </Card>
+                                <li className="clearfix active mb-1" key={index}>
+                                    <Popover placement="topLeft" content={<UserPopup popupUser={participant.gamer}/>}>
+                                        <Card>
+                                            <span className="avatarUser"><img src={participant.gamer.photo} alt="avatar"/></span>
+                                            <div className="about">
+                                                <div className="name"><i className={`fa fa-circle ${isUserOnline(participant.gamer) ? 'online' : 'offline'}`}></i> {participant.gamer.userName}</div>
+                                                <div className="status">{`${isUserOnline(participant.gamer) ? 'Online' : 'offline'}`}</div>                                            
+                                            </div>
+                                        </Card>
+                                    </Popover>
                                 </li>
                             ))
                         }
@@ -98,56 +95,9 @@ const UserList = ({socket, leaderboards}) => {
                 </div>
             </TabPane>
         </Tabs>
-        {/* <Tabs
-            defaultActiveKey="online"
-            id="uncontrolled-tab-example"
-            className="mb-3"
-        >
-            <Tab eventKey="online" title={`Online (${roomUsers.length + 1})`}>
-                <div id="plist" className="people-list px-1">
-                    <ul className="list-unstyled chat-list mb-0">
-                        <li className="clearfix active mb-1">
-                            <img src="https://img.freepik.com/free-vector/cute-cat-gaming-cartoon_138676-2969.jpg" alt="avatar"/>
-                            <div className="about">
-                                <div className="name"><i className="fa fa-circle online"></i> ChatBot</div>
-                                <div className="status">Joined a few seconds ago </div>                                            
-                            </div>
-                        </li>
-                        {
-                            roomUsers.map((participant, index) => (
-                                <li className="clearfix active mb-1" key={index} onClick={(e) => handleShow(participant)}>
-                                    <span className="avatarUser"><img src={participant.photo} alt="avatar"/></span>
-                                    <div className="about">
-                                        <div className="name"><i className="fa fa-circle online"></i> {participant.userName}</div>
-                                        <div className="status">Joined {moment(participant.createdAt).fromNow()} </div>                                            
-                                    </div>
-                                </li>
-                            ))
-                        }
-                    </ul>
-                </div>
-            </Tab>
-            <Tab eventKey="participants" title={`Participants (${leaderboards.length})`}>
-                <div id="plist" className="people-list px-1">
-                    <ul className="list-unstyled chat-list mb-0">
-                        {
-                            leaderboards.map((participant, index) => (
-                                <li className="clearfix active mb-1" key={index} onClick={(e) => handleShow(participant)}>
-                                    <span className="avatarUser"><img src={participant.photo} alt="avatar"/></span>
-                                    <div className="about">
-                                        <div className="name"><i className={`fa fa-circle ${isUserOnline(participant) ? 'online' : 'offline'}`}></i> {participant.userName}</div>
-                                        <div className="status">{`${isUserOnline(participant) ? 'Online' : 'offline'}`}</div>                                            
-                                    </div>
-                                </li>
-                            ))
-                        }
-                    </ul>
-                </div>
-            </Tab>
-        </Tabs> */}
 
         {/* popup for user profile */}
-        <PopupModal show={show} handleClose={handleClose} popupUser={popupUser}/>
+        {/* <PopupModal show={show} handleClose={handleClose} popupUser={popupUser}/> */}
       </>
     );
 };

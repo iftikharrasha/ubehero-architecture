@@ -138,12 +138,12 @@ const Leaderboards = ({leaderboards}) => {
   ];
 
   const data = leaderboards.map((item, index) => ({
-    key: item.gamer?._id,
+    _id: item.gamer?._id,
     index: index + 1,
     userName: item.gamer?.userName,
     photo: item.gamer?.photo,
-    country: "BD",
-    joined: item.gamer?.createdAt,
+    country: item.gamer?.address?.country ? item.gamer?.address?.country : "BD",
+    createdAt: item.gamer?.createdAt,
     totalGamePlayed: item.gamer?.stats?.totalGamePlayed,
     wins: item.gamer?.stats?.totalWins,
     xp: item.gamer?.stats?.totalXp,

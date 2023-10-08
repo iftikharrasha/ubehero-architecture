@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { Card, Button, Progress, Typography, Tag, Row, Space, Avatar, List, Breadcrumb } from 'antd';
 import { MessageOutlined, CoffeeOutlined, StarOutlined, TrophyOutlined, SyncOutlined, UserOutlined, UsergroupAddOutlined, ProjectOutlined, PartitionOutlined, FlagOutlined, ApiOutlined, CrownOutlined } from '@ant-design/icons';
-import useAuth from '../../hooks/useAuth';
+import InboxContext from '../../Contexts/InboxContext/InboxContext';
 
 const { Meta } = Card;
 const { Paragraph } = Typography;
@@ -17,6 +17,12 @@ const IconText = ({ icon, text }) => (
 const TournamentSide = ({ref1TSummery1, ref1TSummery2, ref1TSummery3, isLoggedIn, userId, routeKey, tournament, totalJoined, purchasedItems, handleCancel, handleCheckout, step, buttonStatus, timeLeftPercent}) => {
     const { _id, settings, tournamentName, platforms } = tournament;
     const purchased = purchasedItems?.tournaments?.includes(_id);
+    
+    const { setShowInbox, setPopUser } = useContext(InboxContext);
+    const handleInboxPop = () => {
+        setPopUser(tournament.masterProfile);
+        setShowInbox(true);
+    };
 
     let sideStep;
     switch (step) {
@@ -149,7 +155,7 @@ const TournamentSide = ({ref1TSummery1, ref1TSummery2, ref1TSummery3, isLoggedIn
                 bordered
                 actions={!isLoggedIn ? null : tournament.masterProfile?._id === userId ? null : [
                     <Row justify="center" align="middle">
-                        <Button icon={<MessageOutlined  style={{ marginBottom: "6px" }}/>} style={{ fontSize: '12px' }}>CHAT</Button>
+                        <Button icon={<MessageOutlined  style={{ marginBottom: "6px" }}/>} style={{ fontSize: '12px' }} onClick={handleInboxPop}>CHAT</Button>
                     </Row>,
                     <Row justify="center" align="middle">
                         <Button icon={<CoffeeOutlined style={{ marginBottom: "6px" }}/>} style={{ fontSize: '12px' }}>FOLLOW</Button>

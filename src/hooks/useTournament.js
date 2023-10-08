@@ -98,7 +98,7 @@ const useTournament = () => {
             if(response.data.status === 200){
                 const notificationData = {
                     type: "tournament_draft_creation",
-                    subject: "You’ve created this tournament draft",
+                    subject: "You’ve created this draft",
                     subjectPhoto:"https://i.ibb.co/5FFYTs7/avatar.jpg",
                     invokedByName: data.tournamentName,
                     invokedById: "645b60abe95cd95bcfad6894",

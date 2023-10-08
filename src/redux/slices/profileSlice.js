@@ -149,6 +149,10 @@ const profileSlice = createSlice({
                 state.data.requests.friend.mutuals.push(from);
             }
         },
+        removeFromPendingFriendList: (state, action) => {
+            const from = action.payload;
+            state.data.requests.friend.pending = state.data.requests.friend.pending.filter(id => id !== from);
+        },
     },
     extraReducers: (builder) => {
         // Add reducers for additional action types here, and handle loading state as needed
@@ -174,5 +178,5 @@ const profileSlice = createSlice({
     },
 });
 
-export const { setLogIn, setLogOut, setRoute, setRole, setPurchasedItem, addGameAccount, addIntoFriendQueue, addToPendingFriendList, addToMutualFriendList } = profileSlice.actions;
+export const { setLogIn, setLogOut, setRoute, setRole, setPurchasedItem, addGameAccount, addIntoFriendQueue, addToPendingFriendList, addToMutualFriendList, removeFromPendingFriendList } = profileSlice.actions;
 export default profileSlice.reducer;

@@ -27,6 +27,7 @@ const Profile = () => {
 
     const [routeKey, setRouteKey] = useState('mystats');
     const [settingsRouteKey, setSettingsRouteKey] = useState('personal');
+    const [socialsRouteKey, setSocialsRouteKey] = useState('friends');
 
     const myTeams = useSelector((state) => state.myTeams.data)
     const versionTeams = useSelector((state) => state.myTeams.version)
@@ -46,7 +47,16 @@ const Profile = () => {
     const history = useHistory();
 
     useEffect(() => {
-        if (location.pathname.endsWith('teams')) {
+        if (location.pathname.endsWith('socials')) {
+          setRouteKey('socials');
+          setSocialsRouteKey('friends');
+        } else if (location.pathname.endsWith('friends')) {
+          setRouteKey('socials');
+          setSocialsRouteKey('friends');
+        } else if (location.pathname.endsWith('followers')) {
+          setRouteKey('socials');
+          setSocialsRouteKey('followers');
+        }  else if (location.pathname.endsWith('teams')) {
             setRouteKey('teams');
         } else if (location.pathname.endsWith('settings')) {
             setRouteKey('settings');
@@ -66,6 +76,15 @@ const Profile = () => {
       switch (key) {
         case 'mystats':
           history.push(`/profile/${id}`);
+          break;
+        case 'socials':
+          history.push(`/profile/${id}/socials`);
+          break;
+        case 'friends':
+          history.push(`/profile/${id}/friends`);
+          break;
+        case 'followers':
+          history.push(`/profile/${id}/followers`);
           break;
         case 'teams':
           history.push(`/profile/${id}/teams`);
@@ -164,20 +183,223 @@ const Profile = () => {
           type: 'default'
         },
     ];
-    /* */
+    
+    const badges = [
+      {
+        title: "captain",
+        icon: "https://res.cloudinary.com/duoalyur6/image/upload/v1696441978/Booster_Frame-6_aq0kta.png",
+        instruction: "when you create a team and recruited all the players",
+        level: 1,
+        completed: 0,
+        total: 5,
+        earned: 0,
+      },
+      {
+        title: "warlock",
+        icon: "https://res.cloudinary.com/duoalyur6/image/upload/v1696441977/Diamond_Spell_Specialist_a42lce.png",
+        instruction: "when you join a tournament which means you've annouced war",
+        level: 2,
+        completed: 10,
+        total: 5,
+        earned: 0,
+      },
+      {
+        title: "defender",
+        icon: "https://res.cloudinary.com/duoalyur6/image/upload/v1696441977/Gold_The_Collector_qb27ea.png",
+        instruction: "when you win or defend three battles in a row",
+        level: 3,
+        completed: 33,
+        total: 5,
+        earned: 0,
+      },
+      {
+        title: "kingsguard",
+        icon: "https://res.cloudinary.com/duoalyur6/image/upload/v1696441977/Booster_Frame-1_rmpdoh.png",
+        instruction: "when you successfully win the tournament as a team mate",
+        level: 5,
+        completed: 75,
+        total: 5,
+        earned: 0,
+      },
+      {
+        title: "knighthood",
+        icon: "https://res.cloudinary.com/duoalyur6/image/upload/v1696441977/Booster_Frame-7_giy05h.png",
+        instruction: "when you successfully win the tournament as a captain",
+        level: 0,
+        completed: 100,
+        total: 5,
+        earned: 0,
+      },
+      {
+        title: "kingslayer",
+        icon: "https://res.cloudinary.com/duoalyur6/image/upload/v1696519458/Bronze_Routine_Player_fmgpvs.png",
+        instruction: "when you finished as a runner up in a tournament",
+        level: 0,
+        completed: 0,
+        total: 5,
+        earned: 0,
+      },
+      {
+        title: "contender",
+        icon: "https://res.cloudinary.com/duoalyur6/image/upload/v1696441977/Booster_Frame-9_i66d9c.png",
+        instruction: "when you win three tournaments in a row",
+        level: 0,
+        completed: 0,
+        total: 5,
+        earned: 0,
+      },
+      {
+        title: "loyalist",
+        icon: "https://res.cloudinary.com/duoalyur6/image/upload/v1696441977/Booster_Frame-10_gwxe56.png",
+        instruction: "when you participate two tournaments with your team",
+        level: 0,
+        completed: 75,
+        total: 5,
+        earned: 0,
+      },
+      {
+        title: "specialist",
+        icon: "https://res.cloudinary.com/duoalyur6/image/upload/v1696441977/Booster_Frame-4_o0mzdn.png",
+        instruction: "when at least one of your teams has all the players added",
+        level: 0,
+        completed: 33,
+        total: 5,
+        earned: 0,
+      },
+      {
+        title: "booster",
+        icon: "https://res.cloudinary.com/duoalyur6/image/upload/v1696441977/Booster_Frame-8_w17u8p.png",
+        instruction: "when at least one of your teams has all the players added",
+        level: 0,
+        completed: 10,
+        total: 5,
+        earned: 0,
+      },
+      {
+        title: "dedicated",
+        icon: "https://res.cloudinary.com/duoalyur6/image/upload/v1696441977/Diamond_Star_Selector_samusd.png",
+        instruction: "when at least one of your teams has all the players added",
+        level: 0,
+        completed: 100,
+        total: 5,
+        earned: 0,
+      },
+      {
+        title: "reactor",
+        icon: "https://res.cloudinary.com/duoalyur6/image/upload/v1696441977/Diamond_Superhost_bwvtek.png",
+        instruction: "when at least one of your teams has all the players added",
+        level: 0,
+        completed: 0,
+        total: 5,
+        earned: 0,
+      },
+      {
+        title: "popular",
+        icon: "https://res.cloudinary.com/duoalyur6/image/upload/v1696441977/Booster_Frame_i5qkpt.png",
+        instruction: "when you gain 500 followers withing our gaming community",
+        level: 0,
+        completed: 50,
+        total: 5,
+        earned: 0,
+      },
+      {
+        title: "grand maester",
+        icon: "https://res.cloudinary.com/duoalyur6/image/upload/v1696519458/Gold_Superhost_lni5br.png",
+        instruction: "when you collaborate with the master and master decides to reward you",
+        level: 0,
+        completed: 75,
+        total: 5,
+        earned: 0,
+      },
+      {
+        title: "gaming machine",
+        icon: "https://res.cloudinary.com/duoalyur6/image/upload/v1696519458/Gold_Star_Selector_q9umt7.png",
+        instruction: "when you play at least three different games within our platform",
+        level: 0,
+        completed: 100,
+        total: 5,
+        earned: 0,
+      },
+      {
+        title: "patriot",
+        icon: "https://res.cloudinary.com/duoalyur6/image/upload/v1696519458/Booster_bag_shmoc0.png",
+        instruction: "when you win at least one country based tournament",
+        level: 0,
+        completed: 0,
+        total: 5,
+        earned: 0,
+      },
+    ]
+
+    const gameStats = [
+      {
+        category: "FIFA",
+        img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgawCVKb4ZCy_2whtPFbMsKifk95urcBKgF1UiW2PF50YuxbpIg-s64MVOK4UGp1wE4Qk&usqp=CAU",
+        played: 0,
+        win: 0,
+        defeat: 0,
+      },
+      {
+        category: "PUBG",
+        img: "https://cdn.exputer.com/wp-content/uploads/2022/07/PUBG-Patch-18.2-Adds-More-Graphical-Options-For-Next-Gen-Consoles.jpg.webp",
+        played: 0,
+        win: 0,
+        defeat: 0,
+      },
+      {
+        category: "WARZONE",
+        img: "https://e24reactor-s3-bucket.s3.amazonaws.com/images/tournaments/5442ff27-ed75-49c8-a2c9-6631f34264e2-download.jpg",
+        played: 0,
+        win: 0,
+        defeat: 0,
+      },
+      {
+        category: "CSGO",
+        img: "https://i.pinimg.com/originals/7b/23/2c/7b232ccb015d9c21143b6ccd67038e63.jpg",
+        played: 0,
+        win: 0,
+        defeat: 0,
+      },
+      {
+        category: "FREEFIRE",
+        img: "https://d.newsweek.com/en/full/1987539/garena-free-fire-keyart.webp?w=1600&h=900&q=88&f=e35a53dbb53ee0455d23e0afef5da942",
+        played: 0,
+        win: 0,
+        defeat: 0,
+      },
+      {
+        category: "ROCKET LEAGUE",
+        img: "https://variety.com/wp-content/uploads/2020/07/rocket-league.jpg?w=1000&h=563&crop=1&resize=1000%2C563",
+        played: 0,
+        win: 0,
+        defeat: 0,
+      },
+      {
+        category: "CLASH CLANS",
+        img: "https://media.newyorker.com/photos/590977c9019dfc3494ea2f7f/master/w_2560%2Cc_limit/Johnston-Clash-Clans.jpg",
+        played: 0,
+        win: 0,
+        defeat: 0,
+      },
+      {
+        category: "CLASH ROYALE",
+        img: "https://www.touchtapplay.com/wp-content/uploads/2016/03/how-to-fix-clash-royale-connection-problems.jpg?fit=1000%2C592",
+        played: 0,
+        win: 0,
+        defeat: 0,
+      },
+    ]
 
     return (
         <PageLayout>
             {
                 userDetails ? 
-                <>
-                    <ProfileTop 
-                        ref3ProfilePic={ref3ProfilePic} 
-                        ref4CoverPhoto={ref4CoverPhoto} 
-                        profile={userDetails} 
-                    />
+                <div className='profile'>
+                  {/* <div className='profileBg'>
+                      <img src='https://res.cloudinary.com/duoalyur6/image/upload/v1695208606/MOSHED-2023-9-20-17-12-57_i7hti1.gif' alt="cover" />
+                  </div> */}
                     <Row>
-                        <Col span={4}>
+                        <Col span={5}>
                             <ProfileSide 
                                 ref1TSummery1={ref1TSummery1}
                                 ref1TSummery2={ref1TSummery2}
@@ -186,20 +408,29 @@ const Profile = () => {
                                 profile={userDetails} 
                             />
                         </Col>
-                        <Col span={19} offset={1}>
+                        <Col span={18} offset={1}>
+                            <ProfileTop 
+                                ref3ProfilePic={ref3ProfilePic} 
+                                ref4CoverPhoto={ref4CoverPhoto} 
+                                profile={userDetails} 
+                                badges={badges}
+                            />
                             <ProfileBottom
                                 ref2GamingStats={ref2GamingStats} 
                                 ref2Teams={ref2Teams} 
                                 ref2Settings={ref2Settings}
                                 routeKey={routeKey} 
                                 settingsRouteKey={settingsRouteKey}
+                                socialsRouteKey={socialsRouteKey}
                                 handleTabChange={handleTabChange}
                                 profile={userDetails}
                                 myTeams={myTeams}
+                                badges={badges}
+                                gameStats={gameStats}
                             />
                         </Col>
                     </Row>
-                </>
+                </div>
                 : <Preloader />
             }
 

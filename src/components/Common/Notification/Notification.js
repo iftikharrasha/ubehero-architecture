@@ -1,15 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Badge, List, Popover, Skeleton, Button } from 'antd';
+import { Badge, List, Popover, Skeleton, Button, Avatar } from 'antd';
 import { BellOutlined, CheckCircleOutlined, LoadingOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import useProfile from '../../../hooks/useProfile';
-import { addToPendingFriendList, addToMutualFriendList } from "../../../redux/slices/profileSlice";
+import { addToPendingFriendList, addToMutualFriendList, removeFromPendingFriendList } from "../../../redux/slices/profileSlice";
 
 const Notification = ({socketN, isConnected, userId}) => {
   const [notyfReceived, setNotyfReceived] = useState([]);
   const profile = useSelector(state => state.profile);
-  const [confirmLoading, setConfirmLoading] = useState(false);
+  const [clickedItem, setClickedItem] = useState(null);
   const { handleFriendRequestHook } = useProfile();
   const dispatch = useDispatch();
 
@@ -92,6 +92,7 @@ const Notification = ({socketN, isConnected, userId}) => {
 
   const handleRead = (e, item) => {
     e.preventDefault();
+    setClickedItem(item._id)
     socketN.emit("update_notification", item._id, item);
 
     // Update the state locally
@@ -104,56 +105,54 @@ const Notification = ({socketN, isConnected, userId}) => {
       });
       return updatedNotifications;
     });
-  }
-
-  const handleDelete = (e, notificationId) => {
-    e.preventDefault();
-
-    socketN.emit("delete_notification", notificationId);
-
-    // Update the state locally
-    setNotyfReceived((notifications) => {
-      const updatedNotifications = notifications.filter(notification => notification._id !== notificationId);
-      return updatedNotifications;
-    });
+    setClickedItem(null)
   }
      
   const handleFriendRequest = async (e, item, type) => {
     e.preventDefault();
-    setConfirmLoading(true);
+    setClickedItem(item._id)
 
-    // const data = {
-    //     type: type,
-    //     from: profile?.data?._id,
-    //     to: item.invokedById
-    // }
+    const data = {
+      type: type,
+      from: profile?.data?._id,
+      to: item.invokedById
+    }
 
-    // const result = await handleFriendRequestHook(data, item);
+    const result = await handleFriendRequestHook(data, item);
+    if(result.success){
+      if(type === 'friend_request_reject') {
+        socketN.emit("delete_notification", item._id);
 
-    // if(result.success){
-    //     setConfirmLoading(false);
-    //     const updatadData = {
-    //       type: "friend_request_accept", 
-    //       subject: `Is your friend now`, 
-    //       invokedByName: item.invokedByName
-    //     }
+        // Update the state locally
+        setNotyfReceived((notifications) => {
+          const updatedNotifications = notifications.filter(notification => notification._id !== item._id);
+          return updatedNotifications;
+        });
+      }else{
+        const updatadData = {
+          type: "friend_request_accept", 
+          subject: `Is your friend now`, 
+          invokedByName: item.invokedByName
+        }
         
-    //     // Update the database on server
-    //     socketN.emit("update_notification", item._id, updatadData);
+        // Update the database on server
+        socketN.emit("update_notification", item._id, updatadData);
     
-    //     // Update the state locally
-    //     setNotyfReceived((notifications) => {
-    //       const updatedNotifications = notifications.map((notification) => {
-    //         if (notification._id === item._id) {
-    //           return  { ...notification, 
-    //                     ...updatadData
-    //                   };
-    //         }
-    //         return notification;
-    //       });
-    //       return updatedNotifications;
-    //     });
-    // }
+        // Update the state locally
+        setNotyfReceived((notifications) => {
+          const updatedNotifications = notifications.map((notification) => {
+            if (notification._id === item._id) {
+              return  { ...notification, 
+                        ...updatadData
+                      };
+            }
+            return notification;
+          });
+          return updatedNotifications;
+        });
+      }
+      setClickedItem(null)
+    }
   };
 
   const handleFollowRequest = (e, item) => {
@@ -266,13 +265,13 @@ const Notification = ({socketN, isConnected, userId}) => {
         renderItem={(item) => (
           <List.Item
             actions={
-              isLoadingMore ? null :
+                isLoadingMore ? null :
                 item.type === 'friend_request_send' || item.type === 'team_invite' ?  
-                confirmLoading ? [<LoadingOutlined/>] :
+                clickedItem === item._id ? [<LoadingOutlined/>] :
                 [
                   // <CheckCircleOutlined/>,
                   <i className="fas fa-check check me-3" onClick={(e) => {e.stopPropagation(); handleFriendRequest(e, item, 'friend_request_accept')}}></i>,
-                  <i className="fas fa-close close" onClick={(e) => {e.stopPropagation(); handleDelete(e, item._id)}}></i>,
+                  <i className="fas fa-close close" onClick={(e) => {e.stopPropagation(); handleFriendRequest(e, item, 'friend_request_reject')}}></i>,
                 ] : 
                 item.type === 'follow_request' ? 
                 [
@@ -291,7 +290,12 @@ const Notification = ({socketN, isConnected, userId}) => {
           >
             <Skeleton avatar title={false} loading={item.loading} active>
               <List.Item.Meta
-                avatar={<BellOutlined style={{color: !item.read ? '#F030C0' : null}}/>}
+                avatar={
+                    // <BellOutlined style={{color: !item.read ? '#F030C0' : null}}/>
+                    <Badge>
+                      <Avatar src={item.subjectPhoto}/>
+                    </Badge>
+                }
                 title={<Link to={`/${item.route}`}>{item.invokedByName}</Link>}
                 description={item.subject}
               />

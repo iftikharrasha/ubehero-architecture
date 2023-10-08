@@ -70,7 +70,7 @@ const Navbar = ({socketN, isConnected, profile}) => {
   return (
     <nav className="navbar">
       <Layout>
-        <Layout.Header className="nav-header">
+        <Layout.Header className="nav-header glass">
           <div className="logo">
             <Link to='/'>
               <img src={ubehero} className='img-fluid' alt="ubehero" />
@@ -101,7 +101,7 @@ const Navbar = ({socketN, isConnected, profile}) => {
               placement="right"
               closable={true}
               onClose={showDrawer}
-              visible={visible}
+              open={visible}
               style={{ zIndex: 99999 }}
             >
               <LeftMenu mode={"inline"} />

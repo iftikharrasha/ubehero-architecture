@@ -45,7 +45,7 @@ const ChatRoom = ({socket, isConnected, tournamentDetails, leaderboards, routeKe
                 >
                     <MessagePanel 
                         socket={socket} 
-                        tournamentDetails={tournamentDetails} 
+                        tournament={tournamentDetails} 
                         profile={profile}
                         routeKey={routeKey}
                         unreadCount={unreadCount}

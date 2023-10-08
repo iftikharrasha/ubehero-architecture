@@ -37,7 +37,7 @@ const InboxThread = ({socketN}) => {
 
       //this is to have popup user
       const user =  {
-        key: item.senderId,
+        _id: item.senderId,
         userName: item.senderName,
         photo: item.senderPhoto,
         message: item.message,

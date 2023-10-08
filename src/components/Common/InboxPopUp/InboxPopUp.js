@@ -20,7 +20,7 @@ const InboxPopUp = () => {
     useEffect(() => {
         if (socketInbox) {
             setMessagesReceived([]);
-            const uniqueRoom = generateRoomId(user._id, popUser.key);
+            const uniqueRoom = generateRoomId(user._id, popUser._id);
             setUniqueRoomId(uniqueRoom);
     
             const userId = user._id;
@@ -85,7 +85,7 @@ const InboxPopUp = () => {
                                         socketInbox={socketInbox}
                                         isInboxConnected={isInboxConnected}
                                         roomId={uniqueRoomId}
-                                        receiverId={popUser.key}
+                                        receiverId={popUser._id}
                                         user={user}
                                     />
                                 </>

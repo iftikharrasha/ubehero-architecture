@@ -1,124 +1,68 @@
 import React from 'react';
-import { Card, Badge, Row, Image, Col } from 'antd';
-import { AliwangwangOutlined, TrophyOutlined, CloseSquareOutlined } from '@ant-design/icons';
+import { Card, Badge, Row, Image, Col, Avatar, Progress, Tooltip } from 'antd';
+import { AliwangwangOutlined, TrophyOutlined, CloseSquareOutlined, InfoCircleOutlined } from '@ant-design/icons';
 
 const { Meta } = Card;
 
-const MyStats = ({stats}) => {
+const MyStats = ({stats, badges, gameStats}) => {
     return (
         <>
+            <h5 className='mb-4'>Game <strong>Statistics</strong></h5>
             <Row gutter={[16, 16]}>
-                <Col xs={24} sm={12} md={8} lg={12} xl={6}>
-                    <Badge.Ribbon text="FIFA" style={{ color: 'gray', fontSize: '1rem', padding: "0.25rem 1rem"}}>
-                        <Card className='mb-3'
-                            actions={[
-                                <Row justify="center" align="middle">
-                                    <span className="ps-1" style={{ fontSize: '16px' }}><AliwangwangOutlined /> Played:  {stats.games.fifa ? stats.games.fifa.defeat : 0}</span>
-                                </Row>,
-                                <Row justify="center" align="middle">
-                                    <span className="ps-1" style={{ fontSize: '16px' }}><TrophyOutlined /> Win: {stats.games.fifa ? stats.games.fifa.win : 0}</span>
-                                </Row>,
-                                <Row justify="center" align="middle">
-                                    <span className="ps-1" style={{ fontSize: '16px' }}><CloseSquareOutlined /> Defeat: {stats.games.fifa ? stats.games.fifa.win : 0}</span>
-                                </Row>,
-                            ]}
-                        >
-                            <Meta
-                                // title="FIFA"
-                                avatar={
-                                    <Image
-                                        width={150}
-                                        src="https://img.freepik.com/free-vector/gamer-text-effect-editable-game-esport-text-style_314614-2411.jpg"
-                                    />
-                                }
-                            />
-                        </Card>
-                    </Badge.Ribbon>
-                </Col>
+            {
+                    gameStats.map((stat, index) => (
+                        <Col xs={24} sm={12} md={8} lg={12} xl={6} key={index}>
+                            <Badge.Ribbon text={stat.category} style={{ color: 'gray', fontSize: '1rem', padding: "0.25rem 1rem"}}>
+                                <Card className='mb-3 gameStat'
+                                    cover={
+                                        <img
+                                            alt="example"
+                                            src={stat.img}
+                                        />
+                                    }
+                                    actions={[
+                                        <Row justify="center" align="middle">
+                                            <span className="ps-1" style={{ fontSize: '14px' }}><AliwangwangOutlined /> Played:  {stats.games.fifa ? stats.games.fifa.defeat : 0}</span>
+                                        </Row>,
+                                        <Row justify="center" align="middle">
+                                            <span className="ps-1" style={{ fontSize: '14px' }}><TrophyOutlined /> Win: {stats.games.fifa ? stats.games.fifa.win : 0}</span>
+                                        </Row>,
+                                        <Row justify="center" align="middle">
+                                            <span className="ps-1" style={{ fontSize: '14px' }}><CloseSquareOutlined /> Defeat: {stats.games.fifa ? stats.games.fifa.win : 0}</span>
+                                        </Row>,
+                                    ]}
+                                >
+                                </Card>
+                            </Badge.Ribbon>
+                        </Col>
+                    ))
+                }
+            </Row>
 
-                <Col xs={24} sm={12} md={8} lg={12} xl={6}>
-                    <Badge.Ribbon text="PUBG" style={{ color: 'gray', fontSize: '1rem', padding: "0.25rem 1rem"}}>
-                        <Card className='mb-3'
-                            actions={[
-                                <Row justify="center" align="middle">
-                                    <span className="ps-1" style={{ fontSize: '16px' }}><AliwangwangOutlined /> Played:  {stats.games.pubg ? stats.games.pubg.defeat : 0}</span>
-                                </Row>,
-                                <Row justify="center" align="middle">
-                                    <span className="ps-1" style={{ fontSize: '16px' }}><TrophyOutlined /> Win: {stats.games.pubg ? stats.games.pubg.win : 0}</span>
-                                </Row>,
-                                <Row justify="center" align="middle">
-                                    <span className="ps-1" style={{ fontSize: '16px' }}><CloseSquareOutlined /> Defeat: {stats.games.pubg ? stats.games.pubg.win : 0}</span>
-                                </Row>,
-                            ]}
-                        >
-                            <Meta
-                                // title="PUBG"
-                                avatar={
-                                    <Image
-                                        width={150}
-                                        src="https://img.freepik.com/free-vector/gamer-text-effect-editable-game-esport-text-style_314614-2411.jpg"
-                                    />
-                                }
-                            />
-                        </Card>
-                    </Badge.Ribbon>
-                </Col>
-
-                <Col xs={24} sm={12} md={8} lg={12} xl={6}>
-                    <Badge.Ribbon text="WARZONE" style={{ color: 'gray', fontSize: '1rem', padding: "0.25rem 1rem"}}>
-                        <Card className='mb-3'
-                            actions={[
-                                <Row justify="center" align="middle">
-                                    <span className="ps-1" style={{ fontSize: '16px' }}><AliwangwangOutlined /> Played:  {stats.games.warzone ? stats.games.warzone.defeat : 0}</span>
-                                </Row>,
-                                <Row justify="center" align="middle">
-                                    <span className="ps-1" style={{ fontSize: '16px' }}><TrophyOutlined /> Win: {stats.games.warzone ? stats.games.warzone.win : 0}</span>
-                                </Row>,
-                                <Row justify="center" align="middle">
-                                    <span className="ps-1" style={{ fontSize: '16px' }}><CloseSquareOutlined /> Defeat: {stats.games.warzone ? stats.games.warzone.win : 0}</span>
-                                </Row>,
-                            ]}
-                        >
-                            <Meta
-                                // title="WARZONE"
-                                avatar={
-                                    <Image
-                                        width={150}
-                                        src="https://img.freepik.com/free-vector/gamer-text-effect-editable-game-esport-text-style_314614-2411.jpg"
-                                    />
-                                }
-                            />
-                        </Card>
-                    </Badge.Ribbon>
-                </Col>
-
-                <Col xs={24} sm={12} md={8} lg={12} xl={6}>
-                    <Badge.Ribbon text="CSGO" style={{ color: 'gray', fontSize: '1rem', padding: "0.25rem 1rem"}}>
-                        <Card className='mb-3'
-                            actions={[
-                                <Row justify="center" align="middle">
-                                    <span className="ps-1" style={{ fontSize: '16px' }}><AliwangwangOutlined /> Played:  {stats.games.csgo ? stats.games.csgo.defeat : 0}</span>
-                                </Row>,
-                                <Row justify="center" align="middle">
-                                    <span className="ps-1" style={{ fontSize: '16px' }}><TrophyOutlined /> Win: {stats.games.csgo ? stats.games.csgo.win : 0}</span>
-                                </Row>,
-                                <Row justify="center" align="middle">
-                                    <span className="ps-1" style={{ fontSize: '16px' }}><CloseSquareOutlined /> Defeat: {stats.games.csgo ? stats.games.csgo.win : 0}</span>
-                                </Row>,
-                            ]}
-                        >
-                            <Meta
-                                // title="CSGO"
-                                avatar={
-                                    <Image
-                                        width={150}
-                                        src="https://img.freepik.com/free-vector/gamer-text-effect-editable-game-esport-text-style_314614-2411.jpg"
-                                    />
-                                }
-                            />
-                        </Card>
-                    </Badge.Ribbon>
-                </Col>
+            <h5 className='my-4'>Badge <strong>Statistics</strong></h5>
+            <Row gutter={[16, 16]}>
+                {
+                    badges.map((badge, index) => (
+                        <Col xs={24} sm={12} md={8} lg={12} xl={6} key={index}>
+                            <Card className='mb-3'>
+                                <Meta
+                                    avatar={<Avatar src={badge.icon} />}
+                                    title={badge.title}
+                                    description={
+                                        <>
+                                            <div className='d-flex'><Progress percent={badge.completed}/></div>
+                                            <p className='card-text' style={{fontSize: '14px'}}>0/700 xp points unlocked 
+                                                <Tooltip title={badge.instruction} className='ms-2'>  
+                                                    <InfoCircleOutlined />
+                                                </Tooltip>
+                                            </p>
+                                        </>
+                                    }
+                                />
+                            </Card>
+                        </Col>
+                    ))
+                }
             </Row>
         </>
     );

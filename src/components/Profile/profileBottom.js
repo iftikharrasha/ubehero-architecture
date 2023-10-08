@@ -2,12 +2,13 @@ import React from 'react';
 import { Row, Tabs } from 'antd';
 import { HistoryOutlined, TeamOutlined, SettingOutlined } from '@ant-design/icons';
 import MyStats from './MyStats';
-import MyTeams from './MyTeams';
 import Settings from './Settings';
+import MySocials from './MySocials';
+import MyTeams from './MyTeams';
 
 const { TabPane } = Tabs;
 
-const profileBottom = ({ref2GamingStats, ref2Teams, ref2Settings, routeKey, settingsRouteKey, handleTabChange, profile, myTeams}) => {
+const profileBottom = ({ref2GamingStats, ref2Teams, ref2Settings, routeKey, settingsRouteKey, socialsRouteKey, handleTabChange, profile, myTeams, badges, gameStats}) => {
     return (
         <Tabs activeKey={routeKey} onChange={handleTabChange}>
             <TabPane
@@ -18,9 +19,19 @@ const profileBottom = ({ref2GamingStats, ref2Teams, ref2Settings, routeKey, sett
                     </Row>
                 }
             >
-                <MyStats stats={profile.stats} />
+                <MyStats stats={profile.stats} badges={badges} gameStats={gameStats}/>
             </TabPane>
             <TabPane
+                key="socials"
+                tab={
+                    <Row justify="left" align="middle" ref={ref2Teams}>
+                        <TeamOutlined /> <span>Socials</span>
+                    </Row>
+                }
+            >
+                <MySocials mySocials={[1, 2, 3, 4, 5, 6, 7, 8]} socialsRouteKey={socialsRouteKey} handleTabChange={handleTabChange}/>
+            </TabPane>
+            {/* <TabPane
                 key="teams"
                 tab={
                     <Row justify="left" align="middle" ref={ref2Teams}>
@@ -29,7 +40,7 @@ const profileBottom = ({ref2GamingStats, ref2Teams, ref2Settings, routeKey, sett
                 }
             >
                 <MyTeams routeKey={routeKey} myTeams={myTeams} />
-            </TabPane>
+            </TabPane> */}
             <TabPane
                 key="settings"
                 tab={
@@ -38,7 +49,7 @@ const profileBottom = ({ref2GamingStats, ref2Teams, ref2Settings, routeKey, sett
                     </Row>
                 }
             >
-                <Settings profile={profile} routeKey={routeKey} settingsRouteKey={settingsRouteKey} handleTabChange={handleTabChange}/>
+                <Settings profile={profile} settingsRouteKey={settingsRouteKey} handleTabChange={handleTabChange}/>
             </TabPane>
         </Tabs>
     );

@@ -219,7 +219,7 @@ export const epg = [
     // "since": `${today}T00:45:00`,
     // "till": `${today}T11:00:00`,
 	"channelUuid": "b51689be-8eb4-4481-b208-6bbcb7fb47c2",
-	"image": "https://www.themoviedb.org/t/p/w1066_and_h600_bestv2/9hNJ3fvIVd4WE3rU1Us2awoTpgM.jpg",
+	"image": "https://res.cloudinary.com/duoalyur6/image/upload/v1695205125/MOSHED-2023-9-20-16-14-6_f5kjsi.gif",
 	"country": "Belize",
 	"Year": "2021–",
 	"Rated": "TV-MA",
