@@ -7,18 +7,17 @@ import moment from 'moment';
 
 const { TabPane } = Tabs;
 
-const MySocials = ({socialsRouteKey, handleTabChange}) => {
-    const [myFriendList, setMyFriendList] = useState(null);
-    const [myFollowerList, setFollowerList] = useState(null);
+const MySocials = ({socialsRouteKey, friendRouteKey, handleTabChange}) => {
+    const [mySocialsList, setMySocialsList] = useState(null);
     const { handleFriendListHook } = useProfile();
 
     useEffect(() => {
         const fetchData = async () => {
           try {
             const requests = await handleFriendListHook();
-            setMyFriendList(requests.friend.mutuals);
-            setFollowerList(requests.follow.follower);
+            setMySocialsList(requests);
           } catch (error) {
+            setMySocialsList([]);
             console.error('Error fetching friend list:', error);
           }
         };
@@ -36,46 +35,137 @@ const MySocials = ({socialsRouteKey, handleTabChange}) => {
                     </Row>
                 }
             >
-                <Card
-                    title={
-                        <h5>
-                            My <strong>Friends</strong>
-                        </h5>
-                    }
-                >
-                    {
-                        !myFriendList ?  <div className='d-flex justify-content-center align-items-center' style={{ minHeight: '30vh' }}><Spin /></div> :
-                        <Row gutter={[16, 16]}>
+                <Tabs type="card" activeKey={friendRouteKey} onChange={handleTabChange}>
+                    <TabPane
+                        key="friendlist"
+                        tab={
+                            <Row justify="left" align="middle">
+                                <ProjectOutlined /> <span>Friendlist</span>
+                            </Row>
+                        }
+                    >
+                        <Card>
                             {
-                                myFriendList.length === 0 ? 
+                                !mySocialsList ?  <div className='d-flex justify-content-center align-items-center' style={{ minHeight: '30vh' }}><Spin /></div> :
+                                mySocialsList?.friend?.mutuals?.length === 0 ? 
                                 <Empty/> :
-                                myFriendList.map((friend, index) => (
-                                    <Col span={6} key={index}>
-                                        <Popover placement="topLeft" content={<UserPopup popupUser={friend}/>}>
-                                            <Card hoverable>
-                                                    <div className="d-flex align-items-center">
-                                                        <img
-                                                        src={friend.photo}
-                                                        alt="user-pic"
-                                                        style={{ width: '45px', height: '45px' }}
-                                                        className="rounded-circle"
-                                                        />
-                                                        <div className="ms-3">
-                                                        <p className="fw-bold mb-0">{friend.userName}</p>
-                                                        {/* <p className="mb-0">Country: {record.country}</p> */}
-                                                        <p className="mb-0">
-                                                            <div className="status">Joined {moment(friend.createdAt).fromNow()} </div>  
-                                                        </p>
-                                                        </div>
-                                                    </div>
-                                            </Card>
-                                        </Popover>
-                                    </Col>
-                                ))
+                                <Row gutter={[16, 16]}>
+                                    {
+                                        mySocialsList?.friend?.mutuals?.map((friend, index) => (
+                                            <Col span={6} key={index}>
+                                                <Popover placement="topLeft" content={<UserPopup popupUser={friend} middle={false}/>}>
+                                                    <Card hoverable>
+                                                            <div className="d-flex align-items-center">
+                                                                <img
+                                                                src={friend.photo}
+                                                                alt="user-pic"
+                                                                style={{ width: '45px', height: '45px' }}
+                                                                className="rounded-circle"
+                                                                />
+                                                                <div className="ms-3">
+                                                                <p className="fw-bold mb-0">{friend.userName}</p>
+                                                                {/* <p className="mb-0">Country: {record.country}</p> */}
+                                                                <p className="mb-0">
+                                                                    <div className="status">Joined {moment(friend.createdAt).fromNow()} </div>  
+                                                                </p>
+                                                                </div>
+                                                            </div>
+                                                    </Card>
+                                                </Popover>
+                                            </Col>
+                                        ))
+                                    }
+                                </Row>
                             }
-                        </Row>
-                    }
-                </Card>
+                        </Card>
+                    </TabPane>
+                    <TabPane
+                        key="requests"
+                        tab={
+                            <Row justify="left" align="middle">
+                                <ProjectOutlined /> <span>Requests</span>
+                            </Row>
+                        }
+                    >
+                        <Card>
+                            {
+                                !mySocialsList ?  <div className='d-flex justify-content-center align-items-center' style={{ minHeight: '30vh' }}><Spin /></div> :
+                                mySocialsList?.friend?.pending?.length === 0 ? 
+                                <Empty/> :
+                                <Row gutter={[16, 16]}>
+                                    {
+                                        mySocialsList?.friend?.pending?.map((friend, index) => (
+                                            <Col span={6} key={index}>
+                                                <Popover placement="topLeft" content={<UserPopup popupUser={friend} middle={false}/>}>
+                                                    <Card hoverable>
+                                                            <div className="d-flex align-items-center">
+                                                                <img
+                                                                src={friend.photo}
+                                                                alt="user-pic"
+                                                                style={{ width: '45px', height: '45px' }}
+                                                                className="rounded-circle"
+                                                                />
+                                                                <div className="ms-3">
+                                                                <p className="fw-bold mb-0">{friend.userName}</p>
+                                                                {/* <p className="mb-0">Country: {record.country}</p> */}
+                                                                <p className="mb-0">
+                                                                    <div className="status">Joined {moment(friend.createdAt).fromNow()} </div>  
+                                                                </p>
+                                                                </div>
+                                                            </div>
+                                                    </Card>
+                                                </Popover>
+                                            </Col>
+                                        ))
+                                    }
+                                </Row>
+                            }
+                        </Card>
+                    </TabPane>
+                    <TabPane
+                        key="pendings"
+                        tab={
+                            <Row justify="left" align="middle">
+                                <ProjectOutlined /> <span>Pendings</span>
+                            </Row>
+                        }
+                    >
+                        <Card>
+                            {
+                                !mySocialsList ?  <div className='d-flex justify-content-center align-items-center' style={{ minHeight: '30vh' }}><Spin /></div> :
+                                mySocialsList?.friend?.sent?.length === 0 ? 
+                                <Empty/> :
+                                <Row gutter={[16, 16]}>
+                                    {
+                                        mySocialsList?.friend?.sent?.map((friend, index) => (
+                                            <Col span={6} key={index}>
+                                                <Popover placement="topLeft" content={<UserPopup popupUser={friend} middle={false}/>}>
+                                                    <Card hoverable>
+                                                            <div className="d-flex align-items-center">
+                                                                <img
+                                                                src={friend.photo}
+                                                                alt="user-pic"
+                                                                style={{ width: '45px', height: '45px' }}
+                                                                className="rounded-circle"
+                                                                />
+                                                                <div className="ms-3">
+                                                                <p className="fw-bold mb-0">{friend.userName}</p>
+                                                                {/* <p className="mb-0">Country: {record.country}</p> */}
+                                                                <p className="mb-0">
+                                                                    <div className="status">Joined {moment(friend.createdAt).fromNow()} </div>  
+                                                                </p>
+                                                                </div>
+                                                            </div>
+                                                    </Card>
+                                                </Popover>
+                                            </Col>
+                                        ))
+                                    }
+                                </Row>
+                            }
+                        </Card>
+                    </TabPane>
+                </Tabs>
             </TabPane> 
             <TabPane
                 key="followers"
@@ -86,14 +176,14 @@ const MySocials = ({socialsRouteKey, handleTabChange}) => {
                 }
             >
                 {
-                    !myFollowerList ?  <div className='d-flex justify-content-center align-items-center' style={{ minHeight: '30vh' }}><Spin /></div> :
+                    !mySocialsList ?  <div className='d-flex justify-content-center align-items-center' style={{ minHeight: '30vh' }}><Spin /></div> :
                     <Row gutter={[16, 16]}>
                         {
-                            myFollowerList.length === 0 ? 
+                            mySocialsList?.follow?.follower?.length === 0 ? 
                             <Empty/> :
-                            myFollowerList.map((social, index) => (
+                            mySocialsList?.follow?.follower?.map((social, index) => (
                                 <Col span={6} key={index}>
-                                    <Popover placement="topLeft" content={<UserPopup popupUser={{}}/>}>
+                                    <Popover placement="topLeft" content={<UserPopup popupUser={{}} middle={false}/>}>
                                         <Card>
                                                 <div className="d-flex align-items-center">
                                                     <img

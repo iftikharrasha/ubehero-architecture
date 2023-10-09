@@ -51,7 +51,7 @@ const Leaderboards = ({leaderboards}) => {
         }
       },
       render: (text, record) => (
-        <Popover placement="topLeft" content={<UserPopup popupUser={record}/>}>
+        <Popover placement="topLeft" content={<UserPopup popupUser={record} middle={true}/>}>
           <div className="d-flex align-items-center">
             <img
               src={record.photo}

@@ -2,6 +2,7 @@ import React from "react";
 import { Card, Button, Row, Image,  Avatar, Divider, Tooltip, Badge } from 'antd';
 import { CameraOutlined, AntDesignOutlined, UserOutlined } from '@ant-design/icons';
 import moment from "moment";
+import { Link } from 'react-router-dom';
 
 const ProfileTop = ({ref3ProfilePic, ref4CoverPhoto, profile, badges}) => {
   const { _id, userName, createdAt, photo, version, stats, requests } = profile;
@@ -45,12 +46,16 @@ const ProfileTop = ({ref3ProfilePic, ref4CoverPhoto, profile, badges}) => {
           </Row>
           <Row justify="space-between" align="start" style={{ flexDirection: 'column' }} className="my-3" >
             <CameraOutlined style={{ fontSize: '24px'}} />
-            <Button type="default" size="small">
-              FOLLOWERS {requests?.follow?.follower?.length}
-            </Button>
-            <Button type="default" size="small">
-              FRIENDS {requests?.friend?.mutuals?.length}
-            </Button>
+            <Link to={`/profile/${_id}/friends`}>
+              <Button type="default" size="small">
+                {requests?.friend?.mutuals?.length} FRIENDS
+              </Button>
+            </Link>
+            <Link to={`/profile/${_id}/followers`}>
+              <Button type="default" size="small">
+                {requests?.follow?.follower?.length} FOLLOWERS
+              </Button>
+            </Link>
           </Row>
         </Row>
       </Card>

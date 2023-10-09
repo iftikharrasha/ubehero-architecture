@@ -26,8 +26,10 @@ const Profile = () => {
     const version = userDetails ? userDetails.version : 0;
 
     const [routeKey, setRouteKey] = useState('mystats');
+    const [statsRouteKey, setStatsRouteKey] = useState('games');
     const [settingsRouteKey, setSettingsRouteKey] = useState('personal');
     const [socialsRouteKey, setSocialsRouteKey] = useState('friends');
+    const [friendRouteKey, setFriendRouteKey] = useState('friendlist');
 
     const myTeams = useSelector((state) => state.myTeams.data)
     const versionTeams = useSelector((state) => state.myTeams.version)
@@ -47,28 +49,49 @@ const Profile = () => {
     const history = useHistory();
 
     useEffect(() => {
-        if (location.pathname.endsWith('socials')) {
-          setRouteKey('socials');
-          setSocialsRouteKey('friends');
+        if (location.pathname.endsWith('games')) {
+            setRouteKey('mystats');
+            setStatsRouteKey('games');
+        } else if (location.pathname.endsWith('badges')) {
+            setRouteKey('mystats');
+            setStatsRouteKey('badges');
+        } else if (location.pathname.endsWith('socials')) {
+            setRouteKey('socials');
+            setSocialsRouteKey('friends');
+            setFriendRouteKey('friendlist');
         } else if (location.pathname.endsWith('friends')) {
-          setRouteKey('socials');
-          setSocialsRouteKey('friends');
-        } else if (location.pathname.endsWith('followers')) {
-          setRouteKey('socials');
-          setSocialsRouteKey('followers');
+            setRouteKey('socials');
+            setSocialsRouteKey('friends');
+            setFriendRouteKey('friendlist');
+        } else if (location.pathname.endsWith('friendlist')) {
+            setRouteKey('socials');
+            setSocialsRouteKey('friends');
+            setFriendRouteKey('friendlist');
+        }else if (location.pathname.endsWith('requests')) {
+            setRouteKey('socials');
+            setSocialsRouteKey('friends');
+            setFriendRouteKey('requests');
+        }else if (location.pathname.endsWith('pendings')) {
+            setRouteKey('socials');
+            setSocialsRouteKey('friends');
+            setFriendRouteKey('pendings');
+        }else if (location.pathname.endsWith('followers')) {
+            setRouteKey('socials');
+            setSocialsRouteKey('followers');
         }  else if (location.pathname.endsWith('teams')) {
             setRouteKey('teams');
         } else if (location.pathname.endsWith('settings')) {
             setRouteKey('settings');
             setSettingsRouteKey('personal');
         } else if (location.pathname.endsWith('personal')) {
-          setRouteKey('settings');
-          setSettingsRouteKey('personal');
+            setRouteKey('settings');
+            setSettingsRouteKey('personal');
         } else if (location.pathname.endsWith('gameaccounts')) {
-          setRouteKey('settings');
-          setSettingsRouteKey('gameaccounts');
+            setRouteKey('settings');
+            setSettingsRouteKey('gameaccounts');
         }else {
             setRouteKey('mystats');
+            setStatsRouteKey('games');
         }
     }, [location]);
 
@@ -77,11 +100,26 @@ const Profile = () => {
         case 'mystats':
           history.push(`/profile/${id}`);
           break;
+        case 'games':
+          history.push(`/profile/${id}/games`);
+          break;
+        case 'badges':
+          history.push(`/profile/${id}/badges`);
+          break;
         case 'socials':
           history.push(`/profile/${id}/socials`);
           break;
         case 'friends':
           history.push(`/profile/${id}/friends`);
+          break;
+        case 'friendlist':
+          history.push(`/profile/${id}/friendlist`);
+          break;
+        case 'requests':
+          history.push(`/profile/${id}/requests`);
+          break;
+        case 'pendings':
+          history.push(`/profile/${id}/pendings`);
           break;
         case 'followers':
           history.push(`/profile/${id}/followers`);
@@ -422,6 +460,8 @@ const Profile = () => {
                                 routeKey={routeKey} 
                                 settingsRouteKey={settingsRouteKey}
                                 socialsRouteKey={socialsRouteKey}
+                                statsRouteKey={statsRouteKey}
+                                friendRouteKey={friendRouteKey}
                                 handleTabChange={handleTabChange}
                                 profile={userDetails}
                                 myTeams={myTeams}

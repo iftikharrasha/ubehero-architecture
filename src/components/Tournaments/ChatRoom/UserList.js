@@ -51,7 +51,7 @@ const UserList = ({socket, leaderboards}) => {
                         {
                             roomUsers.map((participant, index) => (
                                 <li className="clearfix active mb-1" key={index}>
-                                    <Popover placement="topLeft" content={<UserPopup popupUser={participant}/>}>
+                                    <Popover placement="topLeft" content={<UserPopup popupUser={participant} middle={false}/>}>
                                         <Card>
                                             <span className="avatarUser"><img src={participant.photo} alt="avatar"/></span>
                                             <div className="about">
@@ -79,7 +79,7 @@ const UserList = ({socket, leaderboards}) => {
                         {
                             leaderboards.map((participant, index) => (
                                 <li className="clearfix active mb-1" key={index}>
-                                    <Popover placement="topLeft" content={<UserPopup popupUser={participant.gamer}/>}>
+                                    <Popover placement="topLeft" content={<UserPopup popupUser={participant.gamer} middle={false}/>}>
                                         <Card>
                                             <span className="avatarUser"><img src={participant.gamer.photo} alt="avatar"/></span>
                                             <div className="about">

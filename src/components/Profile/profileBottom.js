@@ -8,7 +8,7 @@ import MyTeams from './MyTeams';
 
 const { TabPane } = Tabs;
 
-const profileBottom = ({ref2GamingStats, ref2Teams, ref2Settings, routeKey, settingsRouteKey, socialsRouteKey, handleTabChange, profile, myTeams, badges, gameStats}) => {
+const profileBottom = ({ref2GamingStats, ref2Teams, ref2Settings, routeKey, settingsRouteKey, socialsRouteKey, statsRouteKey, friendRouteKey, handleTabChange, profile, myTeams, badges, gameStats}) => {
     return (
         <Tabs activeKey={routeKey} onChange={handleTabChange}>
             <TabPane
@@ -19,7 +19,7 @@ const profileBottom = ({ref2GamingStats, ref2Teams, ref2Settings, routeKey, sett
                     </Row>
                 }
             >
-                <MyStats stats={profile.stats} badges={badges} gameStats={gameStats}/>
+                <MyStats statsRouteKey={statsRouteKey} handleTabChange={handleTabChange} stats={profile.stats} badges={badges} gameStats={gameStats}/>
             </TabPane>
             <TabPane
                 key="socials"
@@ -29,7 +29,7 @@ const profileBottom = ({ref2GamingStats, ref2Teams, ref2Settings, routeKey, sett
                     </Row>
                 }
             >
-                <MySocials mySocials={[1, 2, 3, 4, 5, 6, 7, 8]} socialsRouteKey={socialsRouteKey} handleTabChange={handleTabChange}/>
+                <MySocials mySocials={[1, 2, 3, 4, 5, 6, 7, 8]} socialsRouteKey={socialsRouteKey} friendRouteKey={friendRouteKey} handleTabChange={handleTabChange}/>
             </TabPane>
             {/* <TabPane
                 key="teams"

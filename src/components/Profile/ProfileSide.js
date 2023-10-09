@@ -11,7 +11,7 @@ const ProfileSide = ({ref1TSummery1, ref1TSummery2, ref1TSummery3, ref1TSummery4
     const ranks = [
         {
             level: 1,
-            title: 'Newbie',
+            title: 'Underdog',
             icon: 'https://content.invisioncic.com/u312729/monthly_2021_06/12_Mentor.svg',
         },
         {
@@ -51,7 +51,7 @@ const ProfileSide = ({ref1TSummery1, ref1TSummery2, ref1TSummery3, ref1TSummery4
         },
         {
             level: 9,
-            title: 'Underdogg',
+            title: 'Professional',
             icon: 'https://content.invisioncic.com/u312729/monthly_2021_06/12_Mentor.svg',
         }
     ]
