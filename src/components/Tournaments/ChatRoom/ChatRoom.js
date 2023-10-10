@@ -12,23 +12,20 @@ const ChatRoom = ({socket, isConnected, tournamentDetails, leaderboards, routeKe
 
     useEffect(() => {
         if (socket) {
-            const roomId = _id;
-            const userId = profile?.data?._id;
-            const senderName = profile?.data?.userName;
-            const senderPhoto = profile?.data?.photo;
-            const stats = profile?.data?.stats;
-
             // Get master's username and photo from tournamentDetails
             const { userName, photo } = masterProfile;
 
             const data = {
-              userId: userId,
-              roomId: roomId,
-              senderName: senderName,
-              senderPhoto: senderPhoto,
-              stats: stats,
+              userId: profile?.data?._id,
+              roomId: _id,
+              senderName: profile?.data?.userName,
+              senderPhoto: profile?.data?.photo,
+              stats: profile?.data?.stats,
               masterUsername: userName,
-              masterPhoto: photo
+              masterPhoto: photo,
+              country: profile?.data?.country,
+              friends: profile?.data?.friends,
+              followers: profile?.data?.followers
             }
 
             socket.emit("join_room", data);

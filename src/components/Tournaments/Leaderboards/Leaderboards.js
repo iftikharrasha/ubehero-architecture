@@ -51,7 +51,7 @@ const Leaderboards = ({leaderboards}) => {
         }
       },
       render: (text, record) => (
-        <Popover placement="topLeft" content={<UserPopup popupUser={record} middle={true}/>}>
+        <Popover placement="topLeft" content={<UserPopup popupUser={record}/>}>
           <div className="d-flex align-items-center">
             <img
               src={record.photo}
@@ -142,15 +142,15 @@ const Leaderboards = ({leaderboards}) => {
     index: index + 1,
     userName: item.gamer?.userName,
     photo: item.gamer?.photo,
-    country: item.gamer?.address?.country ? item.gamer?.address?.country : "BD",
     createdAt: item.gamer?.createdAt,
     totalGamePlayed: item.gamer?.stats?.totalGamePlayed,
     wins: item.gamer?.stats?.totalWins,
     xp: item.gamer?.stats?.totalXp,
     levelTitle: item.gamer?.stats?.levelTitle,
     currentLevel: item.gamer?.stats?.currentLevel,
-    noOfFollowers: item.gamer?.requests?.follow?.follower?.length,
-    noOfFriends: item.gamer?.requests?.friend?.mutuals?.length,
+    country: item.gamer?.country,
+    friends: item.gamer?.friends,
+    followers: item.gamer?.followers,
     playerIgn: item.gameAccount?.playerIgn,
     accountLogo: item.gameAccount?.accountLogo,
   }));

@@ -10,7 +10,7 @@ import useProfile from '../../../hooks/useProfile';
 const { Meta } = Card;
 const { Paragraph } = Typography;
 
-const UserPopup = ({popupUser, middle}) => {
+const UserPopup = ({popupUser}) => {
     const profile = useSelector((state) => state.profile)
     const requests = profile?.data?.requests;
     const jwt = localStorage.getItem("jwt");
@@ -28,7 +28,6 @@ const UserPopup = ({popupUser, middle}) => {
         }
 
         const result = await handleFriendRequestHook(data, popupUser);
-        console.log(result);
         if(result.success){
             setConfirmLoading(false);
         }
@@ -95,35 +94,32 @@ const UserPopup = ({popupUser, middle}) => {
                 title={<h6>{popupUser.userName} {popupUser.emailVerified ? <CloseCircleOutlined /> : <CheckCircleOutlined style={{ color: '#52c41a', fontSize: '12px' }}/>}</h6>}
                 description={requests && requests?.friend?.mutuals.includes(popupUser._id) ? 'Is your underdogg friend' : `Joined ${moment(popupUser.createdAt).format('ll')}`}
             />
-            {
-                !middle ? null :
-                <Row gutter={[16, 16]} className="pt-3">
-                    <Col span={8}>
-                    <Card bordered={false} className="popBody">
-                        <Row justify="center" align="middle" style={{flexDirection: 'column'}}>
-                        <Paragraph className="mb-0">Country</Paragraph>
-                        <Paragraph className="mb-0">BD</Paragraph>
-                        </Row>
-                    </Card>
-                    </Col>
-                    <Col span={8}>
-                    <Card bordered={false} className="popBody">
-                        <Row justify="center" align="middle" style={{flexDirection: 'column'}}>
-                        <Paragraph className="mb-0">Friends</Paragraph>
-                        <Paragraph className="mb-0">{popupUser.noOfFriends ? popupUser.noOfFriends : 0}</Paragraph>
-                        </Row>
-                    </Card>
-                    </Col>
-                    <Col span={8}>
-                    <Card bordered={false} className="popBody">
-                        <Row justify="center" align="middle" style={{flexDirection: 'column'}}>
-                        <Paragraph className="mb-0">Followers</Paragraph>
-                        <Paragraph className="mb-0">{popupUser.noOfFollowers ? popupUser.noOfFollowers : 0}</Paragraph>
-                        </Row>
-                    </Card>
-                    </Col>
-                </Row>
-            }
+            <Row gutter={[16, 16]} className="pt-3">
+                <Col span={8}>
+                <Card bordered={false} className="popBody">
+                    <Row justify="center" align="middle" style={{flexDirection: 'column'}}>
+                    <Paragraph className="mb-0">Country</Paragraph>
+                    <Paragraph className="mb-0">{popupUser.country ? popupUser.country : 'NA'}</Paragraph>
+                    </Row>
+                </Card>
+                </Col>
+                <Col span={8}>
+                <Card bordered={false} className="popBody">
+                    <Row justify="center" align="middle" style={{flexDirection: 'column'}}>
+                    <Paragraph className="mb-0">Friends</Paragraph>
+                    <Paragraph className="mb-0">{popupUser.friends}</Paragraph>
+                    </Row>
+                </Card>
+                </Col>
+                <Col span={8}>
+                <Card bordered={false} className="popBody">
+                    <Row justify="center" align="middle" style={{flexDirection: 'column'}}>
+                    <Paragraph className="mb-0">Followers</Paragraph>
+                    <Paragraph className="mb-0">{popupUser.followers}</Paragraph>
+                    </Row>
+                </Card>
+                </Col>
+            </Row>
         </Card>
     );
 };

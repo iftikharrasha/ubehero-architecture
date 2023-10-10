@@ -40,7 +40,7 @@ const MySocials = ({socialsRouteKey, friendRouteKey, handleTabChange}) => {
                         key="friendlist"
                         tab={
                             <Row justify="left" align="middle">
-                                <ProjectOutlined /> <span>Friendlist</span>
+                                <ProjectOutlined /> <span>Friendlist ({mySocialsList?.friend?.mutuals?.length})</span>
                             </Row>
                         }
                     >
@@ -83,7 +83,7 @@ const MySocials = ({socialsRouteKey, friendRouteKey, handleTabChange}) => {
                         key="requests"
                         tab={
                             <Row justify="left" align="middle">
-                                <ProjectOutlined /> <span>Requests</span>
+                                <ProjectOutlined /> <span>Requests ({mySocialsList?.friend?.pending?.length})</span>
                             </Row>
                         }
                     >
@@ -126,7 +126,7 @@ const MySocials = ({socialsRouteKey, friendRouteKey, handleTabChange}) => {
                         key="pendings"
                         tab={
                             <Row justify="left" align="middle">
-                                <ProjectOutlined /> <span>Pendings</span>
+                                <ProjectOutlined /> <span>Pendings ({mySocialsList?.friend?.sent?.length})</span>
                             </Row>
                         }
                     >
