@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from 'axios';
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { setLogIn, setRoute, addGameAccount, addIntoFriendQueue } from "../redux/slices/profileSlice";
+import { setLogIn, setRoute, addGameAccount, addIntoFriendQueue, addXpLatest } from "../redux/slices/profileSlice";
 import useNotyf from "./useNotyf";
 
 const useProfile = () => {
@@ -117,6 +117,10 @@ const useProfile = () => {
                 }
                 setErrorMessage(null);
                 dispatch(addIntoFriendQueue(response.data.data));
+                console.log("xp", response);
+                if(response.data.xp){
+                    dispatch(addXpLatest(response.data.xp));
+                }
             }else{
                 setErrorMessage(response.data.error.message);
             }

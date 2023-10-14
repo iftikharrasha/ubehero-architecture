@@ -71,7 +71,7 @@ const MyStats = ({statsRouteKey, handleTabChange, stats, badges, gameStats}) => 
                                             description={
                                                 <>
                                                     <div className='d-flex'><Progress percent={badge.completed}/></div>
-                                                    <p className='card-text' style={{fontSize: '14px'}}>0/700 xp points unlocked 
+                                                    <p className='card-text' style={{fontSize: '14px'}}>{badge.earned}/{badge.total} XP points 
                                                         <Tooltip title={badge.instruction} className='ms-2'>  
                                                             <InfoCircleOutlined />
                                                         </Tooltip>

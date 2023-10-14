@@ -11,9 +11,10 @@ import InternalRouter from './routes/Router/InternalRouter';
 import InternalControlls from './components/PageLayout/InternalControlls';
 import MasterControlls from './components/PageLayout/MasterControlls';
 import Navbar from './components/Common/Navbar/Navbar';
-import { ConfigProvider, Layout, theme } from "antd";
-import { fetchIpInfo } from './redux/slices/profileSlice';
+import { ConfigProvider, Layout, theme  } from "antd";
+import { clearXpLatest, fetchIpInfo } from './redux/slices/profileSlice';
 import { Modal } from 'antd';
+import useXpMessage from './hooks/useXpMessage';
 
 const { defaultAlgorithm, darkAlgorithm } = theme;
 
@@ -22,15 +23,27 @@ function App() {
   const isDarkMode = useSelector(state => state.mySiteSettings.darkMode);
   const [showInbox, setShowInbox] = useState(false);
   const [popUser, setPopUser] = useState({});
+  const { showXPMessage, xpContextHolder } = useXpMessage();
 
   const handleInboxPop = () => {
     setShowInbox(!showInbox);
   };
-
+ 
   const profile = useSelector((state) => state.profile);
+  const xPmessage = useSelector((state) => state.profile.xp);
   const isVpn = profile.vpn;
   // const isVpn = true;
   console.log("isVpn", isVpn);
+
+  useEffect(() => {
+    const onFinish = () => {
+      dispatch(clearXpLatest());
+    };
+
+    if(xPmessage){
+      showXPMessage(xPmessage, 0, onFinish);
+    }
+  },[xPmessage])
 
   const jwt = localStorage.getItem("jwt");
   const { socketN, isConnected } = useNotyf(profile.data, jwt);
@@ -90,10 +103,12 @@ function App() {
                   </Route>
                 </Switch>
 
+                {xpContextHolder}
                 {showInbox && <InboxPopUp handleInboxPop={handleInboxPop}/>}
               </Router>
             </InboxContext.Provider>
           </AuthProvider>
+
 
           {
             vpn && 

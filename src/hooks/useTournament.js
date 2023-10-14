@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from 'axios';
-import { setPurchasedItem } from "../redux/slices/profileSlice";
+import { addXpLatest, setPurchasedItem } from "../redux/slices/profileSlice";
 import { useDispatch, useSelector } from "react-redux";
 import useNotyf from "./useNotyf";
 import { useHistory } from "react-router-dom";
@@ -42,6 +42,7 @@ const useTournament = () => {
 
         try {
             const response = await axios.post(`${process.env.REACT_APP_API_LINK}/api/v1/tournaments/registration/${data._id}`, purchaseItem, config);
+            console.log("7. response", response)
             
             if(response.data.status === 200){
                 const notificationData = {
@@ -63,7 +64,11 @@ const useTournament = () => {
                 dispatch(setPurchasedItem(data._id));
                 const destination = `/tournament/details/${data._id}/chatroom`;
                 history.replace(destination);
+                console.log("8. xp", response.data)
                 window.location.reload();
+                if(response.data.xp){
+                    dispatch(addXpLatest(response.data.xp));
+                }
             }else{
                 setErrorMessage(response.data.error.message);
             }

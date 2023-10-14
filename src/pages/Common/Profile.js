@@ -224,6 +224,15 @@ const Profile = () => {
     
     const badges = [
       {
+        title: "underdog",
+        icon: "https://play-lh.googleusercontent.com/1rlj6XtWblBp8KD2KKB9e1ehT7yYb4byYAb1be7BqRTh5pzBHNX_FCSUf-B4yh1COQ=w240-h480-rw",
+        instruction: "created the account",
+        level: 1,
+        completed: 100,
+        total: 120,
+        earned: 120,
+      },
+      {
         title: "captain",
         icon: "https://res.cloudinary.com/duoalyur6/image/upload/v1696441978/Booster_Frame-6_aq0kta.png",
         instruction: "when you create a team and recruited all the players",

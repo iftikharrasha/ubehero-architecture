@@ -79,6 +79,7 @@ const profileSlice = createSlice({
         actingAs: "user",
         role: "user",
         status: 'idle',
+        xp: null,
         vpn: false,
         intel: null,
     },
@@ -153,6 +154,12 @@ const profileSlice = createSlice({
             const from = action.payload;
             state.data.requests.friend.pending = state.data.requests.friend.pending.filter(id => id !== from);
         },
+        addXpLatest: (state, action) => {
+            state.xp = action.payload;
+        },
+        clearXpLatest: (state, action) => {
+            state.xp = null;
+        },
     },
     extraReducers: (builder) => {
         // Add reducers for additional action types here, and handle loading state as needed
@@ -178,5 +185,5 @@ const profileSlice = createSlice({
     },
 });
 
-export const { setLogIn, setLogOut, setRoute, setRole, setPurchasedItem, addGameAccount, addIntoFriendQueue, addToPendingFriendList, addToMutualFriendList, removeFromPendingFriendList } = profileSlice.actions;
+export const { setLogIn, setLogOut, setRoute, setRole, setPurchasedItem, addGameAccount, addIntoFriendQueue, addToPendingFriendList, addToMutualFriendList, removeFromPendingFriendList, addXpLatest, clearXpLatest } = profileSlice.actions;
 export default profileSlice.reducer;
