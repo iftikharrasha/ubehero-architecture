@@ -1,5 +1,5 @@
 import React from "react";
-import { Menu, Avatar, Row, Space, Button } from "antd";
+import { Menu, Avatar, Row, Space, Button, Progress, Card } from "antd";
 import { UserOutlined, SettingOutlined, LogoutOutlined } from "@ant-design/icons";
 import { useHistory } from "react-router-dom";
 import useAuth from "../../../hooks/useAuth";
@@ -10,7 +10,10 @@ import InboxThread from "../InboxThread/InboxThread";
 import useProfile from "../../../hooks/useProfile";
 import WishList from "../../Profile/WishList";
 
+const { Meta } = Card;
+
 const RightMenu = ({ profile, socketN, isConnected, mode }) => {
+    const now = Math.ceil(((profile?.data?.stats?.currentXP / (profile?.data?.stats?.currentXP  + profile?.data?.stats?.nextLevelRequiredXP)) * 100));
     const history = useHistory();
     const { handlelogOut } = useAuth();
     const { handleSwitchProfile } = useProfile();
@@ -36,7 +39,7 @@ const RightMenu = ({ profile, socketN, isConnected, mode }) => {
                                 </> : null
                             }
 
-                            <WalletPopUp userId={profile?.data?._id}/>
+                            <WalletPopUp userId={profile?.data?._id} userName={profile?.data?.userName}/>
 
                             <WishList/>
 
@@ -49,6 +52,26 @@ const RightMenu = ({ profile, socketN, isConnected, mode }) => {
                                     </>
                                     }
                                 >
+                                    <Menu.Item key="profile" className="xpTop">
+                                        <Link to={`/profile/${profile?.data?._id}/badges`}>
+                                            <Card hoverable>
+                                                <Meta
+                                                    avatar={
+                                                        <Avatar src="https://props.com/wp-content/uploads/Underdog-Fantasy-Icon-100x100.webp" size="small"/>
+                                                    }
+                                                    title={null}
+                                                    description={
+                                                        <>
+                                                            <p className='card-text text-capital' style={{fontSize: '14px'}}>{profile?.data?.stats?.levelTitle}</p>
+                                                        </>
+                                                    }
+                                                />
+                                                <Progress percent={100} size='small'/>
+                                                {/* <p className="text-center">Total XP: 230</p> */}
+                                            </Card>
+                                        </Link>
+                                    </Menu.Item>
+
                                     <Menu.Item key="profile">
                                         <Link to={`/profile/${profile?.data?._id}`}>
                                             <UserOutlined /> {profile?.data?.userName}

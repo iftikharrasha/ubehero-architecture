@@ -8,7 +8,7 @@ import MyTeams from './MyTeams';
 
 const { TabPane } = Tabs;
 
-const profileBottom = ({ref2GamingStats, ref2Teams, ref2Settings, routeKey, settingsRouteKey, socialsRouteKey, statsRouteKey, friendRouteKey, handleTabChange, profile, myTeams, badges, gameStats}) => {
+const ProfileBottom = ({ref2GamingStats, ref2Teams, ref2Settings, routeKey, settingsRouteKey, socialsRouteKey, statsRouteKey, friendRouteKey, handleTabChange, profile, myTeams, badges, gameStats}) => {
     return (
         <Tabs activeKey={routeKey} onChange={handleTabChange}>
             <TabPane
@@ -55,4 +55,4 @@ const profileBottom = ({ref2GamingStats, ref2Teams, ref2Settings, routeKey, sett
     );
 };
 
-export default profileBottom;
+export default ProfileBottom;

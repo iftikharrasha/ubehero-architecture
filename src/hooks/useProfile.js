@@ -152,6 +152,28 @@ const useProfile = () => {
         }
     }
 
+    const handleBadgeListHook = async () => {
+        let config = {}
+
+        if(profile.signed_in){
+            const token = localStorage.getItem('jwt');
+            config.headers = { "Authorization": "Bearer " + token, ...config.headers};
+        }
+
+        try {
+            const response = await axios.get(`${process.env.REACT_APP_API_LINK}/api/v1/account/badge/${profile.data._id}`, config);
+            
+            if(response.data.status === 200){
+                setErrorMessage(null);
+            }else{
+                setErrorMessage(response.data.error.message);
+            }
+            return response.data.data
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     const handleProfileDraftUpdate = async (data) => {
         let config = {}
 
@@ -185,6 +207,7 @@ const useProfile = () => {
         handleGameAccountAdd,
         handleFriendRequestHook,
         handleFriendListHook,
+        handleBadgeListHook
     }
 }
 

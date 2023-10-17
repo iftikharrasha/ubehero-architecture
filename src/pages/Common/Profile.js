@@ -2,17 +2,18 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import PageLayout from '../../components/PageLayout/PageLayout';
-import ProfileTop from '../../components/Profile/ProfileTop';
-import ProfileBottom from '../../components/Profile/ProfileBottom';
 import Preloader from '../../components/PageLayout/Preloader';
 import ProfileSide from '../../components/Profile/ProfileSide';
 import { fetchMyTeams } from '../../redux/slices/teamSlice';
 import { fetchProfileDetails } from '../../redux/slices/profileSlice'
+import ProfileBottom from '../../components/Profile/ProfileBottom';
+import ProfileTop from '../../components/Profile/ProfileTop';
 
 import { Tabs, Row, Modal, Tour, Col } from 'antd';
 import { HistoryOutlined, TeamOutlined, SettingOutlined } from '@ant-design/icons';
 
 import useTour from '../../hooks/useTour';
+import useProfile from '../../hooks/useProfile';
 
 const { TabPane } = Tabs;
 
@@ -225,12 +226,13 @@ const Profile = () => {
     const badges = [
       {
         title: "underdog",
-        icon: "https://play-lh.googleusercontent.com/1rlj6XtWblBp8KD2KKB9e1ehT7yYb4byYAb1be7BqRTh5pzBHNX_FCSUf-B4yh1COQ=w240-h480-rw",
+        icon: "https://props.com/wp-content/uploads/Underdog-Fantasy-Icon-100x100.webp",
         instruction: "created the account",
         level: 1,
         completed: 100,
         total: 120,
         earned: 120,
+        claimed: true,
       },
       {
         title: "captain",
@@ -240,6 +242,7 @@ const Profile = () => {
         completed: 0,
         total: 5,
         earned: 0,
+        claimed: false,
       },
       {
         title: "warlock",
@@ -249,6 +252,7 @@ const Profile = () => {
         completed: 10,
         total: 5,
         earned: 0,
+        claimed: false,
       },
       {
         title: "defender",
@@ -258,6 +262,7 @@ const Profile = () => {
         completed: 33,
         total: 5,
         earned: 0,
+        claimed: false,
       },
       {
         title: "kingsguard",
@@ -267,6 +272,7 @@ const Profile = () => {
         completed: 75,
         total: 5,
         earned: 0,
+        claimed: false,
       },
       {
         title: "knighthood",
@@ -276,6 +282,7 @@ const Profile = () => {
         completed: 100,
         total: 5,
         earned: 0,
+        claimed: false,
       },
       {
         title: "kingslayer",
@@ -285,6 +292,7 @@ const Profile = () => {
         completed: 0,
         total: 5,
         earned: 0,
+        claimed: false,
       },
       {
         title: "contender",
@@ -294,6 +302,7 @@ const Profile = () => {
         completed: 0,
         total: 5,
         earned: 0,
+        claimed: false,
       },
       {
         title: "loyalist",
@@ -303,6 +312,7 @@ const Profile = () => {
         completed: 75,
         total: 5,
         earned: 0,
+        claimed: false,
       },
       {
         title: "specialist",
@@ -312,6 +322,7 @@ const Profile = () => {
         completed: 33,
         total: 5,
         earned: 0,
+        claimed: false,
       },
       {
         title: "booster",
@@ -321,6 +332,7 @@ const Profile = () => {
         completed: 10,
         total: 5,
         earned: 0,
+        claimed: false,
       },
       {
         title: "dedicated",
@@ -330,6 +342,7 @@ const Profile = () => {
         completed: 100,
         total: 5,
         earned: 0,
+        claimed: false,
       },
       {
         title: "reactor",
@@ -339,6 +352,7 @@ const Profile = () => {
         completed: 0,
         total: 5,
         earned: 0,
+        claimed: false,
       },
       {
         title: "popular",
@@ -348,6 +362,7 @@ const Profile = () => {
         completed: 50,
         total: 5,
         earned: 0,
+        claimed: false,
       },
       {
         title: "grand maester",
@@ -357,6 +372,7 @@ const Profile = () => {
         completed: 75,
         total: 5,
         earned: 0,
+        claimed: false,
       },
       {
         title: "gaming machine",
@@ -366,6 +382,7 @@ const Profile = () => {
         completed: 100,
         total: 5,
         earned: 0,
+        claimed: false,
       },
       {
         title: "patriot",
@@ -375,6 +392,7 @@ const Profile = () => {
         completed: 0,
         total: 5,
         earned: 0,
+        claimed: false,
       },
     ]
 
@@ -437,6 +455,24 @@ const Profile = () => {
       },
     ]
 
+    const [myBadgeList, setMyBadgeList] = useState(null);
+    const { handleBadgeListHook } = useProfile();
+    console.log("myBadgeList", myBadgeList)
+
+    useEffect(() => {
+        const fetchData = async () => {
+          try {
+            const badges = await handleBadgeListHook();
+            setMyBadgeList(badges);
+          } catch (error) {
+            setMyBadgeList([]);
+            console.error('Error fetching friend list:', error);
+          }
+        };
+      
+        fetchData();
+    }, []);
+
     return (
         <PageLayout>
             {
@@ -456,7 +492,7 @@ const Profile = () => {
                             />
                         </Col>
                         <Col span={18} offset={1}>
-                            <ProfileTop 
+                            <ProfileTop
                                 ref3ProfilePic={ref3ProfilePic} 
                                 ref4CoverPhoto={ref4CoverPhoto} 
                                 profile={userDetails} 

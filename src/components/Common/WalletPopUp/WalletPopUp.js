@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 const { Meta } = Card;
 const { Paragraph } = Typography;
 
-const WalletPopUp = ({userId}) => {
+const WalletPopUp = ({userId, userName}) => {
     const content = (
         <Card
             style={{
@@ -16,9 +16,16 @@ const WalletPopUp = ({userId}) => {
             bordered={false}
             actions={[
                 <Row justify="center" align="middle">
-                    <Button icon={<WalletOutlined  style={{ marginBottom: "6px" }}/>} style={{ fontSize: '12px' }}>
+                    <Button style={{ fontSize: '12px' }} icon={<WalletOutlined  style={{ marginBottom: "6px" }}/>}>
                         <Link to={`/wallet/${userId}`}>
                             My Wallet
+                        </Link>
+                    </Button>
+                </Row>,
+                <Row justify="center" align="middle">
+                    <Button style={{ fontSize: '12px' }} icon={<WalletOutlined  style={{ marginBottom: "6px" }}/>}>
+                        <Link to={`/wallet/${userId}/settings`}>
+                            Settings
                         </Link>
                     </Button>
                 </Row>,
@@ -27,7 +34,7 @@ const WalletPopUp = ({userId}) => {
                 <Meta
                     avatar={<Avatar src="https://i.ibb.co/vjpGbfj/balance-Coin.webp" />}
                     title="Wallet Details"
-                    description="@mywallet"
+                    description={`@${userName}`}
                 />
                 <Row gutter={[16, 16]} className="pt-3">
                     <Col span={8}>
