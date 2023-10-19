@@ -13,7 +13,7 @@ const BadgePopup = ({isModalOpen, setIsModalOpen, claimedBadge}) => {
 
     return (
         <Modal title={<p className="text-capital">{claimedBadge.title} Badge</p>} className='claimModal' open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-            <div className={claimedBadge.claimed ? "number" : "number numberDefault"}>{claimedBadge.level+1}</div>
+            <div className={claimedBadge.claimed ? "number" : "number numberDefault"}>{claimedBadge.claimed ? claimedBadge.level+1 : claimedBadge.level}</div>
             <div className="badgeClaimed">
                 <div className='spinningasset'>
                     <img src={claimedBadge.icon} alt='claim'/>
@@ -41,19 +41,19 @@ const BadgePopup = ({isModalOpen, setIsModalOpen, claimedBadge}) => {
                         <li>
                             <img src="https://icons.iconarchive.com/icons/iconarchive/treasure-chest/512/Blue-Flat-Treasure-Chest-icon.png" alt="loot" width={50}/>
                             <span>
-                                +200 LOOTS
+                                +{claimedBadge.loots} LOOTS
                             </span>
                         </li>
                         <li>
                             <img src="https://cdn2.iconfinder.com/data/icons/outlined-valuable-items/200/minerals_green_stone-512.png" alt="gems" width={50}/>
                             <span>
-                                +1 GEMS
+                                +{claimedBadge.gems} GEMS
                             </span>
                         </li>
                         <li>
                             <img src="https://cdn-icons-png.flaticon.com/512/5972/5972327.png" alt="xp" width={50}/>
                             <span>
-                                +120 XP
+                                +{claimedBadge.xp} XP
                             </span>
                         </li>
                     </ul>

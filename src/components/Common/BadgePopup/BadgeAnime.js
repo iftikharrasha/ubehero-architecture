@@ -5,7 +5,7 @@ import groovyWalkAnimation from "../../../lib/Lottie/lf30_brfwfvq7.json";
 const BadgeAnime = () => {
     const options = {
       animationData: groovyWalkAnimation,
-      loop: false,
+      loop: true,
       autoplay: true,
     };
 

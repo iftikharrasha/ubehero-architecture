@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, Badge, Row, Col, Progress, Tooltip, Tabs, Button } from 'antd';
-import { AliwangwangOutlined, TrophyOutlined, CloseSquareOutlined, PartitionOutlined, ProjectOutlined } from '@ant-design/icons';
+import { AliwangwangOutlined, TrophyOutlined, CloseSquareOutlined, PartitionOutlined, ProjectOutlined, UnlockOutlined } from '@ant-design/icons';
 import BadgePopup from '../Common/BadgePopup/BadgePopup';
 
 const { TabPane } = Tabs;
@@ -15,6 +15,8 @@ const MyStats = ({statsRouteKey, handleTabChange, stats, badges, gameStats}) => 
         setIsModalOpen(true);
     };
 
+    
+    
     return (
     <>
         <Tabs activeKey={statsRouteKey} onChange={handleTabChange}  tabPosition="left">
@@ -84,11 +86,11 @@ const MyStats = ({statsRouteKey, handleTabChange, stats, badges, gameStats}) => 
                                                     </Tooltip>}
                                             description={
                                                 <>
-                                                    <div className='d-flex'><Progress percent={badge.completed}/></div>
+                                                    <Progress percent={badge.locked ? 100 : badge.claimed ? 100 : 0}/>
                                                     {
-                                                        badge.title === 'underdog' ?
+                                                        badge.claimed ?
                                                         <Button type="primary" size="small" onClick={() => showModal(badge)}>Claim Badge</Button> :
-                                                        <p className='card-text' style={{fontSize: '14px'}}>{badge.earned}/{badge.total} XP points</p>
+                                                        <Button type="default" size="small" icon={<UnlockOutlined />} onClick={() => showModal(badge)}>{badge.locked ? 'Unlocked' : 'See Objective'}</Button>
                                                     }
                                                 </>
                                             }
