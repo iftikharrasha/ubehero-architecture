@@ -3,6 +3,7 @@ import { Modal } from 'antd';
 import BadgeAnime from './BadgeAnime';
 
 const BadgePopup = ({isModalOpen, setIsModalOpen, claimedBadge}) => {
+    const copies = [1, 2, 3, 4, 5, 6, 7, 8];
     const handleOk = () => {
         setIsModalOpen(false);
     };
@@ -13,18 +14,15 @@ const BadgePopup = ({isModalOpen, setIsModalOpen, claimedBadge}) => {
 
     return (
         <Modal title={<p className="text-capital">{claimedBadge.title} Badge</p>} className='claimModal' open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-            <div className={claimedBadge.claimed ? "number" : "number numberDefault"}>{claimedBadge.claimed ? claimedBadge.level+1 : claimedBadge.level}</div>
+            <div className={claimedBadge.claimed ? "number" : "number numberDefault"}>{claimedBadge.claimed ? claimedBadge.level+1 : claimedBadge.level === 0 ? 1 : claimedBadge.level}</div>
             <div className="badgeClaimed">
                 <div className='spinningasset'>
                     <img src={claimedBadge.icon} alt='claim'/>
-                    <i style={{ backgroundImage: `url(${claimedBadge.icon})` }}></i>
-                    <i style={{ backgroundImage: `url(${claimedBadge.icon})` }}></i>
-                    <i style={{ backgroundImage: `url(${claimedBadge.icon})` }}></i>
-                    <i style={{ backgroundImage: `url(${claimedBadge.icon})` }}></i>
-                    <i style={{ backgroundImage: `url(${claimedBadge.icon})` }}></i>
-                    <i style={{ backgroundImage: `url(${claimedBadge.icon})` }}></i>
-                    <i style={{ backgroundImage: `url(${claimedBadge.icon})` }}></i>
-                    <i style={{ backgroundImage: `url(${claimedBadge.icon})` }}></i>
+                    {
+                        copies.map((copy, index) => (
+                            <i style={{ backgroundImage: `url(${claimedBadge.icon})` }} key={index}></i>
+                        ))
+                    }
                 </div>
             </div>
             {

@@ -2,20 +2,61 @@ import React, { useEffect, useState } from 'react';
 import { Card, Badge, Row, Col, Progress, Tooltip, Tabs, Button } from 'antd';
 import { AliwangwangOutlined, TrophyOutlined, CloseSquareOutlined, PartitionOutlined, ProjectOutlined, UnlockOutlined } from '@ant-design/icons';
 import BadgePopup from '../Common/BadgePopup/BadgePopup';
+import useProfile from '../../hooks/useProfile';
 
 const { TabPane } = Tabs;
 const { Meta } = Card;
 
 const MyStats = ({statsRouteKey, handleTabChange, stats, badges, gameStats}) => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [claimedBadge, setClaimedBadge] = useState(null);
-
-    const showModal = (badge) => {
-        setClaimedBadge(badge)
-        setIsModalOpen(true);
-    };
-
+    const [isModalOpen, setIsModalOpen] = useState(true);
+    const [loadings, setLoadings] = useState([]);
     
+    const enterLoading = async (index, badge) => {
+      setLoadings((prevLoadings) => {
+        const newLoadings = [...prevLoadings];
+        newLoadings[index] = true;
+        return newLoadings;
+      });
+    //   setTimeout(() => {
+    //     setLoadings((prevLoadings) => {
+    //       const newLoadings = [...prevLoadings];
+    //       newLoadings[index] = false;
+    //       return newLoadings;
+    //     });
+    //   }, 6000);
+    };
+    
+    const [claimedBadge, setClaimedBadge] = useState(null);
+    const { handleClaimingBadgetHook } = useProfile();
+
+    const showModal = async (index, badge) => {
+        setLoadings((prevLoadings) => {
+          const newLoadings = [...prevLoadings];
+          newLoadings[index] = true;
+          return newLoadings;
+        });
+
+        if(badge.claimed){
+            const claimedItem = await handleClaimingBadgetHook(badge);
+            if(!claimedItem.claimed){
+                setLoadings((prevLoadings) => {
+                    const newLoadings = [...prevLoadings];
+                    newLoadings[index] = false;
+                    return newLoadings;
+                });
+                setClaimedBadge(badge)
+                setIsModalOpen(true);
+            }
+        }else{
+            setClaimedBadge(badge)
+            setIsModalOpen(true);
+            setLoadings((prevLoadings) => {
+                const newLoadings = [...prevLoadings];
+                newLoadings[index] = false;
+                return newLoadings;
+            });
+        }
+    };
     
     return (
     <>
@@ -74,9 +115,9 @@ const MyStats = ({statsRouteKey, handleTabChange, stats, badges, gameStats}) => 
                 {
                     <Row gutter={[16, 16]}>
                         {
-                            badges.map((badge, index) => (
+                            badges.slice(0).reverse().map((badge, index) => (
                                 <Col xs={24} sm={12} md={8} lg={12} xl={6} key={index}>
-                                    <Card className='mb-3' onClick={() => showModal(badge)} hoverable>
+                                    <Card className='mb-3' onClick={() => showModal(index, badge)} hoverable>
                                         <Meta
                                             avatar={
                                                 <img src={badge.icon} alt='badge' width={30}/>
@@ -86,11 +127,11 @@ const MyStats = ({statsRouteKey, handleTabChange, stats, badges, gameStats}) => 
                                                     </Tooltip>}
                                             description={
                                                 <>
-                                                    <Progress percent={badge.locked ? 100 : badge.claimed ? 100 : 0}/>
+                                                    <Progress percent={badge.locked ? 100 : badge.claimed ? 100 : 1}/>
                                                     {
                                                         badge.claimed ?
-                                                        <Button type="primary" size="small" onClick={() => showModal(badge)}>Claim Badge</Button> :
-                                                        <Button type="default" size="small" icon={<UnlockOutlined />} onClick={() => showModal(badge)}>{badge.locked ? 'Unlocked' : 'See Objective'}</Button>
+                                                        <Button type="primary" size="small" onClick={() => showModal(index, badge)} loading={loadings[index]}>Claim Badge</Button> :
+                                                        <Button type="default" size="small" icon={<UnlockOutlined />} onClick={() => showModal(index, badge)}>{badge.locked ? 'Unlocked' : 'See Objective'}</Button>
                                                     }
                                                 </>
                                             }

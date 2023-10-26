@@ -20,28 +20,32 @@ const ProfileTop = ({ref3ProfilePic, ref4CoverPhoto, profile, badges}) => {
             <Avatar src={photo} size={130}/>
             <div className="ps-4">
               <h5 className='card-title mb-1'>{userName}</h5>
-              <h6>Joined: {moment(createdAt).format('ll')}</h6>
-
-              <Divider />
-                <Avatar.Group
-                  shape="square"
-                  maxCount={14}
-                  size="medium"
-                  maxStyle={{
-                    color: '#f56a00',
-                    backgroundColor: '#fde3cf',
-                  }}
-                >
-                  {
-                    badges.map((badge, index) => (
-                      <Tooltip title={`${badge.level}x ${badge.title}`} placement="top">
-                        <Avatar key={index}
-                          src={badge.icon}
-                        />
-                      </Tooltip>
-                    ))
-                  }
-                </Avatar.Group>
+              <p>Member since: {moment(createdAt).format('ll')}</p>
+                <div className="d-flex">
+                  <Avatar.Group
+                    shape="square"
+                    maxCount={14}
+                    size="medium"
+                    maxStyle={{
+                      color: '#f56a00',
+                      backgroundColor: '#fde3cf',
+                    }}
+                  >
+                    {
+                      badges.slice(0).reverse().filter(badge => badge.level > 0).map((badge, index) => (
+                        <Tooltip title={`L.${badge.level === 0 ? 1 : badge.level} ${badge.title}`} placement="top">
+                          <Avatar key={index}
+                            src={badge.icon}
+                          />
+                        </Tooltip>
+                      ))
+                    }
+                  </Avatar.Group>
+                  <span className="ms-2">
+                    <p className="mb-2">{badges.filter(badge => badge.level > 0).length === 0 ? `No badges unlocked yet` : `${badges.filter(badge => badge.level > 0).length} badge unlocked so far`}</p>
+                    <Divider className="my-1"/>
+                  </span>
+                </div>
             </div>
           </Row>
           <Row justify="space-between" align="start" style={{ flexDirection: 'column' }} className="my-3" >

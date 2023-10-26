@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from 'axios';
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { setLogIn, setRoute, addGameAccount, addIntoFriendQueue, addXpLatest } from "../redux/slices/profileSlice";
+import { setLogIn, setRoute, addGameAccount, addIntoFriendQueue, addXpLatest , setClaimedBadge} from "../redux/slices/profileSlice";
 import useNotyf from "./useNotyf";
 
 const useProfile = () => {
@@ -152,7 +152,30 @@ const useProfile = () => {
         }
     }
 
-    const handleBadgeListHook = async () => {
+    // const handleBadgeListHook = async () => {
+    //     let config = {}
+
+    //     if(profile.signed_in){
+    //         const token = localStorage.getItem('jwt');
+    //         config.headers = { "Authorization": "Bearer " + token, ...config.headers};
+    //     }
+
+    //     try {
+    //         const response = await axios.get(`${process.env.REACT_APP_API_LINK}/api/v1/account/badge/${profile.data._id}`, config);
+            
+    //         if(response.data.status === 200){
+    //             setErrorMessage(null);
+    //         }else{
+    //             setErrorMessage(response.data.error.message);
+    //         }
+    //         return response.data.data
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    // }
+
+    const handleClaimingBadgetHook = async (badge) => {
+        console.log(badge);
         let config = {}
 
         if(profile.signed_in){
@@ -161,9 +184,12 @@ const useProfile = () => {
         }
 
         try {
-            const response = await axios.get(`${process.env.REACT_APP_API_LINK}/api/v1/account/badge/${profile.data._id}`, config);
+            const response = await axios.get(`${process.env.REACT_APP_API_LINK}/api/v1/account/badgeclaim/${badge.slag}/${profile.data._id}`, config);
+            console.log("4. response", response);
             
             if(response.data.status === 200){
+                console.log("5. response.data", response.data);
+                dispatch(setClaimedBadge(response.data.data));
                 setErrorMessage(null);
             }else{
                 setErrorMessage(response.data.error.message);
@@ -207,7 +233,8 @@ const useProfile = () => {
         handleGameAccountAdd,
         handleFriendRequestHook,
         handleFriendListHook,
-        handleBadgeListHook
+        handleClaimingBadgetHook
+        // handleBadgeListHook
     }
 }
 

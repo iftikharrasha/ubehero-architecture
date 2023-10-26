@@ -70,6 +70,32 @@ export const fetchProfileDetails = createAsyncThunk(
     }
 );
 
+export const fetchProfileBadges = createAsyncThunk(
+    'profile/fetchProfileBadges',
+    async ({ id, version }, { getState }) => {
+        if(!version){
+            version = 0;
+        }
+
+        const isLoggedIn = getState().profile.signed_in;
+        let config = {}
+
+        if(isLoggedIn){
+            const token = localStorage.getItem('jwt');
+            config.headers = { "Authorization": "Bearer " + token, ...config.headers};
+        }
+
+        const response = await fetch(`${process.env.REACT_APP_API_LINK}/api/v1/account/badge/${id}`, config);
+        const data = await response.json();
+
+        if(data.status === 304) {
+            return getState().profile.badges;
+        } else{
+            return data;
+        }
+    }
+);
+
 const profileSlice = createSlice({
     name: 'profile',
     initialState: {
@@ -79,6 +105,7 @@ const profileSlice = createSlice({
         actingAs: "user",
         role: "user",
         status: 'idle',
+        badges: null,
         xp: null,
         vpn: false,
         intel: null,
@@ -93,6 +120,7 @@ const profileSlice = createSlice({
             state.version = 0;
             state.signed_in = false;
             state.status = 'idle';
+            state.badges = null;
         },
         setRoute: (state, action) => {
             state.actingAs = action.payload || state.actingAs;
@@ -160,6 +188,31 @@ const profileSlice = createSlice({
         clearXpLatest: (state, action) => {
             state.xp = null;
         },
+        setClaimedBadge: (state, action) => {
+            const updatedBadgeData = action.payload;
+
+            const index = state.badges.findIndex(
+                (badge) => badge._id === updatedBadgeData.badge.badge
+            );
+
+            if (index !== -1) {
+                // Update claimed and locked properties of the found badge
+                state.badges[index].claimed = updatedBadgeData.badge.claimed;
+                state.badges[index].locked = updatedBadgeData.badge.locked;
+                state.badges[index].level = updatedBadgeData.badge.level;
+                state.badges[index].xpTotal = updatedBadgeData.badge.xpTotal;
+                
+                // const item = state.badges.find((badge) => badge._id === updatedBadgeData.badge);
+                // const regularItemObject = { ...item };
+                // console.log("item", regularItemObject);
+
+                //Also update the total points in the profile
+                state.data.stats = updatedBadgeData.stats;
+                // state.data.stats.totalXp += regularItemObject.xp;
+                // state.data.stats.totalGems += regularItemObject.gems;
+                // state.data.stats.totalLoots += regularItemObject.loots;
+            }
+        }
     },
     extraReducers: (builder) => {
         // Add reducers for additional action types here, and handle loading state as needed
@@ -174,6 +227,10 @@ const profileSlice = createSlice({
           state.intel = action.payload.intel;
           state.vpn = action.payload.vpn;
         })
+        builder.addCase(fetchProfileBadges.fulfilled, (state, action) => {
+          state.status = 'success';
+          state.badges = action.payload.data;
+        })
 
         // builder.addCase(fetchTournaments.pending, (state) => {
         //     state.status = 'pending';
@@ -185,5 +242,5 @@ const profileSlice = createSlice({
     },
 });
 
-export const { setLogIn, setLogOut, setRoute, setRole, setPurchasedItem, addGameAccount, addIntoFriendQueue, addToPendingFriendList, addToMutualFriendList, removeFromPendingFriendList, addXpLatest, clearXpLatest } = profileSlice.actions;
+export const { setLogIn, setLogOut, setRoute, setRole, setPurchasedItem, addGameAccount, addIntoFriendQueue, addToPendingFriendList, addToMutualFriendList, removeFromPendingFriendList, addXpLatest, clearXpLatest, setClaimedBadge } = profileSlice.actions;
 export default profileSlice.reducer;

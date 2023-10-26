@@ -1546,6 +1546,7 @@ a:hover{
   backdrop-filter: blur(4px);
   min-width: 100px;
   animation: scale-in-center 1s cubic-bezier(0.165, 0.84, 0.44, 1) both;
+  text-align: center;
 }
 
 
@@ -1626,4 +1627,8 @@ a:hover{
   height: 60px !important;
   line-height: 60px !important;
   padding: 0 !important;
+}
+
+.ant-tabs-nav{
+  z-index: 1;
 }
