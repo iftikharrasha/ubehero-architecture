@@ -31,7 +31,7 @@ const ProfileBottom = ({ref2GamingStats, ref2Teams, ref2Settings, routeKey, sett
             >
                 <MySocials mySocials={[1, 2, 3, 4, 5, 6, 7, 8]} socialsRouteKey={socialsRouteKey} friendRouteKey={friendRouteKey} handleTabChange={handleTabChange}/>
             </TabPane>
-            {/* <TabPane
+            <TabPane
                 key="teams"
                 tab={
                     <Row justify="left" align="middle" ref={ref2Teams}>
@@ -40,7 +40,7 @@ const ProfileBottom = ({ref2GamingStats, ref2Teams, ref2Settings, routeKey, sett
                 }
             >
                 <MyTeams routeKey={routeKey} myTeams={myTeams} />
-            </TabPane> */}
+            </TabPane>
             <TabPane
                 key="settings"
                 tab={

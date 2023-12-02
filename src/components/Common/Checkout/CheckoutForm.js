@@ -1,14 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import useTournament from '../../../hooks/useTournament';
 import { Button, Card } from 'antd';
 
 const CheckoutForm = ({method, tournament, connectedAccount}) => {
+    const [confirmLoading, setConfirmLoading] = useState(false);
     const { _id, tournamentName, tournamentThumbnail, settings } = tournament;
     const { handleTournamentPurchase } = useTournament();
-    console.log(connectedAccount)
 
-    const tournamentRegistration = () => {
-        handleTournamentPurchase(tournament, connectedAccount._id, method);
+    const tournamentRegistration = async () => {
+        setConfirmLoading(true)
+        const result = await handleTournamentPurchase(tournament, connectedAccount._id, method);
+        if(result){
+            setConfirmLoading(false);
+        }
     };
 
     // const onFinish = (values) => {
@@ -131,7 +135,7 @@ const CheckoutForm = ({method, tournament, connectedAccount}) => {
 
                             <div className="row my-4">
                                 <div className="col-12 d-flex justify-content-center">
-                                    <Button type="primary" size="medium" className="mt-3" onClick={tournamentRegistration}>
+                                    <Button type="primary" size="medium" className="mt-3" onClick={tournamentRegistration} loading={confirmLoading}>
                                         Submit
                                     </Button> 
                                 </div>

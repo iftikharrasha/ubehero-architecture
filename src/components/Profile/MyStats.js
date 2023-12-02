@@ -38,7 +38,8 @@ const MyStats = ({statsRouteKey, handleTabChange, stats, badges, gameStats}) => 
 
         if(badge.claimed){
             const claimedItem = await handleClaimingBadgetHook(badge);
-            if(!claimedItem.claimed){
+            console.log('claimed once?:', claimedItem.badge.claimed, claimedItem.claimed);
+            if(!claimedItem.badge.claimed){
                 setLoadings((prevLoadings) => {
                     const newLoadings = [...prevLoadings];
                     newLoadings[index] = false;

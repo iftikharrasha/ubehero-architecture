@@ -25,8 +25,7 @@ export const channels = [
       title: "five tv",
       country: "USA",
       provider: 9749,
-      logo:
-        "https://i.pinimg.com/564x/61/36/04/613604882ac12ef0d6774a6f1f100afd.jpg",
+      logo: "https://i.pinimg.com/564x/61/36/04/613604882ac12ef0d6774a6f1f100afd.jpg",
       year: 2002
     },
     {

@@ -3,7 +3,6 @@ import { Button } from 'react-bootstrap';
 import Modal from 'react-bootstrap/Modal';
 
 const FileUploadPopUp = ({show, handleClose, previewURL, selectedFile, handleFileSelect, handleTournamentImageUploadToS3, picProgress, errorMessage}) => {
-    console.log(errorMessage)
     return (
         <Modal show={show} onHide={handleClose} id="staticBackdrop" data-mdb-backdrop="static" data-mdb-keyboard="false" tabindex="-1" className='popupModal fade' aria-labelledby="staticBackdropLabel" aria-hidden="true" centered>
             <Modal.Body>

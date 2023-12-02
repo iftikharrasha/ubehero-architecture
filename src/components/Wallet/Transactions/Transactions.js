@@ -286,7 +286,7 @@ const Transactions = ({myTransactions}) => {
         scroll={{ x: true }}
         style={{ boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)' }}
         pagination={{
-          pageSize: 5,
+          pageSize: 8,
           hideOnSinglePage: false,
         }}
       />

@@ -12,7 +12,7 @@ import { fetchBrackets } from '../../redux/slices/bracketSlice';
 import Preloader from '../../components/PageLayout/Preloader';
 import Prizes from '../../components/Tournaments/Prizes/Prizes';
 import ChatRoom from '../../components/Tournaments/ChatRoom/ChatRoom';
-import CheckoutForm from '../../components/Tournaments/Checkout/CheckoutForm';
+import CheckoutForm from '../../components/Common/Checkout/CheckoutForm';
 import CheckoutLayout from '../../components/Common/Checkout/CheckoutLayout';
 import useTour from '../../hooks/useTour';
 import useTimer from '../../hooks/useTimer';
@@ -21,10 +21,12 @@ import Bracket from '../../components/Tournaments/Bracket/Bracket';
 import axios from 'axios';
 import Matches from '../../components/Tournaments/Matches/Matches';
 import Results from '../../components/Tournaments/Results/Results';
+import DOMPurify from 'dompurify';
 
-import { Tabs, Row, Modal, Tour, Col, Card, Empty } from 'antd';
+import { Tabs, Row, Modal, Tour, Col, Card, Empty, message } from 'antd';
 import { TrophyOutlined, MessageOutlined, CrownOutlined, PartitionOutlined, ProjectOutlined, OrderedListOutlined } from '@ant-design/icons';
 import TournamentSide from '../../components/Tournaments/TournamentSide';
+import useTournament from '../../hooks/useTournament';
 
 const { TabPane } = Tabs;
 
@@ -38,7 +40,10 @@ const TournamentDetails = () => {
     const userId = profile?.data?._id;
     const [routeKey, setRouteKey] = useState('leaderboards');
     const [connectedAccount, setConnectedAccount] = useState(null);
+    const { handleTournamentPurchase } = useTournament();
+    const [confirmCheckoutLoading, setConfirmCheckoutLoading] = useState(false);
     const { id } = useParams();
+    const [messageApi, contextHolder] = message.useMessage();
 
     const location = useLocation();
     const history = useHistory();
@@ -123,8 +128,36 @@ const TournamentDetails = () => {
         setRouteKey('checkout');
     };
 
-    const handleOrder = () => {
-        setRouteKey('order');
+    const handleOrder = async () => {
+        setConfirmCheckoutLoading(true);
+        if(tournamentDetails?.settings?.feeType === 'free'){
+            setMethod('free');
+            const result = await handleTournamentPurchase(tournamentDetails, connectedAccount._id, tournamentDetails?.feeType);
+            if(result){
+                setConfirmCheckoutLoading(false);
+            }
+        }else if(tournamentDetails?.settings?.feeType === 'gems'){
+            setMethod('gems');
+            if(profile?.data?.stats?.totalGems > tournamentDetails?.settings?.joiningFee){
+                console.log(profile?.data?.stats?.totalGems, tournamentDetails?.settings?.joiningFee)
+                const result = await handleTournamentPurchase(tournamentDetails, connectedAccount._id, tournamentDetails?.feeType);
+                if(result){
+                    setConfirmCheckoutLoading(false);
+                }
+            }else{
+                messageApi.open({
+                  type: 'warning',
+                  content: 'Not enough gems in your account',
+                  style: {
+                    marginTop: '85vh',
+                  },
+                });
+                setConfirmCheckoutLoading(false);
+            }
+        }else{
+            setRouteKey('order');
+            setConfirmCheckoutLoading(false);
+        }
     };
 
     const handleCancel = () => {
@@ -292,6 +325,7 @@ const TournamentDetails = () => {
 
     return (
         <PageLayout>
+            {contextHolder}
             <div className="tournamentDetails">
                 <div className='tournamentBg'>
                     <img src={tournamentDetails.tournamentCover} alt="cover" />
@@ -385,6 +419,16 @@ const TournamentDetails = () => {
                                                     </>
                                                 }
                                                 <TabPane
+                                                    key="rules"
+                                                    tab={
+                                                        <Row justify="left" align="middle" ref={ref2Prize}>
+                                                            <TrophyOutlined style={{ fontSize: '16px' }}/> <span>Rules</span>
+                                                        </Row>
+                                                    }
+                                                >
+                                                    <div className='rules' dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(tournamentDetails.settings.tournamentRules) }} />
+                                                </TabPane>
+                                                <TabPane
                                                     key="prizes"
                                                     tab={
                                                         <Row justify="left" align="middle" ref={ref2Prize}>
@@ -469,8 +513,6 @@ const TournamentDetails = () => {
                                             {/* this is the tab for checkout when clicked the checkout button */}
                                             {routeKey === 'checkout' ? (
                                                 <CheckoutLayout 
-                                                    remark='reg'
-                                                    routeKey={routeKey} 
                                                     item={tournamentDetails} 
                                                     handleOrder={handleOrder} 
                                                     handlePaymentMethod={handlePaymentMethod} 
@@ -478,6 +520,7 @@ const TournamentDetails = () => {
                                                     setMethod={setMethod}
                                                     connectedAccount={connectedAccount}
                                                     setConnectedAccount={setConnectedAccount}
+                                                    confirmCheckoutLoading={confirmCheckoutLoading}
                                                 />
                                             ) : null}
                                         </Card>

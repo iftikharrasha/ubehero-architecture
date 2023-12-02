@@ -6,6 +6,7 @@ import useNotyf from '../../../hooks/useNotyf';
 import { Button, Avatar, Card,  Row, Col, Typography } from 'antd';
 import { MessageOutlined, PlusCircleOutlined, CheckCircleOutlined, CloseCircleOutlined, CoffeeOutlined, UserOutlined } from '@ant-design/icons';
 import useProfile from '../../../hooks/useProfile';
+import { Link } from 'react-router-dom';
 
 const { Meta } = Card;
 const { Paragraph } = Typography;
@@ -66,7 +67,9 @@ const UserPopup = ({popupUser}) => {
             bordered={false}
             actions={!profile.signed_in ? null : popupUser?._id === profile?.data?._id ? null : [
                 <Row justify="center" align="middle">
-                    <Button icon={<UserOutlined  style={{ marginBottom: "6px" }}/>} style={{ fontSize: '12px' }} size='small'>PROFILE</Button>
+                    <Link to={`/profile/${popupUser?._id}`}>
+                        <Button icon={<UserOutlined  style={{ marginBottom: "6px" }}/>} style={{ fontSize: '12px' }} size='small'>PROFILE</Button>
+                    </Link>
                 </Row>,
                 <Row justify="center" align="middle">
                     {

@@ -82,7 +82,38 @@ const MessagePanel = ({socket, tournament, profile, routeKey, unreadCound, setUn
     return (
         <div className="chat">
             <div className="chat-history" ref={messagesColumnRef}>
-                <Steps
+                <ul className="m-b-0">
+                    {
+                        messagesRecieved.map((item, index) => (
+                            <li className={item.senderName.toLowerCase() === profile?.data?.userName ? "text-right" : "text-left"} key={index}>
+                                <div className="message-data">
+                                    <img src={item.senderPhoto} alt="avatar"/> {item.senderName} 
+                                    {
+                                        item.senderName.toLowerCase() === profile?.data?.userName ? null : 
+                                            item.senderPermissions ? 
+                                                item.senderPermissions.includes("master") ? " (MASTER)" :
+                                                            null
+                                            : null
+                                    }
+                                </div>
+                                <div className={
+                                        item.senderName.toLowerCase() === profile?.data?.userName ? "message my-message" : 
+                                                    item.senderPermissions ? 
+                                                        item.senderPermissions.includes("master") ? "message other-message master" :
+                                                                    "message other-message"
+                                        : "message other-message bot"
+                                }
+                                >
+                                    <Card>
+                                        <p>{item.message}</p>
+                                        <span>{moment(item.createdAt).fromNow()}</span>
+                                    </Card>
+                                </div>                                    
+                            </li>
+                        ))
+                    }
+                </ul>
+                {/* <Steps
                     progressDot
                     current={step - 1}
                     direction="vertical"
@@ -136,7 +167,7 @@ const MessagePanel = ({socket, tournament, profile, routeKey, unreadCound, setUn
                             // description: 'This is a description.',
                         },
                     ]}
-                />
+                /> */}
             </div>
             <audio id="newMessageSound" src={sound} type="audio/mpeg"></audio>
         </div>

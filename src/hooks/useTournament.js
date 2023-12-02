@@ -72,9 +72,10 @@ const useTournament = () => {
             }else{
                 setErrorMessage(response.data.error.message);
             }
-            return response.data
+            return response.data.success
         } catch (error) {
             console.log(error);
+            return false
         }
     }
 

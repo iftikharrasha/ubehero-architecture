@@ -8,7 +8,7 @@ import useTimer from '../../../hooks/useTimer';
 const { Meta } = Card;
 
 const TournamentStage = ({ compMode, currentMatch, finalMatch, setRouteKey, tournament, purchased }) => {
-    const { step } = useTimer(tournament.dates);
+    const { step } = useTimer(tournament?.dates);
     const [loadings, setLoadings] = useState([]);
     const [popoverVisible, setPopoverVisible] = useState(false);
     const [loadingCompleted, setLoadingCompleted] = useState(false);
@@ -35,7 +35,7 @@ const TournamentStage = ({ compMode, currentMatch, finalMatch, setRouteKey, tour
             const token = localStorage.getItem('jwt');
             config.headers = { "Authorization": "Bearer " + token, ...config.headers };
         
-            const response = await axios.get(`${process.env.REACT_APP_API_LINK}/api/v1/tournaments/credentials/${tournament._id}`, config);
+            const response = await axios.get(`${process.env.REACT_APP_API_LINK}/api/v1/tournaments/credentials/${tournament?._id}`, config);
         
             // Assuming response.data contains the credentials
             setCredentials(response.data.data);
@@ -55,12 +55,12 @@ const TournamentStage = ({ compMode, currentMatch, finalMatch, setRouteKey, tour
 
     const history = useHistory();
     const handleResult = () => {
-        history.push(`/tournament/details/${tournament._id}/result`);
+        history.push(`/tournament/details/${tournament?._id}/result`);
         setRouteKey('result');
     };
     
     const handleBracket = () => {
-        history.push(`/tournament/details/${tournament._id}/bracket`);
+        history.push(`/tournament/details/${tournament?._id}/bracket`);
         setRouteKey('bracket');
     };
 
@@ -69,12 +69,12 @@ const TournamentStage = ({ compMode, currentMatch, finalMatch, setRouteKey, tour
             <Card >
                 <Meta
                     title={
-                        <h4>{tournament.tournamentName}</h4>
+                        <h4>{tournament?.tournamentName}</h4>
                     }
                     // avatar={
                     //     <Image
                     //         width={150}
-                    //         src={tournament.tournamentThumbnail}
+                    //         src={tournament?.tournamentThumbnail}
                     //     />
                     // }
                     description={
@@ -88,7 +88,8 @@ const TournamentStage = ({ compMode, currentMatch, finalMatch, setRouteKey, tour
                                     [
                                         {
                                             title: step > 1 ? 'Registration Closed': 'Registration Open' ,
-                                            description: step > 1 ? `${moment(tournament.dates?.registrationEnd).format('lll')}` : `Till ${moment(tournament.dates?.registrationEnd).format('lll')}`,
+                                            description: !tournament?.dates?.registrationEnd ? 'Set the timing from Dates tab' : 
+                                                        step > 1 ? `${moment(tournament?.dates?.registrationEnd).format('lll')}` : `Till ${moment(tournament?.dates?.registrationEnd).format('lll')}`,
                                             status: step > 1 ? 'finish': null,
                                         },
                                         // {
@@ -97,32 +98,35 @@ const TournamentStage = ({ compMode, currentMatch, finalMatch, setRouteKey, tour
                                         //                 <Button type="dashed" size="small" loading={loadings[0]} className='mt-1' onClick={handleBracket}>
                                         //                     View Bracket
                                         //                 </Button> : 
-                                        //                 `${moment(tournament.dates?.registrationEnd).format('lll')}`,
+                                        //                 `${moment(tournament?.dates?.registrationEnd).format('lll')}`,
                                         //     status: step > 2 ? 'finish': null,
                                         // },
                                         {
                                             title: step > 2 ? 'Preparation Ended' : 'Preparation Starts',
-                                            description: step < 2 ? `${moment(tournament.dates?.registrationEnd).format('lll')}` : 
+                                            description: !tournament?.dates?.registrationEnd ? 'Set the timing from Dates tab' : 
+                                                        step < 2 ? `${moment(tournament?.dates?.registrationEnd).format('lll')}` : 
                                                         step === 2 && purchased ? 
                                                             <>
                                                                 <Tag color="success" style={{marginTop: '2px'}}>Live</Tag>
                                                                 <Popover content={content} title={`Lobby: ${currentMatch?.name}`} trigger="click" open={popoverVisible && loadingCompleted} onOpenChange={setPopoverVisible}>
                                                                     <Button type="dashed" size="small" loading={loadings[0]} className='mt-1' onClick={() => enterLobby(0)}>
-                                                                        {tournament.credentials?.roomId || tournament.credentials.roomPassword ? 'Join Lobby' : 'Announcement'}
+                                                                        {tournament?.credentials?.roomId || tournament?.credentials.roomPassword ? 'Join Lobby' : 'Announcement'}
                                                                     </Button>
                                                                 </Popover>
                                                             </> : 
-                                                        `${moment(tournament.dates?.registrationEnd).format('lll')}`,
+                                                        `${moment(tournament?.dates?.registrationEnd).format('lll')}`,
                                             status: step > 2 ? 'finish': null,
                                         },
                                         {
                                             title: currentMatch?.name,
-                                            description: step === 3 ? <Tag color="success" style={{marginTop: '2px'}}>Live</Tag> : `${moment(currentMatch?.startTime).format('lll')}`,
+                                            description: !tournament?.dates?.tournamentStart ? 'Set the timing from Dates tab' : 
+                                                        step === 3 ? <Tag color="success" style={{marginTop: '2px'}}>Live</Tag> : `${moment(currentMatch?.startTime).format('lll')}`,
                                             status: step > 3 ? 'finish': null,
                                         },
                                         {
                                             title: tournament?.settings?.currentMatchId === tournament?.settings?.matches ? 'Battle Ends' : finalMatch?.name,
-                                            description: step === 4 ? 
+                                            description: !tournament?.dates?.tournamentEnd ? 'Set the timing from Dates tab' : 
+                                                        step === 4 ? 
                                                         <Button type="dashed" size="small" className='mt-1' onClick={handleResult}>
                                                             View Result
                                                         </Button> : 
@@ -133,12 +137,14 @@ const TournamentStage = ({ compMode, currentMatch, finalMatch, setRouteKey, tour
                                     [
                                         {
                                             title: step > 1 ? 'Registration Closed': 'Registration Open' ,
-                                            description: step > 1 ? `${moment(tournament.dates?.registrationEnd).format('lll')}` : `Till ${moment(tournament.dates?.registrationEnd).format('lll')}`,
+                                            description: !tournament?.dates?.registrationEnd ? 'Set the timing from Dates tab' :  
+                                                        step > 1 ? `${moment(tournament?.dates?.registrationEnd).format('lll')}` : `Till ${moment(tournament?.dates?.registrationEnd).format('lll')}`,
                                             status: step > 1 ? 'finish': null,
                                         },
                                         {
                                             title: step > 2 ? 'Preparation Ended' : 'Preparation Starts',
-                                            description: step < 2 ? `${moment(tournament.dates?.registrationEnd).format('lll')}` : 
+                                            description: !tournament?.dates?.registrationEnd ? 'Set the timing from Dates tab' :  
+                                                        step < 2 ? `${moment(tournament?.dates?.registrationEnd).format('lll')}` : 
                                                         step === 2 && purchased ? 
                                                         <>
                                                             <Tag color="success" style={{marginTop: '2px'}}>Live</Tag>
@@ -146,21 +152,23 @@ const TournamentStage = ({ compMode, currentMatch, finalMatch, setRouteKey, tour
                                                                 <Button type="dashed" size="small" loading={loadings[0]} className='mt-1' onClick={() => enterLobby(0)}>Join Lobby</Button>
                                                             </Popover> 
                                                         </>: 
-                                                        `${moment(tournament.dates?.registrationEnd).format('lll')}`,
+                                                        `${moment(tournament?.dates?.registrationEnd).format('lll')}`,
                                             status: step > 2 ? 'finish': null,
                                         },
                                         {
                                             title: step >= 3 ? 'Battle Started' : 'Battle Starts',
-                                            description: step === 3 ? <Tag color="success" style={{marginTop: '2px'}}>Live</Tag> : `${moment(tournament.dates?.tournamentStart).format('lll')}`,
+                                            description: !tournament?.dates?.tournamentStart ? 'Set the timing from Dates tab' :  
+                                                        step === 3 ? <Tag color="success" style={{marginTop: '2px'}}>Live</Tag> : `${moment(tournament?.dates?.tournamentStart).format('lll')}`,
                                             status: step > 3 ? 'finish': null,
                                         },
                                         {
                                             title: step === 4 ? 'Battle Ended' : 'Battle Ends',
-                                            description: step === 4 ? 
+                                            description: !tournament?.dates?.tournamentEnd ? 'Set the timing from Dates tab' : 
+                                                        step === 4 ? 
                                                         <Button type="dashed" size="small" className='mt-1' onClick={handleResult}>
                                                             View Result
                                                         </Button> : 
-                                                        `${moment(tournament.dates?.tournamentEnd).format('lll')}`,
+                                                        `${moment(tournament?.dates?.tournamentEnd).format('lll')}`,
                                             status: step === 4 ? 'finish': null,
                                         },
                                     ]}

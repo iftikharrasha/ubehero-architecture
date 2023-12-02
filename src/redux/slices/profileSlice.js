@@ -115,7 +115,7 @@ const profileSlice = createSlice({
             state.data = action.payload || state.data;
             state.signed_in = true;
         },
-        setLogOut: (state, action) => {
+        setProfileReset: (state, action) => {
             state.data = null;
             state.version = 0;
             state.signed_in = false;
@@ -201,16 +201,9 @@ const profileSlice = createSlice({
                 state.badges[index].locked = updatedBadgeData.badge.locked;
                 state.badges[index].level = updatedBadgeData.badge.level;
                 state.badges[index].xpTotal = updatedBadgeData.badge.xpTotal;
-                
-                // const item = state.badges.find((badge) => badge._id === updatedBadgeData.badge);
-                // const regularItemObject = { ...item };
-                // console.log("item", regularItemObject);
 
                 //Also update the total points in the profile
-                state.data.stats = updatedBadgeData.stats;
-                // state.data.stats.totalXp += regularItemObject.xp;
-                // state.data.stats.totalGems += regularItemObject.gems;
-                // state.data.stats.totalLoots += regularItemObject.loots;
+                state.data.stats = updatedBadgeData.stats ? updatedBadgeData.stats : state.data.stats;
             }
         }
     },
@@ -242,5 +235,5 @@ const profileSlice = createSlice({
     },
 });
 
-export const { setLogIn, setLogOut, setRoute, setRole, setPurchasedItem, addGameAccount, addIntoFriendQueue, addToPendingFriendList, addToMutualFriendList, removeFromPendingFriendList, addXpLatest, clearXpLatest, setClaimedBadge } = profileSlice.actions;
+export const { setLogIn, setProfileReset, setRoute, setRole, setPurchasedItem, addGameAccount, addIntoFriendQueue, addToPendingFriendList, addToMutualFriendList, removeFromPendingFriendList, addXpLatest, clearXpLatest, setClaimedBadge } = profileSlice.actions;
 export default profileSlice.reducer;

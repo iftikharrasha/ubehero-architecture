@@ -1,8 +1,8 @@
 import React from 'react';
-import StageRegistration from './StageRegistration';
 import StageCredentials from './StageCredentials';
 import StageResult from './StageResult';
 import { Button, Result, Timeline } from 'antd';
+import StageRegistration from './StageRegistration/StageRegistration';
 
 const StageDeclare = ({ step, tId, previewURL, setPreviewURL, updatedTournament, setUpdatedTournament, compMode, currentMatch }) => {
     let content; 

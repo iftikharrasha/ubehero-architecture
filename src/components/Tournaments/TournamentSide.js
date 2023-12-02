@@ -40,8 +40,8 @@ const TournamentSide = ({ref1TSummery1, ref1TSummery2, ref1TSummery3, isLoggedIn
                                 </Tag>
                             </div>
                             <Link to={`/login`} ref={ref1TSummery3}>
-                                <Button type="primary" size="small" className="mt-3">
-                                    {buttonStatus}
+                                <Button type="primary" size="small" className="mt-3 joinButton">
+                                    {settings?.joiningFee === 0 ? 'Free Entry' : buttonStatus}
                                 </Button>  
                             </Link> 
                         </>:
@@ -60,8 +60,15 @@ const TournamentSide = ({ref1TSummery1, ref1TSummery2, ref1TSummery3, isLoggedIn
                                     </Tag>
                                 </div>
                                 <Button type="primary" size="medium" className="mt-3 joinButton" onClick={handleCheckout}>
-                                    {buttonStatus}
+                                    {
+                                        settings?.joiningFee === 0 ? 'Free Entry' :
+                                        `${buttonStatus} 
+                                        ${settings?.feeType === "gems" ? '💎' : '$'}${settings?.joiningFee}`
+                                    }
                                 </Button>  
+
+                                
+                                {/* {settings?.joiningFee}{settings?.feeType === "gems" ? '💎' : '$'} */}
                             </>
                     }
                 </>

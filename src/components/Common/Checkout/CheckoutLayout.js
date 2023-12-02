@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import Checkout from '../../Tournaments/Checkout/Checkout';
-import Giftcard from '../../Wallet/Topup/Giftcard';
 import GameAccount from '../../Profile/GameAccount';
 import { CheckCircleOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { Button, Card, Timeline, Empty, Modal, Col, Row, Form } from 'antd';
 import { useSelector } from 'react-redux';
 import AddGameAccount from '../../Profile/AddGameAccount';
 import useProfile from '../../../hooks/useProfile';
+import CheckoutDetails from './CheckoutDetails';
 
-const CheckoutLayout = ({ remark, routeKey, item, handleOrder, handlePaymentMethod, method, setMethod, connectedAccount, setConnectedAccount }) => {
+const CheckoutLayout = ({ item, handleOrder, handlePaymentMethod, method, setMethod, connectedAccount, setConnectedAccount, confirmCheckoutLoading }) => {
     const [open, setOpen] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
     const [isFieldsFilled, setIsFieldsFilled] = useState(false);
@@ -113,60 +112,38 @@ const CheckoutLayout = ({ remark, routeKey, item, handleOrder, handlePaymentMeth
 
             {/* step 2 */}
             <div className="col-md-6">
-                {
-                    remark === 'reg' ? 
-                    <Timeline
-                      mode="left"
-                      items={[
-                        {
-                          children: `Your ${connectedAccount.platform} ${connectedAccount.category} account has been connected`,
-                          color: 'green',
-                          dot: (
-                            <CheckCircleOutlined
-                              style={{
-                                fontSize: '16px',
-                              }}
-                            />
-                          ),
-                        },
-                        {
-                          children: 
-                          <GameAccount account={connectedAccount} cover={false}/>
-                          ,
-                          color: 'green',
-                        },
-                        // {
-                        //   children: 
-                        //     <Button type="primary" size="small" className="mt-3">
-                        //         Connect
-                        //     </Button> ,
-                        // },
-                      ]}
-                    />
-                    : 
-                    remark === 'topup' ? 
-                    <Giftcard gift={item}/> : null
-                }
+                <Timeline
+                  mode="left"
+                  items={[
+                    {
+                      children: `Your ${connectedAccount.platform} ${connectedAccount.category} account has been connected`,
+                      color: 'green',
+                      dot: (
+                        <CheckCircleOutlined
+                          style={{
+                            fontSize: '16px',
+                          }}
+                        />
+                      ),
+                    },
+                    {
+                      children: 
+                      <GameAccount account={connectedAccount} cover={false}/>
+                      ,
+                      color: 'green',
+                    },
+                  ]}
+                />
             </div>
             <div className="col-md-6">
-            {
-                remark === 'reg' ? 
-                <Checkout 
-                    handleOrder={handleOrder} 
-                    handlePaymentMethod={handlePaymentMethod} 
-                    method={method} 
-                    setMethod={setMethod} 
-                    itemName={item.tournamentName}
-                />: 
-                remark === 'topup' ? 
-                <Checkout 
-                    handleOrder={handleOrder} 
-                    handlePaymentMethod={handlePaymentMethod} 
-                    method={method}
-                    setMethod={setMethod} 
-                    itemName="Wallet top up"
-                /> : null
-            }
+              <CheckoutDetails 
+                  handleOrder={handleOrder} 
+                  handlePaymentMethod={handlePaymentMethod} 
+                  method={method} 
+                  setMethod={setMethod} 
+                  item={item}
+                  confirmCheckoutLoading={confirmCheckoutLoading}
+              />
             </div>
             </>
           }

@@ -16,7 +16,7 @@ const MasterUpdateDraft = () => {
     const versionTournament = tournamentDetails ? tournamentDetails.version : 0;
 
     const [updatedTournament, setUpdatedTournament] = useState(tournamentDetails);
-    const [previewURL, setPreviewURL] = useState(null);
+    const [previewURL, setPreviewURL] = useState(updatedTournament.tournamentThumbnail);
 
     const compMode = tournamentDetails?.settings?.competitionMode;
     const { step } = useTimer(tournamentDetails?.dates);
@@ -41,7 +41,7 @@ const MasterUpdateDraft = () => {
                             compMode={compMode}
                             currentMatch={tournamentDetails?.bracket[0]?.matches[tournamentDetails?.settings?.currentMatchId-1]}
                             finalMatch={tournamentDetails?.bracket[0]?.matches[tournamentDetails?.settings?.maxParticipitant-2]}
-                            tournament={tournamentDetails} 
+                            tournament={updatedTournament} 
                         />
 
                         <StageDeclare

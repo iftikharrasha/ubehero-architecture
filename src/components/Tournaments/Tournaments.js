@@ -79,7 +79,7 @@ const Tournaments = ({remark, tournament, totalJoined}) => {
                   }
                   description={
                     <Row justify="left" align="middle" className="mt-1">
-                      <span>Prize ${settings?.joiningFee*settings?.maxParticipitant}.00</span>
+                      <span>Prize {settings?.joiningFee*settings?.maxParticipitant}{settings?.feeType === "gems" ? '💎' : '$'}</span>
                     </Row>
                   }
                 />
@@ -111,7 +111,11 @@ const Tournaments = ({remark, tournament, totalJoined}) => {
                     step === 1 ? 
                     <Link to={`/tournament/details/${_id}`}>
                         <Button type="primary" size="small" className="mt-3">
-                          {buttonStatus} ${settings?.joiningFee}
+                          {
+                              settings?.joiningFee === 0 ? 'Free Entry' :
+                              `${buttonStatus} 
+                              ${settings?.feeType === "gems" ? '💎' : '$'}${settings?.joiningFee}`
+                          }
                         </Button>
                     </Link>  : 
                     <Link to={`/tournament/details/${_id}`}>
@@ -128,7 +132,11 @@ const Tournaments = ({remark, tournament, totalJoined}) => {
                     step === 1 ? 
                     <Link to={`/tournament/details/${_id}`}>
                       <Button type="primary" size="small" className="mt-3">
-                        {buttonStatus} ${settings?.joiningFee}
+                        {
+                          settings?.joiningFee === 0 ? 'Free Entry' :
+                          `${buttonStatus} 
+                          ${settings?.feeType === "gems" ? '💎' : '$'}${settings?.joiningFee}`
+                        }
                       </Button>
                     </Link> : 
                     <Link to={`/tournament/details/${_id}`}>

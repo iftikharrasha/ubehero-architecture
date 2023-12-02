@@ -1389,6 +1389,7 @@ a:hover{
 
 .gameAccount h6{
   color: white;
+  font-size: 16px;
 } 
 
 .grayscale{
@@ -1631,4 +1632,16 @@ a:hover{
 
 .ant-tabs-nav{
   z-index: 1;
+}
+/* tinymsc */
+.tox .tox-statusbar__branding svg{
+  display: none;
+}
+
+.rules h1, h2, h3, h4, h5, h6{
+  font-size: 20px;
+}
+
+.rules p{
+  font-size: 16px;
 }

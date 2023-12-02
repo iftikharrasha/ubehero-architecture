@@ -4,6 +4,8 @@ import { Redirect, Route } from 'react-router-dom';
 
 const PrivateRoute = ({ children, ...rest }) => {
     const isLoggedIn = useSelector(state => state.profile.signed_in);
+	const uid = useSelector(state => state.profile.data ? state.profile.data._id : null);
+	console.log(isLoggedIn, uid)
 
     return (
         <Route

@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import axios from 'axios';
 import { useDispatch, useSelector } from "react-redux";
-import { setLogIn, setLogOut, setRoute, setRole } from "../redux/slices/profileSlice";
+import { setLogIn, setProfileReset, setRoute, setRole } from "../redux/slices/profileSlice";
 import { setMasterLogOut } from "../redux/slices/masterTournamentSlice";
 import { setInternalLogOut } from "../redux/slices/internalTournamentSlice";
+import { setTeamReset } from "../redux/slices/teamSlice";
 
 const useFirebase = () => {
     const dispatch = useDispatch();
@@ -105,7 +106,8 @@ const useFirebase = () => {
     }
 
     const handlelogOut = (history) => {
-        dispatch(setLogOut())
+        dispatch(setProfileReset())
+        dispatch(setTeamReset())
         dispatch(setMasterLogOut())
         dispatch(setInternalLogOut())
         dispatch(setRoute("user"))

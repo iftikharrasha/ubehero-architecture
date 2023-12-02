@@ -1,8 +1,15 @@
 import React from 'react';
-import Button from 'react-bootstrap/Button';
-import Card from 'react-bootstrap/Card';
+import { Avatar, Card, Popconfirm, Row, message } from 'antd';
+import { UsergroupAddOutlined, PlusCircleOutlined, PartitionOutlined } from '@ant-design/icons';
+import moment from 'moment';
+
+const { Meta } = Card;
 
 const MyTeams = ({myTeams}) => {
+    const confirm = (e) => {
+        message.success('Clicked');
+    };
+
     return (
         <div>
             <h2 className='mb-4'>My Teams: {myTeams.length}</h2>
@@ -10,18 +17,41 @@ const MyTeams = ({myTeams}) => {
                 {
                     myTeams.length === 0 ? <p className="mt-3">No teams found!</p> :
                         myTeams.map((item, index) => (
-                            <Card style={{ width: '18rem' }} className="mr-2" key={index}>
-                            <Card.Img variant="top" src={item.photo} style={{ width: '30%', padding: '12px'}}/>
-                                <Card.Body>
-                                    <Card.Title>{item.teamName}</Card.Title>
-                                    <Card.Text>
-                                        Members: {item.members.length}
-                                    </Card.Text>
-                                    <Card.Text>
-                                        {item.createdAt}
-                                    </Card.Text>
-                                    <Button variant="primary">Check</Button>
-                                </Card.Body>
+                            <Card key={index}
+                                style={{
+                                width: 300,
+                            }}
+                                // cover={
+                                //     <img
+                                //         alt="example"
+                                //         src={item.photo}
+                                //     />
+                                // }
+                                actions={[
+                                    <Row justify="center" align="middle">
+                                        <UsergroupAddOutlined  style={{ fontSize: '18px' }} /> <span className="ps-1" style={{ fontSize: '14px' }}>0/{item.members.length}</span>
+                                    </Row>,
+                                    <Row justify="center" align="middle">
+                                        <>
+                                            <PartitionOutlined  style={{ fontSize: '18px', transform: 'rotate(180deg)' }} />
+                                            <span className="ps-1" style={{ fontSize: '14px' }}>freefire</span>
+                                        </>
+                                    </Row>,
+                                    <Popconfirm
+                                        title="Save this for later?"
+                                        onConfirm={confirm}
+                                        okText="Yes"
+                                    >
+                                        <PlusCircleOutlined style={{ fontSize: '18px' }}/>
+                                    </Popconfirm>
+                                    ,
+                                ]}
+                                >
+                                <Meta
+                                    avatar={<Avatar src={item.photo} />}
+                                    title={item.teamName}
+                                    description={`Created At: ${moment(item.createdAt).format('ll')}`}
+                                />
                             </Card>
                         ))
                 }

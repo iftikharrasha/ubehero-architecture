@@ -114,8 +114,8 @@ const Login = () => {
         }
       </Card>
 
-        <div className="mt-4 text-center">Don't have any account?
-            <Link to="/signup" className="ml-1"> <u>Create Account</u></Link>
+        <div className="mt-4 text-center text-white">Don't have any account?
+            <Link to="/signup" className="ml-1 text-white"> <u>Create Account</u></Link>
         </div>
 
         <div className="text-center">

@@ -42,6 +42,13 @@ const myTeamSlice = createSlice({
         version: 0,
         status: 'idle',
     },
+    reducers: {
+        setTeamReset: (state, action) => {
+            state.data = [];
+            state.version = 0;
+            state.status = 'idle';
+        },
+    },
     extraReducers: (builder) => {
         // Add reducers for additional action types here, and handle loading state as needed
         builder.addCase(fetchMyTeams.fulfilled, (state, action) => {
@@ -59,4 +66,5 @@ const myTeamSlice = createSlice({
     },
 });
 
+export const { setTeamReset } = myTeamSlice.actions;
 export default myTeamSlice.reducer;

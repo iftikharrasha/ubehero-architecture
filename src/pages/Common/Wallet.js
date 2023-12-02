@@ -177,12 +177,11 @@ const Wallet = () => {
                                                     key="topup"
                                                     tab={
                                                         <Row justify="left" align="middle">
-                                                            <DollarOutlined /> <span>Topups</span>
+                                                            <DollarOutlined /> <span>Gems Topup</span>
                                                         </Row>
                                                     }
                                                 >
-                                                    {   
-                                                        
+                                                    {
                                                         <Row gutter={16}>
                                                             {
                                                                 giftcards ?
@@ -199,7 +198,7 @@ const Wallet = () => {
                                                     key="sendmoney"
                                                     tab={
                                                         <Row justify="left" align="middle">
-                                                            <SendOutlined /> <span>Send Money</span>
+                                                            <SendOutlined /> <span>Send Gems</span>
                                                         </Row>
                                                     }
                                                 >

@@ -19,12 +19,13 @@ const { TabPane } = Tabs;
 
 const Profile = () => { 
     const { tourDoneOfPages, checkInTourStorage, addTourToStorage } = useTour();
-    const { id } = useParams();
+    // const { id } = useParams(); this might be problamatic and fetch others profile?
 
     const dispatch = useDispatch();
 
     const userDetails = useSelector((state) => state.profile.data)
     const version = userDetails ? userDetails.version : 0;
+    const id = userDetails._id;
 
     const [routeKey, setRouteKey] = useState('mystats');
     const [statsRouteKey, setStatsRouteKey] = useState('games');
