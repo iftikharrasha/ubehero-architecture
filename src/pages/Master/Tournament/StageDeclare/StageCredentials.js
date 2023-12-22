@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Form from 'react-bootstrap/Form';
 import "react-datepicker/dist/react-datepicker.css";
-import useTournament from '../../../hooks/useTournament';
+import useTournament from '../../../../hooks/useTournament';
 import { Button, Divider, Modal, Result, Space } from "antd";
 import { Link } from "react-router-dom";
 import CurrentMatch from "./CurrentMatch";

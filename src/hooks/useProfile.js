@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { setLogIn, setRoute, addGameAccount, addIntoFriendQueue, addXpLatest , setClaimedBadge} from "../redux/slices/profileSlice";
 import useNotyf from "./useNotyf";
+import { addTeamCreation } from "../redux/slices/teamSlice";
 
 const useProfile = () => {
     const dispatch = useDispatch();
@@ -60,6 +61,66 @@ const useProfile = () => {
 
                 //also add to redux user profile
                 dispatch(addGameAccount(response.data.data));
+            }else{
+                setErrorMessage(response.data.error.message);
+            }
+            return response.data
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const handleTeamCreation = async (data) => {
+        let config = {}
+
+        if(profile.signed_in){
+            const token = localStorage.getItem('jwt');
+            config.headers = { "Authorization": "Bearer " + token, ...config.headers};
+        }
+
+        try {
+            const response = await axios.post(`${process.env.REACT_APP_API_LINK}/api/v1/teams`, data, config);
+            
+            if(response.data.status === 200){
+                const notificationData = {
+                    type: "team_creation",
+                    subject: "You’ve created this team",
+                    subjectPhoto:response.data.data.photo,
+                    invokedByName: response.data.data.teamName,
+                    invokedById: "645b60abe95cd95bcfad6894",
+                    receivedByName: profile.data.userName,
+                    receivedById: profile.data._id,  //this user will receive notification
+                    route: `team/${response.data.data._id}`
+                }
+
+                // Send message to server
+                socketN.emit("send_notification", notificationData);
+                setErrorMessage(null);
+
+                //also add to redux user profile
+                dispatch(addTeamCreation(response.data.data));
+            }else{
+                setErrorMessage(response.data.error.message);
+            }
+            return response.data
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const handleVerifyMembers = async (data) => {
+        let config = {}
+
+        if(profile.signed_in){
+            const token = localStorage.getItem('jwt');
+            config.headers = { "Authorization": "Bearer " + token, ...config.headers};
+        }
+
+        try {
+            const response = await axios.post(`${process.env.REACT_APP_API_LINK}/api/v1/account/verifyMembers/${profile.data._id}`, data, config);
+            
+            if(response.data.status === 200){
+                setErrorMessage(null);
             }else{
                 setErrorMessage(response.data.error.message);
             }
@@ -152,28 +213,6 @@ const useProfile = () => {
         }
     }
 
-    // const handleBadgeListHook = async () => {
-    //     let config = {}
-
-    //     if(profile.signed_in){
-    //         const token = localStorage.getItem('jwt');
-    //         config.headers = { "Authorization": "Bearer " + token, ...config.headers};
-    //     }
-
-    //     try {
-    //         const response = await axios.get(`${process.env.REACT_APP_API_LINK}/api/v1/account/badge/${profile.data._id}`, config);
-            
-    //         if(response.data.status === 200){
-    //             setErrorMessage(null);
-    //         }else{
-    //             setErrorMessage(response.data.error.message);
-    //         }
-    //         return response.data.data
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // }
-
     const handleClaimingBadgetHook = async (badge) => {
         console.log(badge);
         let config = {}
@@ -209,12 +248,55 @@ const useProfile = () => {
         }
 
         try {
-            const response = await axios.patch(`${process.env.REACT_APP_API_LINK}/api/v1/account/profile/${data._id}`, data, config);
+            const response = await axios.post(`${process.env.REACT_APP_API_LINK}/api/v1/account/profile/${data._id}`, data, config);
             
             if(response.data.status === 200){
                 setErrorMessage(null);
                 dispatch(setLogIn(response.data.data));
                 const destination = `/profile/${data._id}`;
+                history.replace(destination);
+            }else{
+                setErrorMessage(response.data.error.message);
+            }
+            return response.data
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const handlePartyCreate = async (data, role) => {
+        let config = {}
+
+        if(profile.signed_in){
+            const token = localStorage.getItem('jwt');
+            config.headers = { "Authorization": "Bearer " + token, ...config.headers};
+        }
+
+        const draftItem = {
+            ...data,
+            owner: profile.data._id
+        }
+
+        try {
+            const response = await axios.post(`${process.env.REACT_APP_API_LINK}/api/v1/party`, draftItem, config);
+            
+            if(response.data.status === 200){
+                const notificationData = {
+                    type: "party_creation",
+                    subject: "You’ve created this party",
+                    subjectPhoto:response.data.data.photo,
+                    invokedByName: data.title,
+                    invokedById: "645b60abe95cd95bcfad6894",
+                    receivedByName: profile.data.userName,
+                    receivedById: profile.data._id,  //this user will receive notification
+                    route: `master/${profile.data._id}/parties/${response.data.data._id}`
+                }
+
+                // Send message to server
+                socketN.emit("send_notification", notificationData);
+
+                setErrorMessage(null);
+                const destination = `/${role}/${profile.data._id}/parties`;
                 history.replace(destination);
             }else{
                 setErrorMessage(response.data.error.message);
@@ -231,9 +313,12 @@ const useProfile = () => {
         handleSwitchProfile,
         handleProfileDraftUpdate,
         handleGameAccountAdd,
+        handleTeamCreation,
+        handleVerifyMembers,
         handleFriendRequestHook,
         handleFriendListHook,
-        handleClaimingBadgetHook
+        handleClaimingBadgetHook,
+        handlePartyCreate
         // handleBadgeListHook
     }
 }

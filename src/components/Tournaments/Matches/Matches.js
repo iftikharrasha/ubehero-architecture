@@ -1,5 +1,5 @@
 import React from 'react';
-import CurrentMatch from '../../../pages/Master/StageDeclare/CurrentMatch';
+import CurrentMatch from '../../../pages/Master/Tournament/StageDeclare/CurrentMatch';
 
 const Matches = ({matches}) => {
     return (

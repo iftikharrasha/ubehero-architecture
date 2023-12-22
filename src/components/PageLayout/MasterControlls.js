@@ -38,6 +38,21 @@ const MasterControlls = () => {
       ],
     },
     {
+      label: 'Parties',
+      icon: 'fas fa-building fa-fw',
+      link: null,
+      submenu: [
+        {
+          label: 'My Parties',
+          link: `/master/${profile._id}/parties`,
+        },
+        {
+          label: 'Create Party',
+          link: `/master/${profile._id}/create-party`,
+        },
+      ],
+    },
+    {
       label: 'Followers',
       icon: 'fas fa-building fa-fw',
       link: '/master/inner-page',

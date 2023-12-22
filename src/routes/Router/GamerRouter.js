@@ -8,6 +8,9 @@ import Signup from '../../pages/Common/Signup';
 import TDetails from '../../pages/Common/TDetails';
 import Profile from '../../pages/Common/Profile';
 import Wallet from '../../pages/Common/Wallet';
+import Team from '../../pages/Common/Team';
+import Parties from '../../pages/Common/Parties';
+import Party from '../../pages/Common/Party';
 
 const GamerRouter = () => {
   return (
@@ -16,8 +19,10 @@ const GamerRouter = () => {
         <Route path="/tournament/joined" component={Home} />
         <Route exact path="/login" component={Login} />
         <Route exact path="/signup" component={Signup} />
-        <Route exact path="/Live" component={Live} />
+        <Route exact path="/live" component={Live} />
+        <Route exact path="/parties" component={Parties} />
         <Route exact path="/tournament/details/:id" render={() => <TDetails/>}  />
+        <Route exact path="/party/details/:id" render={() => <Party/>}  />
         <Route path="/tournament/details/:id/bracket" render={() => <TDetails tabKey={'bracket'}/>} />
         <Route path="/tournament/details/:id/matches" render={() => <TDetails tabKey={'matches'}/>} />
         <Route path="/tournament/details/:id/chatroom" render={() => <TDetails tabKey={'chatroom'}/>} />
@@ -26,6 +31,9 @@ const GamerRouter = () => {
         <Route path="/tournament/details/:id/checkout" render={() => <TDetails tabKey={'checkout'}/>} />
         <PrivateRoute path="/profile/:id">
             <Profile/>
+        </PrivateRoute>
+        <PrivateRoute path="/team/:id">
+            <Team/>
         </PrivateRoute>
         <PrivateRoute path="/wallet/:id">
             <Wallet/>

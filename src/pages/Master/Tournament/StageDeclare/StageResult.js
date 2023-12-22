@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Form from 'react-bootstrap/Form';
-import useTournament from '../../../hooks/useTournament';
+import useTournament from '../../../../hooks/useTournament';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import CurrentMatch from "./CurrentMatch";

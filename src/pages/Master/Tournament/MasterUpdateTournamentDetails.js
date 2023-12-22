@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
-import TournamentStage from "../../components/Common/TournamentStage/TournamentStage";
-import StageDeclare from "./StageDeclare";
-import { fetchMastersTournamentDetails } from "../../redux/slices/masterTournamentSlice";
-import useTimer from "../../hooks/useTimer";
+import TournamentStage from "../../../components/Common/TournamentStage/TournamentStage";
+import { fetchMastersTournamentDetails } from "../../../redux/slices/masterTournamentSlice";
+import useTimer from "../../../hooks/useTimer";
 import "react-datepicker/dist/react-datepicker.css";
+import StageDeclare from "./StageDeclare/StageDeclare";
 
 const MasterUpdateDraft = () => {
     const { tId } = useParams();

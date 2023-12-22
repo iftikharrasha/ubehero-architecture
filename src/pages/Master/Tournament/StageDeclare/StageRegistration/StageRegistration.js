@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Form from 'react-bootstrap/Form';
 import "react-datepicker/dist/react-datepicker.css";
-import useTournament from '../../../../hooks/useTournament';
+import useTournament from '../../../../../hooks/useTournament';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import { Button, Divider, Result, Space } from "antd";

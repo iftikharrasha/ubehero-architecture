@@ -8,6 +8,7 @@ import profileReducer from './slices/profileSlice';
 import leaderboardReducer from './slices/leaderboardSlice';
 import bracketReducer from './slices/bracketSlice';
 import giftCardReducer from './slices/giftCardSlice';
+import partyReducer from './slices/partySlice';
 import myTeamReducer from './slices/teamSlice';
 import myTransactionReducer from './slices/walletSlice';
 import mySiteSettingsReducer from './slices/mySiteSettingsSlice';
@@ -18,6 +19,7 @@ import storage from 'redux-persist/lib/storage';
 const rootReducer = combineReducers({
   statics: staticReducer,
   tournaments: tournamentReducer,
+  parties: partyReducer,
   masterTournaments: masterTournamentReducer,
   internalTournaments: internalTournamentReducer,
   internalUsers: internalUserReducer,
@@ -33,7 +35,7 @@ const rootReducer = combineReducers({
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['tournaments', 'masterTournaments', 'internalTournaments', 'statics', 'profile', 'leaderboards', 'brackets', 'giftcards', 'myTeams', 'myTransactions', 'mySiteSettings']
+  whitelist: ['tournaments', 'parties', 'masterTournaments', 'internalTournaments', 'statics', 'profile', 'leaderboards', 'brackets', 'giftcards', 'myTeams', 'myTransactions', 'mySiteSettings']
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Row, Col, Steps, Card } from "antd";
 import Form from 'react-bootstrap/Form';
-import FileUploadPopUp from "../../../../components/Common/FileUploadPopUp/FileUploadPopUp";
+import FileUploadPopUp from "../../../../../components/Common/FileUploadPopUp/FileUploadPopUp";
 import axios from 'axios';
 
 const TournamentThumb = ({tId, updatedTournament, setUpdatedTournament, previewURL, setPreviewURL, errorMessage, setErrorMessage}) => {

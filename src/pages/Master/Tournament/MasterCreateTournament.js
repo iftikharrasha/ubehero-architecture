@@ -4,7 +4,7 @@ import Form from 'react-bootstrap/Form';
 import { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import useTournament from '../../hooks/useTournament';
+import useTournament from '../../../hooks/useTournament';
 import { Checkbox } from 'antd';
 
 const CheckboxGroup = Checkbox.Group;

@@ -33,7 +33,33 @@ export const fetchMyTeams = createAsyncThunk(
             console.log(e);
         }
     }
-)
+);
+
+export const fetchTeamDetails = createAsyncThunk(
+    'myTeam/fetchTeamDetails',
+    async ({ id, version }, { getState }) => {
+        if(!version){
+            version = 0;
+        }
+
+        const isLoggedIn = getState().profile.signed_in;
+        let config = {}
+
+        if(isLoggedIn){
+            const token = localStorage.getItem('jwt');
+            config.headers = { "Authorization": "Bearer " + token, ...config.headers};
+        }
+
+        const response = await fetch(`${process.env.REACT_APP_API_LINK}/api/v1/account/profile/${id}?version=${version}`, config);
+        const data = await response.json();
+
+        if(data.status === 304) {
+            return getState().profile.data;
+        } else{
+            return data;
+        }
+    }
+);
 
 const myTeamSlice = createSlice({
     name: 'myTeam',
@@ -48,9 +74,17 @@ const myTeamSlice = createSlice({
             state.version = 0;
             state.status = 'idle';
         },
+        addTeamCreation: (state, action) => {
+            state.data.push(action.payload);
+        },
     },
     extraReducers: (builder) => {
         // Add reducers for additional action types here, and handle loading state as needed
+        builder.addCase(fetchTeamDetails.fulfilled, (state, action) => {
+            state.data = action.payload.data || state.data;
+            state.version = action.payload.version || state.version;
+            state.status = 'success';
+        })
         builder.addCase(fetchMyTeams.fulfilled, (state, action) => {
             state.data = action.payload.data || state.data;
             state.version = action.payload.version || state.version;
@@ -66,5 +100,5 @@ const myTeamSlice = createSlice({
     },
 });
 
-export const { setTeamReset } = myTeamSlice.actions;
+export const { setTeamReset, addTeamCreation } = myTeamSlice.actions;
 export default myTeamSlice.reducer;
