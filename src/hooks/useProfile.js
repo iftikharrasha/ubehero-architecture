@@ -5,6 +5,7 @@ import { useHistory } from "react-router-dom";
 import { setLogIn, setRoute, addGameAccount, addIntoFriendQueue, addXpLatest , setClaimedBadge} from "../redux/slices/profileSlice";
 import useNotyf from "./useNotyf";
 import { addTeamCreation } from "../redux/slices/teamSlice";
+import { addUserRequestToPartyService } from "../redux/slices/partySlice";
 
 const useProfile = () => {
     const dispatch = useDispatch();
@@ -289,7 +290,8 @@ const useProfile = () => {
                     invokedById: "645b60abe95cd95bcfad6894",
                     receivedByName: profile.data.userName,
                     receivedById: profile.data._id,  //this user will receive notification
-                    route: `master/${profile.data._id}/parties/${response.data.data._id}`
+                    // route: `master/${profile.data._id}/parties/${response.data.data._id}`
+                    route: `profile/${profile.data._id}`
                 }
 
                 // Send message to server
@@ -307,6 +309,91 @@ const useProfile = () => {
         }
     }
 
+    const handlePartyEventListHook = async (pid) => {
+        let config = {}
+
+        if(profile.signed_in){
+            const token = localStorage.getItem('jwt');
+            config.headers = { "Authorization": "Bearer " + token, ...config.headers};
+        }
+
+        try {
+            const response = await axios.get(`${process.env.REACT_APP_API_LINK}/api/v1/party/events/${pid}?version=0`, config);
+            
+            if(response.data.status === 200){
+                setErrorMessage(null);
+            }else{
+                setErrorMessage(response.data.error.message);
+            }
+            return response.data.data
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const handlePartyJoin = async (data) => {
+        let config = {}
+
+        if(profile.signed_in){
+            const token = localStorage.getItem('jwt');
+            config.headers = { "Authorization": "Bearer " + token, ...config.headers};
+        }
+
+        try {
+            const response = await axios.post(`${process.env.REACT_APP_API_LINK}/api/v1/party/${data.partyId}`, data, config);
+            
+            if(response.data.status === 200){
+                const notificationData = {
+                    type: "party_join",
+                    subject: "You’ve requested to join the party",
+                    subjectPhoto:response.data.data.photo,
+                    invokedByName: response.data.data._id,
+                    invokedById: "645b60abe95cd95bcfad6894",
+                    receivedByName: profile.data.userName,
+                    receivedById: profile.data._id,  //this user will receive notification
+                    route: `party/details/${response.data.data._id}`
+                }
+
+                // Send message to server
+                socketN.emit("send_notification", notificationData);
+                setErrorMessage(null);
+
+                //also add to redux user profile
+                const pId = response.data.data._id;
+                const uId = profile.data._id;
+                console.log("hook", pId, uId)
+                dispatch(addUserRequestToPartyService({pId, uId}));
+            }else{
+                setErrorMessage(response.data.error.message);
+            }
+            return response.data
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const handlePartyPeopleListHook = async (pId) => {
+        let config = {}
+
+        if(profile.signed_in){
+            const token = localStorage.getItem('jwt');
+            config.headers = { "Authorization": "Bearer " + token, ...config.headers};
+        }
+
+        try {
+            const response = await axios.get(`${process.env.REACT_APP_API_LINK}/api/v1/party/people/${pId}`, config);
+            
+            if(response.data.status === 200){
+                setErrorMessage(null);
+            }else{
+                setErrorMessage(response.data.error.message);
+            }
+            return response.data.data
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     return {
         actingAs,
         errorMessage,
@@ -318,7 +405,10 @@ const useProfile = () => {
         handleFriendRequestHook,
         handleFriendListHook,
         handleClaimingBadgetHook,
-        handlePartyCreate
+        handlePartyCreate,
+        handlePartyJoin,
+        handlePartyEventListHook,
+        handlePartyPeopleListHook
         // handleBadgeListHook
     }
 }

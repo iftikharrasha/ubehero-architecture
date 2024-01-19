@@ -27,7 +27,7 @@ export const ExploreCard = ({ index, active, setActive, setAmount, games }) => {
                     </div>
                     <h2>{games?.title}</h2>
                     <p>
-                        UBE Hero allow gamers all over the world, with all skills to compete on their
+                        Underdog allow gamers all over the world, with all skills to compete on their
                         favourite game and make money.
                     </p>
                 </div>

@@ -1,10 +1,13 @@
 import React from 'react';
 import { Row, Col, Steps, Card, Checkbox } from "antd";
 import Form from 'react-bootstrap/Form';
+import { useSelector } from 'react-redux';
 
 const CheckboxGroup = Checkbox.Group;
 
 const TournamentBasic = ({updatedTournament, setUpdatedTournament}) => {
+    console.log(updatedTournament)
+    const myParties = useSelector((state) => state.profile.data.parties.owner);
     const platformOptions = [
         { label: 'PSN', value: 'psn', disabled: updatedTournament.platforms.includes('mobile') || updatedTournament.platforms.includes('nintendo') },
         { label: 'XBOX', value: 'xbox', disabled: updatedTournament.platforms.includes('mobile') || updatedTournament.platforms.includes('nintendo') },
@@ -62,6 +65,25 @@ const TournamentBasic = ({updatedTournament, setUpdatedTournament}) => {
                     <div>
                         <CheckboxGroup options={platformOptions} value={updatedTournament.platforms} onChange={onChange} />
                     </div>
+                </Form.Group>
+
+                <Form.Group className="mb-3" controlId="formBasicGender">
+                    <Form.Label>Choose Party</Form.Label>
+                    <Form.Control as="select" value={updatedTournament.party} onChange={(e) =>
+                        setUpdatedTournament({
+                        ...updatedTournament,
+                        party: e.target.value,
+                        })
+                    }>
+                        <option value="">Select category</option>
+                        <option value="65851d4304cf34c8d4649e2e">Underdogg</option>
+                        {
+                            
+                            myParties.map((party) => (
+                                <option value={party._id}>{party.title}</option>
+                            ))
+                        }
+                    </Form.Control>
                 </Form.Group>
 
                 <Form.Group className="mb-3" controlId="formBasicRegion">

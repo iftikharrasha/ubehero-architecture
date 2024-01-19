@@ -93,6 +93,7 @@ const useTournament = () => {
             masterProfile: profile.data._id,
             region: data.region,
             platforms: data.platforms,
+            party: data.party,
             dates: {
                 registrationStart: data.date
             }

@@ -6,13 +6,15 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import useTournament from '../../../hooks/useTournament';
 import { Checkbox } from 'antd';
+import { useSelector } from "react-redux";
 
 const CheckboxGroup = Checkbox.Group;
 
 const MasterCreateDraft = () => {
     const { handleTournamentDraftCreate, errorMessage } = useTournament();
-    const [createData, setCreateData] = useState({ tournamentName: "", category: "", region: "", platforms: [], date: new Date() });
-    // console.log(createData)
+    const [createData, setCreateData] = useState({ tournamentName: "", category: "", region: "", platforms: [], party: "65851d4304cf34c8d4649e2e", date: new Date() });
+    const myParties = useSelector((state) => state.profile.data.parties.owner);
+    // console.log(myParties)
 
     const platformOptions = [
         { label: 'PSN', value: 'psn', disabled: createData.platforms.includes('mobile') || createData.platforms.includes('nintendo') },
@@ -87,6 +89,24 @@ const MasterCreateDraft = () => {
                     <div>
                         <CheckboxGroup options={platformOptions} value={createData.platforms} onChange={onChange} />
                     </div>
+                </Form.Group>
+
+                <Form.Group className="mb-3" controlId="formBasicGender">
+                    <Form.Label>Choose Party</Form.Label>
+                    <Form.Control as="select" value={createData.party} onChange={(e) =>
+                        setCreateData({
+                        ...createData,
+                        party: e.target.value,
+                        })
+                    }>
+                        <option value="65851d4304cf34c8d4649e2e">Underdogg</option>
+                        {
+                            
+                            myParties.map((party) => (
+                                <option value={party._id}>{party.title}</option>
+                            ))
+                        }
+                    </Form.Control>
                 </Form.Group>
 
                 <Form.Group className="mb-3" controlId="formBasicRegion">
