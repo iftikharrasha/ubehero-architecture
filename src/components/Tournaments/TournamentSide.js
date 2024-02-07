@@ -171,8 +171,8 @@ const TournamentSide = ({ref1TSummery1, ref1TSummery2, ref1TSummery3, isLoggedIn
                 >
                 <Meta
                     avatar={<Avatar src={tournament.masterProfile.photo} />}
-                    title={<h6><CrownOutlined style={{ fontSize: '16px', color: 'gold' }}/> {tournament.masterProfile.userName}</h6>}
-                    description={`Master of the tournament`}
+                    title={<h6>{tournament.masterProfile.userName}</h6>}
+                    description={<p className='mb-0'><CrownOutlined style={{ fontSize: '16px', color: 'gold' }}/> Master of the tournament</p>}
                 />
             </Card>
         </div>

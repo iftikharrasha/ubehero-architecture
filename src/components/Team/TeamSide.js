@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
-import { Card, Button, Progress, Typography, Timeline, Badge, Tabs, Row } from 'antd';
-import { PartitionOutlined, DoubleRightOutlined  } from '@ant-design/icons';
+import React, { useContext, useState } from 'react';
+import { Card, Button, Progress, Typography, Timeline, Badge, Tabs, Row, Avatar } from 'antd';
+import { PartitionOutlined, DoubleRightOutlined, MessageOutlined, CrownOutlined, CoffeeOutlined } from '@ant-design/icons';
+import InboxContext from '../../Contexts/InboxContext/InboxContext';
 
 const { Paragraph } = Typography;
 const { Meta } = Card;
 const { TabPane } = Tabs;
 
-const TeamSide = ({team}) => {
+const TeamSide = ({team, isLoggedIn, userId}) => {
     const { stats } = team;
     const { levelTitle, currentLevel } = stats;
     const now = Math.ceil(((stats.currentXP / (stats.currentXP  + stats.nextLevelRequiredXP)) * 100));
@@ -64,6 +65,12 @@ const TeamSide = ({team}) => {
     const onChange = (key) => {
       setProfileSideKey(key);
     };
+
+    const { setShowInbox, setPopUser } = useContext(InboxContext);
+    const handleInboxPop = () => {
+        setPopUser(team.captainProfile);
+        setShowInbox(true);
+    };
     
     return (
         <div className="list-group sticky-top">
@@ -116,6 +123,30 @@ const TeamSide = ({team}) => {
                             </li>
                         </ul>
                     </> 
+                </Card>
+
+                
+                <Card
+                    style={{
+                        boxShadow: 'none',
+                        marginTop: '20px',
+                    }}
+                    className="popCard mt-5"
+                    bordered
+                    actions={!isLoggedIn ? null : team.captainId?._id === userId ? null : [
+                        <Row justify="center" align="middle">
+                            <Button icon={<MessageOutlined  style={{ marginBottom: "6px" }}/>} style={{ fontSize: '12px' }} onClick={handleInboxPop}>CHAT</Button>
+                        </Row>,
+                        <Row justify="center" align="middle">
+                            <Button icon={<CoffeeOutlined style={{ marginBottom: "6px" }}/>} style={{ fontSize: '12px' }}>FOLLOW</Button>
+                        </Row>
+                    ]}
+                    >
+                    <Meta
+                        avatar={<Avatar src={team.captainId.photo} />}
+                        title={<h6>{team.captainId.userName}</h6>}
+                        description={<p className='mb-0'><CrownOutlined style={{ fontSize: '16px', color: 'gold', marginBottom: '0px' }}/> Team Leader</p>}
+                    />
                 </Card>
               </TabPane>
               {/* <TabPane

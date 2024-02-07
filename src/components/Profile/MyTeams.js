@@ -14,43 +14,58 @@ const MyTeams = ({myTeams}) => {
     const limit = 2;
     const [isFieldsFilled, setIsFieldsFilled] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
-    const [memberError, setMemberError] = useState(null);
+    const [teamError, setTeamError] = useState(null);
     const [form] = Form.useForm();
     const [open, setOpen] = useState(false);
     const uId = useSelector((state) => state.profile.data._id);
-    const { handleTeamCreation, handleVerifyMembers } = useProfile();
+    const userName = useSelector((state) => state.profile.data.userName);
+    const teams = useSelector((state) => state.myTeams.data);
+    const { handleTeamCreation, handleVerifyTeamMemberAdd } = useProfile();
 
     const confirm = (e) => {
         message.success('Clicked');
     };
 
     const handleOk = async () => {
-      setConfirmLoading(true);
-      
-      const formData = form.getFieldsValue();
-      let addTeam = {
-        ...formData,
-        captainId: uId,
-      }
+        setConfirmLoading(true);
+        
+        const formData = form.getFieldsValue();
+        let addTeam = {
+            ...formData,
+            captainId: uId,
+        }
 
-      const result = await handleVerifyMembers(addTeam.members);
-      if(result.success){
-        addTeam = {
-            ...addTeam,
-            members: {
-                invited: result.data
-            },
-        }
-        console.log(addTeam)
-        const team = await handleTeamCreation(addTeam);
-        if(team.success){
-            setOpen(false);
+        const teamExists = teams.find(t => t.category === addTeam.category);
+
+        if (teamExists) {
+            setTeamError({
+                message: `You already have a team for ${addTeam.category}`,
+                description: 'Please choose a different game',
+            });
             setConfirmLoading(false);
+        } else {
+            const result = await handleVerifyTeamMemberAdd(addTeam);
+            if(result.success){
+                addTeam = {
+                    ...addTeam,
+                    members: {
+                        invited: result.data
+                    },
+                }
+                console.log(addTeam)
+                const team = await handleTeamCreation(addTeam);
+                if(team.success){
+                    setOpen(false);
+                    setConfirmLoading(false);
+                }
+            }else{
+                setTeamError({
+                    message: result.message,
+                    description: "Type your friends username correctly!",
+                });
+                setConfirmLoading(false);
+            }
         }
-      }else{
-        setMemberError(result.message);
-        setConfirmLoading(false);
-      }
     };
 
     return (
@@ -106,7 +121,7 @@ const MyTeams = ({myTeams}) => {
             </div>
 
             <Modal
-              title={<h4 className='text-center pb-5'>Create a new team:</h4>}
+              title={<h4 className='text-center pb-5'>CREATE A NEW TEAM</h4>}
               centered
               open={open}
               okText='Connect'
@@ -120,7 +135,7 @@ const MyTeams = ({myTeams}) => {
             >
               <Row gutter={[16, 16]}>
                     <Col span={16}>
-                      <AddTeam limit={limit} form={form} setIsFieldsFilled={setIsFieldsFilled} memberError={memberError} setMemberError={setMemberError}/>
+                      <AddTeam userName={userName} limit={limit} form={form} setIsFieldsFilled={setIsFieldsFilled} teamError={teamError} setTeamError={setTeamError}/>
                     </Col>
               </Row>
             </Modal>

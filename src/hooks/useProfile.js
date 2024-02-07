@@ -71,6 +71,28 @@ const useProfile = () => {
         }
     }
 
+    const handleVerifyTeamMemberAdd = async (data, category) => {
+        let config = {}
+
+        if(profile.signed_in){
+            const token = localStorage.getItem('jwt');
+            config.headers = { "Authorization": "Bearer " + token, ...config.headers};
+        }
+
+        try {
+            const response = await axios.post(`${process.env.REACT_APP_API_LINK}/api/v1/account/verifyTeamMemberAdd/${profile.data._id}`, data, config);
+            
+            if(response.data.status === 200){
+                setErrorMessage(null);
+            }else{
+                setErrorMessage(response.data.error.message);
+            }
+            return response.data
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     const handleTeamCreation = async (data) => {
         let config = {}
 
@@ -81,6 +103,7 @@ const useProfile = () => {
 
         try {
             const response = await axios.post(`${process.env.REACT_APP_API_LINK}/api/v1/teams`, data, config);
+            console.log(response.data.data.members.invited)
             
             if(response.data.status === 200){
                 const notificationData = {
@@ -96,32 +119,28 @@ const useProfile = () => {
 
                 // Send message to server
                 socketN.emit("send_notification", notificationData);
+
+                //send the invited players notification as well.
+                response.data.data.members.invited.forEach((invited) => {
+                    const notificationData = {
+                        type: "team_creation",
+                        subject: "You’re invited to join this team",
+                        subjectPhoto:response.data.data.photo,
+                        invokedByName: response.data.data.teamName,
+                        invokedById: "645b60abe95cd95bcfad6894",
+                        receivedByName: profile.data.userName,
+                        receivedById: invited._id,  //this user will receive notification
+                        route: `team/${response.data.data._id}`
+                    }
+
+                    // Send message to server
+                    socketN.emit("send_notification", notificationData);
+                })
+
                 setErrorMessage(null);
 
                 //also add to redux user profile
                 dispatch(addTeamCreation(response.data.data));
-            }else{
-                setErrorMessage(response.data.error.message);
-            }
-            return response.data
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    const handleVerifyMembers = async (data) => {
-        let config = {}
-
-        if(profile.signed_in){
-            const token = localStorage.getItem('jwt');
-            config.headers = { "Authorization": "Bearer " + token, ...config.headers};
-        }
-
-        try {
-            const response = await axios.post(`${process.env.REACT_APP_API_LINK}/api/v1/account/verifyMembers/${profile.data._id}`, data, config);
-            
-            if(response.data.status === 200){
-                setErrorMessage(null);
             }else{
                 setErrorMessage(response.data.error.message);
             }
@@ -343,19 +362,19 @@ const useProfile = () => {
             const response = await axios.post(`${process.env.REACT_APP_API_LINK}/api/v1/party/${data.partyId}`, data, config);
             
             if(response.data.status === 200){
-                const notificationData = {
-                    type: "party_join",
-                    subject: "You’ve requested to join the party",
-                    subjectPhoto:response.data.data.photo,
-                    invokedByName: response.data.data._id,
-                    invokedById: "645b60abe95cd95bcfad6894",
-                    receivedByName: profile.data.userName,
-                    receivedById: profile.data._id,  //this user will receive notification
-                    route: `party/details/${response.data.data._id}`
-                }
+                // const notificationData = {
+                //     type: "party_join",
+                //     subject: "You’ve requested to join the party",
+                //     subjectPhoto:response.data.data.photo,
+                //     invokedByName: response.data.data.title,
+                //     invokedById: "645b60abe95cd95bcfad6894",
+                //     receivedByName: profile.data.userName,
+                //     receivedById: profile.data._id,  //this user will receive notification
+                //     route: `party/details/${response.data.data._id}`
+                // }
 
-                // Send message to server
-                socketN.emit("send_notification", notificationData);
+                // // Send message to server
+                // socketN.emit("send_notification", notificationData);
                 setErrorMessage(null);
 
                 //also add to redux user profile
@@ -401,7 +420,7 @@ const useProfile = () => {
         handleProfileDraftUpdate,
         handleGameAccountAdd,
         handleTeamCreation,
-        handleVerifyMembers,
+        handleVerifyTeamMemberAdd,
         handleFriendRequestHook,
         handleFriendListHook,
         handleClaimingBadgetHook,

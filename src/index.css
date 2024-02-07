@@ -697,7 +697,7 @@ a:hover{
   margin-bottom: 0px !important;
 }
 .popCard .ant-card-body{
-  padding: 10px;
+  padding: 20px;
 }
 .popBody .ant-card-body{
   padding: 10px;
@@ -1132,7 +1132,7 @@ a:hover{
   color: transparent;
 }
 
-.tournamentBg::after{
+.tournamentBg::after, .profileBg::after{
   content: '';
   width: 100%;
   background: linear-gradient(to bottom,transparent 0%, #16161a 95%);

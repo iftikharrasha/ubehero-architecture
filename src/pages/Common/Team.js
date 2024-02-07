@@ -9,7 +9,7 @@ import TeamSide from '../../components/Team/TeamSide';
 import TeamTop from '../../components/Team/TeamTop';
 // import TeamBottom from '../../components/Team/TeamBottom';
 
-import { Tabs, Row, Modal, Tour, Col } from 'antd';
+import { Tabs, Row, Modal, Tour, Col, Card } from 'antd';
 import TeamBottom from '../../components/Team/TeamBottom';
 
 const Team = () => { 
@@ -20,11 +20,13 @@ const Team = () => {
     // const version = userDetails ? userDetails.version : 0; //delete
     // const id = userDetails._id; //delete
     
+    const profile = useSelector(state => state.profile);
+    const isLoggedIn = profile?.signed_in;
+    const userId = profile?.data?._id;
+
     const teams = useSelector((state) => state.myTeams.data)
-    console.log(teams);
     const teamDetails = teams.find(t => t._id === id);
     const version = teamDetails ? teamDetails.version : 0;
-    console.log(teamDetails);
 
     // const [routeKey, setRouteKey] = useState('mystats');
     // const [statsRouteKey, setStatsRouteKey] = useState('games');
@@ -206,10 +208,15 @@ const Team = () => {
             {
                 teamDetails ? 
                 <div className='profile'>
+                    <div className='profileBg'>
+                      <img src={teamDetails.coverPhoto} alt="cover" />
+                    </div>
                     <Row>
                         <Col span={5}>
                             <TeamSide 
-                                team={teamDetails} 
+                                team={teamDetails}
+                                isLoggedIn={isLoggedIn} 
+                                userId={userId}
                             />
                         </Col>
                         <Col span={18} offset={1}>
@@ -217,19 +224,22 @@ const Team = () => {
                                 team={teamDetails} 
                                 // badges={badges}
                             />
-                            <TeamBottom/>
-                            {/* <TeamBottom
-                                routeKey={routeKey} 
-                                settingsRouteKey={settingsRouteKey}
-                                socialsRouteKey={socialsRouteKey}
-                                statsRouteKey={statsRouteKey}
-                                friendRouteKey={friendRouteKey}
-                                handleTabChange={handleTabChange}
-                                profile={userDetails}
-                                myTeams={myTeams}
-                                badges={badges}
-                                gameStats={gameStats}
-                            /> */}
+                            
+                            <Card className="tabCard">
+                                <TeamBottom/>
+                                {/* <TeamBottom
+                                    routeKey={routeKey} 
+                                    settingsRouteKey={settingsRouteKey}
+                                    socialsRouteKey={socialsRouteKey}
+                                    statsRouteKey={statsRouteKey}
+                                    friendRouteKey={friendRouteKey}
+                                    handleTabChange={handleTabChange}
+                                    profile={userDetails}
+                                    myTeams={myTeams}
+                                    badges={badges}
+                                    gameStats={gameStats}
+                                /> */}
+                            </Card>
                         </Col>
                     </Row>
                 </div>

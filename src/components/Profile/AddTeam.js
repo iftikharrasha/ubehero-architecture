@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Space, Form, Input, Select, Button, Alert } from 'antd';
+import { Space, Form, Input, Select, Button, Alert, message } from 'antd';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 
 const { Option } = Select;
@@ -35,14 +35,14 @@ const formItemLayout = {
 };
 
 
-const AddTeam = ({ limit, form, setIsFieldsFilled, memberError, setMemberError }) => {
+const AddTeam = ({ userName, limit, form, setIsFieldsFilled, teamError, setTeamError }) => {
     const [memberAdd, setMemberAdd] = useState(false);
     const onFinish = (values) => {
         console.log('Received values of form: ', values);
     };
 
     const onFieldsChange = (_, allFields) => {
-        setMemberError(null);
+        setTeamError(null);
         const categoryField = allFields.find((field) => field.name[0] === 'category');
         const teamNameField = allFields.find((field) => field.name[0] === 'teamName');
         const namesField = allFields.find((field) => field.name[0] === 'members');
@@ -75,31 +75,6 @@ const AddTeam = ({ limit, form, setIsFieldsFilled, memberError, setMemberError }
                 <Form.Item>
                     <Space.Compact>
                         <Form.Item
-                            label='Game Name'
-                            name={['category']}
-                            style={{
-                                width: 200,
-                                margin: '0 8px',
-                            }}
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'you must select a game',
-                                },
-                            ]}
-                        >
-                            <Select placeholder="Select a game">
-                                <Option value="">Select category</Option>
-                                <Option value="pubg">pubg</Option>
-                                <Option value="freefire">freefire</Option>
-                                <Option value="warzone">warzone</Option>
-                                <Option value="fifa">fifa</Option>
-                                <Option value="rocket league">rocket league</Option>
-                                <Option value="clash of clans">clash of clans</Option>
-                                <Option value="clash royale">clash royale</Option>
-                            </Select>
-                        </Form.Item>
-                        <Form.Item
                             label='Team Name'
                             name={['teamName']}
                             style={{
@@ -116,6 +91,31 @@ const AddTeam = ({ limit, form, setIsFieldsFilled, memberError, setMemberError }
                             <Input
                                 placeholder="Enter Team Name"
                             />
+                        </Form.Item>
+                        <Form.Item
+                            label='Game Name'
+                            name={['category']}
+                            style={{
+                                width: 200,
+                                margin: '0 8px',
+                            }}
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'You must select a game',
+                                },
+                            ]}
+                        >
+                            <Select placeholder="Select a game">
+                                <Option value="">Select category</Option>
+                                <Option value="pubg">pubg</Option>
+                                <Option value="freefire">freefire</Option>
+                                <Option value="warzone">warzone</Option>
+                                <Option value="fifa">fifa</Option>
+                                <Option value="rocket league">rocket league</Option>
+                                <Option value="clash of clans">clash of clans</Option>
+                                <Option value="clash royale">clash royale</Option>
+                            </Select>
                         </Form.Item>
                     </Space.Compact>
                 </Form.Item>
@@ -134,10 +134,11 @@ const AddTeam = ({ limit, form, setIsFieldsFilled, memberError, setMemberError }
                 >
                     {(fields, { add, remove }, { errors }) => (
                         <>
+                            <p style={{margin: '0 8px 10px 8px'}}>Leader: {userName}</p>
                             {fields.map((field, index) => (
                                 <Form.Item
                                     {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
-                                    label={index === 0 ? 'Members' : ''}
+                                    label={index === 0 ? 'Teammates' : ''}
                                     required={true}
                                     key={field.key}
                                     style={{
@@ -158,7 +159,7 @@ const AddTeam = ({ limit, form, setIsFieldsFilled, memberError, setMemberError }
                                         noStyle
                                     >
                                         <Input
-                                            placeholder="members username"
+                                            placeholder="teammates username"
                                             style={{
                                                 width: 200,
                                             }}
@@ -184,7 +185,7 @@ const AddTeam = ({ limit, form, setIsFieldsFilled, memberError, setMemberError }
                                         onClick={() => add()}
                                         icon={<PlusOutlined />}
                                     >
-                                        Add Member
+                                        Add Teammate
                                     </Button>
     
                                     <Form.ErrorList errors={errors} />
@@ -203,11 +204,11 @@ const AddTeam = ({ limit, form, setIsFieldsFilled, memberError, setMemberError }
 
             </Form>
             {
-            memberError ? 
+            teamError ? 
             <div className="d-flex">
                 <Alert 
-                    message={memberError}
-                    description="Make sure you typed the username correctly!"
+                    message={teamError.message}
+                    description={teamError.description}
                     type="warning"
                     showIcon 
                     closable={false}

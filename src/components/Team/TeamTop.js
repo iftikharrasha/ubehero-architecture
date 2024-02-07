@@ -12,8 +12,8 @@ const TeamTop = ({team, badges}) => {
       style={{position: 'relative'}}
     >
       <Card bordered 
-        // style={{ width: "100%"}}
-        style={{ width: "100%", boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)', backgroundImage: `url(${coverPhoto})`, backgroundPosition: 'center', backgroundRepeat: 'no-repeat', backgroundSize: 'cover' }}
+        style={{ width: "100%"}}
+        // style={{ width: "100%", boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)', backgroundImage: `url(${coverPhoto})`, backgroundPosition: 'center', backgroundRepeat: 'no-repeat', backgroundSize: 'cover' }}
       >
         <Row justify="space-between" align="end">
           <Row justify="left" align="middle">
@@ -52,12 +52,12 @@ const TeamTop = ({team, badges}) => {
             <CameraOutlined style={{ fontSize: '24px'}} />
             <Link to={`/team/2/friends`}>
               <Button type="default" size="small">
-                4 MEMBERS
+                0 MEMBERS
               </Button>
             </Link>
             <Link to={`/team/2/followers`}>
               <Button type="default" size="small">
-                213 FOLLOWERS
+                0 FOLLOWERS
               </Button>
             </Link>
           </Row>
