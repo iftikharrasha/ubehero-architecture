@@ -117,7 +117,7 @@ const UserPopup = ({popupUser}) => {
                 <Col span={8}>
                 <Card bordered={false} className="popBody">
                     <Row justify="center" align="middle" style={{flexDirection: 'column'}}>
-                    <Paragraph className="mb-0">Followers</Paragraph>
+                    <Paragraph className="mb-0">Follower</Paragraph>
                     <Paragraph className="mb-0">{popupUser.followers}</Paragraph>
                     </Row>
                 </Card>

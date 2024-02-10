@@ -1136,7 +1136,7 @@ a:hover{
   content: '';
   width: 100%;
   background: linear-gradient(to bottom,transparent 0%, #16161a 95%);
-  z-index: 1;
+  z-index: 0;
   position: fixed;
   top: 0;
   left: 0px;

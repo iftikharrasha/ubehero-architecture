@@ -2,65 +2,99 @@ import React, { useContext, useState } from 'react';
 import { Card, Button, Progress, Typography, Timeline, Badge, Tabs, Row, Avatar } from 'antd';
 import { PartitionOutlined, DoubleRightOutlined, MessageOutlined, CrownOutlined, CoffeeOutlined } from '@ant-design/icons';
 import InboxContext from '../../Contexts/InboxContext/InboxContext';
+import useProfile from '../../hooks/useProfile';
 
 const { Paragraph } = Typography;
 const { Meta } = Card;
 const { TabPane } = Tabs;
 
-const TeamSide = ({team, isLoggedIn, userId}) => {
-    const { stats } = team;
-    const { levelTitle, currentLevel } = stats;
-    const now = Math.ceil(((stats.currentXP / (stats.currentXP  + stats.nextLevelRequiredXP)) * 100));
-    const [profileSideKey, setProfileSideKey] = useState('currentBage')
+const copies = [1, 2, 3, 4, 5, 6, 7, 8];
+const ranks = [
+    {
+        level: 1,
+        title: 'Suncrest',
+        icon: 'https://content.invisioncic.com/u312729/monthly_2021_06/12_Mentor.svg',
+        xpCap: 5000,
+    },
+    {
+        level: 2,
+        title: 'Emberfall',
+        icon: 'https://content.invisioncic.com/u312729/monthly_2021_06/3_Apprentice.svg',
+        xpCap: 10000,
+    },
+    {
+        level: 3,
+        title: 'Thornwood',
+        icon: 'https://content.invisioncic.com/u312729/monthly_2021_06/9_RisingStar.svg',
+        xpCap: 15000,
+    },
+    {
+        level: 4,
+        title: 'Frostvale',
+        icon: 'https://content.invisioncic.com/u312729/monthly_2021_06/2_Rookie.svg',
+        xpCap: 20000,
+    },
+    {
+        level: 5,
+        title: 'Shadowmoor',
+        icon: 'https://content.invisioncic.com/u312729/monthly_2021_06/6_Enthusiast.svg',
+        xpCap: 25000,
+    },
+    {
+        level: 6,
+        title: 'Ironspire',
+        icon: 'https://content.invisioncic.com/u312729/monthly_2021_06/6_Enthusiast.svg',
+        xpCap: 30000,
+    },
+    {
+        level: 7,
+        title: 'Azurekeep',
+        icon: 'https://content.invisioncic.com/u312729/monthly_2021_06/9_RisingStar.svg',
+        xpCap: 35000,
+    },
+    {
+        level: 8,
+        title: 'Stormreach',
+        icon: 'https://content.invisioncic.com/u312729/monthly_2021_06/8_Regular.svg',
+        xpCap: 40000,
+    },
+    {
+        level: 9,
+        title: 'Oakheart',
+        icon: 'https://content.invisioncic.com/u312729/monthly_2021_06/12_Mentor.svg',
+        xpCap: 45000,
+    },
+    {
+        level: 10,
+        title: 'Whisperwind',
+        icon: 'https://content.invisioncic.com/u312729/monthly_2021_06/12_Mentor.svg',
+        xpCap: 50000,
+    },
+]
 
-    const copies = [1, 2, 3, 4, 5, 6, 7, 8];
-    const ranks = [
-        {
-            level: 1,
-            title: 'Underdog',
-            icon: 'https://content.invisioncic.com/u312729/monthly_2021_06/12_Mentor.svg',
-        },
-        {
-            level: 2,
-            title: 'Rookie',
-            icon: 'https://content.invisioncic.com/u312729/monthly_2021_06/3_Apprentice.svg',
-        },
-        {
-            level: 3,
-            title: 'Explorer',
-            icon: 'https://content.invisioncic.com/u312729/monthly_2021_06/9_RisingStar.svg',
-        },
-        {
-            level: 4,
-            title: 'Collector',
-            icon: 'https://content.invisioncic.com/u312729/monthly_2021_06/2_Rookie.svg',
-        },
-        {
-            level: 5,
-            title: 'Collaborator',
-            icon: 'https://content.invisioncic.com/u312729/monthly_2021_06/6_Enthusiast.svg',
-        },
-        {
-            level: 6,
-            title: 'Contributor',
-            icon: 'https://content.invisioncic.com/u312729/monthly_2021_06/6_Enthusiast.svg',
-        },
-        {
-            level: 7,
-            title: 'Rising star',
-            icon: 'https://content.invisioncic.com/u312729/monthly_2021_06/9_RisingStar.svg',
-        },
-        {
-            level: 8,
-            title: 'Professional',
-            icon: 'https://content.invisioncic.com/u312729/monthly_2021_06/8_Regular.svg',
-        },
-        {
-            level: 9,
-            title: 'Veteran',
-            icon: 'https://content.invisioncic.com/u312729/monthly_2021_06/12_Mentor.svg',
+const TeamSide = ({socketN, team, isLoggedIn, userId}) => {
+    const { stats, members, category } = team;
+    const { levelTitle, currentLevel } = stats;
+    const [profileSideKey, setProfileSideKey] = useState('currentBage')
+    const { handleTeamJoiningRequestHook } = useProfile();
+    
+    // const now = Math.ceil(((stats.currentXP / (stats.currentXP  + stats.nextLevelRequiredXP)) * 100));
+    const detectLevelAndTitle = (teamTotalXp) => {
+        let level = 0;
+        let title = '';
+    
+        for (let i = 0; i < ranks.length; i++) {
+            if (teamTotalXp <= ranks[i].xpCap) {
+                level = ranks[i].level;
+                title = ranks[i].title;
+                break;
+            }
         }
-    ]
+    
+        return { level, title };
+    };
+
+    const { level, title } = detectLevelAndTitle(team.teamTotalXp);
 
     const onChange = (key) => {
       setProfileSideKey(key);
@@ -68,10 +102,56 @@ const TeamSide = ({team, isLoggedIn, userId}) => {
 
     const { setShowInbox, setPopUser } = useContext(InboxContext);
     const handleInboxPop = () => {
-        setPopUser(team.captainProfile);
+        setPopUser(team.captainId);
         setShowInbox(true);
     };
     
+    const handleJoiningTeam = async (e, item, type) => {
+        e.preventDefault();
+
+        const data = {
+            type: type,
+            from: userId,
+            to: team._id
+        }
+
+        const result = await handleTeamJoiningRequestHook(data, item);
+        if(result.success){
+            window.location.reload();
+            // if(type === 'invite_request_reject') {
+            // socketN.emit("delete_notification", item._id);
+            //     // Update the state locally
+            //     setNotyfReceived((notifications) => {
+            //         const updatedNotifications = notifications.filter(notification => notification._id !== item._id);
+            //         return updatedNotifications;
+            //     });
+            // }else{
+            // const updatadData = {
+            //     type: "friend_request_accept", 
+            //     subject: `Is your friend now`, 
+            //     invokedByName: item.invokedByName
+            // }
+            
+            // // Update the database on server
+            // socketN.emit("update_notification", item._id, updatadData);
+        
+            // // Update the state locally
+            // setNotyfReceived((notifications) => {
+            //     const updatedNotifications = notifications.map((notification) => {
+            //     if (notification._id === item._id) {
+            //         return  { ...notification, 
+            //                 ...updatadData
+            //                 };
+            //     }
+            //     return notification;
+            //     });
+            //     return updatedNotifications;
+            // });
+            // }
+            // setClickedItem(null)
+        }
+    };
+
     return (
         <div className="list-group sticky-top">
           <Tabs activeKey={profileSideKey} onChange={onChange}>
@@ -84,7 +164,7 @@ const TeamSide = ({team, isLoggedIn, userId}) => {
                   }
               >
                 <Card>
-                    <div className="number">{currentLevel}</div>
+                    <div className="number">{level}</div>
                     <div className="badgeClaimed">
                         <div className='spinningasset'>
                             <img src='https://content.invisioncic.com/u312729/monthly_2021_06/12_Mentor.svg' alt='claim'/>
@@ -97,32 +177,39 @@ const TeamSide = ({team, isLoggedIn, userId}) => {
                     </div>
                     <>
                         <div className="instructions text-center">
-                            <h2>{levelTitle}</h2>
+                            <h2>{title}</h2>
                             <p>
-                                Level {currentLevel}
+                                Level {level}
                             </p>
                         </div>
                         <ul className='rewards ps-0'>
-                            {/* <li>
-                                <img src="https://icons.iconarchive.com/icons/iconarchive/treasure-chest/512/Blue-Flat-Treasure-Chest-icon.png" alt="loot" width={50}/>
+                            <li>
+                                <img src="https://cdn-icons-png.flaticon.com/512/8037/8037151.png" alt="loot" width={50}/>
                                 <span>
-                                    {stats.totalLoots} <br /> LOOTS
+                                    {members?.mates?.length+1}/3 <br /> Mates
                                 </span>
                             </li>
                             <li>
-                                <img src="https://cdn2.iconfinder.com/data/icons/outlined-valuable-items/200/minerals_green_stone-512.png" alt="gems" width={50}/>
+                                <img src="https://images.rawpixel.com/image_transparent_png_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTA0L2pvYjcyMS0xNDAtcF8xLnBuZw.png" alt="gems" width={50}/>
                                 <span>
-                                    {stats.totalGems} <br /> GEMS
+                                    {category}
                                 </span>
-                            </li> */}
+                            </li>
                             <li>
                                 <img src="https://miro.medium.com/v2/resize:fit:728/1*jBIARTlGCm6J8d29xcVekg.png" alt="xp" width={50}/>
                                 <span>
-                                    {stats.totalXp} <br />
+                                    {team.teamTotalXp} <br />XP
                                 </span>
                             </li>
                         </ul>
                     </> 
+
+                    {
+                        members?.invited?.find(u => u._id === userId) ? 
+                        <Button type="primary" size="small" className="mt-3 joinButton" onClick={(e) => {e.stopPropagation(); handleJoiningTeam(e, team.captainId, 'invite_request_accept')}}>
+                            Accept Invitation
+                        </Button>  : null
+                    }
                 </Card>
 
                 
@@ -149,11 +236,11 @@ const TeamSide = ({team, isLoggedIn, userId}) => {
                     />
                 </Card>
               </TabPane>
-              {/* <TabPane
+              <TabPane
                   key="journey"
                   tab={
                       <Row justify="left" align="middle">
-                          <PartitionOutlined style={{ fontSize: '16px', transform: 'rotate(180deg)' }} /> <span>My Journey</span>
+                          <PartitionOutlined style={{ fontSize: '16px', transform: 'rotate(180deg)' }} /> <span>Journey</span>
                       </Row>
                   }
               >
@@ -162,13 +249,15 @@ const TeamSide = ({team, isLoggedIn, userId}) => {
                     <Timeline>
                         {
                             ranks.map((rank, index) => {
-                                const isCurrentLevel = rank.level === currentLevel;
-                                const showNextRankBadge = rank.level === currentLevel+1;
+                                const isCurrentLevel = rank.level === level;
+                                const showNextRankBadge = rank.level === level+1;
+                                const xpNeededForNextLevel = rank.xpCap - team.teamTotalXp;
+                                const now = Math.ceil(((team.teamTotalXp / (team.teamTotalXp  + xpNeededForNextLevel)) * 100));
       
                                 return (
-                                    <Timeline.Item key={index} label={false} color={rank.level <= stats?.currentLevel+1 ? 'green' : 'gray'} dot={showNextRankBadge ? <DoubleRightOutlined style={{fontSize: '26px'}} /> : rank.level}>
+                                    <Timeline.Item key={index} label={false} color={rank.level <= level+1 ? 'green' : 'gray'} dot={showNextRankBadge ? <DoubleRightOutlined style={{fontSize: '26px'}} /> : rank.level}>
                                       {showNextRankBadge ? (
-                                        <Badge.Ribbon text={`${stats?.totalXp}xp`} color="#f030c0">
+                                        <Badge.Ribbon text={`${team.teamTotalXp}xp`} color="#f030c0">
                                           <Card>
                                             <Meta
                                               title={
@@ -179,14 +268,14 @@ const TeamSide = ({team, isLoggedIn, userId}) => {
                                               description={
                                                 <div>
                                                   <Progress percent={now} steps={12} />
-                                                  <p className='card-text' style={{fontSize: '14px'}}>{stats?.nextLevelRequiredXP}xp needed to unlock this rank</p>
+                                                  <p className='card-text' style={{fontSize: '14px'}}>{xpNeededForNextLevel} xp needed to unlock this rank</p>
                                                 </div>
                                               }
                                             />
                                           </Card>
                                         </Badge.Ribbon>
                                       ) : (
-                                        <Paragraph className={rank.level <= currentLevel ? null : 'grayscale'}>
+                                        <Paragraph className={rank.level <= level ? null : 'grayscale'}>
                                           <img alt="rank" src={rank.icon} width={26} height={26} /> {rank.title}
                                         </Paragraph>
                                       )}
@@ -194,14 +283,9 @@ const TeamSide = ({team, isLoggedIn, userId}) => {
                                 )
                             })
                         }
-                        <Timeline.Item className='pb-0' label={false} color={currentLevel === 10 ? 'green' : 'gray' } dot={currentLevel === 10 ? <DoubleRightOutlined style={{fontSize: '26px'}}/> : 10}>
-                            <Button type="primary" size="small" disabled={currentLevel === 9 ? false : true }>
-                                UPGRADE TO MASTER
-                            </Button>
-                        </Timeline.Item>
                     </Timeline>
                 </Card>
-              </TabPane> */}
+              </TabPane>
           </Tabs>
         </div>
     );

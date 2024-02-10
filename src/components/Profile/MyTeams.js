@@ -91,7 +91,7 @@ const MyTeams = ({myTeams}) => {
                                 }
                                 actions={[
                                     <Row justify="center" align="middle">
-                                        <UsergroupAddOutlined  style={{ fontSize: '18px' }} /> <span className="ps-1" style={{ fontSize: '14px' }}>0/{item.members.invited.length}</span>
+                                        <UsergroupAddOutlined  style={{ fontSize: '18px' }} /> <span className="ps-1" style={{ fontSize: '14px' }}>{item.members.mates.length+1}/3</span>
                                     </Row>,
                                     <Row justify="center" align="middle">
                                         <>

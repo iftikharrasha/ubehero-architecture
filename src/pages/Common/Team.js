@@ -11,10 +11,12 @@ import TeamTop from '../../components/Team/TeamTop';
 
 import { Tabs, Row, Modal, Tour, Col, Card } from 'antd';
 import TeamBottom from '../../components/Team/TeamBottom';
+import useProfile from '../../hooks/useProfile';
 
 const Team = () => { 
     const dispatch = useDispatch();
     const { id } = useParams();
+    const { handleTeamDetails } = useProfile();
 
     // const userDetails = useSelector((state) => state.profile.data)  //delete
     // const version = userDetails ? userDetails.version : 0; //delete
@@ -24,9 +26,24 @@ const Team = () => {
     const isLoggedIn = profile?.signed_in;
     const userId = profile?.data?._id;
 
-    const teams = useSelector((state) => state.myTeams.data)
-    const teamDetails = teams.find(t => t._id === id);
-    const version = teamDetails ? teamDetails.version : 0;
+    // const teams = useSelector((state) => state.myTeams.data)
+    // const teamDetails = teams.find(t => t._id === id);
+    // const version = teamDetails ? teamDetails.version : 0;
+
+    const [teamDetails, setTeamDetails] = useState(null);
+    useEffect(() => {
+        const fetchData = async () => {
+          try {
+            const team = await handleTeamDetails(id);
+            setTeamDetails(team);
+          } catch (error) {
+            setTeamDetails([]);
+            console.error('Error fetching friend list:', error);
+          }
+        };
+      
+        fetchData();  // Call the async function immediately
+    }, []);
 
     // const [routeKey, setRouteKey] = useState('mystats');
     // const [statsRouteKey, setStatsRouteKey] = useState('games');
@@ -226,7 +243,11 @@ const Team = () => {
                             />
                             
                             <Card className="tabCard">
-                                <TeamBottom/>
+                                <TeamBottom
+                                    team={teamDetails}
+                                    isLoggedIn={isLoggedIn} 
+                                    userId={userId}
+                                />
                                 {/* <TeamBottom
                                     routeKey={routeKey} 
                                     settingsRouteKey={settingsRouteKey}

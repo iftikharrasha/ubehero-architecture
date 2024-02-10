@@ -150,6 +150,29 @@ const useProfile = () => {
         }
     }
 
+    const handleTeamDetails = async (id) => {
+        let config = {}
+
+        if(profile.signed_in){
+            const token = localStorage.getItem('jwt');
+            config.headers = { "Authorization": "Bearer " + token, ...config.headers};
+        }
+
+        try {
+            const response = await axios.get(`${process.env.REACT_APP_API_LINK}/api/v1/teams/${id}?version=0`, config);
+            console.log("1. response", response);
+            
+            if(response.data.status === 200){
+                setErrorMessage(null);
+            }else{
+                setErrorMessage(response.data.error.message);
+            }
+            return response.data.data
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     const handleFriendRequestHook = async (data, receiver) => {
         let config = {}
 
@@ -198,6 +221,67 @@ const useProfile = () => {
                 }
                 setErrorMessage(null);
                 dispatch(addIntoFriendQueue(response.data.data));
+                console.log("xp", response);
+                if(response.data.xp){
+                    dispatch(addXpLatest(response.data.xp));
+                }
+            }else{
+                setErrorMessage(response.data.error.message);
+            }
+            return response.data
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const handleTeamJoiningRequestHook = async (data, receiver) => {
+        let config = {}
+
+        if(profile.signed_in){
+            const token = localStorage.getItem('jwt');
+            config.headers = { "Authorization": "Bearer " + token, ...config.headers};
+        }
+
+        try {
+            const response = await axios.post(`${process.env.REACT_APP_API_LINK}/api/v1/teams/members/${data.from}`, data, config);
+            console.log(response.data)
+            
+            if(response.data.status === 200){
+                let notificationData = null;
+                switch (data.type) {
+                    case 'invite_request_accept':
+                        notificationData = {
+                            type: data.type,
+                            subject: "Accepted your team join invitation",
+                            subjectPhoto: profile?.data?.photo,
+                            invokedByName: profile?.data?.userName,
+                            invokedById: profile?.data?._id,
+                            receivedByName: receiver.userName,
+                            receivedById: receiver._id, 
+                            route: `team/${data.to}`
+                        }
+                        // Send message to server
+                        socketN.emit("send_notification", notificationData);
+                        break;
+                    // case 'friend_request_accept':
+                    //     notificationData = {
+                    //         type: data.type,
+                    //         subject: "Accepted your friend request",
+                    //         subjectPhoto: profile?.data?.photo,
+                    //         invokedByName: profile?.data?.userName,
+                    //         invokedById: profile?.data?._id,
+                    //         receivedByName: receiver.invokedByName,
+                    //         receivedById: receiver.invokedById, 
+                    //         route: `profile/${profile?.data?._id}`
+                    //     }
+                    //     // Send message to server
+                    //     socketN.emit("send_notification", notificationData);
+                    //     break;
+                    default:
+                        // Handle unknown types or do nothing
+                        break;
+                }
+                setErrorMessage(null);
                 console.log("xp", response);
                 if(response.data.xp){
                     dispatch(addXpLatest(response.data.xp));
@@ -413,6 +497,28 @@ const useProfile = () => {
         }
     }
 
+    const handleTeamMembersListHook = async (tId) => {
+        let config = {}
+
+        if(profile.signed_in){
+            const token = localStorage.getItem('jwt');
+            config.headers = { "Authorization": "Bearer " + token, ...config.headers};
+        }
+
+        try {
+            const response = await axios.get(`${process.env.REACT_APP_API_LINK}/api/v1/teams/members/${tId}`, config);
+            
+            if(response.data.status === 200){
+                setErrorMessage(null);
+            }else{
+                setErrorMessage(response.data.error.message);
+            }
+            return response.data.data
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     return {
         actingAs,
         errorMessage,
@@ -420,6 +526,8 @@ const useProfile = () => {
         handleProfileDraftUpdate,
         handleGameAccountAdd,
         handleTeamCreation,
+        handleTeamDetails,
+        handleTeamJoiningRequestHook,
         handleVerifyTeamMemberAdd,
         handleFriendRequestHook,
         handleFriendListHook,
@@ -427,7 +535,8 @@ const useProfile = () => {
         handlePartyCreate,
         handlePartyJoin,
         handlePartyEventListHook,
-        handlePartyPeopleListHook
+        handlePartyPeopleListHook,
+        handleTeamMembersListHook,
         // handleBadgeListHook
     }
 }

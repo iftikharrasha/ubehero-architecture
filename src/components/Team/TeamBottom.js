@@ -1,6 +1,7 @@
 import React from 'react';
-import { Row, Tabs } from 'antd';
+import { Empty, Row, Tabs } from 'antd';
 import { HistoryOutlined, TeamOutlined, SettingOutlined } from '@ant-design/icons';
+import TeamMates from './TeamMates';
 // import MyStats from './MyStats';
 // import Settings from './Settings';
 // import MySocials from './MySocials';
@@ -8,39 +9,45 @@ import { HistoryOutlined, TeamOutlined, SettingOutlined } from '@ant-design/icon
 
 const { TabPane } = Tabs;
 
-const TeamBottom = () => {
+const TeamBottom = ({team, isLoggedIn, userId}) => {
     return (
         <Tabs>
             <TabPane
-                key="mystats"
+                key="tournaments"
                 tab={
                     <Row justify="left" align="middle">
-                        <HistoryOutlined /> <span>My Stats</span>
+                        <HistoryOutlined /> <span>Tournaments</span>
                     </Row>
                 }
             >
-                <h2>Team Stats here!</h2>
+                <Empty/>
             </TabPane>
+
             <TabPane
-                key="socials"
-                tab={
-                    <Row justify="left" align="middle">
-                        <TeamOutlined /> <span>Members</span>
-                    </Row>
-                }
-            >
-                {/* <MySocials mySocials={[1, 2, 3, 4, 5, 6, 7, 8]} socialsRouteKey={socialsRouteKey} friendRouteKey={friendRouteKey} handleTabChange={handleTabChange}/> */}
+                    key="members"
+                    tab={
+                        <Row justify="left" align="middle">
+                            <SettingOutlined /> <span>Members</span>
+                        </Row>
+                    }
+                >
+                <TeamMates captain={team.captainId} tId={team._id}/>
             </TabPane>
-            <TabPane
-                key="settings"
-                tab={
-                    <Row justify="left" align="middle">
-                        <SettingOutlined /> <span>Inventory</span>
-                    </Row>
-                }
-            >
-                {/* <Settings profile={profile} settingsRouteKey={settingsRouteKey} handleTabChange={handleTabChange}/> */}
-            </TabPane>
+
+            {
+                !isLoggedIn ? null : team?.captainId?._id === userId ?
+                <TabPane
+                    key="settings"
+                    tab={
+                        <Row justify="left" align="middle">
+                            <SettingOutlined /> <span>Inventory</span>
+                        </Row>
+                    }
+                >
+                    <h2>This is where captain would have the controls!</h2>
+                    {/* <Settings profile={profile} settingsRouteKey={settingsRouteKey} handleTabChange={handleTabChange}/> */}
+                </TabPane> : null
+            }
         </Tabs>
     );
 };
