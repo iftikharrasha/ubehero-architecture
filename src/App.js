@@ -66,6 +66,7 @@ function App() {
       <ConfigProvider
         theme={{
           token: {
+            fontFamily: 'Oxanium',
             colorPrimary: '#9551fb',
             colorPrimaryActive: '#1677ff',
             colorPrimaryHover: '#F030C0',

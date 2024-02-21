@@ -93,6 +93,28 @@ const useProfile = () => {
         }
     }
 
+    const handleTeamsList = async (pid) => {
+        let config = {}
+
+        if(profile.signed_in){
+            const token = localStorage.getItem('jwt');
+            config.headers = { "Authorization": "Bearer " + token, ...config.headers};
+        }
+
+        try {
+            const response = await axios.get(`${process.env.REACT_APP_API_LINK}/api/v1/teams?version=0`, config);
+            
+            if(response.data.status === 200){
+                setErrorMessage(null);
+            }else{
+                setErrorMessage(response.data.error.message);
+            }
+            return response.data.data
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     const handleTeamCreation = async (data) => {
         let config = {}
 
@@ -168,6 +190,28 @@ const useProfile = () => {
                 setErrorMessage(response.data.error.message);
             }
             return response.data.data
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const handleTeamActivation = async (data) => {
+        let config = {}
+
+        if(profile.signed_in){
+            const token = localStorage.getItem('jwt');
+            config.headers = { "Authorization": "Bearer " + token, ...config.headers};
+        }
+
+        try {
+            const response = await axios.patch(`${process.env.REACT_APP_API_LINK}/api/v1/teams/${data._id}`, data, config);
+            
+            if(response.data.status === 200){
+                setErrorMessage(null);
+            }else{
+                setErrorMessage(response.data.error.message);
+            }
+            return response.data
         } catch (error) {
             console.log(error);
         }
@@ -524,8 +568,10 @@ const useProfile = () => {
         errorMessage,
         handleSwitchProfile,
         handleProfileDraftUpdate,
+        handleTeamActivation,
         handleGameAccountAdd,
         handleTeamCreation,
+        handleTeamsList,
         handleTeamDetails,
         handleTeamJoiningRequestHook,
         handleVerifyTeamMemberAdd,

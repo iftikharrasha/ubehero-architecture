@@ -1,11 +1,11 @@
 import React from "react";
-import { Card, Button, Row, Image,  Avatar, Divider, Tooltip, Badge } from 'antd';
+import { Card, Button, Row, Image,  Avatar, Divider, Tooltip, Badge, Tag } from 'antd';
 import { CameraOutlined, AntDesignOutlined, UserOutlined } from '@ant-design/icons';
 import moment from "moment";
 import { Link } from 'react-router-dom';
 
 const TeamTop = ({team, badges}) => {
-  const { _id, teamName, createdAt, photo, version, stats, coverPhoto } = team;
+  const { _id, teamName, createdAt, photo, version, stats, coverPhoto, captainId, members } = team;
   
   return (
     <div className='d-flex mb-3' 
@@ -19,8 +19,9 @@ const TeamTop = ({team, badges}) => {
           <Row justify="left" align="middle">
             <Avatar src={photo} size={130}/>
             <div className="ps-4">
-              <h5 className='card-title mb-1'>{teamName}</h5>
-              <p>Member since: July 2, 2023</p>
+                <h5 className='card-title mb-1'>{teamName}</h5>
+                {/* <p>{`Created At: ${moment(createdAt).format('ll')}`}</p> */}
+                <p>Team Status: <Tag color={`${team?.status === 'active' ? 'green' : 'gold'}`}>{team?.status}</Tag></p>
                 <div className="d-flex">
                   <Avatar.Group
                     shape="square"
@@ -31,28 +32,43 @@ const TeamTop = ({team, badges}) => {
                       backgroundColor: '#fde3cf',
                     }}
                   >
-                    {/* {
-                      badges.slice(0).reverse().filter(badge => badge.level > 0).map((badge, index) => (
-                        <Tooltip title={`L.${badge.level === 0 ? 1 : badge.level} ${badge.title}`} placement="top">
+                      <Tooltip title={`${captainId.userName}`} placement="top">
+                        <Avatar
+                          src={captainId.photo}
+                        />
+                      </Tooltip>
+                    {
+                      members.mates.map((mate, index) => (
+                        <Tooltip title={`${mate.userName}`} placement="top">
                           <Avatar key={index}
-                            src={badge.icon}
+                            src={mate.photo}
                           />
                         </Tooltip>
                       ))
-                    } */}
+                    }
+                    {
+                      members.invited.map((mate, index) => (
+                        <Tooltip title={`${mate.userName} (pending)`} placement="top">
+                          {/* <Avatar key={index}
+                            src={mate.photo}
+                          /> */}
+                          <Avatar icon={<UserOutlined/>} />
+                        </Tooltip>
+                      ))
+                    }
                   </Avatar.Group>
-                  <span className="ms-2">
-                    <p className="mb-2">No badges unlocked yet</p>
+                  {/* <span className="ms-2">
+                    <p className="mb-2">Team Status: <Tag color="gold">{team?.status}</Tag></p>
                     <Divider className="my-1"/>
-                  </span>
+                  </span> */}
                 </div>
             </div>
           </Row>
           <Row justify="space-between" align="start" style={{ flexDirection: 'column' }} className="my-3" >
             <CameraOutlined style={{ fontSize: '24px'}} />
-            <Link to={`/team/2/friends`}>
+            <Link to={`/team/${team._id}/mates`}>
               <Button type="default" size="small">
-                0 MEMBERS
+                {team?.members?.mates?.length+1} MEMBERS
               </Button>
             </Link>
             <Link to={`/team/2/followers`}>

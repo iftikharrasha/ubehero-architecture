@@ -17,6 +17,11 @@ const LeftMenu = ({ mode }) => {
           Parties
         </Link>
       </Menu.Item>
+      <Menu.Item key="upgrade">
+        <Link to='/teams'>
+          Teams
+        </Link>
+      </Menu.Item>
       <Menu.Item key="leaderboards">
         <Link to='/leaderboards'>
           Leaderboards

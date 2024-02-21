@@ -43,7 +43,7 @@ html {
 
 body {
   margin: 0;
-  font-family: 'Oxanium', 'cursive';
+  font-family: 'Oxanium', 'cursive' !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
@@ -1135,7 +1135,7 @@ a:hover{
 .tournamentBg::after, .profileBg::after{
   content: '';
   width: 100%;
-  background: linear-gradient(to bottom,transparent 0%, #16161a 95%);
+  background: linear-gradient(to top,transparent 0%, #16161a 95%);
   z-index: 0;
   position: fixed;
   top: 0;
@@ -1645,3 +1645,11 @@ a:hover{
 .rules p{
   font-size: 16px;
 }
+
+/* .empty.ant-empty{
+    min-height: 22rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+} */

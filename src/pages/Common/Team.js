@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import io from 'socket.io-client';
 import PageLayout from '../../components/PageLayout/PageLayout';
 import Preloader from '../../components/PageLayout/Preloader';
 import { fetchMyTeams, fetchTeamDetails } from '../../redux/slices/teamSlice';
@@ -12,6 +13,8 @@ import TeamTop from '../../components/Team/TeamTop';
 import { Tabs, Row, Modal, Tour, Col, Card } from 'antd';
 import TeamBottom from '../../components/Team/TeamBottom';
 import useProfile from '../../hooks/useProfile';
+
+let initialSocketId = null;
 
 const Team = () => { 
     const dispatch = useDispatch();
@@ -220,6 +223,71 @@ const Team = () => {
     //   },
     // ]
 
+    //socket implementation
+    const [socket, setSocket] = useState(null);
+    const [isConnected, setIsConnected] = useState(false);
+    const [unreadCount, setUnreadCount] = useState(0);
+
+    useEffect(() => {
+        const chatRoomSocket = io.connect(`${process.env.REACT_APP_API_LINK}/chatRoomTeam`, {
+          transports: ['websocket'],
+          cors: {
+            origin: `${process.env.REACT_APP_CLIENT_ORIGIN}`,
+            methods: ['GET', 'POST'],
+          },
+        });
+    
+        setSocket(chatRoomSocket);
+    
+        // Listen for pong event
+        chatRoomSocket.on("pong", (receivedDate, pingReceivedAt, pongSocketId) => {
+  
+          const createdAt = new Date().getTime();
+          const latency = createdAt - receivedDate;
+          console.log(`Received pong of ${chatRoomSocket.id} at ${pingReceivedAt} with latency ${latency}ms`);
+  
+          if(!initialSocketId){
+              console.log("pongSocketId, initialSocketId", pongSocketId, initialSocketId)
+              initialSocketId = pongSocketId;
+          }
+  
+          // Compare the socketId with the initial socketId to see if the socket is still connected
+          if(initialSocketId){
+              if (pongSocketId !== initialSocketId) {
+                  initialSocketId = null;
+                  console.log('Socket disconnected for inactivity!');
+                  setIsConnected(false);
+  
+                  chatRoomSocket.emit("leave_room", { createdAt });
+              }
+          }
+        });
+  
+        // Listen for disconnect event
+        chatRoomSocket.on('disconnect', () => {
+          initialSocketId = null;
+          console.log('Socket disconnected with disconnect event');
+          setIsConnected(false);
+        });
+    
+        // Disconnect socket on unmount
+        return () => {
+          chatRoomSocket.disconnect();
+        };
+    }, []);
+
+    useEffect(() => {
+      let interval;
+      if (socket) {
+        interval = setInterval(() => {
+          socket.emit("ping");
+        }, 15000);
+        setIsConnected(true);
+      }
+    
+      return () => clearInterval(interval);
+    }, [socket]);
+
     return (
         <PageLayout>
             {
@@ -247,6 +315,11 @@ const Team = () => {
                                     team={teamDetails}
                                     isLoggedIn={isLoggedIn} 
                                     userId={userId}
+                                    socket={socket}
+                                    isConnected={isConnected}
+                                    leaderboards={teamDetails?.members?.mates?.length}
+                                    unreadCount={unreadCount}
+                                    setUnreadCount={setUnreadCount}
                                 />
                                 {/* <TeamBottom
                                     routeKey={routeKey} 

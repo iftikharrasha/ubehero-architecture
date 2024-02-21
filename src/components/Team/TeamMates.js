@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { LockOutlined, UserOutlined, PartitionOutlined, ProjectOutlined } from '@ant-design/icons';
-import { Button, Card, Tabs, Row, Col, Empty, Popover, Spin } from 'antd';
+import { LockOutlined, UserOutlined, TeamOutlined, ProjectOutlined, CrownOutlined } from '@ant-design/icons';
+import { Button, Card, Tabs, Row, Col, Empty, Popover, Spin, Typography } from 'antd';
 import UserPopup from '../Common/UserPopup/UserPopup';
 import useProfile from '../../hooks/useProfile';
 import moment from 'moment';
 
+const { Paragraph } = Typography;
 const { TabPane } = Tabs;
 
 const TeamMates = ({captain, tId, friendRouteKey, handleTabChange}) => {
@@ -31,61 +32,99 @@ const TeamMates = ({captain, tId, friendRouteKey, handleTabChange}) => {
                 key="friendlist"
                 tab={
                     <Row justify="left" align="middle">
-                        <ProjectOutlined /> <span>Joined ({partyPeopleList?.members?.mates?.length+1})</span>
+                        <ProjectOutlined /> <span>Joined ({partyPeopleList?.members?.mates?.length+1 || 0})</span>
                     </Row>
                 }
             >
                 <Card>
                     {
                         !partyPeopleList ?  <div className='d-flex justify-content-center align-items-center' style={{ minHeight: '30vh' }}><Spin /></div> :
-                        <Row gutter={[16, 16]}>
-                            <Col span={6}>
-                                <Popover placement="topLeft" content={<UserPopup popupUser={captain} middle={false}/>}>
-                                    <Card hoverable>
-                                            <div className="d-flex align-items-center">
-                                                <img
-                                                src={captain.photo}
-                                                alt="user-pic"
-                                                style={{ width: '45px', height: '45px' }}
-                                                className="rounded-circle"
-                                                />
-                                                <div className="ms-3">
-                                                <p className="fw-bold mb-0">{captain.userName}</p>
-                                                {/* <p className="mb-0">Country: {record.country}</p> */}
-                                                <p className="mb-0">
-                                                    <div className="status">Joined {moment(captain.createdAt).fromNow()} </div>  
-                                                </p>
-                                                </div>
-                                            </div>
-                                    </Card>
-                                </Popover>
-                            </Col>
-                            {
-                                partyPeopleList?.members?.mates?.map((friend, index) => (
-                                    <Col span={6} key={index}>
-                                        <Popover placement="topLeft" content={<UserPopup popupUser={friend} middle={false}/>}>
-                                            <Card hoverable>
-                                                    <div className="d-flex align-items-center">
-                                                        <img
-                                                        src={friend.photo}
+                        <>
+                            <Paragraph><CrownOutlined style={{ fontSize: '16px', color: 'gold', marginBottom: '0px' }}/> Team Leader</Paragraph>
+                            <Row gutter={[16, 16]}>
+                                <Col span={6}>
+                                    <Popover placement="topLeft" content={<UserPopup popupUser={captain} middle={false}/>}>
+                                        <Card hoverable>
+                                                <div className="d-flex align-items-center">
+                                                    <img
+                                                        src={captain.photo}
                                                         alt="user-pic"
                                                         style={{ width: '45px', height: '45px' }}
                                                         className="rounded-circle"
-                                                        />
-                                                        <div className="ms-3">
-                                                        <p className="fw-bold mb-0">{friend.userName}</p>
+                                                    />
+                                                    <div className="ms-3">
+                                                        <p className="fw-bold mb-0">{captain.userName}</p>
                                                         {/* <p className="mb-0">Country: {record.country}</p> */}
-                                                        <p className="mb-0">
-                                                            <div className="status">Joined {moment(friend.createdAt).fromNow()} </div>  
-                                                        </p>
-                                                        </div>
+                                                        {/* <p className="mb-0">
+                                                            <div className="status">Joined {moment(captain.createdAt).fromNow()} </div>  
+                                                        </p> */}
+                                                        
+                                                        {
+                                                            captain?.gameAccounts[0] ? 
+                                                            <p className="mb-0">
+                                                                <img
+                                                                    src={captain.gameAccounts[0].accountLogo}
+                                                                    alt="account-pic"
+                                                                    style={{ width: '18px', height: '18px', marginRight: '5px' }}
+                                                                    className="rounded-circle"
+                                                                />
+                                                                {captain?.gameAccounts[0]?.playerIgn}
+                                                            </p>
+                                                        :  <p className="mb-0">No game account connected</p>
+                                                        }
                                                     </div>
-                                            </Card>
-                                        </Popover>
-                                    </Col>
-                                ))
+                                                </div>
+                                        </Card>
+                                    </Popover>
+                                </Col>
+                            </Row>
+                            {
+                                partyPeopleList?.members?.mates?.length === 0 ? null : 
+                                <>
+                                    <Paragraph className='mt-3'><TeamOutlined style={{ fontSize: '16px', color: 'gold', marginBottom: '0px', paddingRight: '2px' }}/>Team Mates</Paragraph>
+                                    <Row gutter={[16, 16]}>
+                                        {
+                                            partyPeopleList?.members?.mates?.map((friend, index) => (
+                                                <Col span={6} key={index}>
+                                                    <Popover placement="topLeft" content={<UserPopup popupUser={friend} middle={false}/>}>
+                                                        <Card hoverable>
+                                                                <div className="d-flex align-items-center">
+                                                                    <img
+                                                                    src={friend.photo}
+                                                                    alt="user-pic"
+                                                                    style={{ width: '45px', height: '45px' }}
+                                                                    className="rounded-circle"
+                                                                    />
+                                                                    <div className="ms-3">
+                                                                        <p className="fw-bold mb-0">{friend.userName}</p>
+                                                                        {/* <p className="mb-0">Country: {record.country}</p> */}
+                                                                        {/* <p className="mb-0">
+                                                                            <div className="status">Joined {moment(friend.createdAt).fromNow()} </div>  
+                                                                        </p> */}
+                                                                            {
+                                                                            friend?.gameAccounts[0] ? 
+                                                                            <p className="mb-0">
+                                                                                <img
+                                                                                    src={friend.gameAccounts[0].accountLogo}
+                                                                                    alt="account-pic"
+                                                                                    style={{ width: '18px', height: '18px', marginRight: '5px' }}
+                                                                                    className="rounded-circle"
+                                                                                />
+                                                                                {friend?.gameAccounts[0]?.playerIgn}
+                                                                            </p>
+                                                                            :  <p className="mb-0">No game account connected</p>
+                                                                            }
+                                                                    </div>
+                                                                </div>
+                                                        </Card>
+                                                    </Popover>
+                                                </Col>
+                                            ))
+                                        }
+                                    </Row>
+                                </>
                             }
-                        </Row>
+                        </>
                     }
                 </Card>
             </TabPane>
@@ -93,7 +132,7 @@ const TeamMates = ({captain, tId, friendRouteKey, handleTabChange}) => {
                 key="pendings"
                 tab={
                     <Row justify="left" align="middle">
-                        <ProjectOutlined /> <span>Invited ({partyPeopleList?.members?.invited?.length})</span>
+                        <ProjectOutlined /> <span>Invited ({partyPeopleList?.members?.invited?.length || 0})</span>
                     </Row>
                 }
             >

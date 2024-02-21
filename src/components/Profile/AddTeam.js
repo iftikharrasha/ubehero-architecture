@@ -111,7 +111,6 @@ const AddTeam = ({ userName, limit, form, setIsFieldsFilled, teamError, setTeamE
                                 <Option value="pubg">pubg</Option>
                                 <Option value="freefire">freefire</Option>
                                 <Option value="warzone">warzone</Option>
-                                <Option value="fifa">fifa</Option>
                                 <Option value="rocket league">rocket league</Option>
                                 <Option value="clash of clans">clash of clans</Option>
                                 <Option value="clash royale">clash royale</Option>

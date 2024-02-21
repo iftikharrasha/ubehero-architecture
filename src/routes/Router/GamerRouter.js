@@ -11,6 +11,7 @@ import Wallet from '../../pages/Common/Wallet';
 import Team from '../../pages/Common/Team';
 import Parties from '../../pages/Common/Parties';
 import Party from '../../pages/Common/Party';
+import Teams from '../../pages/Common/Teams';
 
 const GamerRouter = () => {
   return (
@@ -21,6 +22,7 @@ const GamerRouter = () => {
         <Route exact path="/signup" component={Signup} />
         <Route exact path="/live" component={Live} />
         <Route exact path="/parties" component={Parties} />
+        <Route exact path="/teams" component={Teams} />
         <Route exact path="/tournament/details/:id" render={() => <TDetails/>}  />
         <Route exact path="/party/details/:id" render={() => <Party/>}  />
         <Route path="/tournament/details/:id/bracket" render={() => <TDetails tabKey={'bracket'}/>} />

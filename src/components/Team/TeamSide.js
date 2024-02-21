@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Card, Button, Progress, Typography, Timeline, Badge, Tabs, Row, Avatar } from 'antd';
+import { Card, Button, Progress, Typography, Timeline, Badge, Tabs, Row, Avatar, Tag } from 'antd';
 import { PartitionOutlined, DoubleRightOutlined, MessageOutlined, CrownOutlined, CoffeeOutlined } from '@ant-design/icons';
 import InboxContext from '../../Contexts/InboxContext/InboxContext';
 import useProfile from '../../hooks/useProfile';
@@ -12,68 +12,68 @@ const copies = [1, 2, 3, 4, 5, 6, 7, 8];
 const ranks = [
     {
         level: 1,
-        title: 'Suncrest',
+        title: 'Underdog Coalition',
         icon: 'https://content.invisioncic.com/u312729/monthly_2021_06/12_Mentor.svg',
         xpCap: 5000,
     },
     {
         level: 2,
-        title: 'Emberfall',
+        title: 'Fractured Vanguard',
         icon: 'https://content.invisioncic.com/u312729/monthly_2021_06/3_Apprentice.svg',
         xpCap: 10000,
     },
     {
         level: 3,
-        title: 'Thornwood',
+        title: 'Blade Alliance',
         icon: 'https://content.invisioncic.com/u312729/monthly_2021_06/9_RisingStar.svg',
         xpCap: 15000,
     },
     {
         level: 4,
-        title: 'Frostvale',
+        title: 'Swiftstrike Brigade',
         icon: 'https://content.invisioncic.com/u312729/monthly_2021_06/2_Rookie.svg',
         xpCap: 20000,
     },
     {
         level: 5,
-        title: 'Shadowmoor',
+        title: 'Citadel Raiders',
         icon: 'https://content.invisioncic.com/u312729/monthly_2021_06/6_Enthusiast.svg',
         xpCap: 25000,
     },
     {
         level: 6,
-        title: 'Ironspire',
+        title: 'Ironbound Legion',
         icon: 'https://content.invisioncic.com/u312729/monthly_2021_06/6_Enthusiast.svg',
         xpCap: 30000,
     },
     {
         level: 7,
-        title: 'Azurekeep',
+        title: 'Liberty Guards',
         icon: 'https://content.invisioncic.com/u312729/monthly_2021_06/9_RisingStar.svg',
         xpCap: 35000,
     },
     {
         level: 8,
-        title: 'Stormreach',
+        title: 'Blaze Wardens',
         icon: 'https://content.invisioncic.com/u312729/monthly_2021_06/8_Regular.svg',
         xpCap: 40000,
     },
     {
         level: 9,
-        title: 'Oakheart',
+        title: 'Elite Tribune',
         icon: 'https://content.invisioncic.com/u312729/monthly_2021_06/12_Mentor.svg',
         xpCap: 45000,
     },
     {
         level: 10,
-        title: 'Whisperwind',
+        title: 'Eternity Assembly',
         icon: 'https://content.invisioncic.com/u312729/monthly_2021_06/12_Mentor.svg',
         xpCap: 50000,
     },
 ]
 
 const TeamSide = ({socketN, team, isLoggedIn, userId}) => {
-    const { stats, members, category } = team;
+    const { stats, members, category, captainId } = team;
     const { levelTitle, currentLevel } = stats;
     const [profileSideKey, setProfileSideKey] = useState('currentBage')
     const { handleTeamJoiningRequestHook } = useProfile();
@@ -190,9 +190,9 @@ const TeamSide = ({socketN, team, isLoggedIn, userId}) => {
                                 </span>
                             </li>
                             <li>
-                                <img src="https://images.rawpixel.com/image_transparent_png_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTA0L2pvYjcyMS0xNDAtcF8xLnBuZw.png" alt="gems" width={50}/>
+                                <img src="https://icones.pro/wp-content/uploads/2022/07/icone-jeux-et-jeux-video-violet.png" alt="gems" width={50}/>
                                 <span>
-                                    {category}
+                                    Game <br /><Tag color='volcano' bordered={false} style={{textTransform: 'uppercase'}}>{category}</Tag>
                                 </span>
                             </li>
                             <li>
@@ -208,7 +208,9 @@ const TeamSide = ({socketN, team, isLoggedIn, userId}) => {
                         members?.invited?.find(u => u._id === userId) ? 
                         <Button type="primary" size="small" className="mt-3 joinButton" onClick={(e) => {e.stopPropagation(); handleJoiningTeam(e, team.captainId, 'invite_request_accept')}}>
                             Accept Invitation
-                        </Button>  : null
+                        </Button>  : 
+                         members?.mates?.find(u => u._id === userId) || (captainId._id === userId) ? 
+                         <Tag color="green" className="joinButton">Joined</Tag> : null
                     }
                 </Card>
 

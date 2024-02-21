@@ -22,16 +22,6 @@ const ProfileBottom = ({ref2GamingStats, ref2Teams, ref2Settings, routeKey, sett
                 <MyStats statsRouteKey={statsRouteKey} handleTabChange={handleTabChange} stats={profile.stats} badges={badges} gameStats={gameStats}/>
             </TabPane>
             <TabPane
-                key="socials"
-                tab={
-                    <Row justify="left" align="middle" ref={ref2Teams}>
-                        <TeamOutlined /> <span>Socials</span>
-                    </Row>
-                }
-            >
-                <MySocials socialsRouteKey={socialsRouteKey} friendRouteKey={friendRouteKey} handleTabChange={handleTabChange}/>
-            </TabPane>
-            <TabPane
                 key="teams"
                 tab={
                     <Row justify="left" align="middle" ref={ref2Teams}>
@@ -40,6 +30,16 @@ const ProfileBottom = ({ref2GamingStats, ref2Teams, ref2Settings, routeKey, sett
                 }
             >
                 <MyTeams routeKey={routeKey} myTeams={myTeams} />
+            </TabPane>
+            <TabPane
+                key="socials"
+                tab={
+                    <Row justify="left" align="middle" ref={ref2Teams}>
+                        <TeamOutlined /> <span>Socials</span>
+                    </Row>
+                }
+            >
+                <MySocials socialsRouteKey={socialsRouteKey} friendRouteKey={friendRouteKey} handleTabChange={handleTabChange}/>
             </TabPane>
             <TabPane
                 key="settings"

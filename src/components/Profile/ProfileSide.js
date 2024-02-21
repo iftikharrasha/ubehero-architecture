@@ -16,47 +16,52 @@ const ProfileSide = ({ref1TSummery1, ref1TSummery2, ref1TSummery3, ref1TSummery4
     const ranks = [
         {
             level: 1,
-            title: 'Underdog',
+            title: 'Iron Shakled',
             icon: 'https://content.invisioncic.com/u312729/monthly_2021_06/12_Mentor.svg',
         },
         {
             level: 2,
-            title: 'Rookie',
+            title: 'Broken Cuff',
             icon: 'https://content.invisioncic.com/u312729/monthly_2021_06/3_Apprentice.svg',
         },
         {
             level: 3,
-            title: 'Explorer',
+            title: 'Prison Breaker',
             icon: 'https://content.invisioncic.com/u312729/monthly_2021_06/9_RisingStar.svg',
         },
         {
             level: 4,
-            title: 'Collector',
+            title: 'Shattered Sword',
             icon: 'https://content.invisioncic.com/u312729/monthly_2021_06/2_Rookie.svg',
         },
         {
             level: 5,
-            title: 'Collaborator',
+            title: 'Underdog',
             icon: 'https://content.invisioncic.com/u312729/monthly_2021_06/6_Enthusiast.svg',
         },
         {
             level: 6,
-            title: 'Contributor',
+            title: 'Swiftdagger',
             icon: 'https://content.invisioncic.com/u312729/monthly_2021_06/6_Enthusiast.svg',
         },
         {
             level: 7,
-            title: 'Rising star',
+            title: 'Liberty Blade',
             icon: 'https://content.invisioncic.com/u312729/monthly_2021_06/9_RisingStar.svg',
         },
         {
             level: 8,
-            title: 'Professional',
-            icon: 'https://content.invisioncic.com/u312729/monthly_2021_06/8_Regular.svg',
+            title: 'Burning Sheild',
+            icon: 'https://content.invisioncic.com/u312729/monthly_2021_06/9_RisingStar.svg',
         },
         {
             level: 9,
-            title: 'Veteran',
+            title: 'Thracian Helm',
+            icon: 'https://content.invisioncic.com/u312729/monthly_2021_06/8_Regular.svg',
+        },
+        {
+            level: 10,
+            title: 'Eternal Crest',
             icon: 'https://content.invisioncic.com/u312729/monthly_2021_06/12_Mentor.svg',
         }
     ]
@@ -163,11 +168,11 @@ const ProfileSide = ({ref1TSummery1, ref1TSummery2, ref1TSummery3, ref1TSummery4
                                 )
                             })
                         }
-                        <Timeline.Item className='pb-0' label={false} color={currentLevel === 10 ? 'green' : 'gray' } dot={currentLevel === 10 ? <DoubleRightOutlined style={{fontSize: '26px'}}/> : 10}>
+                        {/* <Timeline.Item className='pb-0' label={false} color={currentLevel === 10 ? 'green' : 'gray' } dot={currentLevel === 10 ? <DoubleRightOutlined style={{fontSize: '26px'}}/> : 10}>
                             <Button type="primary" size="small" ref={ref1TSummery4} disabled={currentLevel === 9 ? false : true }>
                                 UPGRADE TO MASTER
                             </Button>
-                        </Timeline.Item>
+                        </Timeline.Item> */}
                     </Timeline>
                 </Card>
               </TabPane>
