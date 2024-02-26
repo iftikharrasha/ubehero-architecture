@@ -5,24 +5,38 @@ import { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import useTournament from '../../../hooks/useTournament';
-import { Checkbox } from 'antd';
+import { Radio } from 'antd';
 import { useSelector } from "react-redux";
 
-const CheckboxGroup = Checkbox.Group;
-
 const MasterCreateDraft = () => {
-    const { handleTournamentDraftCreate, errorMessage } = useTournament();
-    const [createData, setCreateData] = useState({ tournamentName: "", category: "", region: "", platforms: [], party: "65851d4304cf34c8d4649e2e", date: new Date() });
-    const myParties = useSelector((state) => state.profile.data.parties.owner);
-    // console.log(myParties)
+    const games = useSelector(state => state.statics.games);
+    const [filteredPlatforms, setFilteredPlatforms] = useState(null);
+    const [filteredCrossPlatforms, setFilteredCrossPlatforms] = useState([]);
 
-    const platformOptions = [
-        { label: 'PSN', value: 'psn', disabled: createData.platforms.includes('mobile') || createData.platforms.includes('nintendo') },
-        { label: 'XBOX', value: 'xbox', disabled: createData.platforms.includes('mobile') || createData.platforms.includes('nintendo') },
-        { label: 'PC', value: 'pc', disabled: createData.platforms.includes('mobile') || createData.platforms.includes('nintendo') },
-        { label: 'Mobile', value: 'mobile', disabled: createData.platforms.includes('psn') || createData.platforms.includes('xbox') || createData.platforms.includes('pc') || createData.platforms.includes('nintendo') },
-        { label: 'Nintendo', value: 'nintendo', disabled: createData.platforms.includes('psn') || createData.platforms.includes('xbox') || createData.platforms.includes('pc') || createData.platforms.includes('mobile') },
-    ];
+    const { handleTournamentDraftCreate, errorMessage } = useTournament();
+    const [createData, setCreateData] = useState({ tournamentName: "", category: "", region: "", platforms: [], crossPlatforms: [], party: "65851d4304cf34c8d4649e2e", date: new Date() });
+    const myParties = useSelector((state) => state.profile.data.parties.owner);
+    console.log(createData)
+
+    const onCategoryChange = (e) => {
+        const p = games.find((game) => game.gameTitle === e.target.value);
+        setFilteredPlatforms(p.eligiblePlatforms);
+        setFilteredCrossPlatforms(p.crossPlatforms);
+        setCreateData({
+            ...createData,
+            category: e.target.value,
+            platforms: [],
+            crossPlatforms: [],
+        });
+    };
+    
+    const onPlatformChange = (e) => {
+        setCreateData({
+            ...createData,
+            platforms: [e.target.value],
+            crossPlatforms: e.target.value === 'cross' ? filteredCrossPlatforms : [],
+        });
+    };
 
     const handleRegStartDateChange = (date) => {
         setCreateData({
@@ -34,13 +48,6 @@ const MasterCreateDraft = () => {
     const handleTournamentCreate = (e, role) => {
       e.preventDefault();
       handleTournamentDraftCreate(createData, role);
-    };
-
-    const onChange = (checkedValues) => {
-        setCreateData({
-          ...createData,
-          platforms: checkedValues,
-        });
     };
 
     return (
@@ -66,30 +73,31 @@ const MasterCreateDraft = () => {
 
                 <Form.Group className="mb-3" controlId="formBasicGender">
                     <Form.Label>Game Category</Form.Label>
-                    <Form.Control as="select" value={createData.category} onChange={(e) =>
-                        setCreateData({
-                        ...createData,
-                        category: e.target.value,
-                        })
-                    }>
+                    <Form.Control as="select" value={createData.category} onChange={(e) => onCategoryChange(e)}>
                         <option value="">Select category</option>
-                        <option value="pubg">pubg</option>
-                        <option value="freefire">freefire</option>
-                        <option value="warzone">warzone</option>
-                        <option value="fifa">fifa</option>
-                        <option value="rocket league">rocket league</option>
-                        <option value="clash of clans">clash of clans</option>
-                        <option value="clash royale">clash royale</option>
-                        {/* <option value="csgo">csgo</option> */}
+                        {games.map((game, i) => {
+                            return <option key={i} value={game.gameTitle}>{game.gameTitle}</option>;
+                        })}
                     </Form.Control>
                 </Form.Group>
 
-                <Form.Group className="mb-3" controlId="formBasicPlatform">
-                    <Form.Label>Tournament Platforms</Form.Label>
-                    <div>
-                        <CheckboxGroup options={platformOptions} value={createData.platforms} onChange={onChange} />
-                    </div>
-                </Form.Group>
+                {
+                    filteredPlatforms ?
+                    <Form.Group className="mb-3" controlId="formBasicPlatform">
+                        <Form.Label>Tournament Platforms</Form.Label>
+                        <div>
+                            <Radio.Group onChange={onPlatformChange} value={createData.platforms[0]}>
+                                {filteredPlatforms.map((platform, i) => {
+                                    return (
+                                        <Radio key={i} value={platform} style={{ lineHeight: '32px' }}>
+                                            {platform === 'cross' ? `Cross-Play (${filteredCrossPlatforms.join(', ')})` : platform}
+                                        </Radio>
+                                    );
+                                })}
+                            </Radio.Group>
+                        </div>
+                    </Form.Group> : null
+                }
 
                 <Form.Group className="mb-3" controlId="formBasicGender">
                     <Form.Label>Choose Party</Form.Label>

@@ -16,27 +16,18 @@ const CheckoutLayout = ({ item, handleOrder, handlePaymentMethod, method, setMet
     const [clickedItem, setClickedItem] = useState(null);
     const uId = useSelector((state) => state.profile.data._id);
     const { handleGameAccountAdd } = useProfile();
-    console.log(connectedAccount)
+    console.log(item)
 
     const [form] = Form.useForm();
-
-    //this is to help auto connect game account
-    // useEffect(() => {
-    //   //this is to filter out and remain only valid accounts for this tournament
-    //   const filteredAccounts = allAccounts.filter((account) => {
-    //     return item.platforms.includes(account.platform) && account.category === item.category;
-    //   });
-    //   if(filteredAccounts.length === 1) {
-    //     setConnectedAccount(filteredAccounts[0])
-    //   }else{
-    //     setValidPlatformAccounts(filteredAccounts)
-    //   }
-    // }, [])
 
     useEffect(() => {
       //this is to filter out and remain only valid accounts for this tournament
       const filteredAccounts = allAccounts.filter((account) => {
-        return item.platforms.includes(account.platform) && account.category === item.category;
+        if(item.platforms.includes('cross')){
+          return item.crossPlatforms.includes(account.platform) && account.category === item.category;
+        }else{
+          return item.platforms.includes(account.platform) && account.category === item.category;
+        }
       });
       if(filteredAccounts.length === 1) {
         setConnectedAccount(filteredAccounts[0])
@@ -60,7 +51,8 @@ const CheckoutLayout = ({ item, handleOrder, handlePaymentMethod, method, setMet
           ...formData,
           uId: uId,
           category: item.category,
-          tag: item.settings.accountTag
+          tag: item.settings.accountTag,
+          crossPlay: item.platforms.includes('cross')
         }
 
         const result = await handleGameAccountAdd(addedPlatform);

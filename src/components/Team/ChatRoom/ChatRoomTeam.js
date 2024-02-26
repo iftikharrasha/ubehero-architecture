@@ -62,7 +62,7 @@ const ChatRoomTeam = ({socket, isConnected, team, teammates, unreadCount, setUnr
                 <Card>
                     {
                         teammates && 
-                        <UserListTeam socket={socket} teammates={teammates}/>
+                        <UserListTeam socket={socket} teammates={teammates} captain={captainId}/>
                     }
                 </Card>
             </div>

@@ -99,22 +99,8 @@ const TeamBottom = ({team, isLoggedIn, userId, socket, isConnected, unreadCount,
                         </Row>
                     }
                 >
-                <TeamMates captain={team.captainId} tId={team._id}/>
+                <TeamMates captain={team.captainId} tId={team._id} crossPlay={team.platforms.includes('cross')}/>
             </TabPane>
-
-            {
-                !isLoggedIn ? null : team?.captainId?._id === userId ?
-                <TabPane
-                    key="settings"
-                    tab={
-                        <Row justify="left" align="middle">
-                            <SettingOutlined /> <span>Inventory</span>
-                        </Row>
-                    }
-                >
-                    <TeamInventory team={team}/>
-                </TabPane> : null
-            }
 
             <TabPane
                     key="chatroom"
@@ -137,6 +123,20 @@ const TeamBottom = ({team, isLoggedIn, userId, socket, isConnected, unreadCount,
                     : <Preloader/>
                 }
             </TabPane>
+
+            {
+                !isLoggedIn ? null : team?.captainId?._id === userId ?
+                <TabPane
+                    key="settings"
+                    tab={
+                        <Row justify="left" align="middle">
+                            <SettingOutlined /> <span>Inventory</span>
+                        </Row>
+                    }
+                >
+                    <TeamInventory team={team}/>
+                </TabPane> : null
+            }
         </Tabs>
     );
 };

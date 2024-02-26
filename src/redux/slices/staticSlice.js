@@ -21,6 +21,9 @@ export const fetchStatics = createAsyncThunk(
                 if(data.status === 304) {
                     return {
                         landing: getState().statics.landing,
+                        refs: getState().statics.refs,
+                        games: getState().statics.games,
+                        platforms: getState().statics.platforms,
                         version: getState().statics.version,
                         country: getState().statics.country
                     };
@@ -38,8 +41,11 @@ const staticSlice = createSlice({
     name: 'static',
     initialState: {
         landing: null,
-        version: 0,
+        refs: null,
+        games: [],
+        platforms: [],
         country: 'uk',
+        version: 0,
         status: 'idle',
     },
     reducers: {
@@ -50,7 +56,10 @@ const staticSlice = createSlice({
     extraReducers: (builder) => {
         // Add reducers for additional action types here, and handle loading state as needed
         builder.addCase(fetchStatics.fulfilled, (state, action) => {
-            state.landing = action.payload.data || state.landing;
+            state.landing = action.payload.data.countryData || state.landing;
+            state.refs = action.payload.data.refs || state.refs;
+            state.games = action.payload.data.games || state.games;
+            state.platforms = action.payload.data.platforms || state.platforms;
             state.version = action.payload.version || state.version;
             state.country = action.payload.country || state.country; 
             state.status = 'success';

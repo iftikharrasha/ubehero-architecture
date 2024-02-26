@@ -15,7 +15,7 @@ const IconText = ({ icon, text }) => (
   );
 
 const TournamentSide = ({ref1TSummery1, ref1TSummery2, ref1TSummery3, isLoggedIn, userId, routeKey, tournament, totalJoined, purchasedItems, handleCancel, handleCheckout, step, buttonStatus, timeLeftPercent}) => {
-    const { _id, settings, tournamentName, platforms } = tournament;
+    const { _id, settings, tournamentName, platforms, crossPlatforms } = tournament;
     const purchased = purchasedItems?.tournaments?.includes(_id);
     
     const { setShowInbox, setPopUser } = useContext(InboxContext);
@@ -130,9 +130,15 @@ const TournamentSide = ({ref1TSummery1, ref1TSummery2, ref1TSummery3, isLoggedIn
                             <p className='card-text'>
                                 <span>
                                     <Breadcrumb style={{ color: 'white', fontSize: '16px' }}>Platforms:&nbsp;&nbsp;
-                                        {platforms.map((item, index) => (
-                                            <Breadcrumb.Item key={item.key}>{item}</Breadcrumb.Item>
-                                        ))}
+                                        {
+                                            platforms.includes('cross') ? 
+                                            crossPlatforms.map((item, index) => (
+                                                <Breadcrumb.Item key={item.key}>{item}</Breadcrumb.Item>
+                                            )) : 
+                                            platforms.map((item, index) => (
+                                                <Breadcrumb.Item key={item.key}>{item}</Breadcrumb.Item>
+                                            ))
+                                        }
                                     </Breadcrumb>
                                 </span>
                             </p>}/>

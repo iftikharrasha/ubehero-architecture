@@ -8,7 +8,7 @@ import UserPopup from '../../Common/UserPopup/UserPopup';
 
 const { TabPane } = Tabs;
 
-const UserListTeam = ({socket, teammates}) => {
+const UserListTeam = ({socket, teammates, captain}) => {
     const [roomUsers, setRoomUsers] = useState([]);
     
     //for popup
@@ -70,12 +70,23 @@ const UserListTeam = ({socket, teammates}) => {
                 key="2"
                 tab={
                     <Row justify="left" align="middle">
-                        <span>{`Participants (${teammates.length})`}</span>
+                        <span>{`Participants (${teammates.length+1})`}</span>
                     </Row>
                 }
             >
                 <div id="plist" className="people-list px-1">
                     <ul className="list-unstyled chat-list mb-0">
+                        <li className="clearfix active mb-1">
+                            <Popover placement="topLeft" content={<UserPopup popupUser={captain} middle={false}/>}>
+                                <Card>
+                                    <span className="avatarUser"><img src={captain.photo} alt="avatar"/></span>
+                                    <div className="about">
+                                        <div className="name"><i className={`fa fa-circle ${isUserOnline(captain) ? 'online' : 'offline'}`}></i> {captain.userName}</div>
+                                        <div className="status">{`${isUserOnline(captain) ? 'Online' : 'offline'}`}</div>                                            
+                                    </div>
+                                </Card>
+                            </Popover>
+                        </li>
                         {
                             teammates.map((participant, index) => (
                                 <li className="clearfix active mb-1" key={index}>

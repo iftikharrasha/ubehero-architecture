@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Avatar, Button, Card, Col, Modal, Popconfirm, Row, message, Form, Typography, Tooltip, Tag } from 'antd';
+import { Avatar, Button, Card, Col, Modal, Row, message, Form, Typography, Tooltip, Tag } from 'antd';
 import { UsergroupAddOutlined, CrownOutlined, PartitionOutlined, UserOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import AddTeam from './AddTeam';
@@ -17,53 +17,91 @@ const MyTeams = ({myTeams}) => {
     const [teamError, setTeamError] = useState(null);
     const [form] = Form.useForm();
     const [open, setOpen] = useState(false);
-    const uId = useSelector((state) => state.profile.data._id);
-    const userName = useSelector((state) => state.profile.data.userName);
+    const { _id, userName, gameAccounts } = useSelector((state) => state.profile.data);
+
     const teams = useSelector((state) => state.myTeams.data);
     const { handleTeamCreation, handleVerifyTeamMemberAdd } = useProfile();
+    const [filteredCrossPlatforms, setFilteredCrossPlatforms] = useState([]);
 
-    const confirm = (e) => {
-        message.success('Clicked');
-    };
+    const arraysHaveSameElements = (array1, array2) => {
+        // Sort the arrays
+        const sortedArray1 = array1.slice().sort();
+        const sortedArray2 = array2.slice().sort();
+        console.log(sortedArray1, sortedArray2)
+    
+        // Check if the sorted arrays have the same elements
+        return JSON.stringify(sortedArray1) === JSON.stringify(sortedArray2);
+    }
 
     const handleOk = async () => {
         setConfirmLoading(true);
         
         const formData = form.getFieldsValue();
+        const { category, members, platform, teamName } = formData;
         let addTeam = {
-            ...formData,
-            captainId: uId,
+            captainId: _id,
+            category: category,
+            teamName: teamName,
+            members: members,
+            platforms: [platform],
+            crossPlatforms: filteredCrossPlatforms,
         }
 
-        const teamExists = teams.find(t => t.category === addTeam.category);
+        //1. check if a same team category with same platform created by this player
+        let teamExists = null;
+        if(addTeam.platforms.includes('cross')){
+            teamExists = teams.find(t => t.category === category && arraysHaveSameElements(t.crossPlatforms, addTeam.crossPlatforms));
+            console.log('1', teamExists)
+        }else{
+            teamExists = teams.find(t => t.category === category && arraysHaveSameElements(t.platforms, addTeam.platforms));
+            console.log("2", teamExists)
+        }
 
         if (teamExists) {
             setTeamError({
-                message: `You already have a team for ${addTeam.category}`,
+                message: `You already have a team for ${category}`,
                 description: 'Please choose a different game',
             });
             setConfirmLoading(false);
         } else {
-            const result = await handleVerifyTeamMemberAdd(addTeam);
-            if(result.success){
-                addTeam = {
-                    ...addTeam,
-                    members: {
-                        invited: result.data
-                    },
+            //2. check if user has the game account for this game
+            const gameAccountExists = gameAccounts.filter((account) => {
+                if(addTeam.platforms.includes('cross')){
+                    console.log('cross', addTeam, account)
+                  return addTeam.crossPlatforms.includes(account.platform) && account.category === category;
+                }else{
+                  return addTeam.platforms.includes(account.platform) && account.category === category;
                 }
-                console.log(addTeam)
-                const team = await handleTeamCreation(addTeam);
-                if(team.success){
-                    setOpen(false);
-                    setConfirmLoading(false);
-                }
-            }else{
+            });
+            if(gameAccountExists.length === 0) {
                 setTeamError({
-                    message: result.message,
-                    description: "Type your friends username correctly!",
+                    message: `You do not have a game account for ${category}`,
+                    description: 'Please add your game account first',
                 });
                 setConfirmLoading(false);
+            }else{
+                const result = await handleVerifyTeamMemberAdd(addTeam);
+                console.log(result)
+                if(result.success){
+                    addTeam = {
+                        ...addTeam,
+                        members: {
+                            invited: result.data
+                        },
+                    }
+                    console.log(addTeam)
+                    const team = await handleTeamCreation(addTeam);
+                    if(team.success){
+                        setOpen(false);
+                        setConfirmLoading(false);
+                    }
+                }else{
+                    setTeamError({
+                        message: result.message,
+                        description: "Type your friends username correctly!",
+                    });
+                    setConfirmLoading(false);
+                }
             }
         }
     };
@@ -74,7 +112,7 @@ const MyTeams = ({myTeams}) => {
                 <div></div>
                 <Button danger onClick={() => setOpen(true)}>Create Team</Button>
             </div>
-            <div className='d-flex'>
+            <div className='d-flex mt-4'>
                 {
                     myTeams.length === 0 ? <p className="mt-3">No teams found!</p> :
                         myTeams.map((item, index) => (
@@ -112,7 +150,7 @@ const MyTeams = ({myTeams}) => {
                                 <Meta
                                     avatar={<Avatar src={item.photo} />}
                                     title={<div><Link to={`/team/${item._id}`}><Paragraph className='mb-0'>
-                                        {item.captainId._id === uId ? <CrownOutlined style={{ fontSize: '18px', color: 'gold' }}/> : ""} {item.teamName}</Paragraph></Link></div>}
+                                        {item.captainId._id === _id ? <CrownOutlined style={{ fontSize: '18px', color: 'gold' }}/> : ""} {item.teamName}</Paragraph></Link></div>}
                                     // description={`Created At: ${moment(item.createdAt).format('ll')}`}
                                     description={
                                         <div className="d-flex">
@@ -175,7 +213,7 @@ const MyTeams = ({myTeams}) => {
             >
               <Row gutter={[16, 16]}>
                     <Col span={16}>
-                      <AddTeam userName={userName} limit={limit} form={form} setIsFieldsFilled={setIsFieldsFilled} teamError={teamError} setTeamError={setTeamError}/>
+                      <AddTeam userName={userName} limit={limit} form={form} setIsFieldsFilled={setIsFieldsFilled} teamError={teamError} setTeamError={setTeamError} filteredCrossPlatforms={filteredCrossPlatforms} setFilteredCrossPlatforms={setFilteredCrossPlatforms}/>
                     </Col>
               </Row>
             </Modal>

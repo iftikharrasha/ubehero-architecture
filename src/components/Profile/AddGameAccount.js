@@ -44,9 +44,15 @@ const AddGameAccount = ({ item, form, setIsFieldsFilled }) => {
                     ]}
                 >
                     <Select placeholder="Select platform">
-                    {item.platforms.map((platform, index) => (
-                        <Option value={platform} key={index}>{platform}</Option>
-                    ))}
+                    {
+                        item.platforms.includes('cross') ? 
+                        item.crossPlatforms.map((platform, index) => (
+                            <Option value={platform} key={index}>{platform}</Option>
+                        )) : 
+                        item.platforms.map((platform, index) => (
+                            <Option value={platform} key={index}>{platform}</Option>
+                        ))
+                    }
                     </Select>
                 </Form.Item>
                 <Form.Item

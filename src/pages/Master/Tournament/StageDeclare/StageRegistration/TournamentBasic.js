@@ -1,25 +1,32 @@
-import React from 'react';
-import { Row, Col, Steps, Card, Checkbox } from "antd";
+import React, { useState } from 'react';
+import { Row, Col, Steps, Card, Checkbox, Radio } from "antd";
 import Form from 'react-bootstrap/Form';
 import { useSelector } from 'react-redux';
 
-const CheckboxGroup = Checkbox.Group;
-
 const TournamentBasic = ({updatedTournament, setUpdatedTournament}) => {
-    console.log(updatedTournament)
     const myParties = useSelector((state) => state.profile.data.parties.owner);
-    const platformOptions = [
-        { label: 'PSN', value: 'psn', disabled: updatedTournament.platforms.includes('mobile') || updatedTournament.platforms.includes('nintendo') },
-        { label: 'XBOX', value: 'xbox', disabled: updatedTournament.platforms.includes('mobile') || updatedTournament.platforms.includes('nintendo') },
-        { label: 'PC', value: 'pc', disabled: updatedTournament.platforms.includes('mobile') || updatedTournament.platforms.includes('nintendo') },
-        { label: 'Mobile', value: 'mobile', disabled: updatedTournament.platforms.includes('psn') || updatedTournament.platforms.includes('xbox') || updatedTournament.platforms.includes('pc') || updatedTournament.platforms.includes('nintendo') },
-        { label: 'Nintendo', value: 'nintendo', disabled: updatedTournament.platforms.includes('psn') || updatedTournament.platforms.includes('xbox') || updatedTournament.platforms.includes('pc') || updatedTournament.platforms.includes('mobile') },
-    ];
+    const games = useSelector(state => state.statics.games);
+    const fP = games.find((game) => game.gameTitle === updatedTournament.category)
+    const [filteredPlatforms, setFilteredPlatforms] = useState(fP.eligiblePlatforms);
+    const [filteredCrossPlatforms, setFilteredCrossPlatforms] = useState(fP.crossPlatforms);
 
-    const onChange = (checkedValues) => {
+    const onCategoryChange = (e) => {
+        const p = games.find((game) => game.gameTitle === e.target.value);
+        setFilteredPlatforms(p.eligiblePlatforms);
+        setFilteredCrossPlatforms(p.crossPlatforms);
         setUpdatedTournament({
-          ...updatedTournament,
-          platforms: checkedValues,
+            ...updatedTournament,
+            category: e.target.value,
+            platforms: [],
+            crossPlatforms: [],
+        });
+    };
+    
+    const onPlatformChange = (e) => {
+        setUpdatedTournament({
+            ...updatedTournament,
+            platforms: [e.target.value],
+            crossPlatforms: e.target.value === 'cross' ? filteredCrossPlatforms : [],
         });
     };
 
@@ -38,34 +45,33 @@ const TournamentBasic = ({updatedTournament, setUpdatedTournament}) => {
                     }/>
                 </Form.Group>
 
-                <Form.Group className="mb-3" controlId="formBasicCategory">
+                <Form.Group className="mb-3" controlId="formBasicGender">
                     <Form.Label>Game Category</Form.Label>
-                    <Form.Control as="select" 
-                    value={updatedTournament.category} 
-                    onChange={(e) =>
-                        setUpdatedTournament({
-                            ...updatedTournament, 
-                            category: e.target.value,
-                        })
-                    }>
+                    <Form.Control as="select" value={updatedTournament.category} onChange={(e) => onCategoryChange(e)}>
                         <option value="">Select category</option>
-                        <option value="pubg">pubg</option>
-                        <option value="freefire">freefire</option>
-                        <option value="warzone">warzone</option>
-                        <option value="fifa">fifa</option>
-                        <option value="rocket league">rocket league</option>
-                        <option value="clash of clans">clash of clans</option>
-                        <option value="clash royale">clash royale</option>
-                        {/* <option value="csgo">csgo</option> */}
+                        {games.map((game, i) => {
+                            return <option key={i} value={game.gameTitle}>{game.gameTitle}</option>;
+                        })}
                     </Form.Control>
                 </Form.Group>
 
-                <Form.Group className="mb-3" controlId="formBasicPlatform">
-                    <Form.Label>Tournament Platforms</Form.Label>
-                    <div>
-                        <CheckboxGroup options={platformOptions} value={updatedTournament.platforms} onChange={onChange} />
-                    </div>
-                </Form.Group>
+                {
+                    filteredPlatforms ?
+                    <Form.Group className="mb-3" controlId="formBasicPlatform">
+                        <Form.Label>Tournament Platforms</Form.Label>
+                        <div>
+                            <Radio.Group onChange={onPlatformChange} value={updatedTournament.platforms[0]}>
+                                {filteredPlatforms.map((platform, i) => {
+                                    return (
+                                        <Radio key={i} value={platform} style={{ lineHeight: '32px' }}>
+                                            {platform === 'cross' ? `Cross-Play (${filteredCrossPlatforms.join(', ')})` : platform}
+                                        </Radio>
+                                    );
+                                })}
+                            </Radio.Group>
+                        </div>
+                    </Form.Group> : null
+                }
 
                 <Form.Group className="mb-3" controlId="formBasicGender">
                     <Form.Label>Choose Party</Form.Label>
