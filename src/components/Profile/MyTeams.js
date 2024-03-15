@@ -11,7 +11,6 @@ const { Meta } = Card;
 const { Paragraph } = Typography;
 
 const MyTeams = ({myTeams}) => {
-    const limit = 2;
     const [isFieldsFilled, setIsFieldsFilled] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
     const [teamError, setTeamError] = useState(null);
@@ -108,8 +107,7 @@ const MyTeams = ({myTeams}) => {
 
     return (
         <div>
-            <div className="d-flex justify-content-between">
-                <div></div>
+            <div className="d-flex justify-content-end">
                 <Button danger onClick={() => setOpen(true)}>Create Team</Button>
             </div>
             <div className='d-flex mt-4'>
@@ -213,7 +211,7 @@ const MyTeams = ({myTeams}) => {
             >
               <Row gutter={[16, 16]}>
                     <Col span={16}>
-                      <AddTeam userName={userName} limit={limit} form={form} setIsFieldsFilled={setIsFieldsFilled} teamError={teamError} setTeamError={setTeamError} filteredCrossPlatforms={filteredCrossPlatforms} setFilteredCrossPlatforms={setFilteredCrossPlatforms}/>
+                      <AddTeam userName={userName} form={form} setIsFieldsFilled={setIsFieldsFilled} teamError={teamError} setTeamError={setTeamError} filteredCrossPlatforms={filteredCrossPlatforms} setFilteredCrossPlatforms={setFilteredCrossPlatforms}/>
                     </Col>
               </Row>
             </Modal>

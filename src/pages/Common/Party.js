@@ -3,12 +3,14 @@ import { useHistory, useLocation, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import PageLayout from '../../components/PageLayout/PageLayout';
 import Preloader from '../../components/PageLayout/Preloader';
-import PartySide from '../../components/Party/PartySide';
+import PartyLeftSide from '../../components/Party/PartyLeftSide';
 import PartyTop from '../../components/Party/PartyTop';
 
-import { Tabs, Row, Modal, Tour, Col } from 'antd';
+import { Tabs, Row, Modal, Tour, Col, Empty } from 'antd';
 import PartyBottom from '../../components/Party/PartyBottom';
 import { fetchPartyDetails } from '../../redux/slices/partySlice';
+import PartyRightSide from '../../components/Party/PartyRightSide';
+import useProfile from '../../hooks/useProfile';
 
 const Party = () => { 
     const dispatch = useDispatch();
@@ -132,6 +134,26 @@ const Party = () => {
     //   }
     // };
 
+    
+
+    
+    const [partySocialPosts, setPartySocialPosts] = useState(null);
+    const { handlePartySocialPosts } = useProfile();
+
+    useEffect(() => {
+        const fetchData = async () => {
+          try {
+            const posts = await handlePartySocialPosts(id);
+            setPartySocialPosts(posts);
+          } catch (error) {
+            setPartySocialPosts([]);
+            console.error('Error fetching post list:', error);
+          }
+        };
+      
+        fetchData();  // Call the async function immediately
+    }, []);
+
     return (
         <PageLayout>
             {
@@ -139,12 +161,16 @@ const Party = () => {
                 <div className='profile'>
                     <Row>
                         <Col span={5}>
-                            <PartySide 
+                            <PartyLeftSide 
                                 party={partyDetails} 
                             />
                         </Col>
-                        <Col span={18} offset={1}>
-                            <PartyBottom party={partyDetails} />
+                        <Col span={12} offset={1}>
+                            {
+                                partySocialPosts ? <PartyBottom party={partyDetails} data={partySocialPosts}/> : 
+                                <Empty/>
+                            }
+                            
                             {/* <TeamBottom
                                 routeKey={routeKey} 
                                 settingsRouteKey={settingsRouteKey}
@@ -157,6 +183,9 @@ const Party = () => {
                                 badges={badges}
                                 gameStats={gameStats}
                             /> */}
+                        </Col>
+                        <Col span={5} offset={1}>
+                            <PartyRightSide id={partyDetails._id}/>
                         </Col>
                     </Row>
                 </div>

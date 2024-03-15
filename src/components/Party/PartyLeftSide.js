@@ -9,7 +9,7 @@ import useProfile from '../../hooks/useProfile';
 
 const { TabPane } = Tabs;
 
-const PartySide = ({party}) => {
+const PartyLeftSide = ({party}) => {
     const { _id, title, owner, questions, members } = party;
     const { handlePartyJoin } = useProfile();
 
@@ -110,4 +110,4 @@ const PartySide = ({party}) => {
     );
 };
 
-export default PartySide;
+export default PartyLeftSide;

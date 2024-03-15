@@ -36,8 +36,26 @@ const formItemLayout = {
 };
 
 
-const AddTeam = ({ userName, limit, form, setIsFieldsFilled, teamError, setTeamError, filteredCrossPlatforms, setFilteredCrossPlatforms }) => {
+const AddTeam = ({ userName, form, setIsFieldsFilled, teamError, setTeamError, filteredCrossPlatforms, setFilteredCrossPlatforms }) => {
     const [memberAdd, setMemberAdd] = useState(false);
+    
+    const games = useSelector(state => state.statics.games);
+    const [filteredGame, setFilteredGame] = useState(null);
+    const [filteredPlatforms, setFilteredPlatforms] = useState(null);
+    const [selectedPlatform, setSelectedPlatform] = useState(null);
+
+    const onCategoryChange = (value) => {
+        const p = games.find((game) => game.gameTitle === value);
+        setFilteredGame(p);
+        setFilteredPlatforms(p.eligiblePlatforms);
+        setFilteredCrossPlatforms(p.crossPlatforms);
+        setSelectedPlatform(null);
+    };
+
+    const onPlatformChange = (e) => {
+        setSelectedPlatform(e.target.value);
+    };
+
     const onFinish = (values) => {
         console.log('Received values of form: ', values);
     };
@@ -46,32 +64,16 @@ const AddTeam = ({ userName, limit, form, setIsFieldsFilled, teamError, setTeamE
         setTeamError(null);
         const categoryField = allFields.find((field) => field.name[0] === 'category');
         const teamNameField = allFields.find((field) => field.name[0] === 'teamName');
-        const namesField = allFields.find((field) => field.name[0] === 'members');
+        const membersField = allFields.find((field) => field.name[0] === 'members');
 
         const isCategoryFilled = categoryField && categoryField.value;
         const isTeamNameFilled = teamNameField && teamNameField.value;
-        const isNamesFilled = namesField && namesField.value && namesField.value.length >= limit && !namesField.value.includes(undefined) && !namesField.value.includes('');
-        // console.log('finalDecide', isNamesFilled);
-        // console.log('added', namesField?.value?.length);
+        const isMembersField = membersField && membersField.value && membersField.value.length === filteredGame.size && !membersField.value.includes(undefined) && !membersField.value.includes('');
+        // console.log('finalDecide', isMembersField);
+        // console.log('added', membersField?.value?.length);
 
-        setMemberAdd(namesField?.value?.length);
-        setIsFieldsFilled(isCategoryFilled && isTeamNameFilled && isNamesFilled);
-    };
-
-    
-    const games = useSelector(state => state.statics.games);
-    const [filteredPlatforms, setFilteredPlatforms] = useState(null);
-    const [selectedPlatform, setSelectedPlatform] = useState(null);
-
-    const onCategoryChange = (value) => {
-        const p = games.find((game) => game.gameTitle === value);
-        setFilteredPlatforms(p.eligiblePlatforms);
-        setFilteredCrossPlatforms(p.crossPlatforms);
-        setSelectedPlatform(null);
-    };
-
-    const onPlatformChange = (e) => {
-        setSelectedPlatform(e.target.value);
+        setMemberAdd(membersField?.value?.length);
+        setIsFieldsFilled(isCategoryFilled && isTeamNameFilled && isMembersField);
     };
 
     return (
@@ -164,81 +166,86 @@ const AddTeam = ({ userName, limit, form, setIsFieldsFilled, teamError, setTeamE
                     </Space.Compact>
                 </Form.Item>
 
-                <Form.List
-                    name="members"
-                    rules={[
-                        {
-                            required: true,
-                            validator: async (_, members) => {
-                                if (!members || members.length < 2) {
-                                    return Promise.reject(new Error('At least 2 members need to be added'));
-                                }
-                            },
-                        },
-                    ]}
-                >
-                    {(fields, { add, remove }, { errors }) => (
-                        <>
-                            <p style={{margin: '0 8px 10px 8px'}}>Leader: {userName}</p>
-                            {fields.map((field, index) => (
-                                <Form.Item
-                                    {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
-                                    label={index === 0 ? 'Teammates' : ''}
-                                    required={true}
-                                    key={field.key}
-                                    style={{
-                                        width: '100%',
-                                        marginLeft: '8px',
-                                    }}
-                                >
-                                    <Form.Item
-                                        {...field}
-                                        validateTrigger={['onChange', 'onBlur']}
-                                        rules={[
-                                            {
-                                                required: true,
-                                                whitespace: true,
-                                                message: "Please input member's username.",
-                                            },
-                                        ]}
-                                        noStyle
-                                    >
-                                        <Input
-                                            placeholder="teammates username"
-                                            style={{
-                                                width: 200,
-                                            }}
-                                        />
-                                    </Form.Item>
-                                    {fields.length >= 1 ? (
-                                        <MinusCircleOutlined
-                                            className="dynamic-delete-button"
-                                            onClick={() => remove(field.name)}
-                                        />
-                                    ) : null}
-                                </Form.Item>
-                            ))}
+                {
+                    filteredGame ?
+                    <Form.List
+                        name="members"
+                        rules={[
                             {
-                                memberAdd === limit ? '' :
-                                <Form.Item
-                                    style={{
-                                        width: '100%',
-                                        marginLeft: '8px',
-                                    }}>
-                                    <Button
-                                        type="dashed"
-                                        onClick={() => add()}
-                                        icon={<PlusOutlined />}
+                                required: true,
+                                validator: async (_, members) => {
+                                    if (!members || members.length < filteredGame.size) {
+                                        return Promise.reject(new Error(`At least ${filteredGame.size} members need to be added`));
+                                    }else if (members.length > filteredGame.size){
+                                        return Promise.reject(new Error(`Kindly add ${filteredGame.size} members only`));
+                                    }
+                                },
+                            },
+                        ]}
+                    >
+                        {(fields, { add, remove }, { errors }) => (
+                            <>
+                                <p style={{margin: '0 8px 10px 8px'}}>Leader: {userName}</p>
+                                {fields.map((field, index) => (
+                                    <Form.Item
+                                        {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
+                                        label={index === 0 ? 'Teammates' : ''}
+                                        required={true}
+                                        key={field.key}
+                                        style={{
+                                            width: '100%',
+                                            marginLeft: '8px',
+                                        }}
                                     >
-                                        Add Teammate
-                                    </Button>
-    
-                                    <Form.ErrorList errors={errors} />
-                                </Form.Item>
-                            }
-                        </>
-                    )}
-                </Form.List>
+                                        <Form.Item
+                                            {...field}
+                                            validateTrigger={['onChange', 'onBlur']}
+                                            rules={[
+                                                {
+                                                    required: true,
+                                                    whitespace: true,
+                                                    message: "Please input member's username.",
+                                                },
+                                            ]}
+                                            noStyle
+                                        >
+                                            <Input
+                                                placeholder="teammates username"
+                                                style={{
+                                                    width: 200,
+                                                }}
+                                            />
+                                        </Form.Item>
+                                        {fields.length >= 1 ? (
+                                            <MinusCircleOutlined
+                                                className="dynamic-delete-button"
+                                                onClick={() => remove(field.name)}
+                                            />
+                                        ) : null}
+                                    </Form.Item>
+                                ))}
+                                {
+                                    memberAdd === filteredGame.size ? null :
+                                    <Form.Item
+                                        style={{
+                                            width: '100%',
+                                            marginLeft: '8px',
+                                        }}>
+                                        <Button
+                                            type="dashed"
+                                            onClick={() => add()}
+                                            icon={<PlusOutlined />}
+                                        >
+                                            Add Teammate
+                                        </Button>
+        
+                                        <Form.ErrorList errors={errors} />
+                                    </Form.Item>
+                                }
+                            </>
+                        )}
+                    </Form.List> : null
+                }
 
                 {/* <Form.Item>
                     <Button type="primary" htmlType="submit">

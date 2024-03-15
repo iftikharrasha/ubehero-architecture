@@ -297,7 +297,7 @@ const Notification = ({socketN, isConnected, userId}) => {
                     </Badge>
                 }
                 title={<Link to={`/${item.route}`}>{item.invokedByName}</Link>}
-                description={item.subject}
+                description={<p style={{fontSize: '12px'}}>{item.subject}</p>}
               />
             </Skeleton>
           </List.Item>

@@ -29,68 +29,68 @@ const AddGameAccount = ({ item, form, setIsFieldsFilled }) => {
             >
             <Form.Item>
                 <Space.Compact>
-                <Form.Item
-                    label='Platform'
-                    name={['platform']}
-                    style={{
-                    width: 200,
-                    margin: '0 8px',
-                    }}
-                    rules={[
-                    {
-                        required: true,
-                        message: 'Platform is required',
-                    },
-                    ]}
-                >
-                    <Select placeholder="Select platform">
-                    {
-                        item.platforms.includes('cross') ? 
-                        item.crossPlatforms.map((platform, index) => (
-                            <Option value={platform} key={index}>{platform}</Option>
-                        )) : 
-                        item.platforms.map((platform, index) => (
-                            <Option value={platform} key={index}>{platform}</Option>
-                        ))
-                    }
-                    </Select>
-                </Form.Item>
-                <Form.Item
-                    label='In Game Name'
-                    name={['playerIgn']}
-                    style={{
-                    width: 300,
-                    margin: '0 8px',
-                    }}
-                    rules={[
-                    {
-                        required: true,
-                        message: 'In game name required',
-                    },
-                    ]}
-                >
-                    <Input
-                    placeholder="Enter In Game Name"
-                    />
-                </Form.Item>
-                <Form.Item
-                    label={<span className='text-capital'>{item.settings.accountTag} ID</span>}
-                    name={['playerId']}
-                    style={{
-                    width: 300,
-                    margin: '0 8px',
-                    }}
-                    rules={[
-                    {
-                        required: true,
-                        message: `${item.settings.accountTag} ID is required`,
-                    },
-                    ]}
-                >
-                    <Input
-                    placeholder={`Enter ${item.settings.accountTag} ID`}
-                    />
-                </Form.Item>
+                    <Form.Item
+                        label='Platform'
+                        name={['platform']}
+                        style={{
+                        width: 200,
+                        margin: '0 8px',
+                        }}
+                        rules={[
+                        {
+                            required: true,
+                            message: 'Platform is required',
+                        },
+                        ]}
+                    >
+                        <Select placeholder="Select platform">
+                        {
+                            item.platforms.includes('cross') ? 
+                            item.crossPlatforms.map((platform, index) => (
+                                <Option value={platform} key={index}>{platform}</Option>
+                            )) : 
+                            item.platforms.map((platform, index) => (
+                                <Option value={platform} key={index}>{platform}</Option>
+                            ))
+                        }
+                        </Select>
+                    </Form.Item>
+                    <Form.Item
+                        label='In Game Name'
+                        name={['playerIgn']}
+                        style={{
+                        width: 300,
+                        margin: '0 8px',
+                        }}
+                        rules={[
+                        {
+                            required: true,
+                            message: 'In game name required',
+                        },
+                        ]}
+                    >
+                        <Input
+                        placeholder="Enter In Game Name"
+                        />
+                    </Form.Item>
+                    <Form.Item
+                        label={<span className='text-capital'>{item.settings.accountTag} ID</span>}
+                        name={['playerId']}
+                        style={{
+                        width: 300,
+                        margin: '0 8px',
+                        }}
+                        rules={[
+                        {
+                            required: true,
+                            message: `${item.settings.accountTag} ID is required`,
+                        },
+                        ]}
+                    >
+                        <Input
+                        placeholder={`Enter ${item.settings.accountTag} ID`}
+                        />
+                    </Form.Item>
                 </Space.Compact>
             </Form.Item>
             {/* <Form.Item label=" " colon={false}>

@@ -17,7 +17,8 @@ const GameAccount = ({account, cover}) => {
                     account.platform === 'xbox' ? 'https://res.cloudinary.com/duoalyur6/image/upload/v1695224615/MOSHED-2023-9-20-21-42-44_1_mnhnik.gif' :
                     account.platform === 'pc' ? 'https://res.cloudinary.com/duoalyur6/image/upload/v1695372377/pc_jf7atd.gif' :
                     account.platform === 'nintendo' ? 'https://res.cloudinary.com/duoalyur6/image/upload/v1695208606/MOSHED-2023-9-20-17-12-57_i7hti1.gif' :
-                    null
+                    account.platform === 'mobile' ? 'https://res.cloudinary.com/duoalyur6/image/upload/v1709020274/MOSHED-2024-2-27-13-47-23-ezgif.com-crop_beo3q2.gif' :
+                    'https://res.cloudinary.com/duoalyur6/image/upload/v1709020274/MOSHED-2024-2-27-13-47-23-ezgif.com-crop_beo3q2.gif'
                 })`, 
                 backgroundPosition: 'center', backgroundRepeat: 'no-repeat', backgroundSize: 'cover'
             }}
@@ -34,7 +35,7 @@ const GameAccount = ({account, cover}) => {
                 avatar={<Avatar src={account.accountLogo} />}
                 title={`IGN: ${account.playerIgn}`}
                 description={
-                <h6>
+                <h6 style={{ fontSize: '14px' }}>
                     <span className='text-capital'>{account.tag ? account.tag : 'player'}</span> 
                     &nbsp;ID: {account.playerId}
                 </h6>

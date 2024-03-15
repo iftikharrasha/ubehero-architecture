@@ -112,7 +112,7 @@ const TeamMates = ({captain, tId, crossPlay, friendRouteKey, handleTabChange}) =
                                                                                 />
                                                                                 {friend?.gameAccounts[0]?.playerIgn}
                                                                             </p>
-                                                                            :  <p className="mb-0">No game account connected</p>
+                                                                            :  <p className="mb-0" style={{ fontSize: '12px' }}>No game account connected</p>
                                                                             }
                                                                     </div>
                                                                 </div>

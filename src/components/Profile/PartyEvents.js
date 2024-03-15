@@ -29,7 +29,7 @@ const PartyEvents = ({party}) => {
                     !partyEvents ? <div className='d-flex justify-content-center align-items-center' style={{ minHeight: '30vh' }}><Spin /></div> :
                     partyEvents?.length > 0 ? (
                         partyEvents?.map((tournament, index) => (
-                            <Col xs={24} sm={12} md={8} lg={12} xl={8} key={index}>
+                            <Col xs={24} sm={12} md={24} lg={12} xl={12} key={index}>
                                 <Tournaments routeKey={tournament._id} tournament={tournament} details={false} totalJoined={tournament?.leaderboards?.length}/>
                             </Col>
                         ))
