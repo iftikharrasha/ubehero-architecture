@@ -4,61 +4,35 @@ import { HistoryOutlined, TeamOutlined, SettingOutlined, LikeOutlined, MessageOu
 import PartyEvents from '../Profile/PartyEvents';
 import { useSelector } from 'react-redux';
 import PartyPeople from './PartyPeople';
-import InfiniteScroll from 'react-infinite-scroll-component';
-
-const { Meta } = Card;
-const { TextArea } = Input;
-
-// const data = Array.from({
-//         length: 23,
-//     }).map((_, i) => ({
-//         id: i,
-//         postedBy: {
-//             _id: i,
-//             userName: `gamer${i+1546}`,
-//             photo: `https://xsgames.co/randomusers/avatar.php?g=pixel&key=${i}`,
-//         },
-//         title: `Gaming post having a fancy titles ${i+1}`,
-//         description: 'We provide a wide range of gaming experiences, from action-packed adventures to immersive role-playing games, to satisfy every gamer. We provide a wide range of gaming experiences, from action-packed adventures to immersive role-playing games, to satisfy every gamer...',
-//         thumbnail: `https://www.techspot.com/images2/news/bigimage/2023/09/2023-09-06-image-8.jpg`,
-//         reacts: {
-//             likes: `${(i+16)*3}`,
-//             dislikes: `${(i+2)*3}`,
-//             comments: `${(i+0)*3}`,
-//         },
-//         privacy: 'public',
-//         tags: [],
-//         comments: [],
-// }));
-
-const IconText = ({ icon, text }) => (
-  <Space>
-    {React.createElement(icon)}
-    {text}
-  </Space>
-);
+import PartySocialPopup from '../Common/PartySocialPopup/PartySocialPopup';
 
 const { TabPane } = Tabs;
+
+const IconText = ({ icon, text }) => (
+    <Space>
+      {React.createElement(icon)}
+      {text}
+    </Space>
+);
 
 const PartyBottom = ({party, data}) => {
     const profile = useSelector(state => state.profile);
     const isLoggedIn = profile?.signed_in;
     const userId = profile?.data?._id;
+    const profilePic = profile?.data?.photo;
 
     const [open, setOpen] = useState(false);
-    const [confirmLoading, setConfirmLoading] = useState(false);
-    const [isFieldsFilled, setIsFieldsFilled] = useState(false);
+    // const [isFieldsFilled, setIsFieldsFilled] = useState(false);
     const [readingItem, setReadingItem] = useState(null);
-    const [readingIndex, setReadingIndex] = useState(0);
 
     const handlePostRead = (item, i) => {
-        setReadingIndex(i+1)
         setOpen(true);
         setReadingItem(item);
     }
 
+    // const [confirmLoading, setConfirmLoading] = useState(false);
     const handleSubmitComment = async () => {
-        setConfirmLoading(true);
+        // setConfirmLoading(true);
         
         // const formData = form.getFieldsValue();
         // const answers = Object.values(formData);
@@ -78,43 +52,22 @@ const PartyBottom = ({party, data}) => {
         // }
     };
 
-    const isPrime = (num) => {
-        if (num <= 1) return false;
-        if (num <= 3) return true;
-        if (num % 2 === 0 || num % 3 === 0) return false;
-        let i = 5;
-        while (i * i <= num) {
-            if (num % i === 0 || num % (i + 2) === 0) return false;
-            i += 6;
-        }
-        return true;
+    const sliceDescription = (desc) => {
+        // Step 1: Convert HTML string to plain text
+        const plainText = new DOMParser().parseFromString(desc, 'text/html').body.textContent;
+
+        // Step 2: Split plain text into words
+        const words = plainText.split(/\s+/);
+
+        // Step 3: Slice the array of words to get the first 40 words
+        const slicedWords = words.slice(0, 40);
+
+        // Step 4: Join the sliced array of words into a single string
+        const slicedDescription = slicedWords.join(' ');
+
+        return slicedDescription + '...';
     }
 
-    const onChange = (e) => {
-      console.log('Change:', e.target.value);
-    };
-
-    
-    const [loading, setLoading] = useState(false);
-    const [commentData, setCommentData] = useState([]);
-    const loadMoreData = () => {
-        if (loading) {
-        return;
-        }
-        setLoading(true);
-        fetch('https://randomuser.me/api/?results=10&inc=name,gender,email,nat,picture&noinfo')
-        .then((res) => res.json())
-        .then((body) => {
-            setCommentData([...commentData, ...body.results]);
-            setLoading(false);
-        })
-        .catch(() => {
-            setLoading(false);
-        });
-    };
-    useEffect(() => {
-        loadMoreData();
-    }, []);
     return (
         <Tabs>
             <TabPane
@@ -134,7 +87,7 @@ const PartyBottom = ({party, data}) => {
                         },
                             pageSize: 10,
                     }}
-                    dataSource={party.title === 'Underdogg' ? data : []}
+                    dataSource={party?.title === 'Underdogg' ? data : []}
                     renderItem={(item, i) => (
                         <List.Item
                             key={item.title}
@@ -148,133 +101,31 @@ const PartyBottom = ({party, data}) => {
                                     <img onClick={() => handlePostRead(item, i)}
                                         width={272}
                                         alt="logo"
-                                        src={item.thumbnail}
+                                        src={item?.thumbnail}
                                         style={{cursor: 'pointer'}}
                                     />
                                 ) : null
                             }
-                            // extra={
-                            //     isPrime(item.id) ? (
-                            //         <img onClick={() => handlePostRead(item, i)}
-                            //             width={272}
-                            //             alt="logo"
-                            //             src={item.thumbnail}
-                            //             style={{cursor: 'pointer'}}
-                            //         />
-                            //     ) : null
-                            // }
                         >
                             <List.Item.Meta
-                                title={<h4 onClick={() => handlePostRead(item)} style={{marginBlockEnd: '0px', cursor: 'pointer'}}>{item.title}</h4>}
-                                description={<><Avatar size={30} src={item.postedBy.photo} /><span className='ms-2'>@{item.postedBy.userName}</span></>}
+                                title={<h4 onClick={() => handlePostRead(item)} style={{marginBlockEnd: '0px', cursor: 'pointer'}}>{item?.title}</h4>}
+                                description={<><Avatar size={30} src={item?.author?.photo} /><span className='ms-2'>@{item?.author?.userName}</span></>}
                             />
-                            {item.description.split(' ').slice(0, 40).toString().replace(/,/g, ' ')}...
+                            {sliceDescription(item?.description)}
                         </List.Item>
                     )}
                 />
-                <Modal
-                    title={<h4 className='text-center pb-3'>{`${readingItem?.title}`}</h4>}
-                    centered
-                    open={open}
-                    okText='Next'
-                    onOk={null}
-                    onCancel={() => setOpen(false)}
-                    confirmLoading={confirmLoading}
-                    width={700}
-                    okButtonProps={{
-                        disabled: data?.length === readingIndex,
-                    }}
-                    >
-                    <Row gutter={[16, 16]}>
-                        <Card
-                            style={{
-                                width: '100%',
-                            }}
-                            cover={
-                                readingItem?.thumbnail ? 
-                                <img style={{width: '100%'}}
-                                    alt="example"
-                                    src={readingItem?.thumbnail}
-                                /> : null
-                            }
-                            // cover={
-                            //     isPrime(readingItem?.id) ? 
-                            //     <img style={{width: '100%'}}
-                            //         alt="example"
-                            //         src={readingItem?.thumbnail}
-                            //     /> : null
-                            // }
-                            actions={[
-                                <IconText icon={LikeOutlined} text={readingItem?.reacts?.likes?.length} key="list-vertical-like-o" />,
-                                <IconText icon={DislikeOutlined} text={readingItem?.reacts?.dislikes?.length} key="list-vertical-dislike-o" />,
-                                <IconText icon={MessageOutlined} text={readingItem?.comments?.length} key="list-vertical-message" />,
-                            ]}
-                        >
-                                <Meta
-                                    avatar={<Avatar src={readingItem?.postedBy.photo} />}
-                                    title={readingItem?.postedBy?.username}
-                                    description={readingItem?.description}
-                                />
-                        </Card>
-                        <Card style={{width: '100%'}}>
-                            <Meta
-                                description={
-                                <div
-                                    id="scrollableDiv"
-                                    style={{
-                                        height: 400,
-                                        overflow: 'auto',
-                                        padding: '0 16px',
-                                        border: '1px solid rgba(140, 140, 140, 0.35)',
-                                    }}
-                                >
-                                    <InfiniteScroll
-                                        dataLength={commentData.length}
-                                        next={loadMoreData}
-                                        hasMore={commentData.length < 50}
-                                        loader={
-                                        <Skeleton
-                                            avatar
-                                            paragraph={{
-                                            rows: 1,
-                                            }}
-                                            active
-                                        />
-                                        }
-                                        endMessage={<Divider plain>It is all, nothing more 🤐</Divider>}
-                                        scrollableTarget="scrollableDiv"
-                                    >
-                                        <List
-                                            dataSource={commentData}
-                                            renderItem={(item) => (
-                                                <List.Item key={item.email}>
-                                                <List.Item.Meta
-                                                    avatar={<Avatar src={item.picture.large} />}
-                                                    title={<a href="https://ant.design">{item.name.last}</a>}
-                                                    description={item.email}
-                                                />
-                                                <div>Saturday 12pm</div>
-                                                </List.Item>
-                                            )}
-                                        />
-                                    </InfiniteScroll>
-                                </div>
-                                }
-                            />
-                        </Card>
-                        <Card style={{width: '100%'}}>
-                            <Meta
-                                avatar={<Avatar size={20} src={profile?.data?.photo} />}
-                                description={
-                                    <>
-                                        <TextArea showCount maxLength={300} onChange={onChange} placeholder="type here.." />
-                                        <Button type="primary" className='mt-2'>Comment</Button>
-                                    </>
-                                }
-                            />
-                        </Card>
-                    </Row>
-                </Modal>
+                {
+                    !readingItem ? null :
+                    <PartySocialPopup 
+                        id={party._id}
+                        readingItem={readingItem}
+                        data={data}
+                        open={open}
+                        setOpen={setOpen}
+                        profilePic={profilePic}
+                    /> 
+                }
             </TabPane>
             <TabPane
                 key="events"

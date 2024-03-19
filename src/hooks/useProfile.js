@@ -535,7 +535,31 @@ const useProfile = () => {
             }else{
                 setErrorMessage(response.data.error.message);
             }
-            return response.data.data
+
+            return response.data.data[0].posts
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const handleGetPartySocialPostComments = async (id, postId) => {
+        let config = {}
+
+        if(profile.signed_in){
+            const token = localStorage.getItem('jwt');
+            config.headers = { "Authorization": "Bearer " + token, ...config.headers};
+        }
+
+        try {
+            const response = await axios.get(`${process.env.REACT_APP_API_LINK}/api/v1/party/comments/${id}?version=0&postId=${postId}`, config);
+            
+            if(response.data.status === 200){
+                setErrorMessage(null);
+            }else{
+                setErrorMessage(response.data.error.message);
+            }
+
+            return response.data.data[0].comments
         } catch (error) {
             console.log(error);
         }
@@ -605,6 +629,7 @@ const useProfile = () => {
         handlePartyEventListHook,
         handlePartyPeopleListHook,
         handlePartySocialPosts,
+        handleGetPartySocialPostComments,
         handleTeamMembersListHook,
         // handleBadgeListHook
     }
