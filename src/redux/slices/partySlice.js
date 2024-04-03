@@ -34,8 +34,16 @@ export const fetchPartyDetails = createAsyncThunk(
         if(!versionParty || getState().parties.data.length === 0){
             versionParty = 0;
         }
+        
+        const isLoggedIn = getState().profile.signed_in;
+        let config = {}
 
-        const response = await fetch(`${process.env.REACT_APP_API_LINK}/api/v1/party/${id}?version=${0}`);
+        if(isLoggedIn){
+            const token = localStorage.getItem('jwt');
+            config.headers = { "Authorization": "Bearer " + token, ...config.headers};
+        }
+
+        const response = await fetch(`${process.env.REACT_APP_API_LINK}/api/v1/party/${id}?version=${0}`, config);
         const data = await response.json();
 
         if(data.status === 304) {
@@ -53,10 +61,37 @@ export const fetchPartyDetails = createAsyncThunk(
     }
 );
 
+export const fetchPartySocialPosts = createAsyncThunk(
+    'party/fetchPartySocialPosts',
+    async ({ id, version }, { getState }) => {
+        if(!version){
+            version = 0;
+        }
+
+        const isLoggedIn = getState().profile.signed_in;
+        let config = {}
+
+        if(isLoggedIn){
+            const token = localStorage.getItem('jwt');
+            config.headers = { "Authorization": "Bearer " + token, ...config.headers};
+        }
+
+        const response = await fetch(`${process.env.REACT_APP_API_LINK}/api/v1/party/socials/${id}?version=0`, config);
+        const data = await response.json();
+
+        if(data.status === 304) {
+            return getState().party.social;
+        } else{
+            return data;
+        }
+    }
+);
+
 const partiesSlice = createSlice({
     name: 'party',
     initialState: {
         data: [],
+        social: [],
         version: 0,
         status: 'idle',
     },
@@ -70,6 +105,32 @@ const partiesSlice = createSlice({
                 if (!party.members.requested.includes(uId)) {
                     party.members.requested = [...party.members.requested, uId];
                 }
+            }
+        },
+        addReactsIntoPost: (state, action) => {
+            const { to, from, type } = action.payload;
+            const party = state.social.posts.find(p => p._id === to);
+      
+            switch (type) {
+                case '+':
+                    if (!party.reacts.likes.includes(from)) {
+                        party.reacts.likes.push(from);
+                    }
+                    if (party.reacts.dislikes.includes(from)) {
+                        party.reacts.dislikes = party.reacts.dislikes.filter(id => id !== from);
+                    }
+                    break;
+                case '-':
+                    if (!party.reacts.dislikes.includes(from)) {
+                        party.reacts.dislikes.push(from);
+                    }
+                    if (party.reacts.likes.includes(from)) {
+                        party.reacts.likes = party.reacts.likes.filter(id => id !== from);
+                    }
+                    break;
+                default:
+                    // Handle unknown types or do nothing
+                    break;
             }
         },
     },
@@ -86,7 +147,6 @@ const partiesSlice = createSlice({
             state.status = 'error';
             console.log("rejected");
         });
-        
         builder.addCase(fetchPartyDetails.fulfilled, (state, action) => {
             const index = state.data.findIndex(p => p._id === action.meta.arg.id)
             if(index === -1){
@@ -94,11 +154,14 @@ const partiesSlice = createSlice({
             }else{
                 state.data[index] = action.payload.data || state.data;
             }
-            // state.version = action.payload.version || state.version;
+            state.status = 'success';
+        })
+        builder.addCase(fetchPartySocialPosts.fulfilled, (state, action) => {
+            state.social = action.payload.data || state.social;
             state.status = 'success';
         })
     },
 });
 
-export const { addUserRequestToPartyService } = partiesSlice.actions;
+export const { addUserRequestToPartyService, addReactsIntoPost } = partiesSlice.actions;
 export default partiesSlice.reducer;

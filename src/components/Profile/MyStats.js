@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Card, Badge, Row, Col, Progress, Tooltip, Tabs, Button } from 'antd';
 import { AliwangwangOutlined, TrophyOutlined, CloseSquareOutlined, PartitionOutlined, ProjectOutlined, UnlockOutlined } from '@ant-design/icons';
 import BadgePopup from '../Common/BadgePopup/BadgePopup';

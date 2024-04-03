@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Row, Col, Steps, Card } from "antd";
 import Form from 'react-bootstrap/Form';
-import FileUploadPopUp from "../../../../../components/Common/FileUploadPopUp/FileUploadPopUp";
 import axios from 'axios';
+import FileUploadPopUp from '../Common/FileUploadPopUp/FileUploadPopUp';
 
-const TournamentThumb = ({tId, updatedTournament, setUpdatedTournament, previewURL, setPreviewURL, errorMessage, setErrorMessage}) => {
+const PartyThumb = ({tId, updatedTournament, setUpdatedTournament, previewURL, setPreviewURL, errorMessage, setErrorMessage}) => {
     const [selectedFile, setSelectedFile] = useState(null);
     const [show, setShow] = useState(false);
     const token = localStorage.getItem('jwt');
@@ -25,17 +25,16 @@ const TournamentThumb = ({tId, updatedTournament, setUpdatedTournament, previewU
     };
     
     const [picProgress, setPicProgress] = useState(0);
-    const handleTournamentImageUploadToS3 = async (e) => {
-        e.preventDefault();
-        const path = 'tournaments';
+    const handlePartyImageUploadToS3 = async (e) => {
+        const path = 'parties';
 
+        e.preventDefault();
         if (selectedFile) {
             const formData = new FormData();
             formData.append("file", selectedFile);
-            console.log(selectedFile);
     
             try {
-                const response = await axios.post(`${process.env.REACT_APP_API_LINK}/api/v1/upload/tournaments/${tId}?path=${path}`, formData, {
+                const response = await axios.post(`${process.env.REACT_APP_API_LINK}/api/v1/upload/parties/${tId}?path=${path}`, formData, {
                     headers: {
                         "Content-Type": "multipart/form-data",
                         Authorization: " Bearer " + token,
@@ -127,9 +126,9 @@ const TournamentThumb = ({tId, updatedTournament, setUpdatedTournament, previewU
         </Row>
                 
         {/* popup for user profile */}
-        <FileUploadPopUp show={show} handleClose={handleClose} previewURL={previewURL} selectedFile={selectedFile} handleFileSelect={handleFileSelect} handleTournamentImageUploadToS3={handleTournamentImageUploadToS3} picProgress={picProgress} errorMessage={errorMessage}/>
+        <FileUploadPopUp show={show} handleClose={handleClose} previewURL={previewURL} selectedFile={selectedFile} handleFileSelect={handleFileSelect} handlePartyImageUploadToS3={handlePartyImageUploadToS3} picProgress={picProgress} errorMessage={errorMessage}/>
        </>
     );
 };
 
-export default TournamentThumb;
+export default PartyThumb;

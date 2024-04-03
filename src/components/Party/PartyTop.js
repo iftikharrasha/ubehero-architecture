@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { useSelector } from "react-redux";
 
 const PartyTop = ({party, badges}) => {
-  const { _id, title, photo, version, coverPhoto, members, owner } = party;
+  const { photo, coverPhoto, members, owner } = party;
   const profile = useSelector(state => state.profile);
   const isLoggedIn = profile?.signed_in;
   const userId = profile?.data?._id;
@@ -47,12 +47,7 @@ const PartyTop = ({party, badges}) => {
             
             <Link to={`/party/2/friends`}>
               <Button type="default" size="small">
-                {members?.joined?.length} MEMBER
-              </Button>
-            </Link>
-            <Link to={`/party/2/followers`}>
-              <Button type="default" size="small">
-               {members?.requested?.length} FOLLOWER
+                {members?.joined?.length+1} MEMBER
               </Button>
             </Link>
           </Row>

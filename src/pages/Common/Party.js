@@ -1,16 +1,15 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { useHistory, useLocation, useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import PageLayout from '../../components/PageLayout/PageLayout';
 import Preloader from '../../components/PageLayout/Preloader';
 import PartyLeftSide from '../../components/Party/PartyLeftSide';
-import PartyTop from '../../components/Party/PartyTop';
 
-import { Tabs, Row, Modal, Tour, Col, Empty } from 'antd';
+import { Row, Col } from 'antd';
 import PartyBottom from '../../components/Party/PartyBottom';
 import { fetchPartyDetails } from '../../redux/slices/partySlice';
 import PartyRightSide from '../../components/Party/PartyRightSide';
-import useProfile from '../../hooks/useProfile';
+import PartyWritePost from '../../components/Common/PartySocialPopup/PartyWritePost';
 
 const Party = () => { 
     const dispatch = useDispatch();
@@ -19,6 +18,8 @@ const Party = () => {
     const parties = useSelector((state) => state.parties.data)
     const partyDetails = parties.find(t => t._id === id);
     const versionParty = partyDetails ? partyDetails.version : 0;
+
+    const [open, setOpen] = useState(false);
 
     // const [routeKey, setRouteKey] = useState('mystats');
     // const [statsRouteKey, setStatsRouteKey] = useState('games');
@@ -30,13 +31,7 @@ const Party = () => {
 
     useEffect(() => {
         dispatch(fetchPartyDetails({ id, versionParty }));
-    }, [])
-
-    // useEffect(() => {
-    //     if(routeKey === 'teams'){
-    //         dispatch(fetchMyTeams({ id, versionTeams }));
-    //     }
-    // }, [routeKey])
+    }, [id])
 
     // const location = useLocation();
     // const history = useHistory();
@@ -134,26 +129,6 @@ const Party = () => {
     //   }
     // };
 
-    
-
-    
-    const [partySocialPosts, setPartySocialPosts] = useState(null);
-    const { handlePartySocialPosts } = useProfile();
-
-    useEffect(() => {
-        const fetchData = async () => {
-          try {
-            const posts = await handlePartySocialPosts(id);
-            setPartySocialPosts(posts);
-          } catch (error) {
-            setPartySocialPosts([]);
-            console.error('Error fetching post list:', error);
-          }
-        };
-      
-        fetchData();  // Call the async function immediately
-    }, []);
-
     return (
         <PageLayout>
             {
@@ -166,26 +141,15 @@ const Party = () => {
                             />
                         </Col>
                         <Col span={12} offset={1}>
-                            {
-                                partySocialPosts ? <PartyBottom party={partyDetails} data={partySocialPosts}/> : 
-                                <Empty/>
-                            }
-                            
-                            {/* <TeamBottom
-                                routeKey={routeKey} 
-                                settingsRouteKey={settingsRouteKey}
-                                socialsRouteKey={socialsRouteKey}
-                                statsRouteKey={statsRouteKey}
-                                friendRouteKey={friendRouteKey}
-                                handleTabChange={handleTabChange}
-                                profile={userDetails}
-                                myTeams={myTeams}
-                                badges={badges}
-                                gameStats={gameStats}
-                            /> */}
+                            <PartyBottom id={id} party={partyDetails}/>
+                            <PartyWritePost
+                                id={partyDetails?._id}
+                                open={open}
+                                setOpen={setOpen}
+                            />
                         </Col>
                         <Col span={5} offset={1}>
-                            <PartyRightSide id={partyDetails._id}/>
+                            <PartyRightSide id={partyDetails?._id} unlocked={partyDetails?.unlocked} setOpen={setOpen}/>
                         </Col>
                     </Row>
                 </div>

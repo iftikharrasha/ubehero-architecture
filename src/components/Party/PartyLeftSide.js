@@ -1,17 +1,19 @@
-import React, { useState } from 'react';
-import { Card, Button, Row, Tabs, Typography, Modal, Form } from 'antd';
-import { PartitionOutlined } from '@ant-design/icons';
+import React, { useContext, useState } from 'react';
+import { Card, Button, Row, Tabs, Typography, Modal, Form, Avatar, Tag } from 'antd';
+import { PartitionOutlined, MessageOutlined, CoffeeOutlined, CrownOutlined } from '@ant-design/icons';
 import PartyTop from './PartyTop';
 import { useSelector } from 'react-redux';
 import { Col } from 'react-bootstrap';
 import AnswerQuestions from './AnswerQuestions';
-import useProfile from '../../hooks/useProfile';
+import useParties from '../../hooks/useParties';
+import InboxContext from '../../Contexts/InboxContext/InboxContext';
 
 const { TabPane } = Tabs;
+const { Meta } = Card;
 
 const PartyLeftSide = ({party}) => {
-    const { _id, title, owner, questions, members } = party;
-    const { handlePartyJoin } = useProfile();
+    const { _id, title, owner, questions, members, unlocked } = party;
+    const { handlePartyJoin } = useParties();
 
 
     const profile = useSelector(state => state.profile);
@@ -45,6 +47,12 @@ const PartyLeftSide = ({party}) => {
         }
     };
     
+    const { setShowInbox, setPopUser } = useContext(InboxContext);
+    const handleInboxPop = () => {
+        setPopUser(owner);
+        setShowInbox(true);
+    };
+    
     return (
         <div className="list-group sticky-top">
           <Tabs activeKey="currentBage">
@@ -57,9 +65,7 @@ const PartyLeftSide = ({party}) => {
                   }
               >
                 <Card>
-                    <PartyTop
-                        party={party} 
-                    />
+                    <PartyTop party={party} />
                     <div className="instructions text-center">
                         <h2>{title}</h2>
                         <p>
@@ -67,16 +73,50 @@ const PartyLeftSide = ({party}) => {
                         </p>
                     </div>
 
+                    <div className="d-flex justify-content-center">
                     {
+                        unlocked ? 
+                        <Tag color="green">
+                            JOINED
+                        </Tag> :
+                        title === 'Underdogg' ? null :
                         !isLoggedIn ? null : owner?._id === userId ? null :
-                        members.requested.includes(userId) ?
+                        members?.requested?.includes(userId) ?
                         <Button type='default' disabled>
                             REQUEST PENDING
+                        </Button> : 
+                        members?.invited?.includes(userId) ?
+                        <Button type='default'>
+                            Accept Invitation
                         </Button> : 
                         <Button type='default' onClick={() => setOpen(true)}>
                             Join Now
                         </Button>
                     }
+                    </div>
+                </Card>
+
+                <Card
+                    style={{
+                        boxShadow: 'none',
+                        marginTop: '20px',
+                    }}
+                    className="popCard mt-5"
+                    bordered
+                    actions={!isLoggedIn ? null : owner?._id === userId ? null : [
+                        <Row justify="center" align="middle">
+                            <Button icon={<MessageOutlined  style={{ marginBottom: "6px" }}/>} style={{ fontSize: '12px' }} onClick={handleInboxPop}>CHAT</Button>
+                        </Row>,
+                        <Row justify="center" align="middle">
+                            <Button icon={<CoffeeOutlined style={{ marginBottom: "6px" }}/>} style={{ fontSize: '12px' }}>FOLLOW</Button>
+                        </Row>
+                    ]}
+                    >
+                    <Meta
+                        avatar={<Avatar src={owner?.photo} />}
+                        title={<h6>{owner?.userName}</h6>}
+                        description={<p className='mb-0'><CrownOutlined style={{ fontSize: '16px', color: 'gold', marginBottom: '0px' }}/> Party Owner</p>}
+                    />
                 </Card>
               </TabPane>
           </Tabs>

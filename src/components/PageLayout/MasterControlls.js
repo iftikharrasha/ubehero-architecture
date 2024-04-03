@@ -43,12 +43,12 @@ const MasterControlls = () => {
       link: null,
       submenu: [
         {
-          label: 'My Parties',
-          link: `/master/${profile._id}/parties`,
-        },
-        {
           label: 'Create Party',
           link: `/master/${profile._id}/create-party`,
+        },
+        {
+          label: 'My Parties',
+          link: `/master/${profile._id}/parties`,
         },
       ],
     },

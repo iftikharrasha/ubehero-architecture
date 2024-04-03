@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { LockOutlined, UserOutlined, PartitionOutlined, ProjectOutlined } from '@ant-design/icons';
 import { Button, Card, Tabs, Row, Col, Empty, Popover, Spin } from 'antd';
 import UserPopup from '../Common/UserPopup/UserPopup';
-import useProfile from '../../hooks/useProfile';
+import useParties from '../../hooks/useParties';
 import moment from 'moment';
 
 const { TabPane } = Tabs;
 
 const PartyPeople = ({pId, socialsRouteKey, friendRouteKey, handleTabChange}) => {
     const [partyPeopleList, setPartyPeopleList] = useState(null);
-    const { handlePartyPeopleListHook } = useProfile();
+    const { handlePartyPeopleListHook } = useParties();
 
     useEffect(() => {
         const fetchData = async () => {

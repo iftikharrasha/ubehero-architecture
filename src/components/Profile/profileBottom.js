@@ -5,10 +5,11 @@ import MyStats from './MyStats';
 import Settings from './Settings';
 import MySocials from './MySocials';
 import MyTeams from './MyTeams';
+import MyParties from './MyParties';
 
 const { TabPane } = Tabs;
 
-const ProfileBottom = ({ref2GamingStats, ref2Teams, ref2Settings, routeKey, settingsRouteKey, socialsRouteKey, statsRouteKey, friendRouteKey, handleTabChange, profile, myTeams, badges, gameStats}) => {
+const ProfileBottom = ({ref2GamingStats, ref2Teams, ref2Settings, routeKey, settingsRouteKey, socialsRouteKey, statsRouteKey, friendRouteKey, handleTabChange, profile, myTeams, myParties, badges, gameStats}) => {
     return (
         <Tabs activeKey={routeKey} onChange={handleTabChange}>
             <TabPane
@@ -19,7 +20,13 @@ const ProfileBottom = ({ref2GamingStats, ref2Teams, ref2Settings, routeKey, sett
                     </Row>
                 }
             >
-                <MyStats statsRouteKey={statsRouteKey} handleTabChange={handleTabChange} stats={profile.stats} badges={badges} gameStats={gameStats}/>
+                <MyStats 
+                    statsRouteKey={statsRouteKey} 
+                    handleTabChange={handleTabChange} 
+                    stats={profile.stats} 
+                    badges={badges} 
+                    gameStats={gameStats}
+                />
             </TabPane>
             <TabPane
                 key="teams"
@@ -29,7 +36,23 @@ const ProfileBottom = ({ref2GamingStats, ref2Teams, ref2Settings, routeKey, sett
                     </Row>
                 }
             >
-                <MyTeams routeKey={routeKey} myTeams={myTeams} />
+                <MyTeams 
+                    routeKey={routeKey} 
+                    myTeams={myTeams} 
+                />
+            </TabPane>
+            <TabPane
+                key="parties"
+                tab={
+                    <Row justify="left" align="middle">
+                        <TeamOutlined /> <span>Parties</span>
+                    </Row>
+                }
+            >
+                <MyParties 
+                    routeKey={routeKey} 
+                    myParties={myParties} 
+                />
             </TabPane>
             <TabPane
                 key="socials"
@@ -39,7 +62,11 @@ const ProfileBottom = ({ref2GamingStats, ref2Teams, ref2Settings, routeKey, sett
                     </Row>
                 }
             >
-                <MySocials socialsRouteKey={socialsRouteKey} friendRouteKey={friendRouteKey} handleTabChange={handleTabChange}/>
+                <MySocials 
+                    socialsRouteKey={socialsRouteKey} 
+                    friendRouteKey={friendRouteKey} 
+                    handleTabChange={handleTabChange}
+                />
             </TabPane>
             <TabPane
                 key="settings"
@@ -49,7 +76,11 @@ const ProfileBottom = ({ref2GamingStats, ref2Teams, ref2Settings, routeKey, sett
                     </Row>
                 }
             >
-                <Settings profile={profile} settingsRouteKey={settingsRouteKey} handleTabChange={handleTabChange}/>
+                <Settings 
+                    profile={profile} 
+                    settingsRouteKey={settingsRouteKey} 
+                    handleTabChange={handleTabChange}
+                />
             </TabPane>
         </Tabs>
     );

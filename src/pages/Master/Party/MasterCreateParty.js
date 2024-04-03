@@ -5,7 +5,7 @@ import { useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import { Form, Row, Col, Steps, Input, Card, Button, Select } from "antd";
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
-import useProfile from "../../../hooks/useProfile";
+import useParties from "../../../hooks/useParties";
 
 const { Option } = Select;
 
@@ -13,7 +13,7 @@ const MasterCreateParty = () => {
     const [form] = Form.useForm();
     const [partyQuestion, setPartyQuestion] = useState(null);
     const [okayToCreate, setOkayToCreate] = useState(null);
-    const { handlePartyCreate, errorMessage } = useProfile();
+    const { handlePartyCreate, errorMessage } = useParties();
     // const [createData, setCreateData] = useState({ title: "", owner: "", privacy: "", questions: ["NA"] });
     // console.log(createData)
   

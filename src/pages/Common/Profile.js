@@ -14,6 +14,7 @@ import { HistoryOutlined, TeamOutlined, SettingOutlined } from '@ant-design/icon
 
 import useTour from '../../hooks/useTour';
 import useProfile from '../../hooks/useProfile';
+import { fetchParties } from '../../redux/slices/partySlice';
 
 const { TabPane } = Tabs;
 
@@ -35,7 +36,13 @@ const Profile = () => {
 
     const myTeams = useSelector((state) => state.myTeams.data)
     const versionTeams = useSelector((state) => state.myTeams.version)
-    // console.log('1. versionChatroomC:', versionChatroom);
+    
+    // const separatedItem = parties.find((item) => item.title === 'Underdogg');
+    // const remainingItems = parties.filter((item) => item.title !== 'Underdogg');
+
+    
+    const myParties = useSelector((state) => state.parties.data);
+    const versionParty = useSelector((state) => state.parties.version);
 
     const badges = useSelector((state) => state.profile.badges);
 
@@ -46,7 +53,9 @@ const Profile = () => {
 
     useEffect(() => {
         if(routeKey === 'teams'){
-            dispatch(fetchMyTeams({ id, versionTeams }));
+          dispatch(fetchMyTeams({ id, versionTeams }));
+        }else if(routeKey === 'parties'){
+          dispatch(fetchParties({ versionParty }));
         }
     }, [routeKey])
 
@@ -72,19 +81,21 @@ const Profile = () => {
             setRouteKey('socials');
             setSocialsRouteKey('friends');
             setFriendRouteKey('friendlist');
-        }else if (location.pathname.endsWith('requests')) {
+        } else if (location.pathname.endsWith('requests')) {
             setRouteKey('socials');
             setSocialsRouteKey('friends');
             setFriendRouteKey('requests');
-        }else if (location.pathname.endsWith('pendings')) {
+        } else if (location.pathname.endsWith('pendings')) {
             setRouteKey('socials');
             setSocialsRouteKey('friends');
             setFriendRouteKey('pendings');
-        }else if (location.pathname.endsWith('followers')) {
+        } else if (location.pathname.endsWith('followers')) {
             setRouteKey('socials');
             setSocialsRouteKey('followers');
-        }  else if (location.pathname.endsWith('teams')) {
+        } else if (location.pathname.endsWith('teams')) {
             setRouteKey('teams');
+        } else if (location.pathname.endsWith('parties')) {
+            setRouteKey('parties');
         } else if (location.pathname.endsWith('settings')) {
             setRouteKey('settings');
             setSettingsRouteKey('personal');
@@ -94,7 +105,7 @@ const Profile = () => {
         } else if (location.pathname.endsWith('gameaccounts')) {
             setRouteKey('settings');
             setSettingsRouteKey('gameaccounts');
-        }else {
+        } else {
             setRouteKey('mystats');
             setStatsRouteKey('games');
         }
@@ -131,6 +142,9 @@ const Profile = () => {
           break;
         case 'teams':
           history.push(`/profile/${id}/teams`);
+          break;
+        case 'parties':
+          history.push(`/profile/${id}/parties`);
           break;
         case 'settings':
           history.push(`/profile/${id}/settings`);
@@ -226,247 +240,6 @@ const Profile = () => {
           type: 'default'
         },
     ];
-    
-    // const badges = [
-    //   {
-    //     title: "underdog",
-    //     icon: "https://props.com/wp-content/uploads/Underdog-Fantasy-Icon-100x100.webp",
-    //     instruction: "created the account",
-    //     category: "user",
-    //     priority: 1,
-    //     xp: 120,
-    //     loots: 200,
-    //     gems: 1,
-    //     level: 1,
-    //     once: true,
-    //     claimed: true,
-    //     locked: false,
-    //   },
-    //   {
-    //     title: "captain",
-    //     icon: "https://res.cloudinary.com/duoalyur6/image/upload/v1696441978/Booster_Frame-6_aq0kta.png",
-    //     instruction: "when you create a team and recruited all the players",
-    //     category: "user",
-    //     priority: 1,
-    //     xp: 200,
-    //     loots: 500,
-    //     gems: 2,
-    //     level: 1,
-    //     once: false,
-    //     claimed: false,
-    //     locked: false,
-    //   },
-    //   {
-    //     title: "warlock",
-    //     icon: "https://res.cloudinary.com/duoalyur6/image/upload/v1696441977/Diamond_Spell_Specialist_a42lce.png",
-    //     instruction: "when you join a tournament which means you've annouced war",
-    //     category: "user",
-    //     priority: 1,
-    //     xp: 120,
-    //     loots: 200,
-    //     gems: 1,
-    //     level: 1,
-    //     once: false,
-    //     claimed: false,
-    //     locked: false,
-    //   },
-    //   {
-    //     title: "defender",
-    //     icon: "https://res.cloudinary.com/duoalyur6/image/upload/v1696441977/Gold_The_Collector_qb27ea.png",
-    //     instruction: "when you win or defend three battles in a row",
-    //     category: "user",
-    //     priority: 1,
-    //     xp: 120,
-    //     loots: 200,
-    //     gems: 1,
-    //     level: 1,
-    //     once: false,
-    //     claimed: false,
-    //     locked: false,
-    //   },
-    //   {
-    //     title: "kingsguard",
-    //     icon: "https://res.cloudinary.com/duoalyur6/image/upload/v1696441977/Booster_Frame-1_rmpdoh.png",
-    //     instruction: "when you successfully win the tournament as a team mate",
-    //     category: "user",
-    //     priority: 1,
-    //     xp: 120,
-    //     loots: 200,
-    //     gems: 1,
-    //     level: 1,
-    //     once: false,
-    //     claimed: false,
-    //     locked: false,
-    //   },
-    //   {
-    //     title: "knighthood",
-    //     icon: "https://res.cloudinary.com/duoalyur6/image/upload/v1696441977/Booster_Frame-7_giy05h.png",
-    //     instruction: "when you successfully win the tournament as a captain",
-    //     category: "user",
-    //     priority: 1,
-    //     xp: 120,
-    //     loots: 200,
-    //     gems: 1,
-    //     level: 1,
-    //     once: false,
-    //     claimed: false,
-    //     locked: false,
-    //   },
-    //   {
-    //     title: "kingslayer",
-    //     icon: "https://res.cloudinary.com/duoalyur6/image/upload/v1696519458/Bronze_Routine_Player_fmgpvs.png",
-    //     instruction: "when you finished as a runner up in a tournament",
-    //     category: "user",
-    //     priority: 1,
-    //     xp: 120,
-    //     loots: 200,
-    //     gems: 1,
-    //     level: 1,
-    //     once: false,
-    //     claimed: false,
-    //     locked: false,
-    //   },
-    //   {
-    //     title: "contender",
-    //     icon: "https://res.cloudinary.com/duoalyur6/image/upload/v1696441977/Booster_Frame-9_i66d9c.png",
-    //     instruction: "when you win three tournaments in a row",
-    //     category: "user",
-    //     priority: 1,
-    //     xp: 120,
-    //     loots: 200,
-    //     gems: 1,
-    //     level: 1,
-    //     once: false,
-    //     claimed: false,
-    //     locked: false,
-    //   },
-    //   {
-    //     title: "loyalist",
-    //     icon: "https://res.cloudinary.com/duoalyur6/image/upload/v1696441977/Booster_Frame-10_gwxe56.png",
-    //     instruction: "when you participate two tournaments with your team",
-    //     category: "user",
-    //     priority: 1,
-    //     xp: 120,
-    //     loots: 200,
-    //     gems: 1,
-    //     level: 1,
-    //     once: false,
-    //     claimed: false,
-    //     locked: false,
-    //   },
-    //   {
-    //     title: "specialist",
-    //     icon: "https://res.cloudinary.com/duoalyur6/image/upload/v1696441977/Booster_Frame-4_o0mzdn.png",
-    //     instruction: "when at least one of your teams has all the players added",
-    //     category: "user",
-    //     priority: 1,
-    //     xp: 120,
-    //     loots: 200,
-    //     gems: 1,
-    //     level: 1,
-    //     once: false,
-    //     claimed: false,
-    //     locked: false,
-    //   },
-    //   {
-    //     title: "booster",
-    //     icon: "https://res.cloudinary.com/duoalyur6/image/upload/v1696441977/Booster_Frame-8_w17u8p.png",
-    //     instruction: "when at least one of your teams has all the players added",
-    //     category: "user",
-    //     priority: 1,
-    //     xp: 120,
-    //     loots: 200,
-    //     gems: 1,
-    //     level: 1,
-    //     once: false,
-    //     claimed: false,
-    //     locked: false,
-    //   },
-    //   {
-    //     title: "dedicated",
-    //     icon: "https://res.cloudinary.com/duoalyur6/image/upload/v1696441977/Diamond_Star_Selector_samusd.png",
-    //     instruction: "when at least one of your teams has all the players added",
-    //     category: "user",
-    //     priority: 1,
-    //     xp: 120,
-    //     loots: 200,
-    //     gems: 1,
-    //     level: 1,
-    //     once: false,
-    //     claimed: false,
-    //     locked: false,
-    //   },
-    //   {
-    //     title: "reactor",
-    //     icon: "https://res.cloudinary.com/duoalyur6/image/upload/v1696441977/Diamond_Superhost_bwvtek.png",
-    //     instruction: "when at least one of your teams has all the players added",
-    //     category: "user",
-    //     priority: 1,
-    //     xp: 120,
-    //     loots: 200,
-    //     gems: 1,
-    //     level: 1,
-    //     once: false,
-    //     claimed: false,
-    //     locked: false,
-    //   },
-    //   {
-    //     title: "popular",
-    //     icon: "https://res.cloudinary.com/duoalyur6/image/upload/v1696441977/Booster_Frame_i5qkpt.png",
-    //     instruction: "when you gain 500 followers withing our gaming community",
-    //     category: "user",
-    //     priority: 1,
-    //     xp: 120,
-    //     loots: 200,
-    //     gems: 1,
-    //     level: 1,
-    //     once: false,
-    //     claimed: false,
-    //     locked: false,
-    //   },
-    //   {
-    //     title: "grand maester",
-    //     icon: "https://res.cloudinary.com/duoalyur6/image/upload/v1696519458/Gold_Superhost_lni5br.png",
-    //     instruction: "when you collaborate with the master and master decides to reward you",
-    //     category: "user",
-    //     priority: 1,
-    //     xp: 120,
-    //     loots: 200,
-    //     gems: 1,
-    //     level: 1,
-    //     once: false,
-    //     claimed: false,
-    //     locked: false,
-    //   },
-    //   {
-    //     title: "gaming machine",
-    //     icon: "https://res.cloudinary.com/duoalyur6/image/upload/v1696519458/Gold_Star_Selector_q9umt7.png",
-    //     instruction: "when you play at least three different games within our platform",
-    //     category: "user",
-    //     priority: 1,
-    //     xp: 120,
-    //     loots: 200,
-    //     gems: 1,
-    //     level: 1,
-    //     once: false,
-    //     claimed: false,
-    //     locked: false,
-    //   },
-    //   {
-    //     title: "patriot",
-    //     icon: "https://res.cloudinary.com/duoalyur6/image/upload/v1696519458/Booster_bag_shmoc0.png",
-    //     instruction: "when you win at least one country based tournament",
-    //     category: "user",
-    //     priority: 1,
-    //     xp: 120,
-    //     loots: 200,
-    //     gems: 1,
-    //     level: 1,
-    //     once: true,
-    //     claimed: false,
-    //     locked: true,
-    //   },
-    // ]
 
     const gameStats = [
       {
@@ -564,6 +337,7 @@ const Profile = () => {
                                 handleTabChange={handleTabChange}
                                 profile={userDetails}
                                 myTeams={myTeams}
+                                myParties={myParties}
                                 badges={badges}
                                 gameStats={gameStats}
                             />

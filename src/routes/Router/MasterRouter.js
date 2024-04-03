@@ -7,6 +7,7 @@ import MasterDashboard from '../../pages/Master/Tournament/MasterDashboard';
 import MasterRoute from '../Privates/MasterRoute';
 import MasterCreateParty from '../../pages/Master/Party/MasterCreateParty';
 import MasterParties from '../../pages/Master/Party/MasterParties';
+import MasterPartyMembers from '../../pages/Master/Party/MasterPartyMembers';
 
 const MasterRouter = () => {
   return (
@@ -20,11 +21,14 @@ const MasterRouter = () => {
       <MasterRoute path="/master/:id/tournaments">
         <MasterTournaments/>
       </MasterRoute>
+      <MasterRoute path="/master/:id/create-party">
+        <MasterCreateParty/>
+      </MasterRoute>
       <MasterRoute path="/master/:id/parties">
         <MasterParties/>
       </MasterRoute>
-      <MasterRoute path="/master/:id/create-party">
-        <MasterCreateParty/>
+      <MasterRoute path="/master/:id/member-requests/:pId">
+        <MasterPartyMembers/>
       </MasterRoute>
       <MasterRoute path="/master/:id">
         <MasterDashboard/>

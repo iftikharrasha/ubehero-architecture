@@ -56,7 +56,7 @@ body {
 
 a{
   text-decoration: none;
-  color: #000000;
+  color: #F030C0;
 }
 
 a:hover{
@@ -307,7 +307,7 @@ a:hover{
 }
 
 .me {
-  color: #1d8ecd
+  /* color: #1d8ecd; */
 }
 
 .float-right {

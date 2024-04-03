@@ -24,13 +24,16 @@ const GamerRouter = () => {
         <Route exact path="/parties" component={Parties} />
         <Route exact path="/teams" component={Teams} />
         <Route exact path="/tournament/details/:id" render={() => <TDetails/>}  />
-        <Route exact path="/party/details/:id" render={() => <Party/>}  />
+        {/* <Route exact path="/party/details/:id" render={() => <Party/>}  /> */}
         <Route path="/tournament/details/:id/bracket" render={() => <TDetails tabKey={'bracket'}/>} />
         <Route path="/tournament/details/:id/matches" render={() => <TDetails tabKey={'matches'}/>} />
         <Route path="/tournament/details/:id/chatroom" render={() => <TDetails tabKey={'chatroom'}/>} />
         <Route path="/tournament/details/:id/prizes" render={() => <TDetails tabKey={'prizes'} />}/>
         <Route path="/tournament/details/:id/result" render={() => <TDetails tabKey={'result'} />}/>
         <Route path="/tournament/details/:id/checkout" render={() => <TDetails tabKey={'checkout'}/>} />
+        <PrivateRoute path="/party/details/:id">
+            <Party/>
+        </PrivateRoute>
         <PrivateRoute path="/profile/:id">
             <Profile/>
         </PrivateRoute>

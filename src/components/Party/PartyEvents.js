@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Tabs, Row, Col, Empty, Spin } from 'antd';
-import useProfile from '../../hooks/useProfile';
+import useParties from '../../hooks/useParties';
 import Tournaments from '../Tournaments/Tournaments';
 
 const PartyEvents = ({party}) => {
     const { _id } = party;
     const [partyEvents, setPartyEvents] = useState(null);
-    const { handlePartyEventListHook } = useProfile();
+    const { handlePartyEventListHook } = useParties();
 
     useEffect(() => {
         const fetchData = async () => {
