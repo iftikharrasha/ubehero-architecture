@@ -4,7 +4,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import PageLayout from '../../components/PageLayout/PageLayout';
 import Preloader from '../../components/PageLayout/Preloader';
 import PartyLeftSide from '../../components/Party/PartyLeftSide';
-
 import { Row, Col } from 'antd';
 import PartyBottom from '../../components/Party/PartyBottom';
 import { fetchPartyDetails } from '../../redux/slices/partySlice';

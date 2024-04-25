@@ -33,46 +33,52 @@ const Home = () => {
     }, [])
 
     const landing = useSelector((state) => state.statics.landing)
-    const tournaments = useSelector((state) => state.tournaments.data)
+    const allTournaments = useSelector((state) => state.tournaments.data)
+    const featured = allTournaments.filter(tournament => tournament.tournamentStage !== 4);
+    const archived = allTournaments.filter(tournament => tournament.tournamentStage === 4);
     const purchasedItems = useSelector(state => state.profile?.data?.purchasedItems?.tournaments);
 
     //filter tournaments and get the common one that the user purchased
     const [roomsJoined, setRoomsJoined] = useState([]);
     const [notJoinedRooms, setNotJoinedRooms] = useState([]);
+    const [roomsArchived, setRoomsArchived] = useState([]);
     
     useEffect(() => {
         if(purchasedItems){
-            const myRooms = tournaments.filter(tournament => purchasedItems.some(itemId => tournament._id === itemId));
+            const myRooms = allTournaments.filter(tournament => purchasedItems.some(itemId => tournament._id === itemId));
             setRoomsJoined(myRooms);
         }
-    }, [purchasedItems, tournaments]);
+    }, [purchasedItems, allTournaments]);
     
     useEffect(() => {
+        console.log('hit')
         if(isLoggedIn){
             if(roomsJoined.length > 0){
-                const notJoinedTournaments = tournaments.filter((tournament) =>
+                const notJoinedTournaments = featured.filter((tournament) =>
                     !roomsJoined.some(room => room._id === tournament._id)
                 );
                 setNotJoinedRooms(notJoinedTournaments)
             }else{
-                setNotJoinedRooms(tournaments)
+                setNotJoinedRooms(featured)
+                setRoomsArchived(archived)
             }
         }else{
-            setNotJoinedRooms(tournaments)
+            setNotJoinedRooms(featured)
+            setRoomsArchived(archived)
         }
-    }, [roomsJoined, tournaments, isLoggedIn]);
+    }, [roomsJoined, isLoggedIn]);
 
-    // Tournaments Pagination configuration
-    const [currentTournamentsPage, setCurrentTournamentsPage] = useState(1);
+    // Featured Tournaments Pagination configuration
+    const [currentFeaturedTournamentsPage, setCurrentFeaturedTournamentsPage] = useState(1);
     const handleTournamentsPageChange = (page) => {
-        setCurrentTournamentsPage(page);
+        setCurrentFeaturedTournamentsPage(page);
     };
      const tournamentsPageSize = windowWidth < 575.98 ? 1 : // Extra small screens
                                  windowWidth < 991.98 ? 2 : // Medium screens
                                  windowWidth < 1199.98 ? 4 : // Large screens
                                  4; // Extra large screens
     const totalTournaments = notJoinedRooms ? notJoinedRooms.length : 0;
-    const startIndex = (currentTournamentsPage - 1) * tournamentsPageSize;
+    const startIndex = (currentFeaturedTournamentsPage - 1) * tournamentsPageSize;
     const endIndex = startIndex + tournamentsPageSize;
     const visibleTournaments = notJoinedRooms ? notJoinedRooms.slice(startIndex, endIndex) : [];
 
@@ -89,6 +95,19 @@ const Home = () => {
     const joinedStartIndex = (currentJoinedPage - 1) * joinedPageSize;
     const joinedEndIndex = joinedStartIndex + joinedPageSize;
     const visibleJoinedRooms = roomsJoined ? roomsJoined.slice(joinedStartIndex, joinedEndIndex) : [];
+
+    // Archived Pagination configuration
+    const [currentArchivedPage, setCurrentArchivedPage] = useState(1);
+    const handleArchivedPageChange = (page) => {
+        setCurrentArchivedPage(page);
+    };
+    const archivedPageSize = windowWidth < 575.98 ? 1 : // Extra small screens
+                           windowWidth < 991.98 ? 2 : // Medium screens
+                           windowWidth < 1199.98 ? 4 : // Large screens
+                           4; // Extra large screens
+    const archivedStartIndex = (currentArchivedPage - 1) * archivedPageSize;
+    const archivedEndIndex = archivedStartIndex + archivedPageSize;
+    const visibleArchivedRooms = roomsArchived ? roomsArchived.slice(archivedStartIndex, archivedEndIndex) : [];
 
     const location = useLocation();
     const history = useHistory();
@@ -149,7 +168,7 @@ const Home = () => {
                     <div className="pagination-container">
                         <Pagination
                             hideOnSinglePage={true}
-                            current={currentTournamentsPage}
+                            current={currentFeaturedTournamentsPage}
                             onChange={handleTournamentsPageChange}
                             total={totalTournaments}
                             pageSize={tournamentsPageSize}
@@ -218,7 +237,27 @@ const Home = () => {
                         </Row>
                     }
                 >
-                    <Empty/>
+                   
+                   <Row gutter={[6, 6]}>
+                        {visibleArchivedRooms.length > 0 ? (
+                            visibleArchivedRooms.map((tournament, index) => (
+                                <Col xs={24} sm={12} md={8} lg={12} xl={6} key={index}>
+                                    <Tournaments routeKey={tournament._id} tournament={tournament} details={false} totalJoined={tournament?.leaderboards?.length}/>
+                                </Col>
+                            ))
+                            ) : (
+                            <div style={{width: '100%'}}>
+                                <Empty />
+                            </div>
+                        )}
+                    </Row>
+                    <Pagination
+                        hideOnSinglePage={true}
+                        current={currentArchivedPage}
+                        onChange={handleArchivedPageChange}
+                        total={roomsArchived.length}
+                        pageSize={archivedPageSize}
+                    />
                 </TabPane>
             </Tabs>
         </PageLayout>

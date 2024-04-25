@@ -9,7 +9,7 @@ const CheckoutForm = ({method, tournament, connectedAccount}) => {
 
     const tournamentRegistration = async () => {
         setConfirmLoading(true)
-        const result = await handleTournamentPurchase(tournament, connectedAccount._id, method);
+        const result = await handleTournamentPurchase(tournament, connectedAccount._id);
         if(result){
             setConfirmLoading(false);
         }

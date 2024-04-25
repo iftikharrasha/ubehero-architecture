@@ -93,7 +93,7 @@ const PartyTimeline = ({ unlocked, id, userId, isLoggedIn }) => {
                             !isLoggedIn || !unlocked ? [] :
                             [
                                 <div style={{ cursor: 'pointer' }} onClick={() => handlePostReact(item, '+')}>
-                                    <LikeOutlined style={{ fontSize: '16px', color: item?.reacts?.likes?.includes(userId) ? '#F030C0' : null }} /> 
+                                    <LikeOutlined style={{ fontSize: '16px', color: item?.reacts?.likes?.includes(userId) ? '#6abe39' : null }} /> 
                                     <span className="ps-1" style={{ fontSize: '14px' }}>{item?.reacts?.likes?.length}</span>
                                 </div>,
                                 <div style={{ cursor: 'pointer' }} onClick={() => handlePostReact(item, '-')}>
@@ -120,11 +120,9 @@ const PartyTimeline = ({ unlocked, id, userId, isLoggedIn }) => {
                                 title={
                                     <>
                                         <h4 onClick={() => handlePostRead(item)} style={{marginBlockEnd: '0px', cursor: 'pointer'}}>{item?.title}</h4>
-                                        <div>
-                                            <span style={{fontSize: "12px"}}>
-                                                {moment(item?.createdAt).local().format("LLL")}
-                                            </span>
-                                        </div>
+                                        <span style={{fontSize: "12px"}}>
+                                            {moment(item?.createdAt).local().format("LLL")}
+                                        </span>
                                     </>
                                 }
                                 description={<>

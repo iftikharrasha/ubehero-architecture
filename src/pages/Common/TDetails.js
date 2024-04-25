@@ -5,7 +5,6 @@ import { useDispatch } from 'react-redux';
 import {  useParams } from 'react-router-dom';
 import { useLocation, useHistory  } from 'react-router-dom';
 import PageLayout from '../../components/PageLayout/PageLayout';
-import Leaderboard from '../../components/Tournaments/Leaderboards/Leaderboards';
 import { fetchTournamentDetails } from '../../redux/slices/tournamentSlice';
 import { fetchLeaderboards } from '../../redux/slices/leaderboardSlice';
 import { fetchBrackets } from '../../redux/slices/bracketSlice';
@@ -13,7 +12,7 @@ import Preloader from '../../components/PageLayout/Preloader';
 import Prizes from '../../components/Tournaments/Prizes/Prizes';
 import ChatRoom from '../../components/Tournaments/ChatRoom/ChatRoom';
 import CheckoutForm from '../../components/Common/Checkout/CheckoutForm';
-import CheckoutLayout from '../../components/Common/Checkout/CheckoutLayout';
+import CheckoutLayoutSolo from '../../components/Common/Checkout/CheckoutLayoutSolo';
 import useTour from '../../hooks/useTour';
 import useTimer from '../../hooks/useTimer';
 import TournamentStage from '../../components/Common/TournamentStage/TournamentStage';
@@ -27,6 +26,9 @@ import { Tabs, Row, Modal, Tour, Col, Card, Empty, message } from 'antd';
 import { TrophyOutlined, MessageOutlined, CrownOutlined, PartitionOutlined, ProjectOutlined, OrderedListOutlined } from '@ant-design/icons';
 import TournamentSide from '../../components/Tournaments/TournamentSide';
 import useTournament from '../../hooks/useTournament';
+import CheckoutLayoutTeam from '../../components/Common/Checkout/CheckoutLayoutTeam';
+import LeaderboardsTeam from '../../components/Tournaments/Leaderboards/LeaderboardsTeam';
+import LeaderboardsSolo from '../../components/Tournaments/Leaderboards/LeaderboardsSolo';
 
 const { TabPane } = Tabs;
 
@@ -57,12 +59,35 @@ const TournamentDetails = () => {
     const leaderboards = useSelector((state) => state.leaderboards.data)
     const leaderboardDetails = leaderboards[id];
     const versionLeaderboard = leaderboardDetails ? leaderboardDetails.version : 0;
+    const entryType = leaderboardDetails?.entryType;
+    console.log(leaderboardDetails)
 
     const brackets = useSelector((state) => state.brackets.data)
     const bracketDetails = brackets[id];
     const versionBracket = bracketDetails ? bracketDetails.version : 0;
 
     const compMode = tournamentDetails?.settings?.competitionMode;
+
+    const teams = useSelector((state) => state.myTeams.data ? state.myTeams.data : []);
+    const connectedTeam = teams.find((team) => {
+        if(tournamentDetails.platforms.includes('cross')){
+          const hasCommonItem = tournamentDetails.crossPlatforms.some(item => team.crossPlatforms.includes(item));
+          return hasCommonItem && team.category === tournamentDetails.category;
+        }else{
+          return tournamentDetails.platforms.some(item => team.platforms.includes(item)) && team.category === tournamentDetails.category;
+        }
+    });
+
+    const teamLeaderboards = 
+    tournamentDetails?.settings?.mode === 'solo' ? [] :
+    leaderboardDetails?.leaderboards?.reduce((acc, item) => {
+        const members = item?.team?.members?.mates;
+        const captainId = item?.team?.captainId;
+        const players = [...members, captainId];
+        return acc.concat(players.map(player => {
+            return { gamer: player }; 
+        }));
+    }, []);
 
     useEffect(() => {
         dispatch(fetchTournamentDetails({ id, versionTournament }));
@@ -132,15 +157,22 @@ const TournamentDetails = () => {
         setConfirmCheckoutLoading(true);
         if(tournamentDetails?.settings?.feeType === 'free'){
             setMethod('free');
-            const result = await handleTournamentPurchase(tournamentDetails, connectedAccount._id, tournamentDetails?.feeType);
-            if(result){
-                setConfirmCheckoutLoading(false);
+            if(tournamentDetails?.settings?.mode === 'team'){
+                const result = await handleTournamentPurchase(tournamentDetails, connectedTeam._id);
+                if(result){
+                    setConfirmCheckoutLoading(false);
+                }
+            }else{
+                const result = await handleTournamentPurchase(tournamentDetails, connectedAccount._id);
+                if(result){
+                    setConfirmCheckoutLoading(false);
+                }
             }
         }else if(tournamentDetails?.settings?.feeType === 'gems'){
             setMethod('gems');
             if(profile?.data?.stats?.totalGems > tournamentDetails?.settings?.joiningFee){
                 console.log(profile?.data?.stats?.totalGems, tournamentDetails?.settings?.joiningFee)
-                const result = await handleTournamentPurchase(tournamentDetails, connectedAccount._id, tournamentDetails?.feeType);
+                const result = await handleTournamentPurchase(tournamentDetails, connectedAccount._id);
                 if(result){
                     setConfirmCheckoutLoading(false);
                 }
@@ -380,7 +412,9 @@ const TournamentDetails = () => {
                                                 >
                                                     {
                                                         !leaderboardDetails ? <Preloader /> :
-                                                        <Leaderboard leaderboards={leaderboardDetails.leaderboards}/>
+                                                            entryType === 'team' ?
+                                                            <LeaderboardsTeam leaderboards={leaderboardDetails?.leaderboards}/> :
+                                                            <LeaderboardsSolo leaderboards={leaderboardDetails?.leaderboards}/>
                                                     }
                                                 </TabPane> 
                                                 {
@@ -396,7 +430,7 @@ const TournamentDetails = () => {
                                                     >
                                                         {
                                                             !bracketDetails ? <Preloader /> :
-                                                            <Bracket matches={bracketDetails.matches}/>
+                                                            <Bracket matches={bracketDetails?.matches}/>
                                                         }
                                                     </TabPane>
                                                     <TabPane
@@ -469,7 +503,7 @@ const TournamentDetails = () => {
                                                                             socket={socket}
                                                                             isConnected={isConnected}
                                                                             tournamentDetails={tournamentDetails} 
-                                                                            leaderboards={leaderboardDetails?.leaderboards}
+                                                                            leaderboards={tournamentDetails?.settings?.mode === 'team' ? teamLeaderboards : leaderboardDetails?.leaderboards}
                                                                             routeKey={routeKey}
                                                                             unreadCount={unreadCount}
                                                                             setUnreadCount={setUnreadCount}
@@ -498,7 +532,7 @@ const TournamentDetails = () => {
                                                                         socket={socket}
                                                                         isConnected={isConnected}
                                                                         tournamentDetails={tournamentDetails} 
-                                                                        leaderboards={leaderboardDetails?.leaderboards}
+                                                                        leaderboards={tournamentDetails?.settings?.mode === 'team' ? teamLeaderboards : leaderboardDetails?.leaderboards}
                                                                         routeKey={routeKey}
                                                                         unreadCount={unreadCount}
                                                                         setUnreadCount={setUnreadCount}
@@ -512,7 +546,8 @@ const TournamentDetails = () => {
                                             
                                             {/* this is the tab for checkout when clicked the checkout button */}
                                             {routeKey === 'checkout' ? (
-                                                <CheckoutLayout 
+                                                tournamentDetails?.settings?.mode === 'solo' ?
+                                                <CheckoutLayoutSolo 
                                                     item={tournamentDetails} 
                                                     handleOrder={handleOrder} 
                                                     handlePaymentMethod={handlePaymentMethod} 
@@ -520,6 +555,16 @@ const TournamentDetails = () => {
                                                     setMethod={setMethod}
                                                     connectedAccount={connectedAccount}
                                                     setConnectedAccount={setConnectedAccount}
+                                                    confirmCheckoutLoading={confirmCheckoutLoading}
+                                                /> :
+                                                <CheckoutLayoutTeam 
+                                                    item={tournamentDetails} 
+                                                    handleOrder={handleOrder} 
+                                                    handlePaymentMethod={handlePaymentMethod} 
+                                                    teams={teams}
+                                                    connectedTeam={connectedTeam}
+                                                    method={method} 
+                                                    setMethod={setMethod}
                                                     confirmCheckoutLoading={confirmCheckoutLoading}
                                                 />
                                             ) : null}

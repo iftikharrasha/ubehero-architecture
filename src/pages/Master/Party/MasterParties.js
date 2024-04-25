@@ -9,7 +9,7 @@ import { Button, Divider, Space, Tag } from "antd";
 import useParties from "../../../hooks/useParties";
 
 const MasterParties = () => {
-    const { handlePartiesList } = useParties();
+    const { handleMasterPartiesList } = useParties();
     const dispatch = useDispatch();
     const versionParty = useSelector(state => state.parties.version);
     const id = useSelector(state => state.parties.data ? state.parties.data._id : null);
@@ -24,9 +24,8 @@ const MasterParties = () => {
     useEffect(() => {
         const fetchData = async () => {
           try {
-            const parties = await handlePartiesList();
-            const remainingItems = parties.filter((item) => item.title !== 'Underdogg' && item.owner._id === uId);
-            setMasterParties(remainingItems);
+            const parties = await handleMasterPartiesList();
+            setMasterParties(parties);
           } catch (error) {
             setMasterParties([]);
             console.error('Error fetching parties list:', error);

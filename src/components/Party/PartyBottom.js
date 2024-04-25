@@ -37,7 +37,7 @@ const PartyBottom = ({ id, party }) => {
             </TabPane>
 
             {
-                !isLoggedIn ? null : party?.owner?._id !== userId ? null :
+                !isLoggedIn ? null :
                 <TabPane
                     key="people"
                     tab={
@@ -46,7 +46,7 @@ const PartyBottom = ({ id, party }) => {
                         </Row>
                     }
                 >
-                    <PartyPeople pId={party._id}/>
+                    <PartyPeople pId={party._id} owner={party?.owner?._id === userId }/>
                 </TabPane>
             }
 

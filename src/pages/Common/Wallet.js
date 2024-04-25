@@ -7,7 +7,7 @@ import Preloader from '../../components/PageLayout/Preloader';
 import Transactions from '../../components/Wallet/Transactions/Transactions';
 import { fetchGiftCards } from '../../redux/slices/giftCardSlice';
 import PurchaseLayout from '../../components/Common/Purchase/PurchaseLayout';
-import CheckoutLayout from '../../components/Common/Checkout/CheckoutLayout';
+import CheckoutLayoutSolo from '../../components/Common/Checkout/CheckoutLayoutSolo';
 import Giftcard from '../../components/Wallet/Topup/Giftcard';
 import { fetchMyTransactions } from '../../redux/slices/walletSlice';
 import { Link } from 'react-router-dom';
@@ -225,7 +225,7 @@ const Wallet = () => {
                     {/* this is the tab for checkout when clicked the checkout button */}
                     {routeKey === 'checkout' ? (
                         <div className="checkout row">
-                            <CheckoutLayout 
+                            <CheckoutLayoutSolo 
                                 remark='topup'
                                 routeKey={routeKey} 
                                 item={clickedGift} 

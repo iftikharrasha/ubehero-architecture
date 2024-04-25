@@ -7,12 +7,13 @@ import { Col } from 'react-bootstrap';
 import AnswerQuestions from './AnswerQuestions';
 import useParties from '../../hooks/useParties';
 import InboxContext from '../../Contexts/InboxContext/InboxContext';
+import moment from 'moment';
 
 const { TabPane } = Tabs;
 const { Meta } = Card;
 
 const PartyLeftSide = ({party}) => {
-    const { _id, title, owner, questions, members, unlocked } = party;
+    const { _id, title, owner, questions, members, unlocked, createdAt } = party;
     const { handlePartyJoin } = useParties();
 
 
@@ -68,9 +69,7 @@ const PartyLeftSide = ({party}) => {
                     <PartyTop party={party} />
                     <div className="instructions text-center">
                         <h2>{title}</h2>
-                        <p>
-                            Created at: December 28, 2023
-                        </p>
+                        <p>{moment(createdAt).local().format("LLL")}</p>
                     </div>
 
                     <div className="d-flex justify-content-center">
@@ -79,19 +78,18 @@ const PartyLeftSide = ({party}) => {
                         <Tag color="green">
                             JOINED
                         </Tag> :
-                        title === 'Underdogg' ? null :
                         !isLoggedIn ? null : owner?._id === userId ? null :
-                        members?.requested?.includes(userId) ?
-                        <Button type='default' disabled>
-                            REQUEST PENDING
-                        </Button> : 
-                        members?.invited?.includes(userId) ?
-                        <Button type='default'>
-                            Accept Invitation
-                        </Button> : 
-                        <Button type='default' onClick={() => setOpen(true)}>
-                            Join Now
-                        </Button>
+                            members?.requested?.includes(userId) ?
+                            <Button type='default' disabled>
+                                REQUEST PENDING
+                            </Button> : 
+                            members?.invited?.includes(userId) ?
+                            <Button type='default'>
+                                Accept Invitation
+                            </Button> : 
+                            <Button type='default' onClick={() => setOpen(true)}>
+                                Join Now
+                            </Button>
                     }
                     </div>
                 </Card>

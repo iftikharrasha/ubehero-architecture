@@ -7,7 +7,7 @@ import AddGameAccount from '../../Profile/AddGameAccount';
 import useProfile from '../../../hooks/useProfile';
 import CheckoutDetails from './CheckoutDetails';
 
-const CheckoutLayout = ({ item, handleOrder, handlePaymentMethod, method, setMethod, connectedAccount, setConnectedAccount, confirmCheckoutLoading }) => {
+const CheckoutLayoutSolo = ({ item, handleOrder, handlePaymentMethod, method, setMethod, connectedAccount, setConnectedAccount, confirmCheckoutLoading }) => {
     const [open, setOpen] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
     const [isFieldsFilled, setIsFieldsFilled] = useState(false);
@@ -19,6 +19,7 @@ const CheckoutLayout = ({ item, handleOrder, handlePaymentMethod, method, setMet
     console.log(item)
 
     const [form] = Form.useForm();
+    console.log(connectedAccount)
 
     useEffect(() => {
       //this is to filter out and remain only valid accounts for this tournament
@@ -71,9 +72,9 @@ const CheckoutLayout = ({ item, handleOrder, handlePaymentMethod, method, setMet
 
     return (
         <div className="checkout row my-5">
-        {/* step 1 */}
+          {/* step 1 */}
           {!connectedAccount ?
-          <div className="col-md-12">
+            <div className="col-md-12">
               <Timeline
                 mode="middle"
                 items={[
@@ -140,6 +141,7 @@ const CheckoutLayout = ({ item, handleOrder, handlePaymentMethod, method, setMet
                   ]}
                 />
             </div>
+
             <div className="col-md-6">
               <CheckoutDetails 
                   handleOrder={handleOrder} 
@@ -186,4 +188,4 @@ const CheckoutLayout = ({ item, handleOrder, handlePaymentMethod, method, setMet
     );
 };
 
-export default CheckoutLayout;
+export default CheckoutLayoutSolo;

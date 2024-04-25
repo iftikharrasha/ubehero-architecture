@@ -1,11 +1,12 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { Row, Avatar, Modal, Card } from 'antd';
-import { LikeOutlined, MessageOutlined, DislikeOutlined } from '@ant-design/icons';
+import { Row, Avatar, Modal, Card, Tag } from 'antd';
+import { LikeOutlined, MessageOutlined, DislikeOutlined, DeleteOutlined, CheckOutlined, CloseOutlined, StopOutlined } from '@ant-design/icons';
 import DOMPurify from 'dompurify';
 import PartyComments from './PartyComments';
 import useParties from '../../../hooks/useParties';
 import { useSelector } from 'react-redux';
 import moment from 'moment';
+import ReportTags from '../Report/ReportTags';
 
 const { Meta } = Card;
 
@@ -78,6 +79,22 @@ const PartySocialPopup = ({ unlocked, id, userId, isLoggedIn, readingItem, open,
         }
     };
 
+    const [deletingId, setDeletingId] = useState(null);
+    const [reportingId, setReportingId] = useState(null);
+    const handleToggle = (id, type) => {
+        if(type === 'check') {
+            setDeletingId(id);
+        }else if(type === 'close'){
+            setDeletingId(null);
+            setReportingId(null);
+        }else if(type === 'delete'){
+            setDeletingId(null);
+        }else if(type === 'report'){
+            setDeletingId(null);
+            setReportingId(id);
+        }
+    }
+
     return (
         <Modal
             title={null}
@@ -98,25 +115,46 @@ const PartySocialPopup = ({ unlocked, id, userId, isLoggedIn, readingItem, open,
                         width: '100%',
                     }}
                     cover={
-                        readingItem?.thumbnail ?
                             <>
-                                <img style={{ width: '100%' }}
-                                    alt="example"
-                                    src={readingItem?.thumbnail}
-                                />
+                                {
+                                     !readingItem?.thumbnail ? null :
+                                     <img style={{ width: '100%' }}
+                                         alt="example"
+                                         src={readingItem?.thumbnail}
+                                     />
+                                }
                                 <h4 className='ps-4 pt-4'>{`${readingItem?.title}`}</h4>
-                                <div className='ps-4'>
-                                    <span style={{fontSize: "12px"}}>
-                                        {moment(readingItem?.createdAt).local().format("LLL")}
-                                    </span>
-                                </div>
-                            </> : 
-                            <>
-                                <h4 className='ps-4 pt-4'>{`${readingItem?.title}`}</h4>
-                                <div className='ps-4'>
-                                    <span style={{fontSize: "12px"}}>
-                                        {moment(readingItem?.createdAt).local().format("LLL")}
-                                    </span>
+                                <div className='px-4'>
+                                    {
+                                        !isLoggedIn || !unlocked ? null :
+                                        readingItem?._id === deletingId ?
+                                        <div class="d-flex">
+                                            <span style={{fontSize: "14px", marginRight: '5px', cursor: 'pointer'}}>
+                                                Are you sure you want to delete this item?
+                                            </span>
+                                            <CheckOutlined style={{ color: '#52c41a', marginRight: '5px', cursor: 'pointer'}} onClick={() => handleToggle(readingItem?._id, 'delete')}/> 
+                                            <CloseOutlined style={{ color: '#eb2f96', cursor: 'pointer'}} onClick={() => handleToggle(readingItem?._id, 'close')}/>
+                                        </div> :
+                                        readingItem?._id === reportingId ?
+                                        <div class="d-flex">
+                                            <div>
+                                                <span style={{fontSize: "14px", marginRight: '5px', cursor: 'pointer'}}>
+                                                    Report a problem
+                                                </span>
+                                                <ReportTags id={readingItem?._id} type="post"/>
+                                            </div>
+                                            <CloseOutlined style={{ color: '#eb2f96', cursor: 'pointer'}} onClick={() => handleToggle(readingItem?._id, 'close')}/>
+                                        </div>  :
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span style={{fontSize: "14px"}}>
+                                                {moment(readingItem?.createdAt).local().format("LLL")}
+                                            </span>
+                                            <div>
+                                                <DeleteOutlined style={{ fontSize: '14px', marginLeft: '5px', color: '#eb2f96' }} onClick={() => handleToggle(readingItem?._id, 'check')}/> 
+                                                <StopOutlined style={{ fontSize: '14px', marginLeft: '15px', color: '#eb2f96' }} onClick={() => handleToggle(readingItem?._id, 'report')}/>
+                                            </div>
+                                        </div>
+                                    }
                                 </div>
                             </>
                     }
@@ -124,7 +162,7 @@ const PartySocialPopup = ({ unlocked, id, userId, isLoggedIn, readingItem, open,
                     !isLoggedIn || !unlocked ? [] :
                     [
                         <div style={{ cursor: 'pointer' }} onClick={() => handlePostReact2(readingItem, '+')}>
-                            <LikeOutlined style={{ fontSize: '16px', color: readingItem?.reacts?.likes?.includes(userId) ? '#F030C0' : null }} /> 
+                            <LikeOutlined style={{ fontSize: '16px', color: readingItem?.reacts?.likes?.includes(userId) ? '#6abe39' : null }} /> 
                             <span className="ps-1" style={{ fontSize: '14px' }}>{readingItem?.reacts?.likes?.length}</span>
                         </div>,
                         <div style={{ cursor: 'pointer' }} onClick={() => handlePostReact2(readingItem, '-')}>

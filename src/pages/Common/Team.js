@@ -321,18 +321,6 @@ const Team = () => {
                                     unreadCount={unreadCount}
                                     setUnreadCount={setUnreadCount}
                                 />
-                                {/* <TeamBottom
-                                    routeKey={routeKey} 
-                                    settingsRouteKey={settingsRouteKey}
-                                    socialsRouteKey={socialsRouteKey}
-                                    statsRouteKey={statsRouteKey}
-                                    friendRouteKey={friendRouteKey}
-                                    handleTabChange={handleTabChange}
-                                    profile={userDetails}
-                                    myTeams={myTeams}
-                                    badges={badges}
-                                    gameStats={gameStats}
-                                /> */}
                             </Card>
                         </Col>
                     </Row>

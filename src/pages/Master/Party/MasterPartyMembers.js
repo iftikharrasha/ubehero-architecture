@@ -9,7 +9,7 @@ import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import { Link } from "react-router-dom";
 
-const MasterPartyMembers = ({routeKey, onChangeTab}) => {
+const MasterPartyMembers = () => {
     const { id, pId } = useParams();
 
     const [partyDetails, setPartyDetails] = useState(null);
@@ -17,8 +17,8 @@ const MasterPartyMembers = ({routeKey, onChangeTab}) => {
     const [open, setOpen] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
     const [answer, setAnswer] = useState("");
-    const [requestedMember, setRequestedMember] = useState("");
-    console.log(partyDetails)
+    const [requestedMember, setRequestedMember] = useState({});
+    const [routeKey, setRouteKey] = useState("requests");
 
     useEffect(() => {
         const fetchData = async () => {
@@ -52,6 +52,11 @@ const MasterPartyMembers = ({routeKey, onChangeTab}) => {
         setOpen(true)
     }
 
+    const onChange = (key) => {
+        console.log(routeKey)
+        setRouteKey(key)
+    }
+
     return (
         <div className="container pt-4">
             <Divider orientation="right">
@@ -67,8 +72,8 @@ const MasterPartyMembers = ({routeKey, onChangeTab}) => {
                 <Tabs
                     id="controlled-tab-example"
                     className="mb-3"
-                    defaultActiveKey={routeKey}
-                    onChange={onChangeTab}
+                    activeKey={routeKey}
+                    onSelect={onChange}
                 >
                     <Tab eventKey="requests" title="Requests">
                         <div className="card">
@@ -138,7 +143,71 @@ const MasterPartyMembers = ({routeKey, onChangeTab}) => {
                         </div>
                     </Tab>
                     <Tab eventKey="members" title="Members">
-                        {/* joined */}
+                        <div className="card">
+                            <div className="card-header text-center py-3">
+                                <h5 className="mb-0 text-center">
+                                    <strong>Members of - {partyDetails?.title}</strong>
+                                </h5>
+                            </div>
+                            <div className="card-body">
+                                <div className="table-responsive">
+                                    <table className="table table-hover text-nowrap">
+                                    <thead>
+                                        <tr>
+                                        <th scope="col">No.</th>
+                                        <th scope="col">Member Name</th>
+                                        <th scope="col">Joined Date</th>
+                                        <th scope="col">Status</th>
+                                        <th scope="col">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {
+                                            partyDetails ? 
+                                                partyDetails?.members?.joined?.length === 0 ? <p className="mt-3">No pending join request!</p> :
+                                                    partyDetails?.members?.joined?.map((member, index) => (
+                                                        <tr key={index}>
+                                                            <th scope="row">{index+1}</th>
+                                                            <td>
+                                                                <img className='img-fluid' src={member?.photo} alt='tournamentThumbnail' width="25px" height="25px"/>
+                                                                <span className='ms-3'>{member?.userName}</span>
+                                                            </td>
+                                                            <td>
+                                                                <i className="fas fa-clock me-1 text-secondary"></i>
+                                                                <span>{moment(member?.createdAt).local().format("LLL")}</span>
+                                                            </td>
+                                                            <td>
+                                                            {
+                                                                member.status === 'active' ? 
+                                                                <Tag color="green">
+                                                                    {member.status}
+                                                                </Tag>
+                                                                : member.status === 'blocked' ? 
+                                                                <Tag color="green">
+                                                                    {member.status}
+                                                                </Tag>
+                                                                : member.status === 'paused' ? 
+                                                                <Tag color="green">
+                                                                    {member.status}
+                                                                </Tag>
+                                                                : '-'
+                                                            }
+                                                            </td>
+                                                            <td>
+                                                                <Tag color="red" style={{cursor: 'pointer'}} onClick={(e) => handleRequest(e, member)}>
+                                                                    Remove
+                                                                </Tag>
+                                                            </td>
+                                                        </tr>
+                                                    )) 
+                                            : <Preloader />
+                                        }
+
+                                    </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                     </Tab>
                 </Tabs>
             </section>
@@ -154,6 +223,10 @@ const MasterPartyMembers = ({routeKey, onChangeTab}) => {
                 disabled: null,
               }}
               footer={
+                routeKey === 'members' ?
+                <Button type="primary" danger onClick={() => handleOk('remove')}>
+                    Remove
+                </Button> :
                 <>
                     <Button type="primary" onClick={() => handleOk('approve')}>
                         Approve
@@ -164,22 +237,34 @@ const MasterPartyMembers = ({routeKey, onChangeTab}) => {
                 </>
               }
             >
-              <Row gutter={[16, 16]}>
                 {
-                    partyDetails?.questions[0] !== 'NA' ?
-                    <Col span={24}>
-                        <div className='text-center'>
-                            <p>Kindly pick whether to approve this request or reject?</p>
-                        </div>
-                    </Col> : 
-                    partyDetails?.questions.map((ques, index) => (
-                        <Col span={24} key={index}>
-                            <h6>{index+1}. {ques}</h6>
-                            <p>= {answer[index]}</p>
-                        </Col>
-                    ))
+                    partyDetails?.questions[0] === 'NA' ? null :
+                    <div className="mb-5">
+                        <span>
+                            <img className='img-fluid' src={requestedMember?.photo} alt='tournamentThumbnail' width="25px" height="25px" style={{borderRadius: '50px'}}/>
+                            <span className='ms-2'><strong>{requestedMember?.userName}</strong></span>
+                        </span>
+                        <span className="ps-2">
+                            has answered these question
+                        </span>
+                    </div>
                 }
-              </Row>
+                <Row gutter={[16, 16]}>
+                    {
+                        partyDetails?.questions[0] === 'NA' ?
+                        <Col span={24}>
+                            <div className='text-center'>
+                                <p>Kindly pick whether to approve this request or reject?</p>
+                            </div>
+                        </Col> : 
+                        partyDetails?.questions.map((ques, index) => (
+                            <Col span={24} key={index}>
+                                <h6>{index+1}. {ques}</h6>
+                                <p>= {answer[index]}</p>
+                            </Col>
+                        ))
+                    }
+                </Row>
             </Modal>
         </div>
     );

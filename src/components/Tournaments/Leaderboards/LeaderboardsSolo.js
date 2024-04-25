@@ -3,7 +3,7 @@ import { Table, Input, Space, Button, Popover, Tag } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import UserPopup from "../../Common/UserPopup/UserPopup";
 
-const Leaderboards = ({leaderboards}) => {
+const LeaderboardsSolo = ({leaderboards}) => {
   const searchInput = useRef(null);
 
   const columns = [
@@ -178,4 +178,4 @@ const Leaderboards = ({leaderboards}) => {
   );
 };
 
-export default Leaderboards;
+export default LeaderboardsSolo;

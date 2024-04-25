@@ -5,6 +5,7 @@ import { setLogIn, setProfileReset, setRoute, setRole } from "../redux/slices/pr
 import { setMasterLogOut } from "../redux/slices/masterTournamentSlice";
 import { setInternalLogOut } from "../redux/slices/internalTournamentSlice";
 import { setTeamReset } from "../redux/slices/teamSlice";
+import { setPartyReset } from "../redux/slices/partySlice";
 
 const useFirebase = () => {
     const dispatch = useDispatch();
@@ -108,6 +109,7 @@ const useFirebase = () => {
     const handlelogOut = (history) => {
         dispatch(setProfileReset())
         dispatch(setTeamReset())
+        dispatch(setPartyReset())
         dispatch(setMasterLogOut())
         dispatch(setInternalLogOut())
         dispatch(setRoute("user"))

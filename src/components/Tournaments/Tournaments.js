@@ -50,7 +50,7 @@ const Tournaments = ({remark, tournament, totalJoined}) => {
             }
             actions={[
               <Row justify="center" align="middle">
-                <UsergroupAddOutlined  style={{ fontSize: '18px' }} /> <span className="ps-1" style={{ fontSize: '14px' }}>{leaderboards?.length}/{settings?.maxParticipitant}</span>
+                <UsergroupAddOutlined  style={{ fontSize: '18px' }} /> <span className="ps-1" style={{ fontSize: '14px' }}>{settings?.mode === 'team' ? leaderboards?.length/settings?.teamSize : leaderboards?.length}/{settings?.maxParticipitant}</span>
               </Row>,
               <Row justify="center" align="middle">
                 {settings?.competitionMode === 'ladder' ? 

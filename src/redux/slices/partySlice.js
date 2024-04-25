@@ -15,7 +15,7 @@ export const fetchParties = createAsyncThunk(
             config.headers = { "Authorization": "Bearer " + token, ...config.headers};
         }
         
-        const response = await fetch(`${process.env.REACT_APP_API_LINK}/api/v1/party?version=${versionParty}`, config)
+        const response = await fetch(`${process.env.REACT_APP_API_LINK}/api/v1/party/profile?version=${versionParty}`, config)
 
         if(response.status === 200){
             const data = await response.json();
@@ -133,6 +133,12 @@ const partiesSlice = createSlice({
                     break;
             }
         },
+        setPartyReset: (state, action) => {
+            state.data = [];
+            state.social = [];
+            state.version = 0;
+            state.status = 'idle';
+        },
     },
     extraReducers: (builder) => {
         builder.addCase(fetchParties.fulfilled, (state, action) => {
@@ -163,5 +169,5 @@ const partiesSlice = createSlice({
     },
 });
 
-export const { addUserRequestToPartyService, addReactsIntoPost } = partiesSlice.actions;
+export const { addUserRequestToPartyService, addReactsIntoPost, setPartyReset } = partiesSlice.actions;
 export default partiesSlice.reducer;

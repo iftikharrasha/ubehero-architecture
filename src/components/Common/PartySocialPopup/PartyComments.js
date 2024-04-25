@@ -1,7 +1,9 @@
-import { Avatar, Card, Input, List, Skeleton } from 'antd';
-import React, { useEffect, useRef } from 'react';
+import { Avatar, Card, Input, List, Skeleton, Tag } from 'antd';
+import React, { useEffect, useRef, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { DeleteOutlined, StopOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import moment from "moment";
+import ReportTags from '../Report/ReportTags';
 
 const { Meta } = Card;
 const { TextArea } = Input;
@@ -18,6 +20,22 @@ const PartyComments = ({loadMoreData, loading, commentData, profilePic, comment,
     const onChange = (e) => {
         setComment(e.target.value);
     };
+
+    const [deletingId, setDeletingId] = useState(null);
+    const [reportingId, setReportingId] = useState(null);
+    const handleToggle = (id, type) => {
+        if(type === 'check') {
+            setDeletingId(id);
+        }else if(type === 'close'){
+            setDeletingId(null);
+            setReportingId(null);
+        }else if(type === 'delete'){
+            setDeletingId(null);
+        }else if(type === 'report'){
+            setDeletingId(null);
+            setReportingId(id);
+        }
+    }
 
     return (
         <>
@@ -57,11 +75,38 @@ const PartyComments = ({loadMoreData, loading, commentData, profilePic, comment,
                             <List
                                 dataSource={commentData}
                                 renderItem={(item) => (
-                                    <List.Item key={item?._id}>
+                                    <List.Item 
+                                        key={item?._id}
+                                        actions={
+                                            item?._id === deletingId ?
+                                            [
+                                                <CheckOutlined style={{ color: '#52c41a', marginRight: '5px', cursor: 'pointer'}} onClick={() => handleToggle(item?._id, 'delete')}/>, 
+                                                <CloseOutlined style={{ color: '#eb2f96', cursor: 'pointer'}} onClick={() => handleToggle(item?._id, 'close')}/>
+                                            ] :
+                                            item?._id === reportingId ?
+                                            [
+                                                <CloseOutlined style={{ color: '#eb2f96', cursor: 'pointer'}} onClick={() => handleToggle(item?._id, 'close')}/>
+                                            ] :
+                                            [
+                                                <DeleteOutlined style={{ fontSize: '14px', color: '#eb2f96' }} onClick={() => handleToggle(item?._id, 'check')}/> , 
+                                                <StopOutlined style={{ fontSize: '14px', color: '#eb2f96' }} onClick={() => handleToggle(item?._id, 'report')}/>
+                                            ]
+                                        }
+                                    >
                                         <List.Item.Meta
                                             avatar={<Avatar src={item?.author?.photo} />}
-                                            title={<a href="https://ant.design">{item?.author?.userName}<br /><span style={{fontSize: "14px"}}>{item?.comment}</span></a>}
-                                            description={<span style={{fontSize: "12px"}}>{moment(item?.createdAt).local().format("LLL")}</span>}
+                                            title={
+                                                <a href="https://ant.design">{item?.author?.userName}<br /><span style={{fontSize: "14px"}}>{item?.comment}</span></a>}
+                                                description={
+                                                    item?._id === deletingId ?
+                                                    <span style={{fontSize: "12px"}}>Are you sure you want to delete this item?</span> :
+                                                    item?._id === reportingId ?
+                                                    <div className='pt-2'>
+                                                        <ReportTags handleToggle={handleToggle} id={item?._id} type="comment"/>
+                                                    </div>
+                                                     :
+                                                    <span style={{fontSize: "12px"}}>{moment(item?.createdAt).local().format("LLL")}</span>
+                                                }
                                         />
                                     </List.Item>
                                 )}

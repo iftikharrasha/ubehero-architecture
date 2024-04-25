@@ -16,7 +16,7 @@ const useTournament = () => {
     const jwt = localStorage.getItem("jwt");
     const { socketN } = useNotyf(profile.data, jwt);
 
-    const handleTournamentPurchase = async (data, gameId, method) => {
+    const handleTournamentPurchase = async (data, id) => {
         let config = {}
 
         if(profile.signed_in){
@@ -27,50 +27,79 @@ const useTournament = () => {
         const purchaseItem = {
             purchasedById: profile.data._id,
             amount: data?.settings?.joiningFee,
-            country: "gb",
-            currency: "usd",
-            trx: "Pm_1asdaTr2343asw",
-            medthod: method,
+            medthod: data?.method,
             remarks: "registration",
             route: "u2a",
             activity: "expense",
             description: data.tournamentName,
             tId: data._id,
-            gameId: gameId
+            gameId: data?.settings?.mode === 'solo' ? id : null,
+            teamId: data?.settings?.mode === 'team' ? id : null
         }
-        console.log(gameId, purchaseItem);
+        console.log(id, purchaseItem);
 
         try {
             const response = await axios.post(`${process.env.REACT_APP_API_LINK}/api/v1/tournaments/registration/${data._id}`, purchaseItem, config);
             console.log("7. response", response)
-            
-            if(response.data.status === 200){
-                const notificationData = {
-                    type: "tournament_registration",
-                    subject: "You’ve joined the tournament",
-                    subjectPhoto: data.tournamentThumbnail,
-                    invokedByName: data.tournamentName,
-                    invokedById: data._id,
-                    receivedByName: profile.data.userName,
-                    receivedById: profile.data._id,  //this user will receive notification
-                    route: `tournament/details/${data._id}`
-                }
 
-                // Send message to server
-                socketN.emit("send_notification", notificationData);
-
-                setErrorMessage(null);
-                setRegDone(true);
-                dispatch(setPurchasedItem(data._id));
-                const destination = `/tournament/details/${data._id}/chatroom`;
-                history.replace(destination);
-                console.log("8. xp", response.data)
-                window.location.reload();
-                if(response.data.xp){
-                    dispatch(addXpLatest(response.data.xp));
+            if(data?.settings?.mode === 'solo'){
+                if(response.data.status === 200){
+                    const notificationData = {
+                        type: "tournament_registration",
+                        subject: "You’ve joined the tournament",
+                        subjectPhoto: data.tournamentThumbnail,
+                        invokedByName: data.tournamentName,
+                        invokedById: data._id,
+                        receivedByName: profile.data.userName,
+                        receivedById: profile.data._id,  //this user will receive notification
+                        route: `tournament/details/${data._id}`
+                    }
+    
+                    // Send message to server
+                    socketN.emit("send_notification", notificationData);
+    
+                    setErrorMessage(null);
+                    setRegDone(true);
+                    dispatch(setPurchasedItem(data._id));
+                    const destination = `/tournament/details/${data._id}/chatroom`;
+                    history.replace(destination);
+                    console.log("8. xp", response.data)
+                    window.location.reload();
+                    if(response.data.xp){
+                        dispatch(addXpLatest(response.data.xp));
+                    }
+                }else{
+                    setErrorMessage(response.data.error.message);
                 }
-            }else{
-                setErrorMessage(response.data.error.message);
+            }else if(data?.settings?.mode === 'team'){
+                if(response.data.status === 200){
+                    const notificationData = {
+                        type: "tournament_registration",
+                        subject: "You’ve joined the tournament",
+                        subjectPhoto: data.tournamentThumbnail,
+                        invokedByName: data.tournamentName,
+                        invokedById: data._id,
+                        receivedByName: profile.data.userName,
+                        receivedById: profile.data._id,  //this user will receive notification
+                        route: `tournament/details/${data._id}`
+                    }
+    
+                    // Send message to server
+                    socketN.emit("send_notification", notificationData);
+    
+                    setErrorMessage(null);
+                    setRegDone(true);
+                    dispatch(setPurchasedItem(data._id));
+                    const destination = `/tournament/details/${data._id}/chatroom`;
+                    history.replace(destination);
+                    console.log("8. xp", response.data)
+                    // window.location.reload();
+                    if(response.data.xp){
+                        dispatch(addXpLatest(response.data.xp));
+                    }
+                }else{
+                    setErrorMessage(response.data.error.message);
+                }
             }
             return response.data.success
         } catch (error) {
