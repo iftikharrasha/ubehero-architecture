@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setLogIn, setProfileReset, setRoute, setRole } from "../redux/slices/profileSlice";
 import { setMasterLogOut } from "../redux/slices/masterTournamentSlice";
 import { setInternalLogOut } from "../redux/slices/internalTournamentSlice";
-import { setTeamReset } from "../redux/slices/teamSlice";
+import { fetchMyTeams, setTeamReset } from "../redux/slices/teamSlice";
 import { setPartyReset } from "../redux/slices/partySlice";
 
 const useFirebase = () => {
@@ -31,6 +31,7 @@ const useFirebase = () => {
                 let destination;
                 const parsedAccessToken = parseJwtToken(response.data.jwt);
                 const sub = parsedAccessToken["sub"];
+                console.log(sub)
 
                 if(role === "admin"){
                     dispatch(setRoute("admin"))
@@ -43,6 +44,9 @@ const useFirebase = () => {
                 }else{
                     destination = location?.state?.from || `/`;
                 }
+                const versionTeams = 0;
+                const id = sub;
+                dispatch(fetchMyTeams({ id, versionTeams }));
                 history.replace(destination);
             }else{
                 setErrorMessage(response.data.error.message);

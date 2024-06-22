@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import PageLayout from '../../components/PageLayout/PageLayout';
-import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { Card, Row, Tabs, Empty, Skeleton, Button, Statistic, Col } from 'antd';
+import { StockOutlined, SettingOutlined, DollarOutlined, ArrowUpOutlined, SendOutlined } from '@ant-design/icons';
 import Preloader from '../../components/PageLayout/Preloader';
 import Transactions from '../../components/Wallet/Transactions/Transactions';
 import { fetchGiftCards } from '../../redux/slices/giftCardSlice';
@@ -10,10 +12,8 @@ import PurchaseLayout from '../../components/Common/Purchase/PurchaseLayout';
 import CheckoutLayoutSolo from '../../components/Common/Checkout/CheckoutLayoutSolo';
 import Giftcard from '../../components/Wallet/Topup/Giftcard';
 import { fetchMyTransactions } from '../../redux/slices/walletSlice';
-import { Link } from 'react-router-dom';
-
-import { Card, Row, Tabs, Empty, Skeleton, Button  } from 'antd';
-import { StockOutlined, SettingOutlined, DollarOutlined, SendOutlined } from '@ant-design/icons';
+import WithdrawModal from '../../components/Wallet/WithdrawModal/WithdrawModal';
+import TopupModal from '../../components/Wallet/Topup/TopupModal';
 
 const { Meta } = Card;
 const { TabPane } = Tabs;
@@ -32,8 +32,8 @@ const Wallet = () => {
     useEffect(() => {
         if (location.pathname.endsWith('topup')) {
             setRouteKey('topup');
-        }else if (location.pathname.endsWith('sendmoney')) {
-            setRouteKey('sendmoney');
+        }else if (location.pathname.endsWith('convert')) {
+            setRouteKey('convert');
         }else if (location.pathname.endsWith('checkout')) {
             setRouteKey('checkout');
         }else if (location.pathname.endsWith('settings')) {
@@ -52,8 +52,8 @@ const Wallet = () => {
             case 'topup':
                 history.push(`/wallet/${id}/topup`);
                 break;
-            case 'sendmoney':
-                history.push(`/wallet/${id}/sendmoney`);
+            case 'convert':
+                history.push(`/wallet/${id}/convert`);
                 break;
             case 'settings':
                 history.push(`/wallet/${id}/settings`);
@@ -64,6 +64,8 @@ const Wallet = () => {
     };
 
     const userDetails = useSelector((state) => state.profile.data)
+    const aquamarine = userDetails.stats.aquamarine;
+    const tourmaline = userDetails.stats.tourmaline;
     const version = userDetails ? userDetails.version : 0;
 
     const giftcards = useSelector((state) => state.giftcards.data)
@@ -108,7 +110,17 @@ const Wallet = () => {
         // history.push(`/tournament/details/${id}/order`);
         setRouteKey('order');
     };
+  
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isTopupModalOpen, setIsTopupModalOpen] = useState(false);
 
+    const showModal = () => {
+        setIsModalOpen(true);
+    };
+
+    const showTopupModal = () => {
+        setIsTopupModalOpen(true);
+    };
     return (
         <PageLayout>
             {
@@ -120,16 +132,113 @@ const Wallet = () => {
                                 <Card 
                                     actions={[
                                         <Row justify="center" align="middle">
-                                            <span className="ps-1" style={{ fontSize: '16px' }}>Income: 0$</span>
+                                            <span style={{ fontSize: '16px' }}>
+                                                <img
+                                                    width={150}
+                                                    alt='aquamarine'
+                                                    src="https://res.cloudinary.com/duoalyur6/image/upload/v1717501727/pngtree-gem-cartoon-diamond-png-image_3464627-removebg-preview_ak3qcu.png"
+                                                />
+                                            </span>
+                                            <Card bordered={false}>
+                                                <Statistic
+                                                    title="Aquamarine"
+                                                    value={aquamarine}
+                                                    precision={2}
+                                                    valueStyle={{
+                                                        color: '#8bb1f2',
+                                                    }}
+                                                    prefix={
+                                                        <img alt="aquamarine" src="https://res.cloudinary.com/duoalyur6/image/upload/v1717705441/aquamarine_lluqes.png"
+                                                            style={{
+                                                            width: "28px",
+                                                            height: "28px",
+                                                            }}
+                                                        />
+                                                    }
+                                                />
+                                            </Card>
                                         </Row>,
                                         <Row justify="center" align="middle">
-                                            <span className="ps-1" style={{ fontSize: '16px' }}>Balance: 0$</span>
+                                            <span style={{ fontSize: '16px' }}>
+                                                <img
+                                                    width={150}
+                                                    alt='tourmaline'
+                                                    src="https://res.cloudinary.com/duoalyur6/image/upload/v1717502059/b9a9dd3002f7be93484f2d0bb88e1241-removebg-preview_us5rix.png"
+                                                />
+                                            </span>
+                                           <Card bordered={false}>
+                                                <Statistic
+                                                    title="Tourmaline"
+                                                    value={tourmaline}
+                                                    precision={2}
+                                                    valueStyle={{
+                                                        color: '#FF960C',
+                                                    }}
+                                                    prefix={
+                                                        <img alt="tourmaline" src="https://res.cloudinary.com/duoalyur6/image/upload/v1717705440/tourmaline_psakuj.png"
+                                                            style={{
+                                                            width: "28px",
+                                                            height: "28px",
+                                                            }}
+                                                        />
+                                                    }
+                                                />
+                                            </Card>
                                         </Row>,
                                         <Row justify="center" align="middle">
-                                            <span className="ps-1" style={{ fontSize: '16px' }}>Pending: 0$</span>
+                                           <Card bordered={false}>
+                                                <div className="d-flex justify-content-between mt-2">
+                                                    <Statistic
+                                                        className='me-4'
+                                                        title="Pending Aquamarine"
+                                                        value={0.00}
+                                                        precision={2}
+                                                        valueStyle={{
+                                                            color: '#8bb1f2',
+                                                        }}
+                                                        prefix={
+                                                            <img alt="aquamarine" src="https://res.cloudinary.com/duoalyur6/image/upload/v1717705441/aquamarine_lluqes.png"
+                                                                style={{
+                                                                width: "28px",
+                                                                height: "28px",
+                                                                }}
+                                                            />
+                                                        }
+                                                    />
+                                                    <Statistic
+                                                        className='ms-4'
+                                                        title="Pending Tourmaline"
+                                                        value={0.00}
+                                                        precision={2}
+                                                        valueStyle={{
+                                                            color: '#FF960C',
+                                                        }}
+                                                        prefix={
+                                                            <img alt="tourmaline" src="https://res.cloudinary.com/duoalyur6/image/upload/v1717705440/tourmaline_psakuj.png"
+                                                                style={{
+                                                                width: "28px",
+                                                                height: "28px",
+                                                                }}
+                                                            />
+                                                        }
+                                                    />
+                                                </div>
+                                            </Card>
                                         </Row>,
                                         <Row justify="center" align="middle">
-                                            <span className="ps-1" style={{ fontSize: '16px' }}>Enpense: 0$</span>
+                                            <Card bordered={false}>
+                                                <span className="ps-1" style={{ fontSize: '16px' }}>Net Worth</span>
+                                                <Statistic
+                                                    title="Portfolio"
+                                                    value={tourmaline*0.10}
+                                                    precision={2}
+                                                    valueStyle={{
+                                                        color: '#3f8600',
+                                                    }}
+                                                    prefix={<ArrowUpOutlined />}
+                                                    suffix={<span>$</span>}
+                                                />
+                                            </Card>
                                         </Row>,
                                     ]}
                                     >
@@ -139,13 +248,13 @@ const Wallet = () => {
                                             <img
                                                 width={80}
                                                 alt='coin'
-                                                src="https://i.ibb.co/vjpGbfj/balance-Coin.webp"
+                                                src="https://cdn-icons-png.freepik.com/512/6466/6466947.png"
                                             />
                                         }
                                         description={
                                             <Row justify="space-between" align="middle">
-                                                <span style={{ fontSize: '16px' }}>Join Seller Plus today and withdraw your earnings earlier. <Link to='/'>Tell me more</Link></span>
-                                                <Button type="primary" danger>Withdraw</Button>
+                                                <span style={{ fontSize: '16px' }}>Join Underdog Plus today and withdraw your earnings earlier. <Link to='/' style={{color: 'pink'}}>Tell me more</Link></span>
+                                                <Button type="primary" danger onClick={tourmaline === 0 ? null : showModal} disabled={tourmaline === 0}>Withdraw</Button>
                                             </Row>
                                         }
                                     />
@@ -177,7 +286,7 @@ const Wallet = () => {
                                                     key="topup"
                                                     tab={
                                                         <Row justify="left" align="middle">
-                                                            <DollarOutlined /> <span>Gems Topup</span>
+                                                            <DollarOutlined /> <span>Topup</span>
                                                         </Row>
                                                     }
                                                 >
@@ -186,23 +295,84 @@ const Wallet = () => {
                                                             {
                                                                 giftcards ?
                                                                     giftcards.length === 0 ? <Empty /> :
-                                                                        giftcards.map((item, index) => (
-                                                                            <Giftcard key={index} gift={item} handleCheckout={handleTopUpCheckout} routeKey={routeKey} />
-                                                                        ))  
+                                                                        <>
+                                                                            {
+                                                                                giftcards.map((item, index) => (
+                                                                                    <Giftcard 
+                                                                                        key={index} 
+                                                                                        gift={item} 
+                                                                                        handleCheckout={handleTopUpCheckout} 
+                                                                                        routeKey={routeKey} 
+                                                                                        showTopupModal={showTopupModal}
+                                                                                    />
+                                                                                )) 
+                                                                            } 
+                                                                            <Col span={6}>
+                                                                                <Card>
+                                                                                    <Empty
+                                                                                        image="https://res.cloudinary.com/duoalyur6/image/upload/v1717705440/tourmaline_psakuj.png"
+                                                                                        imageStyle={{
+                                                                                            height: 50,
+                                                                                        }}
+                                                                                        description={
+                                                                                        <span>
+                                                                                            You can also customize the topup to<br /> any tourmaline gem amount
+                                                                                        </span>
+                                                                                        }
+                                                                                    >
+                                                                                        <Button type="primary" onClick={showTopupModal}>Customize</Button>
+                                                                                    </Empty>
+                                                                                </Card>
+                                                                            </Col>
+                                                                        </>
                                                                 : <Skeleton />
                                                             }
                                                         </Row>
                                                     }
                                                 </TabPane>
                                                 <TabPane
-                                                    key="sendmoney"
+                                                    key="convert"
                                                     tab={
                                                         <Row justify="left" align="middle">
-                                                            <SendOutlined /> <span>Send Gems</span>
+                                                            <SendOutlined /> <span>Convert</span>
                                                         </Row>
                                                     }
                                                 >
-                                                    {/* Data here */}
+                                                    <Row gutter={16}>
+                                                        <Col span={6}>
+                                                            <Card cover={<img alt="topup" src="https://res.cloudinary.com/duoalyur6/image/upload/v1718128213/gem_4_sgo4zx.png" />}>
+                                                                <Meta title={
+                                                                    <Row className='mb-1'>
+                                                                        <Col span={8}>
+                                                                        <span>1400 LOOTS</span>
+                                                                        </Col>
+                                                                        <Col span={8} offset={8} className='text-right'>
+                                                                        <Button type="primary" size='small' onClick={showTopupModal}>Convert</Button>
+                                                                        </Col>
+                                                                    </Row>
+                                                                }
+                                                                description="CONVERT YOUR LOOTS INTO AQUAMARINE GEMS FOR FREE"
+                                                                />
+                                                            </Card>
+                                                        </Col>
+                                                        <Col span={6}>
+                                                            <Card>
+                                                                <Empty
+                                                                    image="https://res.cloudinary.com/duoalyur6/image/upload/v1717705441/aquamarine_lluqes.png"
+                                                                    imageStyle={{
+                                                                        height: 50,
+                                                                    }}
+                                                                    description={
+                                                                    <span>
+                                                                        You can also customize the loots to<br /> any aquamarine gem amount
+                                                                    </span>
+                                                                    }
+                                                                >
+                                                                    <Button type="primary" onClick={showTopupModal}>Customize</Button>
+                                                                </Empty>
+                                                            </Card>
+                                                        </Col>
+                                                    </Row>
                                                 </TabPane>
                                                 <TabPane
                                                     key="settings"
@@ -219,6 +389,17 @@ const Wallet = () => {
                                     </div>
                                 </div>
                             </div>
+
+                            {
+                                !isModalOpen ? null :
+                                <WithdrawModal id={id} totalGems={tourmaline} isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen}/>
+                            }
+
+                            {
+                                !isTopupModalOpen ? null :
+                                <TopupModal id={id} totalGems={tourmaline} isModalOpen={isTopupModalOpen} setIsModalOpen={setIsTopupModalOpen}/>
+                            }
+                            
                         </>
                     }
 

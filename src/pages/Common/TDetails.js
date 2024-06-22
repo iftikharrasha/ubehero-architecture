@@ -155,22 +155,33 @@ const TournamentDetails = () => {
 
     const handleOrder = async () => {
         setConfirmCheckoutLoading(true);
-        if(tournamentDetails?.settings?.feeType === 'free'){
-            setMethod('free');
-            if(tournamentDetails?.settings?.mode === 'team'){
-                const result = await handleTournamentPurchase(tournamentDetails, connectedTeam._id);
-                if(result){
-                    setConfirmCheckoutLoading(false);
+        if(tournamentDetails?.settings?.feeType === 'aquamarine'){
+            setMethod('aquamarine');
+            if(profile?.data?.stats?.aquamarine >= tournamentDetails?.settings?.joiningFee){
+                if(tournamentDetails?.settings?.mode === 'team'){
+                    const result = await handleTournamentPurchase(tournamentDetails, connectedTeam._id);
+                    if(result){
+                        setConfirmCheckoutLoading(false);
+                    }
+                }else{
+                    const result = await handleTournamentPurchase(tournamentDetails, connectedAccount._id);
+                    if(result){
+                        setConfirmCheckoutLoading(false);
+                    }
                 }
             }else{
-                const result = await handleTournamentPurchase(tournamentDetails, connectedAccount._id);
-                if(result){
-                    setConfirmCheckoutLoading(false);
-                }
+                messageApi.open({
+                  type: 'warning',
+                  content: 'Not enough aquamarine gems in your account',
+                  style: {
+                    marginTop: '85vh',
+                  },
+                });
+                setConfirmCheckoutLoading(false);
             }
-        }else if(tournamentDetails?.settings?.feeType === 'gems'){
-            setMethod('gems');
-            if(profile?.data?.stats?.totalGems > tournamentDetails?.settings?.joiningFee){
+        }else if(tournamentDetails?.settings?.feeType === 'tourmaline'){
+            setMethod('tourmaline');
+            if(profile?.data?.stats?.tourmaline >= tournamentDetails?.settings?.joiningFee){
                 console.log(profile?.data?.stats?.totalGems, tournamentDetails?.settings?.joiningFee)
                 const result = await handleTournamentPurchase(tournamentDetails, connectedAccount._id);
                 if(result){
@@ -179,7 +190,7 @@ const TournamentDetails = () => {
             }else{
                 messageApi.open({
                   type: 'warning',
-                  content: 'Not enough gems in your account',
+                  content: 'Not enough tourmaline gems in your account',
                   style: {
                     marginTop: '85vh',
                   },

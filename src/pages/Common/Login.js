@@ -23,7 +23,7 @@ const Login = () => {
       }else if(actingAs === "master"){
         history.push(`/master/${id}`);
       }else{
-        history.push(`/profile/${id}`);
+        history.push(`/`);
       }
     }
 }, [isLoggedIn, id, actingAs, history]);

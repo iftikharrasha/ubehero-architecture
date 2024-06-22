@@ -20,16 +20,15 @@ const TournamentPrice = ({updatedTournament, setUpdatedTournament}) => {
                         })
                     }>
                         <option value="">Select fee type</option>
-                        <option value="free">free</option>
-                        <option value="money">money</option>
-                        <option value="gems">gems</option>
+                        <option value="aquamarine">aquamarine</option>
+                        <option value="tourmaline">tourmaline</option>
                     </Form.Control>
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formBasicJoiningFee">
-                    <Form.Label>Entry Fee ({updatedTournament?.settings?.feeType})</Form.Label>
+                    <Form.Label>Joining Amount ({updatedTournament?.settings?.feeType})</Form.Label>
                     <Form.Control type="number" placeholder="Enter Fee" 
                         value={updatedTournament?.settings?.joiningFee}
-                        disabled={updatedTournament?.settings?.feeType === 'free'}
+                        // disabled={updatedTournament?.settings?.feeType === 'free'}
                         onChange={(e) =>
                         setUpdatedTournament({
                             ...updatedTournament,
@@ -53,12 +52,11 @@ const TournamentPrice = ({updatedTournament, setUpdatedTournament}) => {
                             <Card bordered>
                                 <div>Joining Fee Types:</div>
                                 <ul>
-                                    <li><strong>free:</strong> no payment needed</li>
-                                    <li><strong>gems:</strong> payment with gems</li>
-                                    <li><strong>money:</strong> payment with money</li>
+                                    <li><strong>aquamarine:</strong> free non withdrawale gems</li>
+                                    <li><strong>tourmaline:</strong> paid withdrawable gems</li>
                                 </ul>
                                 <div className="mt-2">Example:</div>
-                                <div>If you put the Fee Type "gems" and the Joining Fee "5", this mean players need to pay 5 gems to enter into this tournament</div>
+                                <div>If you put the Fee Type "aquamarine" and the Joining Fee "5", this mean players need to pay 5 aquamarine gems to register</div>
                             </Card>,
                         },
                         {

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import moment from "moment";
 import axios from 'axios';
-import { Row, Steps, Image, Popover, Card, Button, Tag } from 'antd';
+import { Row, Steps, Popover, Card, Button, Tag } from 'antd';
 import { useHistory  } from 'react-router-dom';
 import useTimer from '../../../hooks/useTimer';
 
@@ -110,7 +110,7 @@ const TournamentStage = ({ compMode, currentMatch, finalMatch, setRouteKey, tour
                                                                 <Tag color="success" style={{marginTop: '2px'}}>Live</Tag>
                                                                 <Popover content={content} title={`Lobby: ${currentMatch?.name}`} trigger="click" open={popoverVisible && loadingCompleted} onOpenChange={setPopoverVisible}>
                                                                     <Button type="dashed" size="small" loading={loadings[0]} className='mt-1' onClick={() => enterLobby(0)}>
-                                                                        {tournament?.credentials?.roomId || tournament?.credentials.roomPassword ? 'Join Lobby' : 'Announcement'}
+                                                                        {tournament?.credentials?.roomId || tournament?.credentials?.roomPassword ? 'Join Lobby' : 'Announcement'}
                                                                     </Button>
                                                                 </Popover>
                                                             </> : 

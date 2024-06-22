@@ -121,9 +121,7 @@ const PartyComments = ({loadMoreData, loading, commentData, profilePic, comment,
                     <Meta
                         avatar={<Avatar size={20} src={profilePic} />}
                         description={
-                            <>
-                                <TextArea showCount maxLength={300} value={comment} onChange={onChange} placeholder="write a comment.." />
-                            </>
+                            <TextArea showCount maxLength={300} value={comment} onChange={onChange} placeholder="write a comment.." />
                         }
                     />
                 </Card>

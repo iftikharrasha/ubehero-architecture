@@ -14,6 +14,8 @@ const IconText = ({ icon, text }) => (
     </Space>
   );
 
+const copies = [1, 2, 3, 4, 5, 6, 7, 8];
+
 const TournamentSide = ({ref1TSummery1, ref1TSummery2, ref1TSummery3, isLoggedIn, userId, routeKey, tournament, totalJoined, purchasedItems, handleCancel, handleCheckout, step, buttonStatus, timeLeftPercent}) => {
     const { _id, settings, tournamentName, platforms, crossPlatforms } = tournament;
     const purchased = purchasedItems?.tournaments?.includes(_id);
@@ -60,15 +62,16 @@ const TournamentSide = ({ref1TSummery1, ref1TSummery2, ref1TSummery3, isLoggedIn
                                     </Tag>
                                 </div>
                                 <Button type="primary" size="medium" className="mt-3 joinButton" onClick={handleCheckout}>
-                                    {
-                                        settings?.joiningFee === 0 ? 'Free Entry' :
-                                        `${buttonStatus} 
-                                        ${settings?.feeType === "gems" ? '💎' : '$'}${settings?.joiningFee}`
-                                    }
-                                </Button>  
-
-                                
-                                {/* {settings?.joiningFee}{settings?.feeType === "gems" ? '💎' : '$'} */}
+                                    {buttonStatus}
+                                        <img alt="aquamarine" src={settings?.feeType === "aquamarine" ? "https://res.cloudinary.com/duoalyur6/image/upload/v1717705441/aquamarine_lluqes.png" : "https://res.cloudinary.com/duoalyur6/image/upload/v1717705440/tourmaline_psakuj.png"}
+                                            style={{
+                                                width: "18px",
+                                                height: "18px",
+                                                marginLeft: "5px"
+                                            }}
+                                        /> 
+                                        {settings?.joiningFee}
+                                </Button>
                             </>
                     }
                 </>
@@ -117,8 +120,20 @@ const TournamentSide = ({ref1TSummery1, ref1TSummery2, ref1TSummery3, isLoggedIn
                 <List itemLayout="vertical" size="large">
                     <List.Item style={{ padding: '0' }}>
                         <List.Item.Meta
-                            avatar={<TrophyOutlined style={{ fontSize: '30px' }} />}
-                            title={<h4>50$ PRIZE POOL</h4>}
+                            avatar={
+                                <div className="badgeClaimed prizeRotate">
+                                    <div className='spinningasset'>
+                                        <img src={settings?.feeType === "aquamarine" ? "https://res.cloudinary.com/duoalyur6/image/upload/v1717705441/aquamarine_lluqes.png" : "https://res.cloudinary.com/duoalyur6/image/upload/v1717705440/tourmaline_psakuj.png"} alt='claim'/>
+                                        {
+                                            copies.map((copy, index) => (
+                                                <i style={{ backgroundImage: `url(${settings?.feeType === "aquamarine" ? "https://res.cloudinary.com/duoalyur6/image/upload/v1717705441/aquamarine_lluqes.png" : "https://res.cloudinary.com/duoalyur6/image/upload/v1717705440/tourmaline_psakuj.png"})` }} key={index}></i>
+                                            ))
+                                        }
+                                    </div>
+                                </div>
+                            }
+                            title={
+                            <h4 className='mt-1'>PRIZE POOL WORTH <br /> {settings?.maxParticipitant*settings?.joiningFee} {settings?.feeType}s</h4>}
                         />
                         <div style={{ fontSize: '16px' }}>
                             <IconText icon={settings.competitionMode === 'ladder' ? ProjectOutlined : PartitionOutlined} text={<p className='card-text'>Competition Mode: {settings.competitionMode}</p>} key="list-vertical-like-o" />
@@ -150,7 +165,7 @@ const TournamentSide = ({ref1TSummery1, ref1TSummery2, ref1TSummery3, isLoggedIn
                             <IconText icon={FlagOutlined} text={<p className='card-text'>Region: {tournament.region}</p>} key="list-vertical-star-o" />
                         </div>
                         <div style={{ fontSize: '16px' }}>
-                            <IconText icon={StarOutlined} text={<p className='card-text'>Joined: {totalJoined}/{tournament?.settings?.maxParticipitant}</p>} key="list-vertical-star-o" />
+                            <IconText icon={StarOutlined} text={<p className='card-text'>Joined: {totalJoined}/{settings?.maxParticipitant}</p>} key="list-vertical-star-o" />
                         </div>
                     </List.Item>
                 </List>

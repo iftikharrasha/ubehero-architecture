@@ -115,7 +115,7 @@ const TeamSide = ({socketN, team, isLoggedIn, userId}) => {
             to: team._id
         }
 
-        const result = await handleTeamJoiningRequestHook(data, item);
+        const result = await handleTeamJoiningRequestHook(data, item, team);
         if(result.success){
             window.location.reload();
             // if(type === 'invite_request_reject') {

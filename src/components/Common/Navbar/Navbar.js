@@ -3,17 +3,19 @@ import LeftMenu from "./LeftMenu";
 import RightMenu from "./RightMenu";
 import { useLocation } from "react-router-dom";
 import ubehero from "../../../images/ubehero-dark.svg";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 import { Layout, Button, Drawer, FloatButton, Switch  } from "antd";
-import { MenuOutlined, CheckOutlined, FlagOutlined, BorderInnerOutlined, StopOutlined, HeatMapOutlined } from "@ant-design/icons";
+import { MenuOutlined, CustomerServiceOutlined  } from "@ant-design/icons";
 import { setDarkMode } from "../../../redux/slices/mySiteSettingsSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { changeRegion } from "../../../redux/slices/staticSlice";
 
 const Navbar = ({socketN, isConnected, profile}) => {
   const dispatch = useDispatch();
+  const history = useHistory();
   const isDarkMode = useSelector(state => state.mySiteSettings.darkMode);
+  const isLoggedIn = profile?.signed_in;
   const countrySelected = useSelector(state => state.statics.country);
   const [selectedRegion, setSelectedRegion] = useState(countrySelected);
 
@@ -65,6 +67,10 @@ const Navbar = ({socketN, isConnected, profile}) => {
       if (region === 'uk') return <img src="https://cdn.jsdelivr.net/gh/lipis/flag-icons/flags/4x3/gb.svg" alt="uk"/>;
       if (region === 'ksa') return <img src="https://cdn.jsdelivr.net/gh/lipis/flag-icons/flags/4x3/sa.svg" alt="ksa"/>;
       return null;
+    };
+
+    const handleSupport = () => {
+      history.replace(`/support/${profile.data._id}`);
     };
 
   return (
@@ -159,6 +165,20 @@ const Navbar = ({socketN, isConnected, profile}) => {
             defaultChecked
         />
       </div>
+
+      {
+        !isLoggedIn ? null : 
+        <FloatButton 
+          icon={<CustomerServiceOutlined />} 
+          onClick={handleSupport} 
+          type="primary"
+          tooltip={<div>Help Center</div>}
+          style={{
+            right: '3rem',
+            bottom: '2rem',
+          }}
+        />
+      }
     </nav>
   );
 };

@@ -10,6 +10,8 @@ import useTimer from "../../hooks/useTimer";
 const { Paragraph } = Typography;
 const { Meta } = Card;
 
+const copies = [1, 2, 3, 4, 5, 6, 7, 8];
+
 const Tournaments = ({remark, tournament, totalJoined}) => {
   const { _id, tournamentName, tournamentThumbnail, settings, leaderboards, category, version } = tournament;
   const { wishList } = useSelector((state) => state.tournaments);
@@ -75,11 +77,20 @@ const Tournaments = ({remark, tournament, totalJoined}) => {
             <Row justify="space-between" align="middle" className="mt-2">
                 <Meta
                   avatar={
-                    <TrophyOutlined  style={{ fontSize: '24px' }} />
+                    <div className="badgeClaimed prizeRotate">
+                      <div className='spinningasset'>
+                          <img src={settings?.feeType === "aquamarine" ? "https://res.cloudinary.com/duoalyur6/image/upload/v1717705441/aquamarine_lluqes.png" : "https://res.cloudinary.com/duoalyur6/image/upload/v1717705440/tourmaline_psakuj.png"} alt='claim'/>
+                          {
+                              copies.map((copy, index) => (
+                                  <i style={{ backgroundImage: `url(${settings?.feeType === "aquamarine" ? "https://res.cloudinary.com/duoalyur6/image/upload/v1717705441/aquamarine_lluqes.png" : "https://res.cloudinary.com/duoalyur6/image/upload/v1717705440/tourmaline_psakuj.png"})` }} key={index}></i>
+                              ))
+                          }
+                      </div>
+                    </div>
                   }
                   description={
-                    <Row justify="left" align="middle" className="mt-1">
-                      <span>Prize {settings?.joiningFee*settings?.maxParticipitant}{settings?.feeType === "gems" ? '💎' : '$'}</span>
+                    <Row justify="left" align="middle" className="mt-2">
+                      <span>PRIZE POOL WORTH<br /> {settings?.joiningFee*settings?.maxParticipitant} {settings?.feeType}s</span>
                     </Row>
                   }
                 />
@@ -111,11 +122,15 @@ const Tournaments = ({remark, tournament, totalJoined}) => {
                     step === 1 ? 
                     <Link to={`/tournament/details/${_id}`}>
                         <Button type="primary" size="small" className="mt-3">
-                          {
-                              settings?.joiningFee === 0 ? 'Free Entry' :
-                              `${buttonStatus} 
-                              ${settings?.feeType === "gems" ? '💎' : '$'}${settings?.joiningFee}`
-                          }
+                          {buttonStatus}
+                            <img alt="aquamarine" src={settings?.feeType === "aquamarine" ? "https://res.cloudinary.com/duoalyur6/image/upload/v1717705441/aquamarine_lluqes.png" : "https://res.cloudinary.com/duoalyur6/image/upload/v1717705440/tourmaline_psakuj.png"}
+                                style={{
+                                  width: "18px",
+                                  height: "18px",                      
+                                  marginLeft: "5px"
+                                }}
+                            /> 
+                            {settings?.joiningFee}
                         </Button>
                     </Link>  : 
                     <Link to={`/tournament/details/${_id}`}>
@@ -132,11 +147,15 @@ const Tournaments = ({remark, tournament, totalJoined}) => {
                     step === 1 ? 
                     <Link to={`/tournament/details/${_id}`}>
                       <Button type="primary" size="small" className="mt-3">
-                        {
-                          settings?.joiningFee === 0 ? 'Free Entry' :
-                          `${buttonStatus} 
-                          ${settings?.feeType === "gems" ? '💎' : '$'}${settings?.joiningFee}`
-                        }
+                          {buttonStatus}
+                            <img alt="aquamarine" src={settings?.feeType === "aquamarine" ? "https://res.cloudinary.com/duoalyur6/image/upload/v1717705441/aquamarine_lluqes.png" : "https://res.cloudinary.com/duoalyur6/image/upload/v1717705440/tourmaline_psakuj.png"}
+                                style={{
+                                  width: "18px",
+                                  height: "18px",                      
+                                  marginLeft: "5px"
+                                }}
+                            /> 
+                            {settings?.joiningFee}
                       </Button>
                     </Link> : 
                     <Link to={`/tournament/details/${_id}`}>

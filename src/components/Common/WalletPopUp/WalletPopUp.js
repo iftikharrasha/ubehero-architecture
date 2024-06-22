@@ -1,11 +1,11 @@
-import { Badge, Button, Avatar, Card,  Row, Col, Typography, Popover } from 'antd';
+import { Badge, Button, Avatar, Card,  Row, Col, Typography, Popover, Statistic } from 'antd';
 import { WalletOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 
 const { Meta } = Card;
 const { Paragraph } = Typography;
 
-const WalletPopUp = ({userId, userName}) => {
+const WalletPopUp = ({userId, userName, aquamarine, tourmaline}) => {
     const content = (
         <Card
             style={{
@@ -32,32 +32,54 @@ const WalletPopUp = ({userId, userName}) => {
             ]}
             >
                 <Meta
-                    avatar={<Avatar src="https://i.ibb.co/vjpGbfj/balance-Coin.webp" />}
+                    avatar={<Avatar src="https://cdn-icons-png.freepik.com/512/6466/6466947.png" />}
                     title="Wallet Details"
                     description={`@${userName}`}
                 />
                 <Row gutter={[16, 16]} className="pt-3">
-                    <Col span={8}>
+                    <Col span={12}>
                         <Card bordered={false} className="popBody">
                             <Row justify="center" align="middle" style={{flexDirection: 'column'}}>
-                            <Paragraph className="mb-0">Balance</Paragraph>
-                            <Paragraph className="mb-0">$0</Paragraph>
+                            <Statistic
+                                className='text-center'
+                                title="Aquamarine"
+                                value={aquamarine}
+                                precision={2}
+                                valueStyle={{
+                                    color: '#8bb1f2',
+                                }}
+                                prefix={
+                                    <img alt="aquamarine" src="https://res.cloudinary.com/duoalyur6/image/upload/v1717705441/aquamarine_lluqes.png"
+                                        style={{
+                                        width: "28px",
+                                        height: "28px",
+                                        }}
+                                    />
+                                }
+                            />
                             </Row>
                         </Card>
                     </Col>
-                    <Col span={8}>
+                    <Col span={12}>
                         <Card bordered={false} className="popBody">
                             <Row justify="center" align="middle" style={{flexDirection: 'column'}}>
-                            <Paragraph className="mb-0">Income</Paragraph>
-                            <Paragraph className="mb-0">$0</Paragraph>
-                            </Row>
-                        </Card>
-                    </Col>
-                    <Col span={8}>
-                        <Card bordered={false} className="popBody">
-                            <Row justify="center" align="middle" style={{flexDirection: 'column'}}>
-                            <Paragraph className="mb-0">Pending</Paragraph>
-                            <Paragraph className="mb-0">$0</Paragraph>
+                            <Statistic
+                                className='text-center'
+                                title="Tourmaline"
+                                value={tourmaline}
+                                precision={2}
+                                valueStyle={{
+                                    color: '#FF960C',
+                                }}
+                                prefix={
+                                    <img alt="tourmaline" src="https://res.cloudinary.com/duoalyur6/image/upload/v1717705440/tourmaline_psakuj.png"
+                                        style={{
+                                        width: "28px",
+                                        height: "28px",
+                                        }}
+                                    />
+                                }
+                            />
                             </Row>
                         </Card>
                     </Col>

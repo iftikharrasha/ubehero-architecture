@@ -92,7 +92,7 @@ const InternalControlls = () => {
     {
       label: 'Support',
       icon: 'fas fa-circle-info fa-fw',
-      link: '/internal/inner-page',
+      link: `/internal/${profile._id}/support`,
       submenu: null,
     },
   ];

@@ -69,6 +69,12 @@ const myTeamSlice = createSlice({
         status: 'idle',
     },
     reducers: {
+        syncMyTeamDetails: (state, action) => {
+            const index = state.data.findIndex(t => t._id === action.payload._id);
+            if(index !== -1){
+                state.data[index] = action.payload || state.data;
+            }
+        },
         setTeamReset: (state, action) => {
             state.data = [];
             state.version = 0;
@@ -100,5 +106,5 @@ const myTeamSlice = createSlice({
     },
 });
 
-export const { setTeamReset, addTeamCreation } = myTeamSlice.actions;
+export const { syncMyTeamDetails, setTeamReset, addTeamCreation } = myTeamSlice.actions;
 export default myTeamSlice.reducer;

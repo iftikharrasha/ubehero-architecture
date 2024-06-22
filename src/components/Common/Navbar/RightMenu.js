@@ -18,6 +18,8 @@ const RightMenu = ({ profile, socketN, isConnected, mode }) => {
     const { handlelogOut } = useAuth();
     const { handleSwitchProfile } = useProfile();
     const role = profile.role;
+    const aquamarine = profile?.data?.stats?.aquamarine;
+    const tourmaline = profile?.data?.stats?.tourmaline;
 
     return (
             <Row justify="center" align="middle">
@@ -39,7 +41,7 @@ const RightMenu = ({ profile, socketN, isConnected, mode }) => {
                                 </> : null
                             }
 
-                            <WalletPopUp userId={profile?.data?._id} userName={profile?.data?.userName}/>
+                            <WalletPopUp userId={profile?.data?._id} userName={profile?.data?.userName} aquamarine={aquamarine} tourmaline={tourmaline}/>
 
                             <WishList/>
 

@@ -1,27 +1,14 @@
-import React, { useEffect, useState, useMemo, useRef } from 'react';
-import { Row, Avatar, Modal, Card, Space, Input, Button, Upload, message } from 'antd';
+import React, { useState, useRef } from 'react';
+import { Row, Modal, Card, Space, Input, Button, Upload, message } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import DOMPurify from 'dompurify';
-import PartyComments from './PartyComments';
-import useParties from '../../../hooks/useParties';
 import { Editor } from '@tinymce/tinymce-react';
-import { useSelector } from 'react-redux';
 import axios from 'axios';
 
-const { Meta } = Card;
 const { TextArea } = Input;
 
-const IconText = ({ icon, text }) => (
-    <Space>
-      {React.createElement(icon)}
-      {text}
-    </Space>
-);
-
 const PartyWritePost = ({ id, open, setOpen }) => {
-    const { handleGetPartySocialPostComments } = useParties();
     const [updateData, setUpdateData] = useState({ title: null, description: null, thumbnail: null });
-    const [comment, setComment] = useState('');
     const token = localStorage.getItem('jwt');
 
     

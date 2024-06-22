@@ -62,16 +62,12 @@ const Transactions = ({myTransactions}) => {
       key: 'method',
       filters: [
         {
-          text: 'balance',
-          value: 'balance',
+          text: 'aquamarine',
+          value: 'aquamarine',
         },
         {
-          text: 'bkash',
-          value: 'bkash',
-        },
-        {
-          text: 'card',
-          value: 'card',
+          text: 'tourmaline',
+          value: 'tourmaline',
         },
       ],
       onFilter: (value, record) => record.method === value,
@@ -171,8 +167,8 @@ const Transactions = ({myTransactions}) => {
           value: 'sar',
         },
         {
-          text: 'etoken',
-          value: 'etoken',
+          text: 'gem',
+          value: 'gem',
         },
       ],
       onFilter: (value, record) => record.currency === value,

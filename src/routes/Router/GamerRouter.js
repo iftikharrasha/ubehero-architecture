@@ -12,6 +12,8 @@ import Team from '../../pages/Common/Team';
 import Parties from '../../pages/Common/Parties';
 import Party from '../../pages/Common/Party';
 import Teams from '../../pages/Common/Teams';
+import Support from '../../pages/Common/Support';
+import Ticket from '../../pages/Common/Ticket';
 
 const GamerRouter = () => {
   return (
@@ -42,6 +44,12 @@ const GamerRouter = () => {
         </PrivateRoute>
         <PrivateRoute path="/wallet/:id">
             <Wallet/>
+        </PrivateRoute>
+        <PrivateRoute path="/support/:id">
+            <Support/>
+        </PrivateRoute>
+        <PrivateRoute path="/ticket/:id">
+            <Ticket/>
         </PrivateRoute>
     </Switch>
   );

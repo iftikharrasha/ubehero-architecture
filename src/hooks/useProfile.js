@@ -4,8 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { setLogIn, setRoute, addGameAccount, addIntoFriendQueue, addXpLatest , setClaimedBadge} from "../redux/slices/profileSlice";
 import useNotyf from "./useNotyf";
-import { addTeamCreation } from "../redux/slices/teamSlice";
-import { addUserRequestToPartyService } from "../redux/slices/partySlice";
+import { syncMyTeamDetails, addTeamCreation } from "../redux/slices/teamSlice";
 
 const useProfile = () => {
     const dispatch = useDispatch();
@@ -189,6 +188,7 @@ const useProfile = () => {
             }else{
                 setErrorMessage(response.data.error.message);
             }
+            dispatch(syncMyTeamDetails(response.data.data));
             return response.data.data
         } catch (error) {
             console.log(error);
@@ -278,7 +278,7 @@ const useProfile = () => {
         }
     }
 
-    const handleTeamJoiningRequestHook = async (data, receiver) => {
+    const handleTeamJoiningRequestHook = async (data, receiver, team) => {
         let config = {}
 
         if(profile.signed_in){
@@ -325,6 +325,7 @@ const useProfile = () => {
                         // Handle unknown types or do nothing
                         break;
                 }
+                dispatch(addTeamCreation(team));
                 setErrorMessage(null);
                 console.log("xp", response);
                 if(response.data.xp){
@@ -434,6 +435,195 @@ const useProfile = () => {
         }
     }
 
+    const handleCreateSupportTicket = async (data) => {
+        let config = {}
+
+        if(profile.signed_in){
+            const token = localStorage.getItem('jwt');
+            config.headers = { "Authorization": "Bearer " + token, ...config.headers};
+        }
+
+        try {
+            const response = await axios.post(`${process.env.REACT_APP_API_LINK}/api/v1/support/${data.issuedBy}`, data, config);
+            
+            if(response.data.status === 200){
+                const notificationData = {
+                    type: "ticket_creation",
+                    subject: "You’ve created a support ticket",
+                    subjectPhoto:'https://cdn-icons-png.flaticon.com/512/2057/2057748.png',
+                    invokedByName: 'Help Center',
+                    invokedById: "645b60abe95cd95bcfad6894",
+                    receivedByName: profile.data.userName,
+                    receivedById: profile.data._id,  //this user will receive notification
+                    route: `support/${profile.data._id}/ticket`
+                }
+
+                // Send message to server
+                socketN.emit("send_notification", notificationData);
+                setErrorMessage(null);
+            }else{
+                setErrorMessage(response.data.error.message);
+            }
+            return response.data
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const handleMyTickets = async () => {
+        let config = {}
+
+        if(profile.signed_in){
+            const token = localStorage.getItem('jwt');
+            config.headers = { "Authorization": "Bearer " + token, ...config.headers};
+        }
+
+        try {
+            const response = await axios.get(`${process.env.REACT_APP_API_LINK}/api/v1/support/${profile.data._id}`, config);
+            
+            if(response.data.status === 200){
+                setErrorMessage(null);
+            }else{
+                setErrorMessage(response.data.error.message);
+            }
+            return response.data.data
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const handleAllTickets = async () => {
+        let config = {}
+
+        if(profile.signed_in){
+            const token = localStorage.getItem('jwt');
+            config.headers = { "Authorization": "Bearer " + token, ...config.headers};
+        }
+
+        try {
+            const response = await axios.get(`${process.env.REACT_APP_API_LINK}/api/v1/support/all/${profile.data._id}`, config);
+            
+            if(response.data.status === 200){
+                setErrorMessage(null);
+            }else{
+                setErrorMessage(response.data.error.message);
+            }
+            return response.data.data
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const handleTicketDetails = async (id) => {
+        let config = {}
+
+        if(profile.signed_in){
+            const token = localStorage.getItem('jwt');
+            config.headers = { "Authorization": "Bearer " + token, ...config.headers};
+        }
+
+        try {
+            const response = await axios.get(`${process.env.REACT_APP_API_LINK}/api/v1/support/thread/${id}`, config);
+            
+            if(response.data.status === 200){
+                setErrorMessage(null);
+            }else{
+                setErrorMessage(response.data.error.message);
+            }
+            return response.data.data
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const handleCreateSupportComment = async (id, issuedBy, comment) => {
+        let config = {}
+
+        if(profile.signed_in){
+            const token = localStorage.getItem('jwt');
+            config.headers = { "Authorization": "Bearer " + token, ...config.headers};
+        }
+
+        const data = {
+            author: profile.data._id,
+            comment: comment
+        }
+
+        try {
+            const response = await axios.post(`${process.env.REACT_APP_API_LINK}/api/v1/support/thread/${id}`, data, config);
+            
+            if(response.data.status === 200){
+                if(profile.role === "admin"){
+                    const notificationData = {
+                        type: "ticket_comment",
+                        subject: "You’ve a new comment on your ticket",
+                        subjectPhoto:'https://cdn-icons-png.flaticon.com/512/2057/2057748.png',
+                        invokedByName: 'Help Center',
+                        invokedById: "645b60abe95cd95bcfad6894",
+                        receivedByName: issuedBy.userName,
+                        receivedById: issuedBy._id,  //this user will receive notification
+                        route: `ticket/${id}`
+                    }
+    
+                    // Send message to server
+                    socketN.emit("send_notification", notificationData);
+                    setErrorMessage(null);
+                }
+                setErrorMessage(null);
+            }else{
+                setErrorMessage(response.data.error.message);
+            }
+
+            return response.data.success
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const handleSupportStatus = async (id) => {
+        let config = {}
+
+        if(profile.signed_in){
+            const token = localStorage.getItem('jwt');
+            config.headers = { "Authorization": "Bearer " + token, ...config.headers};
+        }
+
+        try {
+            const response = await axios.get(`${process.env.REACT_APP_API_LINK}/api/v1/support/status/${id}`, config);
+            
+            if(response.data.status === 200){
+                setErrorMessage(null);
+            }else{
+                setErrorMessage(response.data.error.message);
+            }
+            return response.data.status
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const handleTodaysGemPrice = async () => {
+        let config = {}
+
+        if(profile.signed_in){
+            const token = localStorage.getItem('jwt');
+            config.headers = { "Authorization": "Bearer " + token, ...config.headers};
+        }
+
+        try {
+            const response = await axios.get(`${process.env.REACT_APP_API_LINK}/api/v1/geminy/${profile.data._id}`, config);
+            
+            if(response.data.status === 200){
+                setErrorMessage(null);
+            }else{
+                setErrorMessage(response.data.error.message);
+            }
+            return response.data.data
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     return {
         actingAs,
         errorMessage,
@@ -449,7 +639,14 @@ const useProfile = () => {
         handleFriendRequestHook,
         handleFriendListHook,
         handleClaimingBadgetHook,
-        handleTeamMembersListHook
+        handleTeamMembersListHook,
+        handleMyTickets,
+        handleAllTickets,
+        handleTicketDetails,
+        handleCreateSupportTicket,
+        handleCreateSupportComment,
+        handleSupportStatus,
+        handleTodaysGemPrice,
         // handleBadgeListHook
     }
 }

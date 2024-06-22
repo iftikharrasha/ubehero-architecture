@@ -177,7 +177,7 @@ const CheckoutLayoutTeam = ({ item, handleOrder, handlePaymentMethod, teams, con
                     },
                     {
                       children: `Make sure to activate your team before joining`,
-                      color: `${connectedTeam?.members?.mates?.length === connectedTeam?.size-1 ? 'green' : 'red'}`,
+                      color: `${connectedTeam?.status === 'active' ? 'green' : 'red'}`,
                       dot: (
                         <CheckCircleOutlined
                           style={{
@@ -190,7 +190,7 @@ const CheckoutLayoutTeam = ({ item, handleOrder, handlePaymentMethod, teams, con
                       children: 
                       <TeamCard item={connectedTeam} id={connectedTeam?._id}/>
                       ,
-                      color: `${connectedTeam?.members?.mates?.length === connectedTeam?.size-1 ? 'green' : 'red'}`,
+                      color: `${connectedTeam?.status === 'active' ? 'green' : 'red'}`,
                     },
                   ]}
                 />
